@@ -54,11 +54,11 @@ public class LivrosForm extends javax.swing.JInternalFrame {
         publicadoraLivro = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
-        volumeLivro = new javax.swing.JComboBox<>();
         cbAtivo = new javax.swing.JCheckBox();
         btnBuscar = new javax.swing.JButton();
         adicionarEditora = new javax.swing.JButton();
         adicionarAutor = new javax.swing.JButton();
+        volume = new javax.swing.JSpinner();
 
         setClosable(true);
         setIconifiable(true);
@@ -99,8 +99,6 @@ public class LivrosForm extends javax.swing.JInternalFrame {
             }
         });
 
-        volumeLivro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" }));
-
         cbAtivo.setText("Ativo");
 
         btnBuscar.setBackground(new java.awt.Color(51, 102, 255));
@@ -129,6 +127,8 @@ public class LivrosForm extends javax.swing.JInternalFrame {
                 adicionarAutorActionPerformed(evt);
             }
         });
+
+        volume.setModel(new javax.swing.SpinnerNumberModel(0, null, 20, 1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -171,7 +171,7 @@ public class LivrosForm extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
-                                    .addComponent(volumeLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(anoPublicacao, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
@@ -198,7 +198,7 @@ public class LivrosForm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nomeLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(volumeLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(volume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -259,7 +259,7 @@ public class LivrosForm extends javax.swing.JInternalFrame {
     private void cadastroAlteracaoLivro(){
         
         Integer codLivro = Integer.valueOf(this.codLivro.getText());
-        Integer volLivro = Integer.valueOf((String) this.volumeLivro.getSelectedItem());
+        Integer volLivro = (Integer) this.volume.getValue();
         Integer anoPubli = Integer.valueOf(this.anoPublicacao.getText());
         String nome = this.nomeLivro.getText();
         Autor autor = (Autor) this.autorLivro.getSelectedItem();
@@ -401,6 +401,6 @@ public class LivrosForm extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField nomeLivro;
     private javax.swing.JComboBox<String> publicadoraLivro;
-    private javax.swing.JComboBox<String> volumeLivro;
+    private javax.swing.JSpinner volume;
     // End of variables declaration//GEN-END:variables
 }

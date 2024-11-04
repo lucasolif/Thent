@@ -709,14 +709,14 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
             
             //Setando a data de pagamento e a forma de pagamento
             String dataPagamento = this.dataPagamento.getText();
-            FormaPagto formaPgto = (FormaPagto) formaPagto.getSelectedItem();
+            FormaPagto formaPgto = (FormaPagto) this.formaPagto.getSelectedItem();
             ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
-            Integer numNota = listaContasPagar.get(index).getNumNota();
-            Integer parcela = listaContasPagar.get(index).getParcela();
-            String descricao = listaContasPagar.get(index).getDescricaoConta();
+            Integer numNota = this.listaContasPagar.get(index).getNumNota();
+            Integer parcela = this.listaContasPagar.get(index).getParcela();
+            String descricao = this.listaContasPagar.get(index).getDescricaoConta();
             
             MovimentoCaixa mvCaixa = new MovimentoCaixa();
-            mvCaixa.setContaPagar(listaContasPagar.get(index));
+            mvCaixa.setContaPagar(this.listaContasPagar.get(index));
             mvCaixa.setDataPagamentoRecebimento(dataPagamento);
             mvCaixa.setFormaPagto(formaPgto);
             mvCaixa.setContaCaixa(contaCaixa);
@@ -726,7 +726,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
             listaCpEfetivada.add(mvCaixa);  
 
             //Excluí a conta da lista de contas a pagar para a tabela ser atualizada
-            listaContasPagar.remove(index);          
+            this.listaContasPagar.remove(index);          
         }
 
         int confirm = JOptionPane.showConfirmDialog(null,"Efetivar as contas selecionadas?", "Confirmar", JOptionPane.YES_NO_OPTION);     

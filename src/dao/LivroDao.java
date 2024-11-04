@@ -150,7 +150,7 @@ public class LivroDao {
     //Consultar para popular o JComboBox
     public List<Livro> consultarLivros(){
         
-        List<Livro> listaAutores = new ArrayList<>();
+        List<Livro> listaLivros = new ArrayList<>();
         
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -164,8 +164,9 @@ public class LivroDao {
                 livro.setCodInterno(rs.getInt("Codigo"));
                 livro.setCodLivro(rs.getInt("CodLivro"));
                 livro.setNomeLivro(rs.getString("Nome"));
+                livro.setVolume(rs.getInt("Volume"));
  
-                listaAutores.add(livro);
+                listaLivros.add(livro);
             }
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar os autores", "Erro 001", JOptionPane.ERROR_MESSAGE);
@@ -181,6 +182,7 @@ public class LivroDao {
             }
         }
 
-        return listaAutores;
+        return listaLivros;
     }
+    
 }

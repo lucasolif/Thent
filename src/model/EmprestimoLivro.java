@@ -1,6 +1,7 @@
 
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -10,8 +11,8 @@ public class EmprestimoLivro {
     private Pessoa pessoa;
     private Livro livro;
     private Integer status;
-    private String dataEmprestimo;
-    private String dataDevolucao;
+    private Date dataEmprestimo;
+    private Date dataDevolucao;
 
     public Integer getCodigo() {
         return codigo;
@@ -45,31 +46,31 @@ public class EmprestimoLivro {
         this.status = status;
     }
 
-    public String getDataEmprestimo() {
+    public Date getDataEmprestimo() {
         return dataEmprestimo;
     }
 
-    public void setDataEmprestimo(String dataEmprestimo) {
+    public void setDataEmprestimo(Date dataEmprestimo) {
         this.dataEmprestimo = dataEmprestimo;
     }
 
-    public String getDataDevolucao() {
+    public Date getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public void setDataDevolucao(String dataDevolucao) {
+    public void setDataDevolucao(Date dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 53 * hash + Objects.hashCode(this.codigo);
-        hash = 53 * hash + Objects.hashCode(this.pessoa);
-        hash = 53 * hash + Objects.hashCode(this.livro);
-        hash = 53 * hash + Objects.hashCode(this.status);
-        hash = 53 * hash + Objects.hashCode(this.dataEmprestimo);
-        hash = 53 * hash + Objects.hashCode(this.dataDevolucao);
+        hash = 59 * hash + Objects.hashCode(this.codigo);
+        hash = 59 * hash + Objects.hashCode(this.pessoa);
+        hash = 59 * hash + Objects.hashCode(this.livro);
+        hash = 59 * hash + Objects.hashCode(this.status);
+        hash = 59 * hash + Objects.hashCode(this.dataEmprestimo);
+        hash = 59 * hash + Objects.hashCode(this.dataDevolucao);
         return hash;
     }
 
@@ -85,12 +86,6 @@ public class EmprestimoLivro {
             return false;
         }
         final EmprestimoLivro other = (EmprestimoLivro) obj;
-        if (!Objects.equals(this.dataEmprestimo, other.dataEmprestimo)) {
-            return false;
-        }
-        if (!Objects.equals(this.dataDevolucao, other.dataDevolucao)) {
-            return false;
-        }
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
@@ -100,8 +95,16 @@ public class EmprestimoLivro {
         if (!Objects.equals(this.livro, other.livro)) {
             return false;
         }
-        return Objects.equals(this.status, other.status);
+        if (!Objects.equals(this.status, other.status)) {
+            return false;
+        }
+        if (!Objects.equals(this.dataEmprestimo, other.dataEmprestimo)) {
+            return false;
+        }
+        return Objects.equals(this.dataDevolucao, other.dataDevolucao);
     }
+
+    
     
     
 }

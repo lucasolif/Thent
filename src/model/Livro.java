@@ -158,11 +158,14 @@ public class Livro {
         return Objects.equals(this.status, other.status);
     }
 
-    
-    
     @Override
     public String toString() {
-        return nomeLivro;
+        if(this.volume != null && this.volume != 0){
+            return nomeLivro+" Vol. "+volume;
+        }else{
+            return nomeLivro;
+        }
+        
     }   
     
 }

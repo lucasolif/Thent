@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Autor;
@@ -29,6 +30,8 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     private final EditoraDao editoraDao = new EditoraDao();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private List<Biblioteca> listaBiblioteca = new ArrayList();
+    private Livro livroSelec = new Livro();
+    private Biblioteca biblioteca = new Biblioteca();
     private Biblioteca bibliotecaSelec;
     
 
@@ -67,7 +70,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         volume = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaLivros = new javax.swing.JTable();
-        btnExcluir = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         adicionarLivro = new javax.swing.JButton();
         emprestar = new javax.swing.JButton();
@@ -93,10 +95,20 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                 livroMousePressed(evt);
             }
         });
+        livro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                livroKeyPressed(evt);
+            }
+        });
 
         autor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 autorMousePressed(evt);
+            }
+        });
+        autor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                autorKeyPressed(evt);
             }
         });
 
@@ -111,10 +123,16 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                 editoraMousePressed(evt);
             }
         });
+        editora.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                editoraKeyPressed(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Status", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         rbGrupoStatus.add(rbAtivo);
+        rbAtivo.setSelected(true);
         rbAtivo.setText("Ativo");
 
         rbGrupoStatus.add(rbInativo);
@@ -150,8 +168,13 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                 igrejaMousePressed(evt);
             }
         });
+        igreja.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                igrejaKeyPressed(evt);
+            }
+        });
 
-        jLabel6.setText("Igreja");
+        jLabel6.setText("Blbioteca Igreja");
 
         btnFiltrar.setBackground(new java.awt.Color(51, 102, 255));
         btnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -244,6 +267,8 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                         .addContainerGap())))
         );
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Livros Biblioteca", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+
         tabelaLivros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -283,13 +308,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
             tabelaLivros.getColumnModel().getColumn(5).setPreferredWidth(50);
         }
 
-        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-lixeira-16.png"))); // NOI18N
-        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirActionPerformed(evt);
-            }
-        });
-
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
         btnLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,13 +345,11 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(adicionarLivro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(emprestar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(emprestar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -342,15 +358,14 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                         .addComponent(adicionarLivro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(emprestar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(51, Short.MAX_VALUE))
+                        .addComponent(emprestar))
+                    .addComponent(btnLimpar))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -366,12 +381,9 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_adicionarLivroActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        // TODO add your handling code here:
+        limparFormulario();
+        limparTabela();
     }//GEN-LAST:event_btnLimparActionPerformed
-
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void textoBuscaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textoBuscaKeyPressed
         // TODO add your handling code here:
@@ -397,6 +409,30 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_emprestarActionPerformed
 
+    private void livroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_livroKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.livro.removeAllItems();
+        } 
+    }//GEN-LAST:event_livroKeyPressed
+
+    private void autorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_autorKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.autor.removeAllItems();
+        } 
+    }//GEN-LAST:event_autorKeyPressed
+
+    private void igrejaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_igrejaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.igreja.removeAllItems();
+        } 
+    }//GEN-LAST:event_igrejaKeyPressed
+
+    private void editoraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_editoraKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.editora.removeAllItems();
+        } 
+    }//GEN-LAST:event_editoraKeyPressed
+
     private void consultarBilioteca(){
         
         Integer status = 1;
@@ -412,15 +448,21 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
             status = null;
         }
         
-        livroSelec.setAutor(autor);
-        livroSelec.setEditora(editora);
-        livroSelec.setStatus(status);
-        Biblioteca biblioteca = new Biblioteca();
-        biblioteca.setLivro(livroSelec);
-        biblioteca.setIgreja(igreja);
+        try{
+            this.livroSelec.setNomeLivro(livroSelec.getNomeLivro());
+            this.livroSelec.setCodLivro(livroSelec.getCodLivro());
+            this.livroSelec.setCodInterno(livroSelec.getCodInterno());
+        }catch(NullPointerException e){
+            
+        }
+
+        this.livroSelec.setAutor(autor);
+        this.livroSelec.setEditora(editora);
+        this.livroSelec.setStatus(status);
+        this.biblioteca.setLivro(this.livroSelec);
+        this.biblioteca.setIgreja(igreja);
        
-        this.listaBiblioteca = bibliotecaDao.consultarBiblioteca(biblioteca, textoBusca);
-        
+        this.listaBiblioteca = bibliotecaDao.consultarBiblioteca(biblioteca, textoBusca);       
     }
     
     private void atualizarTabela(){  
@@ -475,16 +517,82 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         }
     }
     
+    private void limparFormulario(){
+        this.livro.setSelectedItem("");
+        this.editora.setSelectedItem("");
+        this.autor.setSelectedItem("");
+        this.igreja.setSelectedItem("");
+        this.volume.setValue(1);
+        this.rbAtivo.setSelected(true);
+        
+    }
+    
+    private void limparTabela(){
+        if(this.tabelaLivros.getRowCount() > 0){
+            DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
+            model.setRowCount(0);
+        }
+    }
+    
     private void formAdicionarLivroBiblioteca(){
         AdicionarLivroForm addLivroBiblioteca = new AdicionarLivroForm((Frame) SwingUtilities.getWindowAncestor(this), true);
         addLivroBiblioteca.setLocationRelativeTo(this);
         addLivroBiblioteca.setVisible(true);
     }
+    
+   /* private void formEmprestarLivro(){
+        int[] livrosSelec = this.tabelaLivros.getSelectedRows();
+        List<Livro> listaLivros = new ArrayList<>();
+        
+        //Verifica se foi selecionado algum livro da tabela
+        if(livrosSelec.length < 0){
+            JOptionPane.showMessageDialog(null, "Selecione o livro que será emprestado", "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }else{
+            EmprestarLivroForm emprestarLivro = new EmprestarLivroForm((Frame) SwingUtilities.getWindowAncestor(this), true);
+            emprestarLivro.setLocationRelativeTo(this);
+            emprestarLivro.setVisible(true);
+            
+            
+        }
+        
+        //Selecinando as contas que serão efetivadas
+        for(int index : livrosSelec){
+            
+            //Setando a data de pagamento e a forma de pagamento
+            String dataPagamento = this.dataPagamento.getText();
+            FormaPagto formaPgto = (FormaPagto) formaPagto.getSelectedItem();
+            ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
+            Integer numNota = listaContasPagar.get(index).getNumNota();
+            Integer parcela = listaContasPagar.get(index).getParcela();
+            String descricao = listaContasPagar.get(index).getDescricaoConta();
+            
+            MovimentoCaixa mvCaixa = new MovimentoCaixa();
+            mvCaixa.setContaPagar(listaContasPagar.get(index));
+            mvCaixa.setDataPagamentoRecebimento(dataPagamento);
+            mvCaixa.setFormaPagto(formaPgto);
+            mvCaixa.setContaCaixa(contaCaixa);
+            mvCaixa.setComplemento("CP "+numNota+"-"+parcela+" | "+descricao);
+            
+            //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
+            listaLivros.add(mvCaixa);  
 
+            //Excluí a conta da lista de contas a pagar para a tabela ser atualizada
+            listaContasPagar.remove(index);          
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(null,"Efetivar as contas selecionadas?", "Confirmar", JOptionPane.YES_NO_OPTION);     
+        //Verifica qual a opção escolhida
+        if(confirm == JOptionPane.YES_OPTION){
+            movimentoCaixaDao.movimentarContasPagar(listaLivros);
+        }else if(confirm == JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(null, "Operação cancelada!");
+        } 
+    }
+*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarLivro;
     private javax.swing.JComboBox<String> autor;
-    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JComboBox<String> editora;

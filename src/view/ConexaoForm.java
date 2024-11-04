@@ -145,7 +145,6 @@ public class ConexaoForm extends javax.swing.JDialog {
                 escritor.write(json); // Escrevendo o JSON no arquivo
             }
         } catch (IOException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar salvar os dados do banco de dados", "Erro 014", JOptionPane.ERROR_MESSAGE);
             return;
         }

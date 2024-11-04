@@ -21,7 +21,7 @@ import model.TipoOferta;
 
 public class RegistroOfertaDao {
     
-    private Conversores converteData = new Conversores();
+    private final Conversores converteData = new Conversores();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
@@ -49,7 +49,7 @@ public class RegistroOfertaDao {
                 psRegistro.setString(6, rg.getDataOferta());
                 psRegistro.setInt(7, 1);
                 psRegistro.setInt(8, rg.getIgreja().getCodigo());
-                psRegistro.setInt(9, 1);
+                psRegistro.setInt(9, 2);
                 psRegistro.setInt(10, rg.getContaCaixa().getCodigo());
                 psRegistro.executeUpdate();
 
@@ -71,7 +71,7 @@ public class RegistroOfertaDao {
                     psMovimento.setString(6, rg.getTpOferta().getNome().toUpperCase());
                     psMovimento.setInt(7, rg.getFormaPagto().getCodigo());
                     psMovimento.setInt(8, rg.getIgreja().getCodigo());
-                    psMovimento.setInt(9, 1);
+                    psMovimento.setInt(9, 2);
                     psMovimento.setString(10, rg.getDataOferta());
                     
                     psMovimento.executeUpdate();
@@ -88,11 +88,9 @@ public class RegistroOfertaDao {
                 try{
                     conexao.rollback();
                 }catch(SQLException e){
-                    e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar os registros de dízimos e ofertas", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             //Fechar os recursos abertos
@@ -102,7 +100,6 @@ public class RegistroOfertaDao {
                 if(psMovimento != null) psMovimento.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -259,7 +256,6 @@ public class RegistroOfertaDao {
                 listaRegistros.add(registrosDizimoOferta);
             }     
         } catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar os registros de dizimo e ofertas", "Erro 011", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -268,7 +264,6 @@ public class RegistroOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -300,18 +295,15 @@ public class RegistroOfertaDao {
                 try {
                     conexao.rollback();
                 } catch (SQLException e) {
-                    e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erro ao tentar fazer o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            ex.printStackTrace();
         }finally {
             // Fechar recursos
             try {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -338,18 +330,15 @@ public class RegistroOfertaDao {
                 try {
                     conexao.rollback();
                 } catch (SQLException e) {
-                    e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erro ao tentar fazer o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            ex.printStackTrace();
         }finally {
             // Fechar recursos
             try {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

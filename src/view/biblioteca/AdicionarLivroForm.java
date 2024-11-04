@@ -44,7 +44,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
 
         jLabel1.setText("Livro*");
 
-        qtdLivros.setModel(new javax.swing.SpinnerNumberModel(1, null, null, 1));
+        qtdLivros.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         jLabel3.setText("Qtd.");
 
@@ -57,7 +57,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
             }
         });
 
-        jLabel4.setText("Igreja*");
+        jLabel4.setText("Biblioteca Igreja*");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,11 +97,11 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
                     .addComponent(qtdLivros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(igrejas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();

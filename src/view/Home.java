@@ -7,7 +7,7 @@ import view.biblioteca.AutorForm;
 import view.biblioteca.BibliotecaForm;
 import view.biblioteca.ConsultaEmprestimoForm;
 import view.biblioteca.EditoraForm;
-import view.biblioteca.EmprestimoForm;
+import view.biblioteca.EmprestimoLivroForm;
 import view.biblioteca.LivrosForm;
 import view.cadastros.ContaCaixaForm;
 import view.cadastros.ContaResultadoForm;
@@ -486,7 +486,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroBibliotecaActionPerformed
 
     private void operacaoEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoEmprestimoActionPerformed
-        EmprestimoForm emprestimo = new EmprestimoForm();
+        EmprestimoLivroForm emprestimo = new EmprestimoLivroForm();
         painelHome.add(emprestimo);
         emprestimo.setVisible(true);
         emprestimo.setPosicao();
