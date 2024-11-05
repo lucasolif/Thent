@@ -11,6 +11,7 @@ public class EmprestimoLivro {
     private Pessoa pessoa;
     private Livro livro;
     private Integer status;
+    private Igreja igreja;
     private Date dataEmprestimo;
     private Date dataDevolucao;
 
@@ -61,6 +62,15 @@ public class EmprestimoLivro {
     public void setDataDevolucao(Date dataDevolucao) {
         this.dataDevolucao = dataDevolucao;
     }
+
+    public Igreja getIgreja() {
+        return igreja;
+    }
+
+    public void setIgreja(Igreja igreja) {
+        this.igreja = igreja;
+    }
+    
 
     @Override
     public int hashCode() {

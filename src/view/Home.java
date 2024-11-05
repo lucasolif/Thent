@@ -66,13 +66,14 @@ public class Home extends javax.swing.JFrame {
         movimentoFinanceiro = new javax.swing.JMenuItem();
         relatorios = new javax.swing.JMenu();
         biblioteca = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        menuCadastros = new javax.swing.JMenu();
         cadastroLivros = new javax.swing.JMenuItem();
         cadastroAutor = new javax.swing.JMenuItem();
         cadastroEditora = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        menuBiblioteca = new javax.swing.JMenu();
         cadastroBiblioteca = new javax.swing.JMenuItem();
         addLivroBiblioteca = new javax.swing.JMenuItem();
+        menuEmprestimoLivros = new javax.swing.JMenu();
         operacaoEmprestimo = new javax.swing.JMenuItem();
         operacaoConsultaEmprestimo = new javax.swing.JMenuItem();
         configuracoes = new javax.swing.JMenu();
@@ -263,7 +264,7 @@ public class Home extends javax.swing.JFrame {
 
         biblioteca.setText("Biblioteca");
 
-        jMenu2.setText("Cadastros");
+        menuCadastros.setText("Cadastros");
 
         cadastroLivros.setText("Livros");
         cadastroLivros.addActionListener(new java.awt.event.ActionListener() {
@@ -271,7 +272,7 @@ public class Home extends javax.swing.JFrame {
                 cadastroLivrosActionPerformed(evt);
             }
         });
-        jMenu2.add(cadastroLivros);
+        menuCadastros.add(cadastroLivros);
 
         cadastroAutor.setText("Autor(a)");
         cadastroAutor.addActionListener(new java.awt.event.ActionListener() {
@@ -279,7 +280,7 @@ public class Home extends javax.swing.JFrame {
                 cadastroAutorActionPerformed(evt);
             }
         });
-        jMenu2.add(cadastroAutor);
+        menuCadastros.add(cadastroAutor);
 
         cadastroEditora.setText("Editora/Publicadora");
         cadastroEditora.addActionListener(new java.awt.event.ActionListener() {
@@ -287,19 +288,19 @@ public class Home extends javax.swing.JFrame {
                 cadastroEditoraActionPerformed(evt);
             }
         });
-        jMenu2.add(cadastroEditora);
+        menuCadastros.add(cadastroEditora);
 
-        biblioteca.add(jMenu2);
+        biblioteca.add(menuCadastros);
 
-        jMenu3.setText("Biblioteca");
+        menuBiblioteca.setText("Biblioteca");
 
-        cadastroBiblioteca.setText("Biblioteca");
+        cadastroBiblioteca.setText("Consultar Biblioteca");
         cadastroBiblioteca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cadastroBibliotecaActionPerformed(evt);
             }
         });
-        jMenu3.add(cadastroBiblioteca);
+        menuBiblioteca.add(cadastroBiblioteca);
 
         addLivroBiblioteca.setText("Adicionar Livro Biblioteca");
         addLivroBiblioteca.addActionListener(new java.awt.event.ActionListener() {
@@ -307,25 +308,29 @@ public class Home extends javax.swing.JFrame {
                 addLivroBibliotecaActionPerformed(evt);
             }
         });
-        jMenu3.add(addLivroBiblioteca);
+        menuBiblioteca.add(addLivroBiblioteca);
 
-        biblioteca.add(jMenu3);
+        biblioteca.add(menuBiblioteca);
 
-        operacaoEmprestimo.setText("Empréstimo");
+        menuEmprestimoLivros.setText("Empréstimo Livros");
+
+        operacaoEmprestimo.setText("Empréstimo Livros");
         operacaoEmprestimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 operacaoEmprestimoActionPerformed(evt);
             }
         });
-        biblioteca.add(operacaoEmprestimo);
+        menuEmprestimoLivros.add(operacaoEmprestimo);
 
-        operacaoConsultaEmprestimo.setText("Consultar Empréstimo");
+        operacaoConsultaEmprestimo.setText("Gerenciar Empréstimo");
         operacaoConsultaEmprestimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 operacaoConsultaEmprestimoActionPerformed(evt);
             }
         });
-        biblioteca.add(operacaoConsultaEmprestimo);
+        menuEmprestimoLivros.add(operacaoConsultaEmprestimo);
+
+        biblioteca.add(menuEmprestimoLivros);
 
         menuBarra.add(biblioteca);
 
@@ -551,11 +556,12 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem efetivarContasPagar;
     private javax.swing.JMenu financeiro;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem lancarContasPagar;
     private javax.swing.JMenuBar menuBarra;
+    private javax.swing.JMenu menuBiblioteca;
+    private javax.swing.JMenu menuCadastros;
+    private javax.swing.JMenu menuEmprestimoLivros;
     private javax.swing.JMenu menuUsuario;
     private javax.swing.JMenuItem movimentoFinanceiro;
     private javax.swing.JMenu operacaoCaixa;

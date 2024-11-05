@@ -2,24 +2,29 @@
 package view.biblioteca;
 
 import dao.BibliotecaDao;
+import dao.EmprestimoLivroDao;
 import dao.IgrejaDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import ferramentas.Conversores;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.EmprestimoLivro;
 import model.Igreja;
 import model.Livro;
 import model.Pessoa;
 
 
+
 public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
 
+    private final EmprestimoLivroDao emprestimoDao = new EmprestimoLivroDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final LivroDao livroDao = new LivroDao();
@@ -50,7 +55,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         dataEmprestimo = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        btnAdicionar = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaLivros = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
@@ -85,12 +90,12 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Data Empréstimo");
 
-        btnAdicionar.setBackground(new java.awt.Color(51, 102, 255));
-        btnAdicionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnAdicionar.setText("Adicionar");
-        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+        btnOk.setBackground(new java.awt.Color(51, 102, 255));
+        btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarActionPerformed(evt);
+                btnOkActionPerformed(evt);
             }
         });
 
@@ -159,39 +164,38 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(livro, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAdicionar))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(livro, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(btnExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSalvar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -215,7 +219,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dataEmprestimo)
-                            .addComponent(btnAdicionar)))
+                            .addComponent(btnOk)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
@@ -244,15 +248,18 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         } 
     }//GEN-LAST:event_nomePessoaKeyPressed
 
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         this.nomePessoa.setEditable(false);
         this.dataEmprestimo.setEditable(false);
         this.igreja.setEnabled(false);
-        adicionarLivro();      
-    }//GEN-LAST:event_btnAdicionarActionPerformed
+        adicionarLivro(); 
+        carregarLivros();
+    }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
+        emprestarLivros();
+        limparTabela();
+        formInicial();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -334,17 +341,49 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
             return;
         }     
     }
+    
+    private void emprestarLivros(){
+
+        Pessoa pessoa = new Pessoa();
+        List<EmprestimoLivro> listLivroEmprestado = new ArrayList<>();
+        int livroSelec = this.tabelaLivros.getRowCount();
+        
+        if(livroSelec > 0){           
+            for(int i = 0; i < livroSelec; i++){           
+                Livro livro  = (Livro)this.tabelaLivros.getModel().getValueAt(i, 1);
+                Integer codPessoa = Integer.valueOf(this.codPessoa.getText());
+                String nomePessoa = this.nomePessoa.getText();
+                Date dataEmprestimo = this.conversor.convertendoStringDateSql(this.dataEmprestimo.getText());
+                Igreja igreja  = (Igreja) this.igreja.getSelectedItem();
+                
+                pessoa.setCodigo(codPessoa);
+                pessoa.setNome(nomePessoa);
+            
+                EmprestimoLivro emprestimoLivro  = new EmprestimoLivro();   
+                emprestimoLivro.setPessoa(pessoa);
+                emprestimoLivro.setDataEmprestimo(dataEmprestimo);
+                emprestimoLivro.setLivro(livro);
+                emprestimoLivro.setStatus(1);
+                emprestimoLivro.setIgreja(igreja);
+                
+                listLivroEmprestado.add(emprestimoLivro);
+            }    
+            
+            this.emprestimoDao.emprestarLivros(listLivroEmprestado);
+        }else{
+            JOptionPane.showMessageDialog(null, "Para efetuar o empréstimo, é necessário informar o(s) livro(s)", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
         
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField codPessoa;
     private javax.swing.JFormattedTextField dataEmprestimo;
-    private javax.swing.JButton iconLimpar;
-    private javax.swing.JButton iconLimpar1;
     private javax.swing.JComboBox<String> igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

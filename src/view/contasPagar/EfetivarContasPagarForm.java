@@ -39,7 +39,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     public EfetivarContasPagarForm() {
         initComponents();
         formInicial();
-        listaContasPagar.clear(); //Limpando a lista, antes de receber novos dados.
+        this.listaContasPagar.clear(); //Limpando a lista, antes de receber novos dados.
         consultarContas();
         atualizarTabela();
     }
@@ -496,19 +496,19 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void rbDataVencimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataVencimentoActionPerformed
-        txData.setText("Vencimento:");
+        this.txData.setText("Vencimento:");
     }//GEN-LAST:event_rbDataVencimentoActionPerformed
 
     private void rbDataPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataPagamentoActionPerformed
-        txData.setText("Pagamento:");
+        this.txData.setText("Pagamento:");
     }//GEN-LAST:event_rbDataPagamentoActionPerformed
 
     private void rbDataLancamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataLancamentoActionPerformed
-        txData.setText("Lançamento:");
+        this.txData.setText("Lançamento:");
     }//GEN-LAST:event_rbDataLancamentoActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-        listaContasPagar.clear(); //Limpando a lista, antes de receber novos dados.
+        this.listaContasPagar.clear(); //Limpando a lista, antes de receber novos dados.
         consultarContas();
         atualizarTabela();
     }//GEN-LAST:event_btnFiltrarActionPerformed
@@ -525,29 +525,29 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEfetivarActionPerformed
 
     private void rbEfetivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbEfetivarActionPerformed
-        dataPagamento.setEnabled(true);
-        formaPagto.setEnabled(true);
-        btnEfetivar.setEnabled(true);
-        contaCaixa.setEnabled(true);
-        rbSomenteAbertas.setSelected(true);
-        rbSomentePagas.setSelected(false);
-        rbTodasParcelas.setSelected(false);
-        listaContasPagar.clear();
+        this.dataPagamento.setEnabled(true);
+        this.formaPagto.setEnabled(true);
+        this.btnEfetivar.setEnabled(true);
+        this.contaCaixa.setEnabled(true);
+        this.rbSomenteAbertas.setSelected(true);
+        this.rbSomentePagas.setSelected(false);
+        this.rbTodasParcelas.setSelected(false);
+        this.listaContasPagar.clear();
         consultarContas();
     }//GEN-LAST:event_rbEfetivarActionPerformed
 
     private void rbConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbConsultarActionPerformed
-        dataPagamento.setEnabled(false);
-        formaPagto.setEnabled(false);
-        btnEfetivar.setEnabled(false);
-        contaCaixa.setEnabled(false);
-        rbSomentePagas.setEnabled(true);
-        rbTodasParcelas.setEnabled(true);
+        this.dataPagamento.setEnabled(false);
+        this.formaPagto.setEnabled(false);
+        this.btnEfetivar.setEnabled(false);
+        this.contaCaixa.setEnabled(false);
+        this.rbSomentePagas.setEnabled(true);
+        this.rbTodasParcelas.setEnabled(true);
     }//GEN-LAST:event_rbConsultarActionPerformed
 
     private void subContaResultadoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_subContaResultadoKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            subContaResultado.removeAllItems();
+            this.subContaResultado.removeAllItems();
         } 
     }//GEN-LAST:event_subContaResultadoKeyPressed
 
@@ -556,13 +556,13 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_subContaResultadoMousePressed
 
     private void buscarFornecedor(){
-        String textoBusca = codFornecedor.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = pessoaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        String textoBusca = this.codFornecedor.getText(); // Texto digitado na busca        
+        List<Pessoa> listaPessoa = this.pessoaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
         
         //Adicionando os dados encontrados, no formulário
         for(Pessoa pessoa : listaPessoa){
-            codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
-            nomeFornecedor.setText(pessoa.getNome());
+            this.codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
+            this.nomeFornecedor.setText(pessoa.getNome());
         } 
     } 
     
@@ -586,68 +586,62 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
                 codForn = Integer.valueOf(this.codFornecedor.getText());
                 fornecedor.setCodigo(codForn);
             } catch (NumberFormatException e) {
-                // Tratar exceção se a conversão falhar
-                e.printStackTrace();
-                // Você pode definir codFornecedor como null ou lidar com a exceção de acordo
             }
         }
         //Tratando o número da nota
         if (!this.numNota.getText().isEmpty()) {
             try {
-                numeroNota = Integer.parseInt(this.numNota.getText());
+                numeroNota = Integer.valueOf(this.numNota.getText());
             } catch (NumberFormatException e) {
-                // Tratar exceção se a conversão falhar
-                e.printStackTrace();
-                // Você pode definir codFornecedor como null ou lidar com a exceção de acordo
             }
         }
 
         
         //Verificando quais radios button das parcelas, foram selecionadas
-        if(rbSomenteAbertas.isSelected()){
+        if(this.rbSomenteAbertas.isSelected()){
             baixada = 0;
-        }else if(rbSomentePagas.isSelected()){
+        }else if(this.rbSomentePagas.isSelected()){
             baixada = 1;
-        }else if(rbTodasParcelas.isSelected()){
+        }else if(this.rbTodasParcelas.isSelected()){
             baixada = null;
         }
         
         //Validando qual data foi selecionado, e convertendo a String para tipo data
-        if(rbDataLancamento.isSelected()){
-            dataLancamentoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText()); 
-            dataLancamentoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
+        if(this.rbDataLancamento.isSelected()){
+            dataLancamentoInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText()); 
+            dataLancamentoFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
 
-        }else if(rbDataPagamento.isSelected()){
+        }else if(this.rbDataPagamento.isSelected()){
             dataPagamentoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
             dataPagamentoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
 
-        }else if(rbDataVencimento.isSelected()){
+        }else if(this.rbDataVencimento.isSelected()){
             dataVencimentoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
             dataVencimentoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
 
         }
 
-        contasPagar.setFornecedor(fornecedor);
-        contasPagar.setNumNota(numeroNota);
-        contasPagar.setSubContaResultado(subCtResult);
-        contasPagar.setDescricaoConta(descricao);
-        contasPagar.setStatus(baixada);
+        this.contasPagar.setFornecedor(this.fornecedor);
+        this.contasPagar.setNumNota(numeroNota);
+        this.contasPagar.setSubContaResultado(subCtResult);
+        this.contasPagar.setDescricaoConta(descricao);
+        this.contasPagar.setStatus(baixada);
         
-        listaContasPagar = contasPagarDao.consultarContasPagar(contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
+        this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
     }
     
     private void atualizarTabela(){
-        DefaultTableModel model = (DefaultTableModel) tabelaParcelas.getModel();
+        DefaultTableModel model = (DefaultTableModel) this.tabelaParcelas.getModel();
         model.setNumRows(0);
 
-        for(ContasPagar cp : listaContasPagar){      
+        for(ContasPagar cp : this.listaContasPagar){      
             model.addRow(new Object[]{cp.getNumNota(),cp.getParcela(),cp.getValor(), cp.getDescricaoConta(), cp.getFornecedor().getNome(), cp.getDataPagamento(), cp.getDataVencimento(), cp.getDataCadastro()});
         }
     }
     
     private void carregarSubContaResultado(){
-        List<SubContaResultado> listaSubContaResult = subContResultDao.consultarSubContaResultado();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)subContaResultado.getModel();
+        List<SubContaResultado> listaSubContaResult = this.subContResultDao.consultarSubContaResultado();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.subContaResultado.getModel();
         modelo.removeAllElements();
         for(SubContaResultado subCont : listaSubContaResult){
             modelo.addElement(subCont);
@@ -655,8 +649,8 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarFormaPagto(){
-        List<FormaPagto> listaFormaPagto = formaPagtoDao.consultarFormaPagto();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)formaPagto.getModel();
+        List<FormaPagto> listaFormaPagto = this.formaPagtoDao.consultarFormaPagto();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.formaPagto.getModel();
         modelo.removeAllElements();
         for(FormaPagto pagto : listaFormaPagto){
             modelo.addElement(pagto);
@@ -664,8 +658,8 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarCaixa();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarCaixa();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
             modelo.addElement(cx);
@@ -674,21 +668,21 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }
     
     private void limparFormulario(){
-        codFornecedor.setText("");
-        nomeFornecedor.setText("");
-        rbSomenteAbertas.setSelected(true);
-        rbDataVencimento.setSelected(true);
-        dataInicial.setText(conversor.dataAtualString());
-        dataFinal.setText(conversor.dataAtualString());
-        dataPagamento.setText(conversor.dataAtualString());
-        descricaoContas.setText("");
-        numNota.setText("");
-        subContaResultado.removeAllItems();
+        this.codFornecedor.setText("");
+        this.nomeFornecedor.setText("");
+        this.rbSomenteAbertas.setSelected(true);
+        this.rbDataVencimento.setSelected(true);
+        this.dataInicial.setText(this.conversor.dataAtualString());
+        this.dataFinal.setText(this.conversor.dataAtualString());
+        this.dataPagamento.setText(this.conversor.dataAtualString());
+        this.descricaoContas.setText("");
+        this.numNota.setText("");
+        this.subContaResultado.removeAllItems();
     }
     
     private void limparTabela(){
-        if(tabelaParcelas.getRowCount() > 0){
-            DefaultTableModel model = (DefaultTableModel) tabelaParcelas.getModel();
+        if(this.tabelaParcelas.getRowCount() > 0){
+            DefaultTableModel model = (DefaultTableModel) this.tabelaParcelas.getModel();
             model.setRowCount(0);
         }
     }
@@ -739,20 +733,20 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     }
     
     private void formInicial(){
-        rbDataVencimento.setSelected(true);
+        this.rbDataVencimento.setSelected(true);
         carregarFormaPagto();
         carregarContaCaixa();
-        rbSomenteAbertas.setSelected(true);
-        rbConsultar.setSelected(true);
-        rbSomentePagas.setEnabled(true);
-        rbTodasParcelas.setEnabled(true);
-        dataInicial.setText(conversor.dataAtualString());
-        dataFinal.setText(conversor.dataAtualString());
-        dataPagamento.setText(conversor.dataAtualString());
-        formaPagto.setEnabled(false);
-        contaCaixa.setEnabled(false);
-        dataPagamento.setEnabled(false);
-        btnEfetivar.setEnabled(false);
+        this.rbSomenteAbertas.setSelected(true);
+        this.rbConsultar.setSelected(true);
+        this.rbSomentePagas.setEnabled(true);
+        this.rbTodasParcelas.setEnabled(true);
+        this.dataInicial.setText(conversor.dataAtualString());
+        this.dataFinal.setText(conversor.dataAtualString());
+        this.dataPagamento.setText(conversor.dataAtualString());
+        this.formaPagto.setEnabled(false);
+        this.contaCaixa.setEnabled(false);
+        this.dataPagamento.setEnabled(false);
+        this.btnEfetivar.setEnabled(false);
         consultarContas();
         atualizarTabela(); 
     }

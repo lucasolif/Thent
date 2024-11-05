@@ -58,11 +58,9 @@ public class ContasPagarDao {
                 try{
                     conexao.rollback();
                 }catch(SQLException e){
-                    e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o contas a pagar", "Erro 014", JOptionPane.ERROR_MESSAGE);
         }finally{
             //Fechar os recursos abertos
@@ -70,7 +68,6 @@ public class ContasPagarDao {
                 if(ps != null) ps.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -215,22 +212,18 @@ public class ContasPagarDao {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
-            // Fechando recursos
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
-        return listaContasPagar;
-        
+        return listaContasPagar;       
     }
     
-    public void ExcluirContasPagar (List<ContasPagar> cpExcluida){
-        
+    public void ExcluirContasPagar (List<ContasPagar> cpExcluida){        
         try{
             conexao = Conexao.getDataSource().getConnection();
             String sql = "DELETE FROM ContasPagar WHERE Codigo=? And NumNota=? And Parcela=?";
@@ -247,7 +240,6 @@ public class ContasPagarDao {
             JOptionPane.showMessageDialog(null, "Contas a Pagar excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o contas a pagar ", "Erro 014", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -255,7 +247,6 @@ public class ContasPagarDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -280,7 +271,6 @@ public class ContasPagarDao {
             if(rs.next()){
                 cpExiste = true;
             }
-
         } catch (SQLException e) {
             
         } finally {
@@ -308,18 +298,14 @@ public class ContasPagarDao {
             ps.setString(2, dataPagamento);
             ps.setInt(3,cpEfetivada.getCodigo());
 
-            ps.executeUpdate();
-            
+            ps.executeUpdate();           
         }catch(SQLException ex){
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o status a(s) conta(s) a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
-            // Fechar recursos
             try{
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   

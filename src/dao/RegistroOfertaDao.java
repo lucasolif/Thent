@@ -81,7 +81,7 @@ public class RegistroOfertaDao {
             }
             //Confimar a transação, ou seja, a inserção dos dados
             conexao.commit();
-            JOptionPane.showMessageDialog(null, "Dizimos e ofertas registrado com sucesso", "Erro 007", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Dizimos e ofertas registrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
             //Se ocorrer um erro, fazer rollback da transação
             if(conexao != null){

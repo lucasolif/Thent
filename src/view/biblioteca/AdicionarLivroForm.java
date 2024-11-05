@@ -111,8 +111,8 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
         adicionarLivro();
         carregarLivros();
         carregarIgrejas();
+        this.qtdLivros.setValue(1);
     }//GEN-LAST:event_btnSalvarActionPerformed
-
 
     private void carregarLivros(){  
         List<Livro> listaLivro = this.livroDao.consultarLivros();
