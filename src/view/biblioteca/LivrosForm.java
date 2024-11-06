@@ -258,7 +258,7 @@ public class LivrosForm extends javax.swing.JInternalFrame {
 
     private void cadastroAlteracaoLivro(){
         
-        Integer codLivro = Integer.valueOf(this.codLivro.getText());
+        Integer codLivro = null;
         Integer volLivro = (Integer) this.volume.getValue();
         Integer anoPubli = Integer.valueOf(this.anoPublicacao.getText());
         String nome = this.nomeLivro.getText();
@@ -266,8 +266,16 @@ public class LivrosForm extends javax.swing.JInternalFrame {
         String caract = this.caracteristicaLivro.getText();
         Editora editora = (Editora) this.publicadoraLivro.getSelectedItem();
         Integer status = 0;
+        
         if(cbAtivo.isSelected()){
             status = 1;
+        }
+        
+        try {
+            codLivro = Integer.valueOf(this.codLivro.getText());
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Para cadastrar uma livro é necessário informar o código do livro", "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
         }
         
         //Validando se um cadastro ou alteração

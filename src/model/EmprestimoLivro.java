@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class EmprestimoLivro {
     
-    private Integer codigo;
+    private Integer codInterno;
     private Pessoa pessoa;
     private Livro livro;
     private Integer status;
@@ -15,12 +15,12 @@ public class EmprestimoLivro {
     private Date dataEmprestimo;
     private Date dataDevolucao;
 
-    public Integer getCodigo() {
-        return codigo;
+    public Integer getCodInterno() {
+        return codInterno;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public void setCodInterno(Integer codInterno) {
+        this.codInterno = codInterno;
     }
 
     public Pessoa getPessoa() {
@@ -70,17 +70,17 @@ public class EmprestimoLivro {
     public void setIgreja(Igreja igreja) {
         this.igreja = igreja;
     }
-    
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.codigo);
-        hash = 59 * hash + Objects.hashCode(this.pessoa);
-        hash = 59 * hash + Objects.hashCode(this.livro);
-        hash = 59 * hash + Objects.hashCode(this.status);
-        hash = 59 * hash + Objects.hashCode(this.dataEmprestimo);
-        hash = 59 * hash + Objects.hashCode(this.dataDevolucao);
+        hash = 97 * hash + Objects.hashCode(this.codInterno);
+        hash = 97 * hash + Objects.hashCode(this.pessoa);
+        hash = 97 * hash + Objects.hashCode(this.livro);
+        hash = 97 * hash + Objects.hashCode(this.status);
+        hash = 97 * hash + Objects.hashCode(this.igreja);
+        hash = 97 * hash + Objects.hashCode(this.dataEmprestimo);
+        hash = 97 * hash + Objects.hashCode(this.dataDevolucao);
         return hash;
     }
 
@@ -96,7 +96,7 @@ public class EmprestimoLivro {
             return false;
         }
         final EmprestimoLivro other = (EmprestimoLivro) obj;
-        if (!Objects.equals(this.codigo, other.codigo)) {
+        if (!Objects.equals(this.codInterno, other.codInterno)) {
             return false;
         }
         if (!Objects.equals(this.pessoa, other.pessoa)) {
@@ -108,13 +108,14 @@ public class EmprestimoLivro {
         if (!Objects.equals(this.status, other.status)) {
             return false;
         }
+        if (!Objects.equals(this.igreja, other.igreja)) {
+            return false;
+        }
         if (!Objects.equals(this.dataEmprestimo, other.dataEmprestimo)) {
             return false;
         }
         return Objects.equals(this.dataDevolucao, other.dataDevolucao);
     }
 
-    
-    
     
 }
