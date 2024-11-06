@@ -93,6 +93,7 @@ public class IgrejaDao {
  
     }
     
+    //Consulta a igreja para ser alterada
     public List<Igreja> consultar(String buscaIgreja){
 
         String sql = null;
@@ -141,11 +142,12 @@ public class IgrejaDao {
         }
 
         return listaIgreja;
-    } //Consulta a igreja para ser alterada
+    } 
     
+    // Consulta igreja para popular o JComboBox de Igreja, no cadastro das pessoas
     public List<Igreja> consultarTodasIgrejas(){
         
-        String sql = "SELECT * FROM Igrejas";
+        String sql = "SELECT * FROM Igrejas ORDER BY NomeIgreja";
         List<Igreja> todasIgrejas = new ArrayList<>();
 
         try{
@@ -179,8 +181,9 @@ public class IgrejaDao {
         }
 
         return todasIgrejas;
-    } // Consulta igreja para popular o JComboBox de Igreja, no cadastro das pessoas
+    } 
     
+    //Consulta igreja com base no código da igreja, obtida na tabela de pessoas, para ser utilizado na consulta das pessoas.
     public Igreja consultarIgrejas(int codIgreja){
         String sql = "SELECT * FROM Igrejas WHERE Codigo=?";
         Igreja igreja = new Igreja();
@@ -217,7 +220,7 @@ public class IgrejaDao {
         }
 
         return igreja;
-    } //Consulta igreja com base no código da igreja, obtida na tabela de pessoas, para ser utilizado na consulta das pessoas.
+    } 
     
     public void remover(Igreja igreja){
         

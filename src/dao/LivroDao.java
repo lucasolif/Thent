@@ -155,7 +155,7 @@ public class LivroDao {
         try{
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM Livros";
+            String sql = "SELECT * FROM Livros Order By Nome";
             ps = conexao.prepareStatement(sql);           
             rs = ps.executeQuery();
 

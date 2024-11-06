@@ -165,7 +165,7 @@ public class EditoraDao {
         try{
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM Editoras";
+            String sql = "SELECT * FROM Editoras ORDER BY Nome";
             ps = conexao.prepareStatement(sql);           
             rs = ps.executeQuery();
 

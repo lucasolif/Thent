@@ -25,7 +25,7 @@ public class ContaResultadoDao {
         try{ 
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM ContasResultado";
+            String sql = "SELECT * FROM ContasResultado ORDER BY Descricao";
             ps = conexao.prepareStatement(sql);
             rs = ps.executeQuery();
 

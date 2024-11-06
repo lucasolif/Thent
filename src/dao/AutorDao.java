@@ -162,7 +162,7 @@ public class AutorDao {
         try{
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM Autores";
+            String sql = "SELECT * FROM Autores ORDER BY Nome";
             ps = conexao.prepareStatement(sql);           
             rs = ps.executeQuery();
 

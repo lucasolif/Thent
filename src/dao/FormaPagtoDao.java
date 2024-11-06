@@ -26,7 +26,7 @@ public class FormaPagtoDao {
         try{
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM FormasPagamento";
+            String sql = "SELECT * FROM FormasPagamento ORDER BY Descricao";
             ps = conexao.prepareStatement(sql);           
             rs = ps.executeQuery();
 

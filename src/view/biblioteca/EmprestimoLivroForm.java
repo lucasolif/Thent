@@ -314,11 +314,29 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     } 
     
     private void adicionarLivro(){
+        int cont = 0;
+        final Livro livro = (Livro) this.livro.getSelectedItem();
+        final int qtdLinhas = this.tabelaLivros.getRowCount();
+        boolean livroJaAdicionado = false;
         
-        Livro livro = (Livro) this.livro.getSelectedItem();
+        //Verificar se o livro já foi adicionado na tabela
+        while(cont < qtdLinhas){
+            Integer codLivro = (Integer) this.tabelaLivros.getModel().getValueAt(cont, 0);
+            
+            // Se encontrar o código do livro, significa que já foi adicionado
+            if (codLivro.equals(livro.getCodLivro())) {
+                 livroJaAdicionado = true;
+                 break;
+            }
+            cont++;
+        }    
         
-        DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
-        model.addRow(new Object[]{livro.getCodLivro(),livro, livro.getAutor()});
+        if(livroJaAdicionado){
+            JOptionPane.showMessageDialog(null, "O livro já foi adicionado na lista de empréstimos", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }else{           
+            DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
+            model.addRow(new Object[]{livro.getCodLivro(),livro, livro.getAutor()});
+        }
     }   
     
     private void limparTabela(){

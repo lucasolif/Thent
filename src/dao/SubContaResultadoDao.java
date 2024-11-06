@@ -27,7 +27,7 @@ public class SubContaResultadoDao {
         try{ 
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM SubContasResultado";
+            String sql = "SELECT * FROM SubContasResultado ORDER BY Descricao";
             ps = conexao.prepareStatement(sql);
             rs = ps.executeQuery();
 
