@@ -36,7 +36,6 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         formInicial();
         consultarTodosEmprestimos();
         atualizarTabela();
-        this.listaEmpLivros.clear();
     }
 
     public void setPosicao() {
@@ -182,11 +181,6 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
 
         rbGrupoStatus.add(rbEmprestado);
         rbEmprestado.setText("Emprestados");
-        rbEmprestado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbEmprestadoActionPerformed(evt);
-            }
-        });
 
         rbGrupoStatus.add(rbDevolvido);
         rbDevolvido.setText("Devolvidos");
@@ -354,10 +348,9 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel1))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -384,7 +377,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDevolver)
                     .addComponent(btnLimpar))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
@@ -397,10 +390,6 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private void rbDataDevolucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataDevolucaoActionPerformed
         this.txData.setText("Devolução:");
     }//GEN-LAST:event_rbDataDevolucaoActionPerformed
-
-    private void rbEmprestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbEmprestadoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rbEmprestadoActionPerformed
 
     private void rbDevolvidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDevolvidoActionPerformed
         this.btnDevolver.setEnabled(false);
@@ -420,6 +409,8 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
         devolverEmprestimo();
         formInicial();
+        consultarTodosEmprestimos();
+        atualizarTabela();
     }//GEN-LAST:event_btnDevolverActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -559,25 +550,27 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
      
         int empSelec[] = this.tabelaEmprestimos.getSelectedRows();
         List<EmprestimoLivro> listaEmpDevolvido = new ArrayList<>();
-
+        
         //Verifica se foi selecionado algum registro da lista
         if(empSelec.length < 0){
             JOptionPane.showMessageDialog(null, "Selecione um empréstimo para ser devolvido", "Atenção", JOptionPane.WARNING_MESSAGE);
             return;
         }else{
             for(int index : empSelec){
-                
                 EmprestimoLivro emprestimoLivro = new EmprestimoLivro();           
                 Pessoa pessoa = this.listaEmpLivros.get(index).getPessoa();
                 Livro livro = this.listaEmpLivros.get(index).getLivro();
+                Integer codInterno = this.listaEmpLivros.get(index).getCodInterno();
                 Igreja igreja = (Igreja) this.igreja.getSelectedItem();
                 Date dataDevolucao = conversor.convertendoStringDateSql(this.dataDevolucao.getText());
-                Integer status = 0;               
+                Integer status = 0;                   
+                
                 emprestimoLivro.setPessoa(pessoa);
                 emprestimoLivro.setLivro(livro);
                 emprestimoLivro.setIgreja(igreja);
                 emprestimoLivro.setDataDevolucao(dataDevolucao);
                 emprestimoLivro.setStatus(status);
+                emprestimoLivro.setCodInterno(codInterno);
 
                 //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
                 listaEmpDevolvido.add(emprestimoLivro);   
@@ -595,7 +588,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     }
     
     private void consultarTodosEmprestimos(){
-        this.listaEmpLivros = this.empLivroDao.consultarTodosEmprestimos();
+        this.listaEmpLivros = this.empLivroDao.consultarEmprestimosStatusEmprestado();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

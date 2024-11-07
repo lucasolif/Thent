@@ -25,9 +25,11 @@ public class EmprestimoLivroDao {
     public void emprestarLivros(List<EmprestimoLivro> livrosEmprestados){
 
         PreparedStatement psEmprestimo = null;
+        PreparedStatement psMovimentacao = null;
         PreparedStatement psAtuBblioteca = null;
         ResultSet generatedKeys = null;
         
+        String sqlInsert1 = "INSERT INTO MovimentacaoBiblioteca(Livro,Quantidade,DataMovimentacao,TipoMovimentacao,EmprestimoDevolucao) VALUES(?,1,GETDATE(),'SAÍDA',?)";
         String sqlInsert2 = "INSERT INTO EmprestimoLivros(Pessoa,Livro,StatusEmprestimo,DataEmprestimo,Igreja,Eventos) VALUES(?,?,?,?,?,'<' + CONVERT(VARCHAR, GETDATE(), 103)+'> EMPRÉSTIMO')";
         String sqlUpdate = "UPDATE Biblioteca SET Quantidade = Quantidade - 1 WHERE Livro = ?";
         
@@ -36,7 +38,7 @@ public class EmprestimoLivroDao {
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             for(EmprestimoLivro emp : livrosEmprestados){   
-                    
+                //Inserindo os dados na tabela de empréstimos    
                 psEmprestimo = this.conexao.prepareStatement(sqlInsert2, PreparedStatement.RETURN_GENERATED_KEYS); 
                 psEmprestimo.setInt(1, emp.getPessoa().getCodigo());
                 psEmprestimo.setInt(2, emp.getLivro().getCodInterno());
@@ -49,6 +51,13 @@ public class EmprestimoLivroDao {
                 generatedKeys = psEmprestimo.getGeneratedKeys();
                 
                 if (generatedKeys.next()) {
+                    //Inserindo os dados na tabela de movimentacao
+                    int idImprestimo = generatedKeys.getInt(1);
+                    psMovimentacao = this.conexao.prepareStatement(sqlInsert1); 
+                    psMovimentacao.setInt(1, emp.getLivro().getCodInterno());
+                    psMovimentacao.setInt(2, idImprestimo);
+                    psMovimentacao.executeUpdate();
+                    
                     //Atualizando a quantidade de livros da biblioteca, após o empréstimo
                     psAtuBblioteca = this.conexao.prepareStatement(sqlUpdate);
                     psAtuBblioteca.setInt(1, emp.getLivro().getCodInterno());                  
@@ -203,7 +212,8 @@ public class EmprestimoLivroDao {
     public void devolverLivro(List<EmprestimoLivro> livrosDevolvido){
         
         PreparedStatement psRegistro = null;
-        PreparedStatement psMovimento = null;
+        PreparedStatement psMvBiblioteca = null;
+        PreparedStatement psMovimentacao = null;
         ResultSet generatedKeys = null;
 
         try{
@@ -211,7 +221,7 @@ public class EmprestimoLivroDao {
        
             for(EmprestimoLivro devLivro : livrosDevolvido){ 
                 
-                String sqlUpdate1 = "UPDATE EmprestimoLivros SET StatusEmprestimo=?, DataDevolucao=?, Eventos = Eventos + '<'+CONVERT(VARCHAR, GETDATE(), 103)+'> DEVOLUÇÃO' WHERE CodInterno=? AND Livro=? AND StatusEmprestimo=1 AND DataDevolucao IS NULL";
+                String sqlUpdate1 = "UPDATE EmprestimoLivros SET StatusEmprestimo=?, DataDevolucao=?, Eventos = Eventos + ' <'+CONVERT(VARCHAR, GETDATE(), 103)+'> DEVOLUÇÃO' WHERE CodInterno=? AND Livro=? AND StatusEmprestimo=1 AND DataDevolucao IS NULL";
                 psRegistro = conexao.prepareStatement(sqlUpdate1, PreparedStatement.RETURN_GENERATED_KEYS); 
                 psRegistro.setInt(1, devLivro.getStatus());
                 psRegistro.setDate(2, (Date) devLivro.getDataDevolucao());
@@ -222,12 +232,19 @@ public class EmprestimoLivroDao {
                 // Recuperar a chave primária gerada
                 generatedKeys = psRegistro.getGeneratedKeys();
                 
-                if (generatedKeys.next()) { //Verifica se tem a chave primária
+                if (generatedKeys.next()) {                     
+                    //Inserindo a movimentação na tabela de movimentação
+                    String sqlInsert1 = "INSERT INTO MovimentacaoBiblioteca(Livro,Quantidade,DataMovimentacao,TipoMovimentacao,EmprestimoDevolucao, Igreja) VALUES(?,1,GETDATE(),'ENTRADA',?)";
+                    psMovimentacao = this.conexao.prepareStatement(sqlInsert1); 
+                    psMovimentacao.setInt(1, devLivro.getLivro().getCodInterno());
+                    psMovimentacao.setInt(2, devLivro.getCodInterno());
+                    psMovimentacao.executeUpdate();
+                    
                     // Atualizar a quantidade de livros da biblioteca
                     String sqlUpdate2 = "UPDATE Biblioteca SET Quantidade = Quantidade + 1 WHERE Livro = ?";
-                    psMovimento = conexao.prepareStatement(sqlUpdate2);                  
-                    psMovimento.setInt(1, devLivro.getLivro().getCodInterno());                  
-                    psMovimento.executeUpdate();
+                    psMvBiblioteca = conexao.prepareStatement(sqlUpdate2);                  
+                    psMvBiblioteca.setInt(1, devLivro.getLivro().getCodInterno());                  
+                    psMvBiblioteca.executeUpdate();
                 }
             }
             //Confimar a transação, ou seja, a inserção dos dados
@@ -248,7 +265,7 @@ public class EmprestimoLivroDao {
             try{
                 if(rs != null) rs.close();
                 if(psRegistro != null) psRegistro.close();
-                if(psMovimento != null) psMovimento.close();
+                if(psMvBiblioteca != null) psMvBiblioteca.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
@@ -258,12 +275,12 @@ public class EmprestimoLivroDao {
     }
     
     //Consulta que aparece todos os livros emprestados, quando abrir a tela;
-    public List<EmprestimoLivro> consultarTodosEmprestimos(){
+    public List<EmprestimoLivro> consultarEmprestimosStatusEmprestado(){
         
         List<EmprestimoLivro> listaEmpLivro = new ArrayList<>();
         
         // Montando a query SQL com placeholders
-        String sql = "SELECT EMP.CodInterno AS CodIternoEmprestimo, EMP.EmprestimoDevolucao AS EmprestimoDevolucao, EMP.Pessoa AS CodPessoa, P.Nome AS NomePessoa, " +
+        String sql = "SELECT EMP.CodInterno AS CodIternoEmprestimo, EMP.Pessoa AS CodPessoa, P.Nome AS NomePessoa, " +
             "EMP.Livro AS CodInternoLivro, LV.CodLivro AS CodLivro, LV.Nome AS NomeLivro, LV.Volume AS VolumeLivro, " +
             "EMP.StatusEmprestimo AS StatusEmprestimo, EMP.DataEmprestimo AS DataEmprestimo, EMP.DataDevolucao AS DataDevolucao " +
             "FROM EmprestimoLivros AS EMP " +

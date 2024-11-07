@@ -9,6 +9,7 @@ import view.biblioteca.ConsultaEmprestimoForm;
 import view.biblioteca.EditoraForm;
 import view.biblioteca.EmprestimoLivroForm;
 import view.biblioteca.LivrosForm;
+import view.biblioteca.SaidaAvulsaForm;
 import view.cadastros.ContaCaixaForm;
 import view.cadastros.ContaResultadoForm;
 import view.cadastros.FormaPagtoForm;
@@ -73,6 +74,7 @@ public class Home extends javax.swing.JFrame {
         menuBiblioteca = new javax.swing.JMenu();
         cadastroBiblioteca = new javax.swing.JMenuItem();
         addLivroBiblioteca = new javax.swing.JMenuItem();
+        saidaAvulsaLivro = new javax.swing.JMenuItem();
         menuEmprestimoLivros = new javax.swing.JMenu();
         operacaoEmprestimo = new javax.swing.JMenuItem();
         operacaoConsultaEmprestimo = new javax.swing.JMenuItem();
@@ -310,6 +312,14 @@ public class Home extends javax.swing.JFrame {
         });
         menuBiblioteca.add(addLivroBiblioteca);
 
+        saidaAvulsaLivro.setText("Saída Avulsa de Livros");
+        saidaAvulsaLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saidaAvulsaLivroActionPerformed(evt);
+            }
+        });
+        menuBiblioteca.add(saidaAvulsaLivro);
+
         biblioteca.add(menuBiblioteca);
 
         menuEmprestimoLivros.setText("Empréstimo Livros");
@@ -528,6 +538,13 @@ public class Home extends javax.swing.JFrame {
         dialogAddLivroBibli.setLocationRelativeTo(this);
         dialogAddLivroBibli.setVisible(true);
     }//GEN-LAST:event_addLivroBibliotecaActionPerformed
+
+    private void saidaAvulsaLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saidaAvulsaLivroActionPerformed
+        SaidaAvulsaForm saidaAvulsaLivro = new SaidaAvulsaForm();
+        painelHome.add(saidaAvulsaLivro);
+        saidaAvulsaLivro.setVisible(true);
+        saidaAvulsaLivro.setPosicao();
+    }//GEN-LAST:event_saidaAvulsaLivroActionPerformed
   
    
     
@@ -572,6 +589,7 @@ public class Home extends javax.swing.JFrame {
     public javax.swing.JDesktopPane painelHome;
     private javax.swing.JMenuItem registrarOfertasDizimo;
     private javax.swing.JMenu relatorios;
+    private javax.swing.JMenuItem saidaAvulsaLivro;
     private javax.swing.JMenuItem transferencia;
     // End of variables declaration//GEN-END:variables
 }

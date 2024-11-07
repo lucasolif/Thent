@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.Autor;
 import model.Biblioteca;
-import model.Editora;
 import model.Igreja;
 import model.Livro;
 
@@ -26,14 +25,15 @@ public class BibliotecaDao {
     public void adicionar(Livro livro, Igreja igreja, Integer qtd){
         
         String sqlConsulta = "SELECT * FROM Biblioteca WHERE Livro = ?";
-        String sqlInsert = "INSERT INTO Biblioteca (Livro,Quantidade,DataCadastro,Igreja)VALUES (?,?,GETDATE(),?)";
+        String sqlInsert1 = "INSERT INTO Biblioteca (Livro,Quantidade,Igreja)VALUES (?,?,?)";
         String sqlUpdate = "UPDATE Biblioteca SET Quantidade = ? WHERE Livro = ?";
+        String sqlInsert2 = "INSERT INTO MovimentacaoBiblioteca(Livro,Quantidade,DataMovimentacao,TipoMovimentacao) VALUES(?,?,GETDATE(),'SAÍDA')";
 
         try{
-            this.conexao = Conexao.getDataSource().getConnection();           
-            this.selectStmt = this.conexao.prepareStatement(sqlConsulta);
+            this.conexao = Conexao.getDataSource().getConnection();  
             
             //Executa a query para consultar se o livro já existe
+            this.selectStmt = this.conexao.prepareStatement(sqlConsulta);         
             this.selectStmt.setInt(1,  livro.getCodInterno());
             this.rs = selectStmt.executeQuery();
             
@@ -41,20 +41,23 @@ public class BibliotecaDao {
                 final Integer qtdAtual = rs.getInt("Quantidade");
                 final Integer qtdTotal = qtdAtual + qtd;
                 
-                this.updateStmt = this.conexao.prepareStatement(sqlUpdate);
-                
+                this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
                 this.updateStmt.setInt(1, qtdTotal);
                 this.updateStmt.setInt(2, livro.getCodInterno());
                 this.updateStmt.executeUpdate();
                 
             }else{
-                this.insertStmt = this.conexao.prepareStatement(sqlInsert);
-
+                this.insertStmt = this.conexao.prepareStatement(sqlInsert1);
                 this.insertStmt.setInt(1, livro.getCodInterno());
                 this.insertStmt.setInt(2, qtd);
                 this.insertStmt.setInt(3, igreja.getCodigo());
                 this.insertStmt.execute();
             }
+            
+            this.insertStmt = this.conexao.prepareStatement(sqlInsert2, PreparedStatement.RETURN_GENERATED_KEYS); 
+            this.insertStmt.setInt(1, livro.getCodInterno());
+            this.insertStmt.setInt(2, qtd);
+            this.insertStmt.executeUpdate();         
 
             JOptionPane.showMessageDialog(null, "Livro adicionado na biblioteca com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
@@ -196,7 +199,7 @@ public class BibliotecaDao {
         
     }
     
-    public List<Livro> consultarLivroDisponivel(Igreja igrejaSelec){
+    public List<Livro> consultarLivroDisponivelBiblioteca(Igreja igrejaSelec){
         
         List<Livro> listaLivros = new ArrayList<>();
 

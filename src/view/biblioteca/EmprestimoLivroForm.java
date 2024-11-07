@@ -294,7 +294,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     private void carregarLivros(){  
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         
-        List<Livro> listaLivro = this.bibliotecaDao.consultarLivroDisponivel(igreja);
+        List<Livro> listaLivro = this.bibliotecaDao.consultarLivroDisponivelBiblioteca(igreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.livro.getModel();
         modelo.removeAllElements();
         for(Livro livro : listaLivro){
