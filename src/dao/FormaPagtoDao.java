@@ -38,7 +38,6 @@ public class FormaPagtoDao {
                 listaFormaPagto.add(formasPagto);
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as formas de pagamento", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{
@@ -48,7 +47,6 @@ public class FormaPagtoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -69,7 +67,6 @@ public class FormaPagtoDao {
             JOptionPane.showMessageDialog(null, "Forma de Pagamento cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a forma de pagamento", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -77,7 +74,6 @@ public class FormaPagtoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -97,7 +93,6 @@ public class FormaPagtoDao {
             JOptionPane.showMessageDialog(null, "Forma de Pagamento "+formaPagto.getNome()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a forma de pagamento "+formaPagto.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -105,14 +100,12 @@ public class FormaPagtoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
  
     }
     
-    //Consulta para listar todas as formas de pagamento na tabela
     public List<FormaPagto> consultarFormaPagto(String formaPagto){
         
         String sql = null;
@@ -148,7 +141,6 @@ public class FormaPagtoDao {
                 listaFormaPagto.add(pagto);
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as formas de pagamento", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -157,7 +149,6 @@ public class FormaPagtoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -178,7 +169,6 @@ public class FormaPagtoDao {
             JOptionPane.showMessageDialog(null, "Forma de Pagamento "+formaPagto.getNome()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a forma de pagamento "+formaPagto.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -186,7 +176,6 @@ public class FormaPagtoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

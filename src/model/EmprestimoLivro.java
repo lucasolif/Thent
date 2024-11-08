@@ -7,20 +7,23 @@ import java.util.Objects;
 
 public class EmprestimoLivro {
     
-    private Integer codInterno;
+    private Integer codigo;
     private Pessoa pessoa;
     private Livro livro;
-    private Integer status;
-    private Igreja igreja;
+    private Biblioteca biblioteca;
+    private Integer StatusEmprestimo;
     private Date dataEmprestimo;
     private Date dataDevolucao;
 
-    public Integer getCodInterno() {
-        return codInterno;
+    public EmprestimoLivro() {
     }
 
-    public void setCodInterno(Integer codInterno) {
-        this.codInterno = codInterno;
+    public Integer getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
     public Pessoa getPessoa() {
@@ -39,12 +42,20 @@ public class EmprestimoLivro {
         this.livro = livro;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Biblioteca getBiblioteca() {
+        return biblioteca;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setBiblioteca(Biblioteca biblioteca) {
+        this.biblioteca = biblioteca;
+    }
+
+    public Integer getStatusEmprestimo() {
+        return StatusEmprestimo;
+    }
+
+    public void setStatusEmprestimo(Integer StatusEmprestimo) {
+        this.StatusEmprestimo = StatusEmprestimo;
     }
 
     public Date getDataEmprestimo() {
@@ -63,24 +74,16 @@ public class EmprestimoLivro {
         this.dataDevolucao = dataDevolucao;
     }
 
-    public Igreja getIgreja() {
-        return igreja;
-    }
-
-    public void setIgreja(Igreja igreja) {
-        this.igreja = igreja;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.codInterno);
-        hash = 97 * hash + Objects.hashCode(this.pessoa);
-        hash = 97 * hash + Objects.hashCode(this.livro);
-        hash = 97 * hash + Objects.hashCode(this.status);
-        hash = 97 * hash + Objects.hashCode(this.igreja);
-        hash = 97 * hash + Objects.hashCode(this.dataEmprestimo);
-        hash = 97 * hash + Objects.hashCode(this.dataDevolucao);
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.codigo);
+        hash = 37 * hash + Objects.hashCode(this.pessoa);
+        hash = 37 * hash + Objects.hashCode(this.livro);
+        hash = 37 * hash + Objects.hashCode(this.biblioteca);
+        hash = 37 * hash + Objects.hashCode(this.StatusEmprestimo);
+        hash = 37 * hash + Objects.hashCode(this.dataEmprestimo);
+        hash = 37 * hash + Objects.hashCode(this.dataDevolucao);
         return hash;
     }
 
@@ -96,7 +99,7 @@ public class EmprestimoLivro {
             return false;
         }
         final EmprestimoLivro other = (EmprestimoLivro) obj;
-        if (!Objects.equals(this.codInterno, other.codInterno)) {
+        if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
         if (!Objects.equals(this.pessoa, other.pessoa)) {
@@ -105,10 +108,10 @@ public class EmprestimoLivro {
         if (!Objects.equals(this.livro, other.livro)) {
             return false;
         }
-        if (!Objects.equals(this.status, other.status)) {
+        if (!Objects.equals(this.biblioteca, other.biblioteca)) {
             return false;
         }
-        if (!Objects.equals(this.igreja, other.igreja)) {
+        if (!Objects.equals(this.StatusEmprestimo, other.StatusEmprestimo)) {
             return false;
         }
         if (!Objects.equals(this.dataEmprestimo, other.dataEmprestimo)) {
@@ -117,5 +120,4 @@ public class EmprestimoLivro {
         return Objects.equals(this.dataDevolucao, other.dataDevolucao);
     }
 
-    
 }

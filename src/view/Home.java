@@ -5,6 +5,7 @@ import jdbc.Conexao;
 import view.biblioteca.AdicionarLivroForm;
 import view.biblioteca.AutorForm;
 import view.biblioteca.BibliotecaForm;
+import view.biblioteca.CadastroBibliotecaForm;
 import view.biblioteca.ConsultaEmprestimoForm;
 import view.biblioteca.EditoraForm;
 import view.biblioteca.EmprestimoLivroForm;
@@ -71,6 +72,7 @@ public class Home extends javax.swing.JFrame {
         cadastroLivros = new javax.swing.JMenuItem();
         cadastroAutor = new javax.swing.JMenuItem();
         cadastroEditora = new javax.swing.JMenuItem();
+        cadastroBibliotecas = new javax.swing.JMenuItem();
         menuBiblioteca = new javax.swing.JMenu();
         cadastroBiblioteca = new javax.swing.JMenuItem();
         addLivroBiblioteca = new javax.swing.JMenuItem();
@@ -291,6 +293,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
         menuCadastros.add(cadastroEditora);
+
+        cadastroBibliotecas.setText("Biblioteca");
+        cadastroBibliotecas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastroBibliotecasActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(cadastroBibliotecas);
 
         biblioteca.add(menuCadastros);
 
@@ -545,6 +555,13 @@ public class Home extends javax.swing.JFrame {
         saidaAvulsaLivro.setVisible(true);
         saidaAvulsaLivro.setPosicao();
     }//GEN-LAST:event_saidaAvulsaLivroActionPerformed
+
+    private void cadastroBibliotecasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecasActionPerformed
+        CadastroBibliotecaForm cadastroBiblioteca = new CadastroBibliotecaForm();
+        painelHome.add(cadastroBiblioteca);
+        cadastroBiblioteca.setVisible(true);
+        cadastroBiblioteca.setPosicao();
+    }//GEN-LAST:event_cadastroBibliotecasActionPerformed
   
    
     
@@ -555,6 +572,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu biblioteca;
     private javax.swing.JMenuItem cadastroAutor;
     private javax.swing.JMenuItem cadastroBiblioteca;
+    private javax.swing.JMenuItem cadastroBibliotecas;
     private javax.swing.JMenuItem cadastroContaCaixa;
     private javax.swing.JMenuItem cadastroContaResultado;
     private javax.swing.JMenuItem cadastroEditora;

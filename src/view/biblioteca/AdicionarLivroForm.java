@@ -2,25 +2,25 @@
 package view.biblioteca;
 
 import dao.BibliotecaDao;
-import dao.IgrejaDao;
 import dao.LivroDao;
+import dao.RegistroBibliotecaDao;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import model.Igreja;
+import model.Biblioteca;
 import model.Livro;
 
 
 public class AdicionarLivroForm extends javax.swing.JDialog {
 
-    private final IgrejaDao igrejaDao = new IgrejaDao();
     private final LivroDao livroDao = new LivroDao();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
+    private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
 
     public AdicionarLivroForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         carregarLivros();
-        carregarIgrejas();
+        carregarBibliotecas();
     }
 
 
@@ -35,7 +35,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        igrejas = new javax.swing.JComboBox<>();
+        biblioteca = new javax.swing.JComboBox<>();
 
         jLabel2.setText("jLabel2");
 
@@ -57,7 +57,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
             }
         });
 
-        jLabel4.setText("Biblioteca Igreja*");
+        jLabel4.setText("Biblioteca");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +67,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(igrejas, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(biblioteca, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSalvar))
                     .addGroup(layout.createSequentialGroup()
@@ -100,7 +100,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
-                    .addComponent(igrejas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(biblioteca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -110,7 +110,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         adicionarLivro();
         carregarLivros();
-        carregarIgrejas();
+        carregarBibliotecas();
         this.qtdLivros.setValue(1);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -123,27 +123,27 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
         }
     }
     
-    private void carregarIgrejas(){  
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igrejas.getModel();
+    private void carregarBibliotecas(){  
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.biblioteca.getModel();
         modelo.removeAllElements();
-        for(Igreja igreja : listaIgrejas){
-            modelo.addElement(igreja);
+        for(Biblioteca bibli : listaBiblioteca){
+            modelo.addElement(bibli);
         }
     }
     
     private void adicionarLivro(){     
         Livro livro = (Livro) this.livros.getSelectedItem();
-        Igreja igreja  = (Igreja) this.igrejas.getSelectedItem();
+        Biblioteca biblioteca  = (Biblioteca) this.biblioteca.getSelectedItem();
         Integer qtd = (Integer) this.qtdLivros.getValue();
         
-        this.bibliotecaDao.adicionar(livro, igreja, qtd);
+        this.rgBibliotecaDao.adicionarLivroBiblioteca(livro, biblioteca, qtd);
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> biblioteca;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<String> igrejas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

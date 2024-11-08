@@ -1,10 +1,12 @@
 
 package view.biblioteca;
 
+import dao.BibliotecaDao;
 import dao.EmprestimoLivroDao;
 import dao.IgrejaDao;
 import dao.LivroDao;
 import dao.PessoaDao;
+import dao.RegistroBibliotecaDao;
 import ferramentas.Conversores;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -14,6 +16,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Igreja;
 import model.Livro;
@@ -24,12 +27,13 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     
     private final LivroDao livroDao = new LivroDao();
     private final PessoaDao pessoaDao = new PessoaDao();
-    private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final Biblioteca biblioteca = new Biblioteca();
+    private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
+    private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
     private final Conversores conversor = new Conversores();
     private List<EmprestimoLivro> listaEmpLivros = new ArrayList<>();
-    private Pessoa pessoa = new Pessoa();
-    private EmprestimoLivro emprestimoLivro = new EmprestimoLivro();
+    
 
     public ConsultaEmprestimoForm() {
         initComponents();
@@ -71,7 +75,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         btnFiltrar = new javax.swing.JButton();
         btnDevolver = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
-        igreja = new javax.swing.JComboBox<>();
+        bibliotecaJComboBox = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         dataDevolucao = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -220,14 +224,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Codigo", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução"
+                "Codigo", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Biblioteca"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -252,6 +256,8 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             tabelaEmprestimos.getColumnModel().getColumn(4).setPreferredWidth(60);
             tabelaEmprestimos.getColumnModel().getColumn(5).setResizable(false);
             tabelaEmprestimos.getColumnModel().getColumn(5).setPreferredWidth(50);
+            tabelaEmprestimos.getColumnModel().getColumn(6).setResizable(false);
+            tabelaEmprestimos.getColumnModel().getColumn(6).setPreferredWidth(150);
         }
 
         btnFiltrar.setBackground(new java.awt.Color(51, 153, 255));
@@ -279,14 +285,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             }
         });
 
-        igreja.addMouseListener(new java.awt.event.MouseAdapter() {
+        bibliotecaJComboBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                igrejaMousePressed(evt);
+                bibliotecaJComboBoxMousePressed(evt);
             }
         });
-        igreja.addKeyListener(new java.awt.event.KeyAdapter() {
+        bibliotecaJComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                igrejaKeyPressed(evt);
+                bibliotecaJComboBoxKeyPressed(evt);
             }
         });
 
@@ -298,7 +304,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
-        jLabel5.setText("Igreja");
+        jLabel5.setText("Biblioteca");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -307,7 +313,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -327,7 +333,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(igreja, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(bibliotecaJComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel5)
@@ -362,7 +368,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -428,15 +434,15 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         carregarLivros();
     }//GEN-LAST:event_livrosMousePressed
 
-    private void igrejaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_igrejaKeyPressed
+    private void bibliotecaJComboBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bibliotecaJComboBoxKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            this.igreja.removeAllItems();
+            this.bibliotecaJComboBox.removeAllItems();
         } 
-    }//GEN-LAST:event_igrejaKeyPressed
+    }//GEN-LAST:event_bibliotecaJComboBoxKeyPressed
 
-    private void igrejaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_igrejaMousePressed
-        carregarIgrejas();
-    }//GEN-LAST:event_igrejaMousePressed
+    private void bibliotecaJComboBoxMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bibliotecaJComboBoxMousePressed
+        carregarBibliotecas();
+    }//GEN-LAST:event_bibliotecaJComboBoxMousePressed
 
     private void carregarLivros(){  
         List<Livro> listaLivro = this.livroDao.consultarLivros();
@@ -447,12 +453,12 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         }
     }
     
-    private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igreja.getModel();
+    private void carregarBibliotecas(){  
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.bibliotecaJComboBox.getModel();
         modelo.removeAllElements();
-        for(Igreja igreja : listaIgrejas){
-            modelo.addElement(igreja);
+        for(Biblioteca bibli : listaBiblioteca){
+            modelo.addElement(bibli);
         }
     }
     
@@ -478,9 +484,12 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         this.nomePessoa.setText("");
         this.livros.setSelectedItem("");
         this.txData.setText("Empréstimo:");
+        this.bibliotecaJComboBox.setSelectedItem("");
     }
     
     private void consultarEmprestimos(){
+        Pessoa pessoa = new Pessoa();
+        EmprestimoLivro emprestimoLivro = new EmprestimoLivro();
         Date dataEmprestimoInicial = null;
         Date dataEmprestimoFinal = null;
         Date dataDevolucaoInicial = null;
@@ -489,12 +498,13 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         Integer statusEmprestimo = null;
         String nomePessoa = this.nomePessoa.getText();
         Livro livro = (Livro) this.livros.getSelectedItem();
+        Biblioteca biblioteca = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
         
         //Tratando o código da pessoa    
         try {
             codPessoa = Integer.valueOf(this.codPessoa.getText());
-            this.pessoa.setCodigo(codPessoa);
-            this.pessoa.setNome(nomePessoa);
+            pessoa.setCodigo(codPessoa);
+            pessoa.setNome(nomePessoa);
         } catch (NumberFormatException e){
 
         }
@@ -516,14 +526,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         }else if(this.rbDataDevolucao.isSelected()){
             dataDevolucaoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
             dataDevolucaoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
-        }
+        }       
         
-        this.emprestimoLivro.setLivro(livro);
-        this.emprestimoLivro.setPessoa(this.pessoa);
-        this.emprestimoLivro.setStatus(statusEmprestimo);
+        emprestimoLivro.setLivro(livro);
+        emprestimoLivro.setPessoa(pessoa);
+        emprestimoLivro.setStatusEmprestimo(statusEmprestimo);
+        emprestimoLivro.setBiblioteca(biblioteca);
         
-        this.listaEmpLivros = empLivroDao.consultarEmprestimosLivro(this.emprestimoLivro, dataEmprestimoInicial, dataEmprestimoFinal, dataDevolucaoInicial, dataDevolucaoFinal);
-        
+        this.listaEmpLivros = empLivroDao.consultarEmprestimosLivro(emprestimoLivro, dataEmprestimoInicial, dataEmprestimoFinal, dataDevolucaoInicial, dataDevolucaoFinal);       
     }
     
     private void atualizarTabela(){
@@ -534,7 +544,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             String dataEmprestimo = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataEmprestimo());
             String dataDevolucao = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataDevolucao());
             
-            model.addRow(new Object[]{empLivro.getCodInterno(),empLivro.getLivro().getCodLivro(),empLivro.getLivro(), empLivro.getPessoa(), dataEmprestimo, dataDevolucao});
+            model.addRow(new Object[]{empLivro.getCodigo(),empLivro.getLivro().getCodLivro(),empLivro.getLivro(), empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getBiblioteca()});
         }
     }
     
@@ -554,23 +564,22 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         //Verifica se foi selecionado algum registro da lista
         if(empSelec.length < 0){
             JOptionPane.showMessageDialog(null, "Selecione um empréstimo para ser devolvido", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
         }else{
             for(int index : empSelec){
                 EmprestimoLivro emprestimoLivro = new EmprestimoLivro();           
                 Pessoa pessoa = this.listaEmpLivros.get(index).getPessoa();
                 Livro livro = this.listaEmpLivros.get(index).getLivro();
-                Integer codInterno = this.listaEmpLivros.get(index).getCodInterno();
-                Igreja igreja = (Igreja) this.igreja.getSelectedItem();
+                Integer codEmprestimo = this.listaEmpLivros.get(index).getCodigo();
+                Biblioteca biblioteca = this.listaEmpLivros.get(index).getBiblioteca();
                 Date dataDevolucao = conversor.convertendoStringDateSql(this.dataDevolucao.getText());
-                Integer status = 0;                   
+                Integer statusEmprestimo = 0;                   
                 
                 emprestimoLivro.setPessoa(pessoa);
                 emprestimoLivro.setLivro(livro);
-                emprestimoLivro.setIgreja(igreja);
+                emprestimoLivro.setBiblioteca(biblioteca);
                 emprestimoLivro.setDataDevolucao(dataDevolucao);
-                emprestimoLivro.setStatus(status);
-                emprestimoLivro.setCodInterno(codInterno);
+                emprestimoLivro.setStatusEmprestimo(statusEmprestimo);
+                emprestimoLivro.setCodigo(codEmprestimo);
 
                 //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
                 listaEmpDevolvido.add(emprestimoLivro);   
@@ -592,6 +601,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> bibliotecaJComboBox;
     private javax.swing.JButton btnDevolver;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpar;
@@ -599,7 +609,6 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private javax.swing.JFormattedTextField dataDevolucao;
     private javax.swing.JFormattedTextField dataFinal;
     private javax.swing.JFormattedTextField dataInicial;
-    private javax.swing.JComboBox<String> igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

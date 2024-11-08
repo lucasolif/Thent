@@ -1,15 +1,16 @@
 
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 
 public class Biblioteca {
     private Integer codigo;
-    private Livro livro;
-    private Integer quantidade;
-    private String dataCadastro;
+    private String nomeBiblioteca;
+    private Date dataCadastro;
     private Igreja igreja;
+    private Integer status;
 
     public Biblioteca() {
     }
@@ -22,27 +23,19 @@ public class Biblioteca {
         this.codigo = codigo;
     }
 
-    public Livro getLivro() {
-        return livro;
+    public String getNomeBiblioteca() {
+        return nomeBiblioteca;
     }
 
-    public void setLivro(Livro livro) {
-        this.livro = livro;
+    public void setNomeBiblioteca(String nomeBiblioteca) {
+        this.nomeBiblioteca = nomeBiblioteca;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public String getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(String dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
@@ -54,14 +47,22 @@ public class Biblioteca {
         this.igreja = igreja;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.codigo);
-        hash = 67 * hash + Objects.hashCode(this.livro);
-        hash = 67 * hash + Objects.hashCode(this.quantidade);
-        hash = 67 * hash + Objects.hashCode(this.dataCadastro);
-        hash = 67 * hash + Objects.hashCode(this.igreja);
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.codigo);
+        hash = 47 * hash + Objects.hashCode(this.nomeBiblioteca);
+        hash = 47 * hash + Objects.hashCode(this.dataCadastro);
+        hash = 47 * hash + Objects.hashCode(this.igreja);
+        hash = 47 * hash + Objects.hashCode(this.status);
         return hash;
     }
 
@@ -77,21 +78,24 @@ public class Biblioteca {
             return false;
         }
         final Biblioteca other = (Biblioteca) obj;
-        if (!Objects.equals(this.dataCadastro, other.dataCadastro)) {
+        if (!Objects.equals(this.nomeBiblioteca, other.nomeBiblioteca)) {
             return false;
         }
         if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
-        if (!Objects.equals(this.livro, other.livro)) {
+        if (!Objects.equals(this.dataCadastro, other.dataCadastro)) {
             return false;
         }
-        if (!Objects.equals(this.quantidade, other.quantidade)) {
+        if (!Objects.equals(this.igreja, other.igreja)) {
             return false;
         }
-        return Objects.equals(this.igreja, other.igreja);
+        return Objects.equals(this.status, other.status);
     }
 
-    
+    @Override
+    public String toString() {
+        return nomeBiblioteca;
+    }
  
 }

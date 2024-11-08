@@ -16,7 +16,7 @@ public class ContaCaixaDao {
     
     private Connection conexao = null;
     private PreparedStatement ps = null;
-    ResultSet rs = null;
+    private ResultSet rs = null;
     
     public void adicionar(ContaCaixa contaCaixa){
  

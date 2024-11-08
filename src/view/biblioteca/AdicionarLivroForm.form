@@ -35,7 +35,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="igrejas" min="-2" pref="161" max="-2" attributes="0"/>
+                      <Component id="biblioteca" min="-2" pref="161" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnSalvar" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -79,7 +79,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnSalvar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="igrejas" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="biblioteca" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="23" max="32767" attributes="0"/>
           </Group>
@@ -130,10 +130,10 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Biblioteca Igreja*"/>
+        <Property name="text" type="java.lang.String" value="Biblioteca"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="igrejas">
+    <Component class="javax.swing.JComboBox" name="biblioteca">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>

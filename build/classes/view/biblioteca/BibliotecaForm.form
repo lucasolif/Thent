@@ -126,7 +126,7 @@
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="igreja" pref="205" max="32767" attributes="0"/>
+                              <Component id="bibliotecaIgreja" pref="205" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -160,7 +160,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="livro" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="autor" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="igreja" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="bibliotecaIgreja" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="volume" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -263,7 +263,7 @@
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder justification="1" position="2" title="Status">
+                <TitledBorder justification="1" position="2" title="Status Livro">
                   <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                     <EtchetBorder/>
                   </Border>
@@ -327,15 +327,15 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JComboBox" name="igreja">
+        <Component class="javax.swing.JComboBox" name="bibliotecaIgreja">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="igrejaMousePressed"/>
-            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="igrejaKeyPressed"/>
+            <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bibliotecaIgrejaMousePressed"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="bibliotecaIgrejaKeyPressed"/>
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -343,7 +343,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Blbioteca Igreja"/>
+            <Property name="text" type="java.lang.String" value="Blbioteca"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnFiltrar">
@@ -373,7 +373,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder justification="2" position="1" title="Livros Biblioteca">
+            <TitledBorder justification="2" position="1" title="Registro de Livros da Biblioteca">
               <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                 <EtchetBorder/>
               </Border>
@@ -394,7 +394,7 @@
                 <Column editable="false" title="Vol." type="java.lang.Integer"/>
                 <Column editable="false" title="Autor(a)" type="java.lang.Object"/>
                 <Column editable="false" title="Qtd." type="java.lang.Integer"/>
-                <Column editable="false" title="Status" type="java.lang.String"/>
+                <Column editable="false" title="Biblioteca" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -404,7 +404,7 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="false">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="230" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -414,7 +414,7 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="false">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="230" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -424,7 +424,7 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
