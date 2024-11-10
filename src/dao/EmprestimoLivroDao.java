@@ -15,6 +15,7 @@ import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
 import model.Pessoa;
+import model.RegistroBiblioteca;
 
 public class EmprestimoLivroDao {
     
@@ -27,37 +28,55 @@ public class EmprestimoLivroDao {
     
     public void emprestarLivros(List<EmprestimoLivro> livrosEmprestados){
 
-        String sqlInsert = "INSERT INTO EmprestimoLivros(Pessoa,Livro,Biblioteca,StatusEmprestimo,DataEmprestimo) VALUES(?,?,?,?,?)";
+        String sqlInsert2 = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao)VALUES ('SAÍDA - EMPRÉSTIMO',GETDATE())";
+        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=?";
+        String sqlInsert1 = "INSERT INTO EmprestimoLivros(Pessoa,Livro,Biblioteca,StatusEmprestimo,DataEmprestimo) VALUES(?,?,?,?,?)";
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade - 1 WHERE Livro=? AND Biblioteca=?";
+        
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             for(EmprestimoLivro emp : livrosEmprestados){   
-                //Inserindo os dados na tabela de empréstimos    
-                this.insertStmt = this.conexao.prepareStatement(sqlInsert, PreparedStatement.RETURN_GENERATED_KEYS); 
-                this.insertStmt.setInt(1, emp.getPessoa().getCodigo());
-                this.insertStmt.setInt(2, emp.getLivro().getCodInterno());
-                this.insertStmt.setInt(3, emp.getBiblioteca().getCodigo());
-                this.insertStmt.setInt(4, emp.getStatusEmprestimo());
-                this.insertStmt.setDate(5, (Date) emp.getDataEmprestimo());
-                this.insertStmt.executeUpdate();
-
-                // Recuperar a chave primaria do emprestimo
-                ResultSet generatedKeys = this.insertStmt.getGeneratedKeys();
                 
-                if (generatedKeys.next()) {
-                    //Atualizando o saldo do livro
-                    this.updateStmt = this.conexao.prepareStatement(sqlUpdate); 
-                    this.updateStmt.setInt(1, emp.getLivro().getCodInterno());
-                    this.updateStmt.setInt(2, emp.getBiblioteca().getCodigo());
-                    this.updateStmt.executeUpdate();                                             
+                //Consulta para saber se o livro existe na biblioteca informada
+                this.selectStmt = this.conexao.prepareStatement(sqlSelect, PreparedStatement.RETURN_GENERATED_KEYS); 
+                this.selectStmt.setInt(1, emp.getBiblioteca().getCodigo());
+                this.selectStmt.setInt(2, emp.getLivro().getCodInterno());
+                this.rs = this.selectStmt.executeQuery();
+                
+                if(this.rs.next()){
+                    //Inserindo os dados na tabela de empréstimos    
+                    this.insertStmt = this.conexao.prepareStatement(sqlInsert1, PreparedStatement.RETURN_GENERATED_KEYS); 
+                    this.insertStmt.setInt(1, emp.getPessoa().getCodigo());
+                    this.insertStmt.setInt(2, emp.getLivro().getCodInterno());
+                    this.insertStmt.setInt(3, emp.getBiblioteca().getCodigo());
+                    this.insertStmt.setInt(4, emp.getStatusEmprestimo());
+                    this.insertStmt.setDate(5, (Date) emp.getDataEmprestimo());
+                    this.insertStmt.executeUpdate();
+
+                    // Recuperar a chave primaria do emprestimo adicionado
+                    ResultSet generatedKeys = this.insertStmt.getGeneratedKeys();
+
+                    if (generatedKeys.next()) {
+                        //Atualizando o saldo do livro
+                        this.updateStmt = this.conexao.prepareStatement(sqlUpdate); 
+                        this.updateStmt.setInt(1, emp.getLivro().getCodInterno());
+                        this.updateStmt.setInt(2, emp.getBiblioteca().getCodigo());
+                        this.updateStmt.executeUpdate();    
+                        
+                        //Insere na tabela a movimentação do tipo entrada
+                        this.insertStmt = this.conexao.prepareStatement(sqlInsert2);    
+                        this.insertStmt.execute();    
+                    }
+                    JOptionPane.showMessageDialog(null, "Empréstimo do livro "+emp.getLivro().getNomeLivro().toUpperCase()+" efetuado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Livro "+emp.getLivro().getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+emp.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Concluído", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             //Confimar a transação, ou seja, a inserção dos dados
             this.conexao.commit();
-            JOptionPane.showMessageDialog(null, "Empréstimo efetuado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
             if(this.conexao != null){
                 try{
@@ -207,12 +226,15 @@ public class EmprestimoLivroDao {
 
     public void devolverLivro(List<EmprestimoLivro> livrosDevolvido){
         
+        String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao)VALUES ('ENTRADA - DEVOLUÇÃO',GETDATE())";
+        String sqlUpdate = "UPDATE EmprestimoLivros SET StatusEmprestimo=?, DataDevolucao=? WHERE Codigo=? AND Livro=? AND StatusEmprestimo=1 AND DataDevolucao IS NULL AND Pessoa=? AND Biblioteca=?";
+        String sqlUpdate2 = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Livro = ?";
+        
         try{
             this.conexao = Conexao.getDataSource().getConnection();
        
             for(EmprestimoLivro devLivro : livrosDevolvido){ 
-                
-                String sqlUpdate = "UPDATE EmprestimoLivros SET StatusEmprestimo=?, DataDevolucao=? WHERE Codigo=? AND Livro=? AND StatusEmprestimo=1 AND DataDevolucao IS NULL AND Pessoa=? AND Biblioteca=?";
+                               
                 this.updateStmt = conexao.prepareStatement(sqlUpdate, PreparedStatement.RETURN_GENERATED_KEYS); 
                 this.updateStmt.setInt(1, devLivro.getStatusEmprestimo());
                 this.updateStmt.setDate(2, (Date) devLivro.getDataDevolucao());
@@ -226,11 +248,14 @@ public class EmprestimoLivroDao {
                 ResultSet generatedKeys = this.updateStmt.getGeneratedKeys();
                 
                 if (generatedKeys.next()) {                     
-                    // Atualizar a quantidade de livros da biblioteca
-                    String sqlUpdate2 = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Livro = ?";
+                    // Atualizar a quantidade de livros da biblioteca                  
                     this.updateStmt = this.conexao.prepareStatement(sqlUpdate2);                  
                     this.updateStmt.setInt(1, devLivro.getLivro().getCodInterno());                  
                     this.updateStmt.executeUpdate();
+                    
+                    //Insere na tabela a movimentação do tipo entrada
+                    this.insertStmt = this.conexao.prepareStatement(sqlInsert);    
+                    this.insertStmt.execute();    
                 }
             }
             //Confimar a transação, ou seja, a inserção dos dados
@@ -319,4 +344,48 @@ public class EmprestimoLivroDao {
         }   
         return listaEmpLivro;
     }
+    
+    public void saidaAvulsaLivro(RegistroBiblioteca rgMovimentacao){
+        
+        String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro(TipoMovimentacao,DataMovimentacao) VALUES(?,GETDATE())";
+        String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade - 1 OUTPUT inserted.Codigo WHERE Livro=? AND Biblioteca=?";
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();
+
+            //Atualizando o saldo do livro
+            this.updateStmt = this.conexao.prepareStatement(sqlUpdate); 
+            this.updateStmt.setInt(1, rgMovimentacao.getLivro().getCodInterno());
+            this.updateStmt.setInt(2, rgMovimentacao.getBiblioteca().getCodigo());
+            this.rs = this.updateStmt.executeQuery();   
+            
+            if (this.rs.next()) {           
+                //Inserindo os dados na tabela de empréstimos    
+                this.insertStmt = this.conexao.prepareStatement(sqlInsert); 
+                this.insertStmt.setString(1, "SAÍDA AVULSA - LIVRO: "+rgMovimentacao.getLivro().getCodLivro()+" - "+rgMovimentacao.getLivro().getNomeLivro());
+                this.insertStmt.executeUpdate();
+            }
+            JOptionPane.showMessageDialog(null, "Saída avulsa do livro "+rgMovimentacao.getLivro().getNomeLivro()+" efetuada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+        }catch(SQLException ex){
+            if(this.conexao != null){
+                try{
+                    this.conexao.rollback();
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar a saída avulsa", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            //Fechar os recursos abertos
+            try{
+                if(this.updateStmt != null) this.updateStmt.close();
+                if(this.updateStmt != null) this.updateStmt.close();
+                if(this.conexao != null) this.conexao.close();
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    
 }

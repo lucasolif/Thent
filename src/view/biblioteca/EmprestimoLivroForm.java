@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Biblioteca;
 import model.EmprestimoLivro;
-import model.Igreja;
 import model.Livro;
 import model.Pessoa;
 
@@ -294,9 +293,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarLivros(){  
-        Biblioteca bibliotecaSelec = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
-        
-        List<Livro> listaLivro = this.rgBibliotecaDao.consultarLivroDisponivelBiblioteca(bibliotecaSelec);
+        List<Livro> listaLivro = this.livroDao.consultarLivros();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.livro.getModel();
         modelo.removeAllElements();
         for(Livro livro : listaLivro){

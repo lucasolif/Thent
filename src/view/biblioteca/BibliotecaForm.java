@@ -33,8 +33,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private List<RegistroBiblioteca> listaRgBilioteca = new ArrayList();
 
-    
-
     public BibliotecaForm() {
         initComponents();
     }
@@ -434,39 +432,23 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_editoraKeyPressed
 
     private void consultarRegistroBiblioteca(){
+        RegistroBiblioteca registroBiblioteca = new RegistroBiblioteca();
         
         String textoBusca = this.textoBusca.getText();
-        Livro livroSelec = (Livro) this.livro.getSelectedItem();
         Autor autor = (Autor) this.autor.getSelectedItem();
+        Livro livro = (Livro) this.livro.getSelectedItem();
         Editora editora = (Editora) this.editora.getSelectedItem();
         Biblioteca biblioteca = (Biblioteca) this.bibliotecaIgreja.getSelectedItem();
+        Integer status = null;
+        Integer volumeLivro = (Integer) this.volume.getValue();
         
         if(this.rbAtivo.isSelected()){
-            livroSelec.setStatus(1);
+            status = 1;
         }else if(this.rbInativo.isSelected()){
-            livroSelec.setStatus(0);
-        }else if(this.rbAtivoInativo.isSelected()){
-            livroSelec.setStatus(null);
+            status = 0;
         }
-        
-        /*try{
-            this.livroSelec.setNomeLivro(livroSelec.getNomeLivro());
-            this.livroSelec.setCodLivro(livroSelec.getCodLivro());
-            this.livroSelec.setCodInterno(livroSelec.getCodInterno());
-        }catch(NullPointerException e){
-            
-        }*/
-
-        Livro livro = new Livro();
-        livro = livroSelec;
-        livro.setAutor(autor);
-        livro.setEditora(editora);
-        RegistroBiblioteca registroBiblioteca = new RegistroBiblioteca();
-        registroBiblioteca.setBiblioteca(biblioteca);
-        registroBiblioteca.setLivro(livro);
-  
-        this.listaRgBilioteca = this.rgBibliotecaDao.consultarRegistroBiblioteca(registroBiblioteca);
        
+        this.listaRgBilioteca = this.rgBibliotecaDao.consultarRegistroBiblioteca(autor, livro, editora, biblioteca,status,volumeLivro);   
     }
     
     private void atualizarTabela(){  

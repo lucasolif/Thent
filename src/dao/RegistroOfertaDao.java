@@ -74,10 +74,9 @@ public class RegistroOfertaDao {
                     psMovimento.setInt(9, 2);
                     psMovimento.setString(10, rg.getDataOferta());
                     
-                    psMovimento.executeUpdate();
+                    psMovimento.execute();
 
                 }
-
             }
             //Confimar a transação, ou seja, a inserção dos dados
             conexao.commit();

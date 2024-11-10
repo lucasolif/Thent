@@ -1,8 +1,6 @@
 
 package model;
 
-import java.util.Objects;
-
 
 public class DataFiltro {
     private String dataOfertaInicial;

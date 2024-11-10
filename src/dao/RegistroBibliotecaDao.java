@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.Autor;
 import model.Biblioteca;
+import model.Editora;
 import model.Livro;
 import model.RegistroBiblioteca;
 
@@ -23,38 +24,54 @@ public class RegistroBibliotecaDao {
     private PreparedStatement updateStmt = null;
     private ResultSet rs = null;
     
-    public void adicionarLivroBiblioteca(Livro livro, Biblioteca biblioteca, Integer qtd){
-
-        String sqlInsert = "INSERT INTO RegistroBiblioteca (Biblioteca,Livro,Quantidade)VALUES (?,?,?)";
+    public void adicionarLivroBiblioteca(RegistroBiblioteca rgBiblioteca){
+        
         String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=?";
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Biblioteca=? AND Livro=?";
-
+        String sqlInsert1 = "INSERT INTO RegistroBiblioteca (Biblioteca,Livro,Quantidade)VALUES (?,?,?)";
+        String sqlInsert2 = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao)VALUES ('ENTRADA - AVULSA',GETDATE())";
+        
         try{
             this.conexao = Conexao.getDataSource().getConnection();  
+            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             //Consulta para verificar se o livro já está na biblioteca
-            this.selectStmt = this.conexao.prepareStatement(sqlSelect);       
-            this.selectStmt.setInt(1,  biblioteca.getCodigo());
-            this.selectStmt.setInt(1,  livro.getCodInterno());         
+            this.selectStmt = this.conexao.prepareStatement(sqlSelect,PreparedStatement.RETURN_GENERATED_KEYS);       
+            this.selectStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
+            this.selectStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());         
             this.rs = selectStmt.executeQuery();
             
-            if(rs.next()){
+            if(this.rs.next()){
+                //Caso tenha livro ele atualiza a quantidade
                 this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
-                this.updateStmt.setInt(1,  biblioteca.getCodigo());
-                this.updateStmt.setInt(1,  livro.getCodInterno());
+                this.updateStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
+                this.updateStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());
                 this.updateStmt.executeUpdate();                
             }else{
                 //Se o livro não estiver, ele adiciona
-                this.insertStmt = this.conexao.prepareStatement(sqlInsert);         
-                this.insertStmt.setInt(1,  biblioteca.getCodigo());
-                this.insertStmt.setInt(1,  livro.getCodInterno());
-                this.insertStmt.setInt(1,  qtd);
-                this.insertStmt.executeQuery();
+                this.insertStmt = this.conexao.prepareStatement(sqlInsert1);         
+                this.insertStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
+                this.insertStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());
+                this.insertStmt.setInt(3,  rgBiblioteca.getQtdLivro());
+                this.insertStmt.execute();
             }
-            JOptionPane.showMessageDialog(null, "Livro adicionado na biblioteca com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
+            //Insere na tabela a movimentação do tipo entrada
+            this.insertStmt = this.conexao.prepareStatement(sqlInsert2);    
+            this.insertStmt.execute();  
+            
+            JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" adicionado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase()+" com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            this.conexao.commit();
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar o livro na biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            //Se ocorrer um erro, fazer rollback da transação
+            if(this.conexao != null){
+                try{
+                    this.conexao.rollback();
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar o livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
@@ -68,7 +85,7 @@ public class RegistroBibliotecaDao {
         }
     }
     
-    public List<RegistroBiblioteca> consultarRegistroBiblioteca(RegistroBiblioteca rgBiblioteca){
+    public List<RegistroBiblioteca> consultarRegistroBiblioteca(Autor filtroAutor, Livro filtroLivro, Editora filtroEditora, Biblioteca filtroBiblioteca, Integer filtroStatus, Integer filtroVolumeLivro){
         
         List<RegistroBiblioteca> listaLivros = new ArrayList();
             
@@ -87,8 +104,8 @@ public class RegistroBibliotecaDao {
             "INNER JOIN Livros AS LV ON LV.Codigo = RB.Livro " +
             "INNER JOIN Autores AS AUT ON AUT.Codigo = LV.Autor " +
             "INNER JOIN Bibliotecas AS B ON B.Codigo = RB.Biblioteca "+
-            "WHERE (? IS NULL OR BL.Livro = ?) " +
-            "AND (? IS NULL OR RB.Biblioteca = ?) " +
+            "WHERE (? IS NULL OR RB.Biblioteca = ?) " +
+            "AND (? IS NULL OR RB.Livro = ?) " +
             "AND (? IS NULL OR LV.Autor = ?) " +
             "AND (? IS NULL OR LV.Ativo = ?) " +
             "AND (? IS NULL OR LV.Editora = ?) " +
@@ -98,54 +115,54 @@ public class RegistroBibliotecaDao {
             this.conexao = Conexao.getDataSource().getConnection();         
             this.selectStmt = this.conexao.prepareStatement(sqlSelect);  
 
-            if (rgBiblioteca.getLivro().getCodInterno() != null) {
-                this.selectStmt.setInt(1, rgBiblioteca.getLivro().getCodInterno());
-                this.selectStmt.setInt(2, rgBiblioteca.getLivro().getCodInterno());
+            if (filtroBiblioteca != null) {
+                this.selectStmt.setInt(1, filtroBiblioteca.getCodigo()); 
+                this.selectStmt.setInt(2, filtroBiblioteca.getCodigo());
             } else {
                 this.selectStmt.setNull(1, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(2, java.sql.Types.INTEGER);
             }
-
-            if (rgBiblioteca.getCodigo() != null) {
-                this.selectStmt.setInt(3, rgBiblioteca.getCodigo()); 
-                this.selectStmt.setInt(4, rgBiblioteca.getCodigo());
+                
+            if (filtroLivro != null) {
+                this.selectStmt.setInt(3, filtroLivro.getCodInterno());
+                this.selectStmt.setInt(4, filtroLivro.getCodInterno());
             } else {
                 this.selectStmt.setNull(3, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(4, java.sql.Types.INTEGER);
             }
 
-            if (rgBiblioteca.getLivro().getAutor() != null) {
-                this.selectStmt.setInt(5, rgBiblioteca.getLivro().getAutor().getCodigo());
-                this.selectStmt.setInt(6, rgBiblioteca.getLivro().getAutor().getCodigo());
+            if (filtroAutor != null) {
+                this.selectStmt.setInt(5, filtroAutor.getCodigo());
+                this.selectStmt.setInt(6, filtroAutor.getCodigo());
             } else {
                 this.selectStmt.setNull(5, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(6, java.sql.Types.INTEGER);
             }
-            
-            if (rgBiblioteca.getLivro().getStatus() != null) {
-                this.selectStmt.setInt(7, rgBiblioteca.getLivro().getStatus());
-                this.selectStmt.setInt(8, rgBiblioteca.getLivro().getStatus());
+
+            if (filtroStatus != null) {
+                this.selectStmt.setInt(7, filtroStatus);
+                this.selectStmt.setInt(8, filtroStatus);
             } else {
                 this.selectStmt.setNull(7, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(8, java.sql.Types.INTEGER);
             }
 
-            if (rgBiblioteca.getLivro().getEditora() != null) {
-                this.selectStmt.setInt(9, rgBiblioteca.getLivro().getEditora().getCodigo());
-                this.selectStmt.setInt(10, rgBiblioteca.getLivro().getEditora().getCodigo());
+            if (filtroEditora != null) {
+                this.selectStmt.setInt(9, filtroEditora.getCodigo());
+                this.selectStmt.setInt(10, filtroEditora.getCodigo());
             } else {
                 this.selectStmt.setNull(9, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(10, java.sql.Types.INTEGER);
             }
 
-            if (rgBiblioteca.getLivro().getVolume() != null) {
-                this.selectStmt.setInt(11, rgBiblioteca.getLivro().getVolume());
-                this.selectStmt.setInt(12, rgBiblioteca.getLivro().getVolume());
+            if (filtroVolumeLivro != null) {
+                this.selectStmt.setInt(11, filtroVolumeLivro);
+                this.selectStmt.setInt(12, filtroVolumeLivro);
             } else {
                 this.selectStmt.setNull(11, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(12, java.sql.Types.INTEGER);
             }
-
+                
             // Executando a consulta
             this.rs = this.selectStmt.executeQuery();
 
@@ -241,5 +258,60 @@ public class RegistroBibliotecaDao {
         }
 
         return listaLivros;
+    }
+    
+    public void removerLivroBiblioteca(RegistroBiblioteca rgBiblioteca){
+        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=?";
+        String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade-1 WHERE Biblioteca=? AND Livro=?";
+        String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao)VALUES ('SAÍDA - AVULSA',GETDATE())";
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();  
+            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
+            
+            //Consulta para verificar se o livro já está na biblioteca
+            this.selectStmt = this.conexao.prepareStatement(sqlSelect,PreparedStatement.RETURN_GENERATED_KEYS);       
+            this.selectStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
+            this.selectStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());         
+            this.rs = selectStmt.executeQuery();
+            
+            if(this.rs.next()){
+                //Caso tenha livro ele atualiza a quantidade
+                this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
+                this.updateStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
+                this.updateStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());
+                this.updateStmt.executeUpdate();       
+                
+                //Insere na tabela a movimentação do tipo entrada
+                this.insertStmt = this.conexao.prepareStatement(sqlInsert);    
+                this.insertStmt.execute();    
+                
+                JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" removido da biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase()+" com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            this.conexao.commit();
+        }catch (SQLException ex) {
+            //Se ocorrer um erro, fazer rollback da transação
+            if(this.conexao != null){
+                try{
+                    this.conexao.rollback();
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao tentar remover o livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" da biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.updateStmt != null) this.updateStmt.close();
+                if (this.insertStmt != null) this.insertStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

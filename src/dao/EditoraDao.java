@@ -17,7 +17,7 @@ public class EditoraDao {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
     
-    public void cadastrarEditoras(Editora publicadora){
+    public void cadastrarEditoras(Editora editora){
         
         String sqlInsert = "INSERT INTO Editoras (Nome,DataCadastro) VALUES (?,GETDATE())";
         
@@ -25,14 +25,14 @@ public class EditoraDao {
             conexao = Conexao.getDataSource().getConnection();
                
             ps = conexao.prepareStatement(sqlInsert);
-            ps.setString(1, publicadora.getNome());
+            ps.setString(1, editora.getNome());
             ps.execute();
             
-            JOptionPane.showMessageDialog(null, "Editora cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Editora "+editora.getNome().toUpperCase()+" cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE
-                JOptionPane.showMessageDialog(null, "Já existe uma publicadora cadastrada com esse nome", "Erro 001", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "A editora "+editora.getNome().toUpperCase()+" já está cadastrada", "Erro 001", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a nova publicadora", "Erro 001", JOptionPane.ERROR_MESSAGE);
             }    
@@ -62,18 +62,16 @@ public class EditoraDao {
             
             ps.executeUpdate();
             
-            JOptionPane.showMessageDialog(null, "Editora "+editora.getNome()+" alterado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Editora "+editora.getNome().toUpperCase()+" alterado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a editora "+editora.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a editora "+editora.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
@@ -114,8 +112,7 @@ public class EditoraDao {
             ps.execute();
             
         }catch(SQLException ex){
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a editora", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a editora "+buscaEditora.toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
@@ -123,7 +120,6 @@ public class EditoraDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -141,10 +137,9 @@ public class EditoraDao {
             ps.setInt(1, editora.getCodigo());
             ps.executeUpdate();
             
-            JOptionPane.showMessageDialog(null, "Editora "+editora.getNome()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-            
+            JOptionPane.showMessageDialog(null, "Editora "+editora.getNome().toUpperCase()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);           
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a editora "+editora.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a editora "+editora.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
@@ -154,7 +149,6 @@ public class EditoraDao {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }
     
     //Consultar para popular o JComboBox

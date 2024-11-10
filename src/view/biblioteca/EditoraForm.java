@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.Autor;
 import model.Editora;
 
 
@@ -41,6 +40,12 @@ public class EditoraForm extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editora");
+
+        editora.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                editoraKeyPressed(evt);
+            }
+        });
 
         jLabel1.setText("Editora/Publicadora");
 
@@ -200,7 +205,6 @@ public class EditoraForm extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         cadastrarAlterarEditora();
-        dispose();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
@@ -212,6 +216,12 @@ public class EditoraForm extends javax.swing.JDialog {
         consultarEditora();
         atualizarTabela();
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void editoraKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_editoraKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        cadastrarAlterarEditora();
+        }
+    }//GEN-LAST:event_editoraKeyPressed
 
     private void consultarEditora(){        
         String textoBusca = this.buscar.getText(); // Texto digitado na busca       
@@ -235,13 +245,13 @@ public class EditoraForm extends javax.swing.JDialog {
             if(nomeEditora.isEmpty()){
                 JOptionPane.showMessageDialog(null, "Para cadastrar a editora, informe o nome da mesmoa", "Atenção", JOptionPane.WARNING_MESSAGE);
                 return;
+            }else{
+                Editora editora = new Editora();
+                editora.setNome(nomeEditora);
+
+                this.editoraDao.cadastrarEditoras(editora);  
+                limparFormulario();
             }
-            
-            Editora editora = new Editora();
-            editora.setNome(nomeEditora);
-           
-            this.editoraDao.cadastrarEditoras(editora);  
-            limparFormulario();
         }else{  
             Integer codEditora = Integer.valueOf(this.codigoEditora.getText()); //Código da editora
             
@@ -251,8 +261,7 @@ public class EditoraForm extends javax.swing.JDialog {
            
             editoraDao.alterarEditora(editora); //Chamando o método que altera os dados da editora
             limparFormulario();
-        }
-        
+        }       
         this.editoraSelec = null; //Variável de controle setada como nula, para saber se é um novo cadastro ou uma alteração
         limparTabela();
     }
@@ -264,16 +273,13 @@ public class EditoraForm extends javax.swing.JDialog {
         //Verificando se foi selecionado alguma conta caixa
         if(numLinhaSelec < 0){
             JOptionPane.showMessageDialog(null, "Selecione uma editora", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        //Objeto ContaCaixa recebe os dados que estavam na lista, ou seja, que foram selecionados
-        this.editoraSelec = this.listaEditora.get(numLinhaSelec);
-        
-        this.codigoEditora.setText(Integer.toString(this.editoraSelec.getCodigo()));
-        this.editora.setText(this.editoraSelec.getNome());
-        
-        this.editoraSelec = null;
+        }else{
+            //Objeto ContaCaixa recebe os dados que estavam na lista, ou seja, que foram selecionados
+            this.editoraSelec = this.listaEditora.get(numLinhaSelec);
+
+            this.codigoEditora.setText(Integer.toString(this.editoraSelec.getCodigo()));
+            this.editora.setText(this.editoraSelec.getNome());
+        }      
     }
     
     private void excluirEditora(){

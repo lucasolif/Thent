@@ -144,8 +144,8 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame {
     private void cadastrarAlterarBiblioteca(){
         Biblioteca biblioteca = new Biblioteca();
         
-        if(this.listaBiblioteca.isEmpty()){
-            String nomeBiblioteca = this.codBiblioteca.getText();
+        if(this.listaBiblioteca == null){
+            String nomeBiblioteca = this.nomeBiblioteca.getText();
             Igreja igreja = (Igreja) this.igreja.getSelectedItem();
 
             biblioteca.setNomeBiblioteca(nomeBiblioteca);
@@ -162,9 +162,9 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame {
             
             biblioteca.setCodigo(codBiblioteca);
             biblioteca.setStatus(status);
-            
-        }
 
+            this.bibliotecaDao.alterarBiblioteca(biblioteca);
+        }
     }
     
     private void consultarBiblioteca(){
@@ -175,7 +175,6 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame {
             this.listaBiblioteca = bibliotecaDao.consultarBiblioteca(bibliotecaPesq);
         }else{
             JOptionPane.showMessageDialog(null, "Informe o código ou nome da biblioteca", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
         }   
     }
     
@@ -188,13 +187,15 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame {
             if(blt.getStatus() == 1){
                 this.cbxAtivo.setSelected(true);
                 this.cbxAtivo.setEnabled(true);
+            }else{
+                this.cbxAtivo.setSelected(false);
+                this.cbxAtivo.setEnabled(true);
             }
             
             this.nomeBiblioteca.setEditable(false);
             this.igreja.setEnabled(false);
         }
     }
-    
     
     private void formInicial(){
         this.codBiblioteca.setText("");

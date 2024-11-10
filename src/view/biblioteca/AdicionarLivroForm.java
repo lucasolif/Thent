@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import model.Biblioteca;
 import model.Livro;
+import model.RegistroBiblioteca;
 
 
 public class AdicionarLivroForm extends javax.swing.JDialog {
@@ -137,7 +138,12 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
         Biblioteca biblioteca  = (Biblioteca) this.biblioteca.getSelectedItem();
         Integer qtd = (Integer) this.qtdLivros.getValue();
         
-        this.rgBibliotecaDao.adicionarLivroBiblioteca(livro, biblioteca, qtd);
+        RegistroBiblioteca rgBiblioteca = new RegistroBiblioteca();
+        rgBiblioteca.setLivro(livro);
+        rgBiblioteca.setBiblioteca(biblioteca);
+        rgBiblioteca.setQtdLivro(qtd);
+        
+        this.rgBibliotecaDao.adicionarLivroBiblioteca(rgBiblioteca);
     }
 
 

@@ -89,6 +89,12 @@ public class AutorForm extends javax.swing.JDialog {
             tabelaAutor.getColumnModel().getColumn(1).setPreferredWidth(500);
         }
 
+        autor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                autorKeyPressed(evt);
+            }
+        });
+
         jLabel1.setText("Autor(a)");
 
         jLabel2.setText("Cod");
@@ -187,7 +193,6 @@ public class AutorForm extends javax.swing.JDialog {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         cadastrarAlterarAutor();
-        dispose();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarKeyPressed
@@ -212,6 +217,12 @@ public class AutorForm extends javax.swing.JDialog {
         atualizarTabela();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
+    private void autorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_autorKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            cadastrarAlterarAutor();
+        }
+    }//GEN-LAST:event_autorKeyPressed
+
     private void consultarAutor(){        
         String textoBusca = this.buscar.getText(); // Texto digitado na busca       
         this.listaAutor = this.autorDao.consultarAutor(textoBusca); //Lista recebe a busca retornada do banco
@@ -234,13 +245,13 @@ public class AutorForm extends javax.swing.JDialog {
             if(nomeAutor.isEmpty()){
                 JOptionPane.showMessageDialog(null, "Para cadastrar um autor, informe o nome do mesmo", "Atenção", JOptionPane.WARNING_MESSAGE);
                 return;
+            }else{
+                Autor autor = new Autor();
+                autor.setNome(nomeAutor);
+
+                this.autorDao.cadastrarAutor(autor);  
+                limparFormulario();
             }
-            
-            Autor autor = new Autor();
-            autor.setNome(nomeAutor);
-           
-            this.autorDao.cadastrarAutor(autor);  
-            limparFormulario();
         }else{  
             Integer codAutor = Integer.valueOf(this.codigoAutor.getText()); //Código da conta caixa
             
@@ -250,8 +261,7 @@ public class AutorForm extends javax.swing.JDialog {
            
             autorDao.alterarAutor(autor); //Chamando o método que altera os dados da conta caixa
             limparFormulario();
-        }
-        
+        }       
         this.autorSelec = null; //Variável de controle setada como nula, para saber se é um novo cadastro ou uma alteração
         limparTabela();
     }
@@ -260,37 +270,34 @@ public class AutorForm extends javax.swing.JDialog {
         //Variável recebe o número da linha selecionado.
         int numLinhaSelec = this.tabelaAutor.getSelectedRow();
         
-        //Verificando se foi selecionado alguma conta caixa
+        //Verificando se foi selecionado algum autor
         if(numLinhaSelec < 0){
             JOptionPane.showMessageDialog(null, "Selecione um autor", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
+        }else{                  
+            //Objeto autor recebe os dados que estavam na lista, ou seja, que foram selecionados
+            this.autorSelec = this.listaAutor.get(numLinhaSelec);
+
+            this.codigoAutor.setText(Integer.toString(this.autorSelec.getCodigo()));
+            this.autor.setText(this.autorSelec.getNome());
         }
-        
-        //Objeto ContaCaixa recebe os dados que estavam na lista, ou seja, que foram selecionados
-        this.autorSelec = this.listaAutor.get(numLinhaSelec);
-        
-        this.codigoAutor.setText(Integer.toString(this.autorSelec.getCodigo()));
-        this.autor.setText(this.autorSelec.getNome());
-        
-        this.autorSelec = null;
     }
     
     private void excluirAutor(){
         int numLinhaSelec = this.tabelaAutor.getSelectedRow();
         
-        //Verifica se foi selecionado algum cliente da lista
+        //Verifica se foi selecionado algum autor da lista
         if(numLinhaSelec < 0){
             JOptionPane.showMessageDialog(null, "Selecione um autor a ser excluída", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        //Recebe o a linha que foi selecionada na tabela, ou seja, a conta caixa
-        this.autorSelec = this.listaAutor.get(numLinhaSelec);
-        
-        int confirm = JOptionPane.showConfirmDialog(null,"Excluir o autor "+this.autorSelec.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if(confirm == JOptionPane.YES_OPTION){
-            autorDao.removerAutor(this.autorSelec);
-        }else if(confirm == JOptionPane.NO_OPTION){
-            JOptionPane.showMessageDialog(null, "Operação cancelada!");
+        }else{
+            //Recebe o a linha que foi selecionada na tabela, ou seja, a conta caixa
+            this.autorSelec = this.listaAutor.get(numLinhaSelec);
+
+            int confirm = JOptionPane.showConfirmDialog(null,"Excluir o autor "+this.autorSelec.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION){
+                autorDao.removerAutor(this.autorSelec);
+            }else if(confirm == JOptionPane.NO_OPTION){
+                JOptionPane.showMessageDialog(null, "Operação cancelada!");
+            }
         }
     }
     

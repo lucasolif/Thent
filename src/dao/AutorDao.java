@@ -29,11 +29,11 @@ public class AutorDao {
             ps.setString(1, autor.getNome());
             ps.execute();
             
-            JOptionPane.showMessageDialog(null, "Autor(a) cadastrado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Autor(a) "+autor.getNome().toUpperCase()+" cadastrado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {            
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE
-                JOptionPane.showMessageDialog(null, "Já existe um autor cadastrado com esse nome", "Erro 001", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "O autor "+autor.getNome().toUpperCase()+" já está cadastrado", "Erro 001", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o novo autor", "Erro 001", JOptionPane.ERROR_MESSAGE);
             }           
@@ -63,10 +63,10 @@ public class AutorDao {
             
             ps.executeUpdate();
             
-            JOptionPane.showMessageDialog(null, "Autor "+autor.getNome()+" alterado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Autor "+autor.getNome().toUpperCase()+" alterado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o(a) autor(a) "+autor.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o(a) autor(a) "+autor.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
@@ -113,7 +113,7 @@ public class AutorDao {
             ps.execute();
             
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o autor", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o autor "+buscaAutor.toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
@@ -138,10 +138,10 @@ public class AutorDao {
             ps.setInt(1, autor.getCodigo());
             ps.executeUpdate();
             
-            JOptionPane.showMessageDialog(null, "Autor "+autor.getNome()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Autor "+autor.getNome().toUpperCase()+" excluído com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o autor "+autor.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o autor "+autor.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{

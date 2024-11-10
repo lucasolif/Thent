@@ -25,13 +25,14 @@ public class BibliotecaDao {
         String sqlInsert = "INSERT INTO Bibliotecas (NomeBiblioteca,Igreja,DataCadastro,AtivoInativo)VALUES (?,?,GETDATE(),1)";
         try{
             this.conexao = Conexao.getDataSource().getConnection();  
-            this.selectStmt = this.conexao.prepareStatement(sqlInsert);    
+            this.insertStmt = this.conexao.prepareStatement(sqlInsert);    
             //Executa a query para consultar se o livro já existe
                  
-            this.selectStmt.setString(1,  biblioteca.getNomeBiblioteca());
-            this.selectStmt.setInt(2,  biblioteca.getIgreja().getCodigo());
-            this.rs = insertStmt.executeQuery(); 
+            this.insertStmt.setString(1,  biblioteca.getNomeBiblioteca());
+            this.insertStmt.setInt(2,  biblioteca.getIgreja().getCodigo());
+            this.insertStmt.execute();         
             
+            JOptionPane.showMessageDialog(null, "Biblioteca cadastrada com sucesso", "Erro 001", JOptionPane.INFORMATION_MESSAGE);
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -50,29 +51,29 @@ public class BibliotecaDao {
         
         List<Biblioteca> listaBiblitecas = new ArrayList<>();
 
-        String sql = "SELECT IG.NomeIgreja AS NomeIgreja, IG.Codigo AS CodigoIgreja, * FROM Bibliotecas AS B" +
+        String sql = "SELECT IG.NomeIgreja AS NomeIgreja, IG.Codigo AS CodigoIgreja, * FROM Bibliotecas AS B " +
         "INNER JOIN Igrejas AS IG ON IG.Codigo = B.Igreja " +
-        "WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR NomeBiblioteca LIKE ?)";
+        "WHERE (? IS NULL OR B.Codigo LIKE ?) OR (? IS NULL OR B.NomeBiblioteca LIKE ?)";
 
         try{
-            conexao = Conexao.getDataSource().getConnection();           
-            selectStmt = conexao.prepareStatement(sql);
+            this.conexao = Conexao.getDataSource().getConnection();           
+            this.selectStmt = this.conexao.prepareStatement(sql);
             
             if (filtroBiblioteca != null) {
-                selectStmt.setString(1,  "%" + filtroBiblioteca + "%");
-                selectStmt.setString(2,  "%" + filtroBiblioteca + "%");
-                selectStmt.setString(3,  "%" + filtroBiblioteca + "%");
-                selectStmt.setString(4,  "%" + filtroBiblioteca + "%");
+                this.selectStmt.setString(1,  "%" + filtroBiblioteca + "%");
+                this.selectStmt.setString(2,  "%" + filtroBiblioteca + "%");
+                this.selectStmt.setString(3,  "%" + filtroBiblioteca + "%");
+                this.selectStmt.setString(4,  "%" + filtroBiblioteca + "%");
             } else {
-                selectStmt.setNull(1, java.sql.Types.INTEGER);
-                selectStmt.setNull(2, java.sql.Types.INTEGER);
-                selectStmt.setNull(3, java.sql.Types.INTEGER);
-                selectStmt.setNull(4, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(1, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(2, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(3, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(4, java.sql.Types.INTEGER);
             }
 
-            rs = selectStmt.executeQuery();
+            this.rs = this.selectStmt.executeQuery();
 
-            while(rs.next()){
+            while(this.rs.next()){
                 Biblioteca biblioteca = new Biblioteca();
                 Igreja igreja = new Igreja();
                 igreja.setCodigo(rs.getInt("CodigoIgreja"));
@@ -85,16 +86,17 @@ public class BibliotecaDao {
                 listaBiblitecas.add(biblioteca);
             }            
             
-            selectStmt.execute();
+            this.selectStmt.execute();
             
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar a biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Mensagem de erro "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
-                if (rs != null) rs.close();
-                if (selectStmt != null) selectStmt.close();
-                if (conexao != null) conexao.close();
+                if (this.rs != null) rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
@@ -108,28 +110,23 @@ public class BibliotecaDao {
         String sqlUpdate = "UPDATE Bibliotecas SET AtivoInativo=? WHERE Codigo=?";
 
         try{       
-            updateStmt = conexao.prepareStatement(sqlUpdate); 
-            updateStmt.setInt(1, biblioteca.getStatus());
-            updateStmt.setInt(2, biblioteca.getCodigo());
-            updateStmt.executeUpdate();
+            this.conexao = Conexao.getDataSource().getConnection();
+            
+            this.updateStmt = this.conexao.prepareStatement(sqlUpdate); 
+            this.updateStmt.setInt(1, biblioteca.getStatus());
+            this.updateStmt.setInt(2, biblioteca.getCodigo());
+            this.updateStmt.executeUpdate();
             
             JOptionPane.showMessageDialog(null, "Biblioteca alterada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
-            //Se ocorrer um erro, fazer rollback da transação
-            if(conexao != null){
-                try{
-                    conexao.rollback();
-                }catch(SQLException e){
-                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
-                }
-            }
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a biblioteca", "Erro 007", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Mensagem de erro "+ex.getMessage());
         }finally{
             //Fechar os recursos abertos
             try{
-                if(rs != null) rs.close();
-                if(updateStmt != null) updateStmt.close();
-                if(conexao != null) conexao.close();
+                if(this.rs != null) rs.close();
+                if(this.updateStmt != null) this.updateStmt.close();
+                if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
