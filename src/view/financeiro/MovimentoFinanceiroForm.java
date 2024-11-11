@@ -10,6 +10,7 @@ import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;
 import dao.TransferenciaDepositoDao;
 import ferramentas.Conversores;
+import ferramentas.PaletaCores;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -38,6 +39,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();
     private final TransferenciaDepositoDao transfDeposiDao = new TransferenciaDepositoDao();
     private RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
+    private final PaletaCores cores = new PaletaCores();
     private Pessoa pessoa = new Pessoa();
     private final Conversores conversor = new Conversores();
     private MovimentoCaixa movimentoCaixa = new MovimentoCaixa();
@@ -287,7 +289,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
             }
         });
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Movimentações Financeiras", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Movimentações Financeiras", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         tabelaMovimentacoes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -757,14 +759,8 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
         
         //Tratando o código de pessoa
         if (!this.codFornecedorOfertante.getText().isEmpty()) {
-            try {
-                codPessoa = Integer.valueOf(codFornecedorOfertante.getText());
-                this.pessoa.setCodigo(codPessoa);
-            } catch (NumberFormatException e) {
-                // Tratar exceção se a conversão falhar
-                e.printStackTrace();
-                // Você pode definir codFornecedor como null ou lidar com a exceção de acordo
-            }
+            codPessoa = Integer.valueOf(codFornecedorOfertante.getText());
+            this.pessoa.setCodigo(codPessoa);
         }
         
         //Valida qual a data foi escolhida para o filtro
@@ -898,7 +894,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
         if(valSaldo < 0){
             this.saldo.setForeground(Color.red);
         }else{
-            this.saldo.setForeground(conversor.CorAzul());
+            this.saldo.setForeground(cores.CorAzul());
         }
     }
     

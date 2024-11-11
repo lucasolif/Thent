@@ -11,13 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 public class Conversores{
-    
-    public Color CorAzul(){
-        Color azul = new Color(0,0,244);
-        
-        return azul;
-    }
-    
+     
     //Arredondando o valor para cima se for maior que 0.5 e para baixo se for menos que 0.5
     public double arrendodarValores(double valor){
         BigDecimal bd = new BigDecimal(valor).setScale(2, RoundingMode.HALF_DOWN); 

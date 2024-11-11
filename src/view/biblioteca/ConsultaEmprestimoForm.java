@@ -3,7 +3,6 @@ package view.biblioteca;
 
 import dao.BibliotecaDao;
 import dao.EmprestimoLivroDao;
-import dao.IgrejaDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
@@ -18,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Biblioteca;
 import model.EmprestimoLivro;
-import model.Igreja;
 import model.Livro;
 import model.Pessoa;
 
@@ -219,12 +217,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Empréstimos/Devoluçoes de Livros", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+
         tabelaEmprestimos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Biblioteca"
+                "Cod Emp", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Biblioteca"
             }
         ) {
             Class[] types = new Class [] {
@@ -245,9 +245,9 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tabelaEmprestimos);
         if (tabelaEmprestimos.getColumnModel().getColumnCount() > 0) {
             tabelaEmprestimos.getColumnModel().getColumn(0).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tabelaEmprestimos.getColumnModel().getColumn(0).setPreferredWidth(50);
             tabelaEmprestimos.getColumnModel().getColumn(1).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(1).setPreferredWidth(40);
+            tabelaEmprestimos.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaEmprestimos.getColumnModel().getColumn(2).setResizable(false);
             tabelaEmprestimos.getColumnModel().getColumn(2).setPreferredWidth(200);
             tabelaEmprestimos.getColumnModel().getColumn(3).setResizable(false);

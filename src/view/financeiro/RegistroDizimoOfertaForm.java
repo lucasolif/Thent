@@ -12,6 +12,7 @@ import dao.TipoOfertaDao;
 import ferramentas.Conversores;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -43,7 +44,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
     
     public RegistroDizimoOfertaForm() {
         initComponents();
-        formularioInicial();     
+        formInicial();     
     }
 
     public void setPosicao() {
@@ -236,7 +237,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Registros", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Registros", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         tabelaOfertas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -457,8 +458,13 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
     
     //Função utilizada para inserir os registros na tabela que fica na tela de registros
     private void inserirRegistroTabela(){
-        
-        Integer codigo = Integer.valueOf(this.codOfertante.getText());
+        Integer codigo = null;
+        DecimalFormat df = new DecimalFormat("#.00");
+        if(!this.codOfertante.getText().isEmpty()){
+            codigo = Integer.valueOf(this.codOfertante.getText());       
+        }else{
+            JOptionPane.showMessageDialog(null, "Informe o nome do ofertante", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }    
         String nome = this.nomeOfertante.getText();
         String dataOferta = this.dataOferta.getText();
         double valorOferta = Double.parseDouble(this.valorOferta.getText().replace(",", "."));
@@ -475,7 +481,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
             return;
         }
         
-        DefaultTableModel model = (DefaultTableModel) tabelaOfertas.getModel();
+        DefaultTableModel model = (DefaultTableModel) this.tabelaOfertas.getModel();
         model.addRow(new Object[]{ofertante,valorOferta,tpOferta,formaPagto,contaCaixa,subContResult,dataOferta});         
     } 
     
@@ -524,7 +530,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
         limparTabela();
     } 
     
-    private void formularioInicial(){
+    private void formInicial(){
         carregarFormaPagto();
         carregarIgrejas();
         carregarTipoOferta();

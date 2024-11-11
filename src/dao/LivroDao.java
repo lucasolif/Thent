@@ -139,7 +139,6 @@ public class LivroDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -155,21 +154,28 @@ public class LivroDao {
         try{
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM Livros Order By Nome";
+            String sql = "SELECT A.Codigo AS CodAutor, A.Nome AS NomeLivro, * "
+                + "FROM Livros AS L "                  
+                + "INNER JOIN Autores AS A ON A.Codigo = L.Autor "
+                + "Order By L.Nome ";
             ps = conexao.prepareStatement(sql);           
             rs = ps.executeQuery();
 
             while(rs.next()){
                 Livro livro = new Livro();
+                Autor autor = new Autor();
+                autor.setCodigo(rs.getInt("CodAutor"));
+                autor.setNome(rs.getString("NomeLivro"));
                 livro.setCodInterno(rs.getInt("Codigo"));
                 livro.setCodLivro(rs.getInt("CodLivro"));
                 livro.setNomeLivro(rs.getString("Nome"));
                 livro.setVolume(rs.getInt("Volume"));
+                livro.setAutor(autor);
  
                 listaLivros.add(livro);
             }
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar os autores", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar livros", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{
             // Fechar recursos

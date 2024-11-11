@@ -61,7 +61,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame {
         setTitle("Campo/Igreja");
         setPreferredSize(new java.awt.Dimension(580, 610));
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Campos/Igrejas", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Campos/Igrejas", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         tabelaIgrejas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

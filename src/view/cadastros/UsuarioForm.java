@@ -6,7 +6,7 @@ import dao.IgrejaDao;
 import model.Usuario;
 import dao.UsuarioDao;
 import ferramentas.CriptografarSenhas;
-import java.awt.Color;
+import ferramentas.PaletaCores;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -20,6 +20,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
 
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final PaletaCores cores = new PaletaCores();
     private Usuario userSelec;
     private List<Usuario> listaUser;
       
@@ -66,7 +67,8 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
         setTitle("Cadastro de Usuários");
         setPreferredSize(new java.awt.Dimension(585, 605));
 
-        tabelaUsuarios.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Usuários", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+
         tabelaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -376,8 +378,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
     }
 
     private void verificandoCamposVazio(String nome, String celular, String email, String login, String senha){
-        if(nome.isEmpty() || celular.isEmpty() || email.isEmpty() || login.isEmpty() || senha.isEmpty()){
-            
+        if(nome.isEmpty() || celular.isEmpty() || email.isEmpty() || login.isEmpty() || senha.isEmpty()){        
             JOptionPane.showMessageDialog(null, "Campos vazios. Preencha todos os campos obrigatórios", "Erro", JOptionPane.WARNING_MESSAGE);
             return;
         }   
@@ -417,8 +418,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Senha fraca, precisa conter: letra maiúscula e número.", "Erro 003", JOptionPane.WARNING_MESSAGE);
             control = false;
-        }
-        
+        }       
         return control;
     }
     
@@ -431,8 +431,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Senhas diferente. Digite a mesma senha em ambos os campos", "Erro 003", JOptionPane.WARNING_MESSAGE);
             control = false;
-        }
-        
+        }       
         return control;
     }
     
@@ -506,27 +505,26 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
         //Verifica se alguman linha foi selecionada na tabela, ou seja,o usuario
         if(linhaTabelaUsuario < 0){
             JOptionPane.showMessageDialog(null,"Selecione um usuário a ser excluído","Atenção",JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        //Recebe a linha que foi selecionada na tabela.
-        userSelec = listaUser.get(linhaTabelaUsuario);      
+        }else{
+            //Recebe a linha que foi selecionada na tabela.
+            userSelec = listaUser.get(linhaTabelaUsuario);      
 
-        int confirm = JOptionPane.showConfirmDialog(null,"Excluir o usuário "+userSelec.getLogin()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if(confirm == JOptionPane.YES_OPTION){
-            usuarioDao.remover(userSelec.getCodigo());
-            consultarUsuarios();
-            limparCampos();
-        }else if(confirm == JOptionPane.NO_OPTION){
-            JOptionPane.showMessageDialog(null, "Operação cancelada!");
+            int confirm = JOptionPane.showConfirmDialog(null,"Excluir o usuário "+userSelec.getLogin()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION){
+                usuarioDao.remover(userSelec.getCodigo());
+                consultarUsuarios();
+                limparCampos();
+            }else if(confirm == JOptionPane.NO_OPTION){
+                JOptionPane.showMessageDialog(null, "Operação cancelada!");
+            }
         }
     }
     
     private void alterarUsuario(){
         
         //Criando variável que receberá o usuário selecionado na tabela
-        int numLinhaSelec = tabelaUsuarios.getSelectedRow();
-        cbAtivo.setEnabled(true);
+        int numLinhaSelec = this.tabelaUsuarios.getSelectedRow();
+        this.cbAtivo.setEnabled(true);
         
         
         //Verificando se foi selecionado algum usuario
@@ -535,24 +533,28 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
             return;
         }
                
-        userSelec = listaUser.get(numLinhaSelec);
+        this.userSelec = this.listaUser.get(numLinhaSelec);
         
-        usuarioCodigo.setText(Integer.toString(userSelec.getCodigo()));
-        usuarioNome.setText(userSelec.getNome());
-        usuarioEmail.setText(userSelec.getEmail());
-        usuarioCelular.setText(userSelec.getCelular());
-        usuarioLogin.setText(userSelec.getLogin());
-        usuarioSenha.setText(userSelec.getHashSenha());
-        usuarioConfirmSenha.setText(userSelec.getHashSenha());
-        campoIgreja.setSelectedItem(userSelec.getIgreja());
-        if(userSelec.getAtivo() == 1){
+        this.usuarioCodigo.setText(Integer.toString(this.userSelec.getCodigo()));
+        this.usuarioNome.setText(this.userSelec.getNome());
+        this.usuarioEmail.setText(this.userSelec.getEmail());
+        this.usuarioCelular.setText(this.userSelec.getCelular());
+        this.usuarioLogin.setText(this.userSelec.getLogin());
+        this.usuarioSenha.setText(this.userSelec.getHashSenha());
+        this.usuarioConfirmSenha.setText(this.userSelec.getHashSenha());
+        this.campoIgreja.setSelectedItem(this.userSelec.getIgreja());
+        if(this.userSelec.getAtivo() == 1){
             cbAtivo.setSelected(true);
         }else{
             cbAtivo.setSelected(false);
         }
         
-        usuarioLogin.setEditable(false);
-        usuarioLogin.setBackground(Color.GRAY);
+        this.usuarioLogin.setEditable(false);
+        this.usuarioLogin.setBackground(cores.CorCinza());
+        this.usuarioSenha.setBackground(cores.CorCinza());
+        this.usuarioConfirmSenha.setBackground(cores.CorCinza());
+        this.usuarioSenha.setEditable(false);
+        this.usuarioConfirmSenha.setEditable(false);
     }
         
     

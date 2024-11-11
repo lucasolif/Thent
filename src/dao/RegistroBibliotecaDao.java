@@ -26,7 +26,6 @@ public class RegistroBibliotecaDao {
     
     public void adicionarLivroBiblioteca(RegistroBiblioteca rgBiblioteca){
         
-        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=?";
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Biblioteca=? AND Livro=?";
         String sqlInsert1 = "INSERT INTO RegistroBiblioteca (Biblioteca,Livro,Quantidade)VALUES (?,?,?)";
         String sqlInsert2 = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao)VALUES ('ENTRADA - AVULSA',GETDATE())";
@@ -34,14 +33,8 @@ public class RegistroBibliotecaDao {
         try{
             this.conexao = Conexao.getDataSource().getConnection();  
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso
-            
-            //Consulta para verificar se o livro já está na biblioteca
-            this.selectStmt = this.conexao.prepareStatement(sqlSelect,PreparedStatement.RETURN_GENERATED_KEYS);       
-            this.selectStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
-            this.selectStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());         
-            this.rs = selectStmt.executeQuery();
-            
-            if(this.rs.next()){
+
+            if(verificarExistenciaLivro(rgBiblioteca)){
                 //Caso tenha livro ele atualiza a quantidade
                 this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
                 this.updateStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
@@ -197,9 +190,9 @@ public class RegistroBibliotecaDao {
         } finally {
             // Fechando recursos
             try {
-                if (rs != null) rs.close();
-                if (insertStmt != null) insertStmt.close();
-                if (conexao != null) conexao.close();
+                if (this.rs != null) this.rs.close();
+                if (this.insertStmt != null) this.insertStmt.close();
+                if (this.conexao != null) this.conexao.close();
             } catch (SQLException e) {
 
             }
@@ -207,61 +200,7 @@ public class RegistroBibliotecaDao {
         return listaLivros;      
     }   
     
-    public List<Livro> consultarLivroDisponivelBiblioteca(Biblioteca biblioteca){
-        
-        List<Livro> listaLivros = new ArrayList<>();
-
-        String sqlSelect = "SELECT " +
-            "L.Codigo AS CodInterno, " +
-            "L.CodLivro AS CodLivro, " +
-            "L.Nome AS NomeLivro, " +
-            "L.Volume AS VolumeLivro, " +
-            "A.Codigo AS CodigoAutor, " +
-            "A.Nome AS NomeAutor " +
-            "FROM RegistroBiblioteca AS RB " +
-            "INNER JOIN Livros AS L ON L.Codigo = RB.Livro " +
-            "INNER JOIN Autores AS A ON A.Codigo = L.Autor " +
-            "WHERE L.Ativo = 1 " +
-            "AND RB.Biblioteca = ? " +
-            "AND RB.Quantidade > 0";       
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();            
-            this.selectStmt = this.conexao.prepareStatement(sqlSelect);
-               
-            this.selectStmt.setInt(1,  biblioteca.getCodigo());
-            this.rs = this.selectStmt.executeQuery();
-
-            while(rs.next()){     
-                Livro livro = new Livro();
-                Autor autor = new Autor();
-                autor.setCodigo(this.rs.getInt("CodigoAutor"));
-                autor.setNome(this.rs.getString("NomeAutor"));
-                livro.setCodInterno(this.rs.getInt("CodInterno"));
-                livro.setCodLivro(this.rs.getInt("CodLivro"));
-                livro.setNomeLivro(this.rs.getString("NomeLivro"));
-                livro.setVolume(this.rs.getInt("VolumeLivro"));
-                livro.setAutor(autor);
-                
-                listaLivros.add(livro);
-            }
-        }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar buscar o livro na biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            // Fechar recursos
-            try{
-                if (this.rs != null) rs.close();
-                if (this.selectStmt != null) this.selectStmt.close();
-                if (this.conexao != null) this.conexao.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-        return listaLivros;
-    }
-    
     public void removerLivroBiblioteca(RegistroBiblioteca rgBiblioteca){
-        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=?";
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade-1 WHERE Biblioteca=? AND Livro=?";
         String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao)VALUES ('SAÍDA - AVULSA',GETDATE())";
         
@@ -269,13 +208,7 @@ public class RegistroBibliotecaDao {
             this.conexao = Conexao.getDataSource().getConnection();  
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso
             
-            //Consulta para verificar se o livro já está na biblioteca
-            this.selectStmt = this.conexao.prepareStatement(sqlSelect,PreparedStatement.RETURN_GENERATED_KEYS);       
-            this.selectStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
-            this.selectStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());         
-            this.rs = selectStmt.executeQuery();
-            
-            if(this.rs.next()){
+            if(verificarExistenciaLivro(rgBiblioteca)){
                 //Caso tenha livro ele atualiza a quantidade
                 this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
                 this.updateStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
@@ -287,8 +220,9 @@ public class RegistroBibliotecaDao {
                 this.insertStmt.execute();    
                 
                 JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" removido da biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase()+" com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                this.conexao.commit();
             }else{
-                JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
             this.conexao.commit();
@@ -313,5 +247,39 @@ public class RegistroBibliotecaDao {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    private boolean verificarExistenciaLivro(RegistroBiblioteca rgBiblioteca){
+        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=? AND Quantidade > 0";
+        boolean status = false;
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();  
+            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
+            
+            //Consulta para verificar se o livro já está na biblioteca
+            this.selectStmt = this.conexao.prepareStatement(sqlSelect,PreparedStatement.RETURN_GENERATED_KEYS);       
+            this.selectStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
+            this.selectStmt.setInt(2,  rgBiblioteca.getLivro().getCodInterno());         
+            this.rs = selectStmt.executeQuery();
+            
+            if(this.rs.next()){
+                status = true;
+            }else{
+                JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro", JOptionPane.ERROR_MESSAGE);
+                status = false;
+            }
+        }catch (SQLException ex) {
+
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }      
+        return status;
     }
 }

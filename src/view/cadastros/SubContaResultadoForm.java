@@ -55,14 +55,14 @@ public class SubContaResultadoForm extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setTitle("Sub Conta Resultado");
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Conta de Resultados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Conta de Resultados", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         tabelaSubContaResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Descrição", "Cont Result"
+                "Codigo", "Descrição", "Conta Resultado"
             }
         ) {
             Class[] types = new Class [] {
