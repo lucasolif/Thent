@@ -2,6 +2,7 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -9,7 +10,7 @@ public class EmprestimoLivro {
     
     private Integer codigo;
     private Pessoa pessoa;
-    private Livro livro;
+    private List<Livro> livro;
     private Biblioteca biblioteca;
     private Integer StatusEmprestimo;
     private Date dataEmprestimo;
@@ -34,14 +35,14 @@ public class EmprestimoLivro {
         this.pessoa = pessoa;
     }
 
-    public Livro getLivro() {
+    public List<Livro> getLivro() {
         return livro;
     }
 
-    public void setLivro(Livro livro) {
+    public void setLivro(List<Livro> livro) {
         this.livro = livro;
     }
-
+    
     public Biblioteca getBiblioteca() {
         return biblioteca;
     }

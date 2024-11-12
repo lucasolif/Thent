@@ -9,7 +9,7 @@ import view.biblioteca.CadastroBibliotecaForm;
 import view.biblioteca.ConsultaEmprestimoForm;
 import view.biblioteca.EditoraForm;
 import view.biblioteca.EmprestimoLivroForm;
-import view.biblioteca.LivrosForm;
+import view.biblioteca.CadastroLivrosForm;
 import view.biblioteca.SaidaAvulsaForm;
 import view.cadastros.ContaCaixaForm;
 import view.cadastros.ContaResultadoForm;
@@ -19,6 +19,8 @@ import view.cadastros.PessoasForm;
 import view.cadastros.SubContaResultadoForm;
 import view.cadastros.TipoOfertaForm;
 import view.cadastros.UsuarioForm;
+import view.campanhas.CadastrarCampanhaForm;
+import view.campanhas.TipoCampanhaForm;
 import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
@@ -80,6 +82,10 @@ public class Home extends javax.swing.JFrame {
         menuEmprestimoLivros = new javax.swing.JMenu();
         operacaoEmprestimo = new javax.swing.JMenuItem();
         operacaoConsultaEmprestimo = new javax.swing.JMenuItem();
+        campanha = new javax.swing.JMenu();
+        cadastrarTipoCampanha = new javax.swing.JMenuItem();
+        criarCampanha = new javax.swing.JMenuItem();
+        pagamentosCampanha = new javax.swing.JMenuItem();
         configuracoes = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenu();
         alterarSenha = new javax.swing.JMenuItem();
@@ -354,6 +360,29 @@ public class Home extends javax.swing.JFrame {
 
         menuBarra.add(biblioteca);
 
+        campanha.setText("Campanha");
+
+        cadastrarTipoCampanha.setText("Cadastrar Tipo Campanha");
+        cadastrarTipoCampanha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastrarTipoCampanhaActionPerformed(evt);
+            }
+        });
+        campanha.add(cadastrarTipoCampanha);
+
+        criarCampanha.setText("Criar Campanha");
+        criarCampanha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                criarCampanhaActionPerformed(evt);
+            }
+        });
+        campanha.add(criarCampanha);
+
+        pagamentosCampanha.setText("Pagamentos Campanha");
+        campanha.add(pagamentosCampanha);
+
+        menuBarra.add(campanha);
+
         configuracoes.setText("Configurações");
 
         menuUsuario.setText("Usuário");
@@ -388,98 +417,98 @@ public class Home extends javax.swing.JFrame {
 
     private void cadastroPessoasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroPessoasActionPerformed
         PessoasForm cadastroPessoas = new PessoasForm();
-        painelHome.add(cadastroPessoas);
+        this.painelHome.add(cadastroPessoas);
         cadastroPessoas.setVisible(true);
         cadastroPessoas.setPosicao();
     }//GEN-LAST:event_cadastroPessoasActionPerformed
 
     private void cadastroIgrejaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroIgrejaActionPerformed
         IgrejaForm cadastroIgreja = new IgrejaForm();
-        painelHome.add(cadastroIgreja);
+        this.painelHome.add(cadastroIgreja);
         cadastroIgreja.setVisible(true);
         cadastroIgreja.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroIgrejaActionPerformed
 
     private void cadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroUsuarioActionPerformed
         UsuarioForm cadastroUsuario = new UsuarioForm();
-        painelHome.add(cadastroUsuario);
+        this.painelHome.add(cadastroUsuario);
         cadastroUsuario.setVisible(true);
         cadastroUsuario.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroUsuarioActionPerformed
 
     private void cadastroFormaPagtoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroFormaPagtoActionPerformed
         FormaPagtoForm cadastroFormaPagto = new FormaPagtoForm();
-        painelHome.add(cadastroFormaPagto);
+        this.painelHome.add(cadastroFormaPagto);
         cadastroFormaPagto.setVisible(true);
         cadastroFormaPagto.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroFormaPagtoActionPerformed
 
     private void cadastroContaCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaCaixaActionPerformed
         ContaCaixaForm cadastroContaCaixa = new ContaCaixaForm();
-        painelHome.add(cadastroContaCaixa);
+        this.painelHome.add(cadastroContaCaixa);
         cadastroContaCaixa.setVisible(true);
         cadastroContaCaixa.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroContaCaixaActionPerformed
 
     private void cadastroTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroTipoOfertaActionPerformed
         TipoOfertaForm cadastroTipoOferta = new TipoOfertaForm();
-        painelHome.add(cadastroTipoOferta);
+        this.painelHome.add(cadastroTipoOferta);
         cadastroTipoOferta.setVisible(true);
         cadastroTipoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroTipoOfertaActionPerformed
 
     private void lancarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasPagarActionPerformed
         ContasPagarForm contasPagar = new ContasPagarForm();
-        painelHome.add(contasPagar);
+        this.painelHome.add(contasPagar);
         contasPagar.setVisible(true);
         contasPagar.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_lancarContasPagarActionPerformed
 
     private void efetivarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_efetivarContasPagarActionPerformed
         EfetivarContasPagarForm efetivarContas = new EfetivarContasPagarForm();
-        painelHome.add(efetivarContas);
+        this.painelHome.add(efetivarContas);
         efetivarContas.setVisible(true);
         efetivarContas.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_efetivarContasPagarActionPerformed
 
     private void registrarOfertasDizimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarOfertasDizimoActionPerformed
         RegistroDizimoOfertaForm rgDizimoOferta = new RegistroDizimoOfertaForm();
-        painelHome.add(rgDizimoOferta);
+        this.painelHome.add(rgDizimoOferta);
         rgDizimoOferta.setVisible(true);
         rgDizimoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_registrarOfertasDizimoActionPerformed
 
     private void transferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferenciaActionPerformed
         TransferenciaContaForm trasnfConta = new TransferenciaContaForm();
-        painelHome.add(trasnfConta);
+        this.painelHome.add(trasnfConta);
         trasnfConta.setVisible(true);
         trasnfConta.setPosicao();
     }//GEN-LAST:event_transferenciaActionPerformed
 
     private void alterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarSenhaActionPerformed
         AlterarSenhaForm alterarSenha = new AlterarSenhaForm();
-        painelHome.add(alterarSenha);
+        this.painelHome.add(alterarSenha);
         alterarSenha.setVisible(true);
         alterarSenha.setPosicao();
     }//GEN-LAST:event_alterarSenhaActionPerformed
 
     private void cadastroContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaResultadoActionPerformed
         ContaResultadoForm contaResultado = new ContaResultadoForm();
-        painelHome.add(contaResultado);
+        this.painelHome.add(contaResultado);
         contaResultado.setVisible(true);
         contaResultado.setPosicao();
     }//GEN-LAST:event_cadastroContaResultadoActionPerformed
 
     private void efetivacaoDizimoOfertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_efetivacaoDizimoOfertasActionPerformed
         ConsultaRegistroDizimoOferta efetivacao = new ConsultaRegistroDizimoOferta();
-        painelHome.add(efetivacao);
+        this.painelHome.add(efetivacao);
         efetivacao.setVisible(true);
         efetivacao.setPosicao();
     }//GEN-LAST:event_efetivacaoDizimoOfertasActionPerformed
 
     private void movimentoFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movimentoFinanceiroActionPerformed
         MovimentoFinanceiroForm movimentoFinanceiro = new MovimentoFinanceiroForm();
-        painelHome.add(movimentoFinanceiro);
+        this.painelHome.add(movimentoFinanceiro);
         movimentoFinanceiro.setVisible(true);
         movimentoFinanceiro.setPosicao();
     }//GEN-LAST:event_movimentoFinanceiroActionPerformed
@@ -491,42 +520,42 @@ public class Home extends javax.swing.JFrame {
 
     private void cancelarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarContasPagarActionPerformed
         CancelarContasPagarForm cancelarCp = new CancelarContasPagarForm();
-        painelHome.add(cancelarCp);
+        this.painelHome.add(cancelarCp);
         cancelarCp.setVisible(true);
         cancelarCp.setPosicao();
     }//GEN-LAST:event_cancelarContasPagarActionPerformed
 
     private void cadastroLivrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroLivrosActionPerformed
-        LivrosForm cadastrarLivros = new LivrosForm();
-        painelHome.add(cadastrarLivros);
+        CadastroLivrosForm cadastrarLivros = new CadastroLivrosForm();
+        this.painelHome.add(cadastrarLivros);
         cadastrarLivros.setVisible(true);
         cadastrarLivros.setPosicao();
     }//GEN-LAST:event_cadastroLivrosActionPerformed
 
     private void cadastroBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecaActionPerformed
         BibliotecaForm biblioteca = new BibliotecaForm();
-        painelHome.add(biblioteca);
+        this.painelHome.add(biblioteca);
         biblioteca.setVisible(true);
         biblioteca.setPosicao();
     }//GEN-LAST:event_cadastroBibliotecaActionPerformed
 
     private void operacaoEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoEmprestimoActionPerformed
         EmprestimoLivroForm emprestimo = new EmprestimoLivroForm();
-        painelHome.add(emprestimo);
+        this.painelHome.add(emprestimo);
         emprestimo.setVisible(true);
         emprestimo.setPosicao();
     }//GEN-LAST:event_operacaoEmprestimoActionPerformed
 
     private void operacaoConsultaEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoConsultaEmprestimoActionPerformed
         ConsultaEmprestimoForm consultaEmprestimo = new ConsultaEmprestimoForm();
-        painelHome.add(consultaEmprestimo);
+        this.painelHome.add(consultaEmprestimo);
         consultaEmprestimo.setVisible(true);
         consultaEmprestimo.setPosicao();
     }//GEN-LAST:event_operacaoConsultaEmprestimoActionPerformed
 
     private void cadastroSubContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroSubContaResultadoActionPerformed
         SubContaResultadoForm subContaResult = new SubContaResultadoForm();
-        painelHome.add(subContaResult);
+        this.painelHome.add(subContaResult);
         subContaResult.setVisible(true);
         subContaResult.setPosicao();
     }//GEN-LAST:event_cadastroSubContaResultadoActionPerformed
@@ -551,17 +580,31 @@ public class Home extends javax.swing.JFrame {
 
     private void saidaAvulsaLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saidaAvulsaLivroActionPerformed
         SaidaAvulsaForm saidaAvulsaLivro = new SaidaAvulsaForm();
-        painelHome.add(saidaAvulsaLivro);
+        this.painelHome.add(saidaAvulsaLivro);
         saidaAvulsaLivro.setVisible(true);
         saidaAvulsaLivro.setPosicao();
     }//GEN-LAST:event_saidaAvulsaLivroActionPerformed
 
     private void cadastroBibliotecasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecasActionPerformed
         CadastroBibliotecaForm cadastroBiblioteca = new CadastroBibliotecaForm();
-        painelHome.add(cadastroBiblioteca);
+        this.painelHome.add(cadastroBiblioteca);
         cadastroBiblioteca.setVisible(true);
         cadastroBiblioteca.setPosicao();
     }//GEN-LAST:event_cadastroBibliotecasActionPerformed
+
+    private void cadastrarTipoCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarTipoCampanhaActionPerformed
+        TipoCampanhaForm tpCampanhaForm = new TipoCampanhaForm();
+        this.painelHome.add(tpCampanhaForm);
+        tpCampanhaForm.setVisible(true);
+        tpCampanhaForm.setPosicao();
+    }//GEN-LAST:event_cadastrarTipoCampanhaActionPerformed
+
+    private void criarCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarCampanhaActionPerformed
+        CadastrarCampanhaForm cadastrarCampanha = new CadastrarCampanhaForm();
+        this.painelHome.add(cadastrarCampanha);
+        cadastrarCampanha.setVisible(true);
+        cadastrarCampanha.setPosicao();
+    }//GEN-LAST:event_criarCampanhaActionPerformed
   
    
     
@@ -570,6 +613,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem addLivroBiblioteca;
     private javax.swing.JMenuItem alterarSenha;
     private javax.swing.JMenu biblioteca;
+    private javax.swing.JMenuItem cadastrarTipoCampanha;
     private javax.swing.JMenuItem cadastroAutor;
     private javax.swing.JMenuItem cadastroBiblioteca;
     private javax.swing.JMenuItem cadastroBibliotecas;
@@ -585,8 +629,10 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem cadastroTipoOferta;
     private javax.swing.JMenuItem cadastroUsuario;
     private javax.swing.JMenu cadastros;
+    private javax.swing.JMenu campanha;
     private javax.swing.JMenuItem cancelarContasPagar;
     private javax.swing.JMenu configuracoes;
+    private javax.swing.JMenuItem criarCampanha;
     private javax.swing.JMenuItem efetivacaoDizimoOfertas;
     private javax.swing.JMenuItem efetivarContasPagar;
     private javax.swing.JMenu financeiro;
@@ -604,6 +650,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu operacaoContasPagar;
     private javax.swing.JMenu operacaoDizimoOfertas;
     private javax.swing.JMenuItem operacaoEmprestimo;
+    private javax.swing.JMenuItem pagamentosCampanha;
     public javax.swing.JDesktopPane painelHome;
     private javax.swing.JMenuItem registrarOfertasDizimo;
     private javax.swing.JMenu relatorios;

@@ -37,7 +37,6 @@ public class TipoOfertaDao {
                 listaTipoOferta.add(tipoOferta);
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar os tipos de oferta", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -46,7 +45,6 @@ public class TipoOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -67,7 +65,6 @@ public class TipoOfertaDao {
             JOptionPane.showMessageDialog(null, "Tipo de oferta cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o tipo de oferta", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -75,7 +72,6 @@ public class TipoOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -95,7 +91,6 @@ public class TipoOfertaDao {
             JOptionPane.showMessageDialog(null, "Tipo de Oferta "+tipoOferta.getNome()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o tipo de oferta "+tipoOferta.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -103,7 +98,6 @@ public class TipoOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -140,12 +134,11 @@ public class TipoOfertaDao {
                 TipoOferta tpOferta = new TipoOferta();
                 tpOferta.setCodigo(rs.getInt("Codigo"));
                 tpOferta.setNome(rs.getString("Descricao"));
-                tpOferta.setDataCadastro(rs.getString("DataCadastro"));
+                tpOferta.setDataCadastro(rs.getDate("DataCadastro"));
 
                 listaTipoOferta.add(tpOferta);
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os tipos de ofertas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -154,7 +147,6 @@ public class TipoOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -175,7 +167,6 @@ public class TipoOfertaDao {
             JOptionPane.showMessageDialog(null, "Tipo de Oferta "+tipoOferta.getNome()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o tipo de oferta "+tipoOferta.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -183,7 +174,6 @@ public class TipoOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

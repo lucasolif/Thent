@@ -104,19 +104,18 @@ public class RegistroBibliotecaDao {
             "AND (? IS NULL OR LV.Editora = ?) " +
             "AND (? IS NULL OR LV.Volume = ?)";
    
-
             this.conexao = Conexao.getDataSource().getConnection();         
             this.selectStmt = this.conexao.prepareStatement(sqlSelect);  
 
-            if (filtroBiblioteca != null) {
+            if(filtroBiblioteca != null) {
                 this.selectStmt.setInt(1, filtroBiblioteca.getCodigo()); 
                 this.selectStmt.setInt(2, filtroBiblioteca.getCodigo());
-            } else {
+            }else{
                 this.selectStmt.setNull(1, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(2, java.sql.Types.INTEGER);
             }
                 
-            if (filtroLivro != null) {
+            if(filtroLivro != null) {
                 this.selectStmt.setInt(3, filtroLivro.getCodInterno());
                 this.selectStmt.setInt(4, filtroLivro.getCodInterno());
             } else {
@@ -158,11 +157,9 @@ public class RegistroBibliotecaDao {
                 
             // Executando a consulta
             this.rs = this.selectStmt.executeQuery();
-
+            
             // Iterando sobre os resultados
-            while (rs.next()) {
-                //Convertendo as datas do tipo Date para String
-        
+            while (this.rs.next()) {      
                 Livro livro = new Livro();
                 Autor autor = new Autor();
                 Biblioteca biblioteca = new Biblioteca();
@@ -177,7 +174,7 @@ public class RegistroBibliotecaDao {
                 livro.setStatus(rs.getInt("AtivoInativo"));
                 livro.setAutor(autor);
                 biblioteca.setCodigo(rs.getInt("CodigoBiblioteca"));
-                biblioteca.setNomeBiblioteca(rs.getString("CodigoBiblioteca"));
+                biblioteca.setNomeBiblioteca(rs.getString("NomeBiblioteca"));
                 
                 rgBibli.setLivro(livro);
                 rgBibli.setBiblioteca(biblioteca);

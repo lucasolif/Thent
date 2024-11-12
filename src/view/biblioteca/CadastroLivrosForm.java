@@ -15,14 +15,14 @@ import model.Editora;
 import model.Livro;
 
 
-public class LivrosForm extends javax.swing.JInternalFrame {
+public class CadastroLivrosForm extends javax.swing.JInternalFrame {
 
     private Livro livroSelec;
     private final LivroDao livroDao = new LivroDao();
     private final EditoraDao publicadoraDao = new EditoraDao();
     private final AutorDao autorDao = new AutorDao();
 
-    public LivrosForm() {
+    public CadastroLivrosForm() {
         initComponents();
         carregarAutores();
         carregarPublicadoras();

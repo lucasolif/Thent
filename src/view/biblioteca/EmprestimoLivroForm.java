@@ -354,38 +354,35 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "O livro foi removido da lista", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }else{
             JOptionPane.showMessageDialog(null, "Selecione o livro que será removido da lista", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
         }     
     }
     
     private void emprestarLivros(){
 
         Pessoa pessoa = new Pessoa();
-        List<EmprestimoLivro> listaLivroEmprestado = new ArrayList<>();
+        List<Livro> livrosEmprestado = new ArrayList<>();
+        EmprestimoLivro emprestimoLivro  = new EmprestimoLivro();  
         int qtdLivroSelec = this.tabelaLivros.getRowCount();
-        
-        if(qtdLivroSelec > 0){           
-            for(int i = 0; i < qtdLivroSelec; i++){           
+        Integer codPessoa = Integer.valueOf(this.codPessoa.getText());
+        String nomePessoa = this.nomePessoa.getText();
+        Date dataEmprestimo = this.conversor.convertendoStringDateSql(this.dataEmprestimo.getText());
+        Biblioteca biblioteca  = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
+
+        if(qtdLivroSelec > 0){                            
+            for(int i = 0; i < qtdLivroSelec; i++){                              
                 Livro livro  = (Livro)this.tabelaLivros.getModel().getValueAt(i, 1);
-                Integer codPessoa = Integer.valueOf(this.codPessoa.getText());
-                String nomePessoa = this.nomePessoa.getText();
-                Date dataEmprestimo = this.conversor.convertendoStringDateSql(this.dataEmprestimo.getText());
-                Biblioteca biblioteca  = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
-                
-                pessoa.setCodigo(codPessoa);
-                pessoa.setNome(nomePessoa);
+                livrosEmprestado.add(livro);
+            }
             
-                EmprestimoLivro emprestimoLivro  = new EmprestimoLivro();   
-                emprestimoLivro.setPessoa(pessoa);
-                emprestimoLivro.setDataEmprestimo(dataEmprestimo);
-                emprestimoLivro.setLivro(livro);
-                emprestimoLivro.setStatusEmprestimo(1);
-                emprestimoLivro.setBiblioteca(biblioteca);
-                
-                listaLivroEmprestado.add(emprestimoLivro);
-            }    
-            
-            this.emprestimoDao.emprestarLivros(listaLivroEmprestado);
+            pessoa.setCodigo(codPessoa);
+            pessoa.setNome(nomePessoa);
+            emprestimoLivro.setPessoa(pessoa);
+            emprestimoLivro.setDataEmprestimo(dataEmprestimo);
+            emprestimoLivro.setLivro(livrosEmprestado);
+            emprestimoLivro.setStatusEmprestimo(1);
+            emprestimoLivro.setBiblioteca(biblioteca);
+
+            this.emprestimoDao.emprestarLivros(emprestimoLivro);
         }else{
             JOptionPane.showMessageDialog(null, "Para efetuar o empréstimo, é necessário informar o(s) livro(s)", "Atenção", JOptionPane.WARNING_MESSAGE);
         }

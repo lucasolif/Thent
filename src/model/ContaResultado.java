@@ -1,6 +1,8 @@
 
 package model;
 
+import java.util.Date;
+
 
 public class ContaResultado extends Entidades{
 
@@ -10,12 +12,12 @@ public class ContaResultado extends Entidades{
         
     }
 
-    public ContaResultado(String tipoContaResultado, String descricao, String dataCadastro) {
+    public ContaResultado(String tipoContaResultado, String descricao, Date dataCadastro) {
         super(descricao, dataCadastro);
         this.tipoContaResultado = tipoContaResultado;
     }
 
-    public ContaResultado(String tipoContaResultado, String descricao, String dataCadastro, Integer codigo) {
+    public ContaResultado(String tipoContaResultado, String descricao, Date dataCadastro, Integer codigo) {
         super(descricao, dataCadastro, codigo);
         this.tipoContaResultado = tipoContaResultado;
     }
@@ -35,8 +37,6 @@ public class ContaResultado extends Entidades{
 
     public void setTipoContaResultado(String tipoContaResultado) {
         this.tipoContaResultado = tipoContaResultado;
-    }
-    
-    
+    }    
     
 }

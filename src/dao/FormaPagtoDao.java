@@ -107,12 +107,10 @@ public class FormaPagtoDao {
     }
     
     public List<FormaPagto> consultarFormaPagto(String formaPagto){
-        
-        String sql = null;
+
         List<FormaPagto> listaFormaPagto = new ArrayList<>();
 
-        sql = "SELECT * FROM FormasPagamento "
-        + "WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Descricao LIKE ?)";
+        String sql = "SELECT * FROM FormasPagamento WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Descricao LIKE ?)";
    
         try{
             conexao = Conexao.getDataSource().getConnection();           
@@ -136,7 +134,7 @@ public class FormaPagtoDao {
                 FormaPagto pagto = new FormaPagto();
                 pagto.setCodigo(rs.getInt("Codigo"));
                 pagto.setNome(rs.getString("Descricao"));
-                pagto.setDataCadastro(rs.getString("DataCadastro"));
+                pagto.setDataCadastro(rs.getDate("DataCadastro"));
 
                 listaFormaPagto.add(pagto);
             }

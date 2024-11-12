@@ -37,7 +37,6 @@ public class ContaResultadoDao {
                 listaContaResultado.add(contaResultado);
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as contas de resultado", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -46,7 +45,6 @@ public class ContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -68,7 +66,6 @@ public class ContaResultadoDao {
             JOptionPane.showMessageDialog(null, "Conta Resultado cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a conta de resultado", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -76,7 +73,6 @@ public class ContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -97,7 +93,6 @@ public class ContaResultadoDao {
             JOptionPane.showMessageDialog(null, "Conta de Resultado "+contaResultado.getNome()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a conta de resultado "+contaResultado.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -105,7 +100,6 @@ public class ContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -114,11 +108,10 @@ public class ContaResultadoDao {
     
     //Consulta para listar todas as contas de resultado na tabela
     public List<ContaResultado> consultarContaResultado(String contaResultado){
-
-        String sql = null;
+        
         List<ContaResultado> listaContaResultado = new ArrayList<>();
 
-        sql = "SELECT * FROM ContasResultado "
+        String sql = "SELECT * FROM ContasResultado "
         + "WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Descricao LIKE ?)";
         
         try{
@@ -144,12 +137,11 @@ public class ContaResultadoDao {
                 cResultado.setCodigo(rs.getInt("Codigo"));
                 cResultado.setNome(rs.getString("Descricao"));
                 cResultado.setTipoContaResultado(rs.getString("ReceitaDespesa"));
-                cResultado.setDataCadastro(rs.getString("DataCadastro"));
+                cResultado.setDataCadastro(rs.getDate("DataCadastro"));
 
                 listaContaResultado.add(cResultado);
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a conta de resultado", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -158,7 +150,6 @@ public class ContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -179,7 +170,6 @@ public class ContaResultadoDao {
             JOptionPane.showMessageDialog(null, "Conta de Resultado "+contaResultado.getNome()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a conta de resultado "+contaResultado.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -187,7 +177,6 @@ public class ContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

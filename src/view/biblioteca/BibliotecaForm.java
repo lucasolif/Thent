@@ -183,7 +183,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
             }
         });
 
-        volume.setModel(new javax.swing.SpinnerNumberModel(1, null, null, 1));
+        volume.setModel(new javax.swing.SpinnerNumberModel());
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -431,9 +431,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         } 
     }//GEN-LAST:event_editoraKeyPressed
 
-    private void consultarRegistroBiblioteca(){
-        RegistroBiblioteca registroBiblioteca = new RegistroBiblioteca();
-        
+    private void consultarRegistroBiblioteca(){      
         String textoBusca = this.textoBusca.getText();
         Autor autor = (Autor) this.autor.getSelectedItem();
         Livro livro = (Livro) this.livro.getSelectedItem();
@@ -517,6 +515,11 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         AdicionarLivroForm addLivroBiblioteca = new AdicionarLivroForm((Frame) SwingUtilities.getWindowAncestor(this), true);
         addLivroBiblioteca.setLocationRelativeTo(this);
         addLivroBiblioteca.setVisible(true);
+    }
+    
+    private void formEmprestarLivro(){
+        EmprestimoLivroForm formEmprestimo = new EmprestimoLivroForm();
+        formEmprestimo.setVisible(true);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

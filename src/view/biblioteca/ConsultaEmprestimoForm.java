@@ -497,7 +497,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         Integer codPessoa = null;
         Integer statusEmprestimo = null;
         String nomePessoa = this.nomePessoa.getText();
-        Livro livro = (Livro) this.livros.getSelectedItem();
+        List<Livro> livro = (List<Livro>) (Livro) this.livros.getSelectedItem();
         Biblioteca biblioteca = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
         
         //Tratando o código da pessoa    
@@ -543,8 +543,9 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         for(EmprestimoLivro empLivro : this.listaEmpLivros){    
             String dataEmprestimo = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataEmprestimo());
             String dataDevolucao = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataDevolucao());
-            
-            model.addRow(new Object[]{empLivro.getCodigo(),empLivro.getLivro().getCodLivro(),empLivro.getLivro(), empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getBiblioteca()});
+            for(Livro livro : empLivro.getLivro()){
+                model.addRow(new Object[]{empLivro.getCodigo(),livro.getCodLivro(),livro, empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getBiblioteca()});
+            }        
         }
     }
     
@@ -568,7 +569,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             for(int index : empSelec){
                 EmprestimoLivro emprestimoLivro = new EmprestimoLivro();           
                 Pessoa pessoa = this.listaEmpLivros.get(index).getPessoa();
-                Livro livro = this.listaEmpLivros.get(index).getLivro();
+                List<Livro> livro = this.listaEmpLivros.get(index).getLivro();
                 Integer codEmprestimo = this.listaEmpLivros.get(index).getCodigo();
                 Biblioteca biblioteca = this.listaEmpLivros.get(index).getBiblioteca();
                 Date dataDevolucao = conversor.convertendoStringDateSql(this.dataDevolucao.getText());

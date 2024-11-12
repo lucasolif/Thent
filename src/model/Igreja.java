@@ -1,6 +1,7 @@
 
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Igreja extends Entidades{
@@ -15,7 +16,7 @@ public class Igreja extends Entidades{
         this.endereco = endereco;
     }
 
-    public Igreja(Integer codigo, String descricao, String dataCadastro, Endereco endereco) {
+    public Igreja(Integer codigo, String descricao, Date dataCadastro, Endereco endereco) {
         super(descricao, dataCadastro, codigo);
         this.endereco = endereco;
     }

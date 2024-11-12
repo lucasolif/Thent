@@ -85,7 +85,7 @@ public class ContaCaixaDao {
                 ContaCaixa caixa = new ContaCaixa();
                 caixa.setCodigo(rs.getInt("Codigo"));
                 caixa.setNome(rs.getString("Descricao"));
-                caixa.setDataCadastro(rs.getString("DataCadastro"));
+                caixa.setDataCadastro(rs.getDate("DataCadastro"));
 
                 listaCaixas.add(caixa);
             }
@@ -138,7 +138,7 @@ public class ContaCaixaDao {
                 ContaCaixa caixa = new ContaCaixa();
                 caixa.setCodigo(rs.getInt("Codigo"));
                 caixa.setNome(rs.getString("Descricao"));
-                caixa.setDataCadastro(rs.getString("DataCadastroConv"));
+                caixa.setDataCadastro(rs.getDate("DataCadastro"));
 
                 listaCaixas.add(caixa);
             }

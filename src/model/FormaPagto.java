@@ -1,10 +1,12 @@
 
 package model;
 
+import java.util.Date;
+
 
 public class FormaPagto extends Entidades{
 
-    public FormaPagto(String descricao, String dataCadastro, Integer codigo) {
+    public FormaPagto(String descricao, Date dataCadastro, Integer codigo) {
         super(descricao, dataCadastro, codigo);
     }
 

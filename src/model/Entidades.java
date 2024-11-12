@@ -1,19 +1,21 @@
 
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 
 public class Entidades {
-    private String nome, dataCadastro;
+    private String nome;
+    private Date dataCadastro;
     private Integer codigo;
 
-    public Entidades(String descricao, String dataCadastro) {
+    public Entidades(String descricao, Date dataCadastro) {
         this.nome = descricao;
         this.dataCadastro = dataCadastro;
     }
 
-    public Entidades(String descricao, String dataCadastro, Integer codigo) {
+    public Entidades(String descricao, Date dataCadastro, Integer codigo) {
         this.nome = descricao;
         this.dataCadastro = dataCadastro;
         this.codigo = codigo;
@@ -35,11 +37,11 @@ public class Entidades {
         this.nome = nome;
     }
 
-    public String getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(String dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
@@ -80,8 +82,6 @@ public class Entidades {
         }
         return Objects.equals(this.codigo, other.codigo);
     }
-
-    
 
     @Override
     public String toString() {
