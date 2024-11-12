@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class Campanha {
     private Integer codigo;
-    private Pessoa responsável;
     private TipoCampanha tipoCampanha;
     private String descricaoCampanha;
     private Igreja igreja;
@@ -30,14 +29,6 @@ public class Campanha {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
-    }
-
-    public Pessoa getResponsável() {
-        return responsável;
-    }
-
-    public void setResponsável(Pessoa responsável) {
-        this.responsável = responsável;
     }
 
     public TipoCampanha getTipoCampanha() {
@@ -132,7 +123,6 @@ public class Campanha {
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.codigo);
-        hash = 29 * hash + Objects.hashCode(this.responsável);
         hash = 29 * hash + Objects.hashCode(this.tipoCampanha);
         hash = 29 * hash + Objects.hashCode(this.descricaoCampanha);
         hash = 29 * hash + Objects.hashCode(this.igreja);
@@ -169,9 +159,6 @@ public class Campanha {
             return false;
         }
         if (!Objects.equals(this.codigo, other.codigo)) {
-            return false;
-        }
-        if (!Objects.equals(this.responsável, other.responsável)) {
             return false;
         }
         if (!Objects.equals(this.tipoCampanha, other.tipoCampanha)) {
