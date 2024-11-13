@@ -1,7 +1,7 @@
 
 package dao;
 
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -24,7 +24,7 @@ import model.TransferenciaConta;
 
 public class MovimentoCaixaDao {
     
-    private Conversores converteData = new Conversores();
+    private Utilitarios converteData = new Utilitarios();
     ContasPagarDao cpDao = new ContasPagarDao();
     private Connection conexao = null;
     private PreparedStatement ps = null;

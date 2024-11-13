@@ -9,7 +9,7 @@ import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.SubContaResultadoDao;
 import dao.TipoOfertaDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
@@ -37,7 +37,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
     private final PessoaDao pessoaDao = new PessoaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     private List<RegistroDizimoOferta> listaRgOferta;
     private Pessoa ofertanteSelec;
     private RegistroDizimoOferta rgOfertaSelec;
@@ -390,7 +390,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame {
     }
 
     private void limparTabela(){
-        //Primeiro a condição testa se a quantidade de colunas é maior que 0, depois, limpa os dados
+        //Primeiro a condição testa se a quantidade de linhas é maior que 0, depois, limpa os dados
         if(tabelaOfertas.getRowCount() > 0){
             DefaultTableModel model = (DefaultTableModel) tabelaOfertas.getModel();
             model.setRowCount(0);

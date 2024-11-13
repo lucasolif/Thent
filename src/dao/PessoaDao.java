@@ -1,7 +1,7 @@
 
 package dao;
 
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import jdbc.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ import model.Endereco;
 import model.Igreja;
 
 public class PessoaDao {
-    private Conversores conversor = new Conversores();
+    private Utilitarios conversor = new Utilitarios();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;

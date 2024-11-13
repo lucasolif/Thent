@@ -1,7 +1,7 @@
 
 package dao;
 
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,7 +21,7 @@ import model.TipoOferta;
 
 public class RegistroOfertaDao {
     
-    private final Conversores converteData = new Conversores();
+    private final Utilitarios converteData = new Utilitarios();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;

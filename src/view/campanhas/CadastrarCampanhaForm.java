@@ -1,13 +1,36 @@
 
 package view.campanhas;
 
+import dao.IgrejaDao;
+import dao.TipoCampanhaDao;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import model.Campanha;
+import model.Igreja;
+import model.Pessoa;
+import model.TipoCampanha;
+import view.biblioteca.EditoraForm;
 
 public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
 
-
+    private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final TipoCampanhaDao tpCampanhaDao = new TipoCampanhaDao();
+    private List<Campanha> listaCampanhas = new ArrayList();
+    private Utilitarios conversor = new Utilitarios();
+    private Campanha campanhaSelec = null;
+    
     public CadastrarCampanhaForm() {
         initComponents();
+        formInicial();
     }
     
     public void setPosicao() {
@@ -20,8 +43,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnLimpar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         dataFimCampanha = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -39,7 +62,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
         statusCampanha = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        dataLimitePagamento = new javax.swing.JFormattedTextField();
         jLabel11 = new javax.swing.JLabel();
         codCampanha = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
@@ -48,23 +70,29 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
         jLabel12 = new javax.swing.JLabel();
         codParticipante = new javax.swing.JTextField();
         nomeParticipante = new javax.swing.JTextField();
-        btnOkParticipante = new javax.swing.JButton();
+        btnAdicionar = new javax.swing.JButton();
+        diaPagamento = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaParticipantes = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         consultarCampanha = new javax.swing.JTextField();
-        btnOKConsultar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Cadastrar Campanha");
 
-        jButton2.setBackground(new java.awt.Color(0, 204, 0));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton2.setText("Salvar");
-        jButton2.setToolTipText("");
+        btnSalvar.setBackground(new java.awt.Color(0, 204, 0));
+        btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSalvar.setText("Salvar");
+        btnSalvar.setToolTipText("");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
+        btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Dados Campanha", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
@@ -96,19 +124,17 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
 
         jLabel9.setText("Valor Total*");
 
+        duracaoCampanha.setModel(new javax.swing.SpinnerNumberModel(12, null, null, 1));
+
+        statusCampanha.setSelected(true);
         statusCampanha.setText("Ativo");
+        statusCampanha.setEnabled(false);
 
         jLabel5.setText("Duração (Mês)");
 
-        jLabel10.setText("Status");
+        jLabel10.setText("Status*");
 
-        try {
-            dataLimitePagamento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
-        jLabel11.setText("Dt Limite Pag*");
+        jLabel11.setText("Dia Pagt*");
 
         codCampanha.setEditable(false);
         codCampanha.setBackground(new java.awt.Color(204, 204, 204));
@@ -123,9 +149,11 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
         codParticipante.setBackground(new java.awt.Color(204, 204, 204));
         codParticipante.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
-        btnOkParticipante.setBackground(new java.awt.Color(51, 153, 255));
-        btnOkParticipante.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnOkParticipante.setText("Adicionar");
+        btnAdicionar.setBackground(new java.awt.Color(51, 153, 255));
+        btnAdicionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAdicionar.setText("Adicionar");
+
+        diaPagamento.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -133,121 +161,111 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(134, 134, 134)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(134, 134, 134)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel9)))
-                                    .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dataLimitePagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(statusCampanha)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel13)
-                                    .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(21, 21, 21)
-                                        .addComponent(jLabel3)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(tipoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9)))
+                            .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dataInicioCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(diaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(statusCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(observacaoCampanha)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(tipoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataInicioCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)))
                     .addComponent(jLabel12)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(codParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nomeParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOkParticipante)))
+                        .addComponent(btnAdicionar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel2))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tipoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dataInicioCampanha)
+                            .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel2))
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tipoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(dataInicioCampanha)
-                                    .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel10))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dataLimitePagamento)
-                                    .addComponent(statusCampanha)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
+                        .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(observacaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(diaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(statusCampanha)
+                            .addComponent(observacaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nomeParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOkParticipante))
+                    .addComponent(btnAdicionar))
                 .addContainerGap())
         );
 
@@ -255,10 +273,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
 
         tabelaParticipantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Código", "Nome Participante", "CPF/CNPJ", "Igreja"
@@ -293,9 +308,20 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Consultar Campanha");
 
-        btnOKConsultar.setBackground(new java.awt.Color(255, 102, 0));
-        btnOKConsultar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnOKConsultar.setText("OK");
+        consultarCampanha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                consultarCampanhaKeyPressed(evt);
+            }
+        });
+
+        btnBuscar.setBackground(new java.awt.Color(255, 102, 0));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -310,9 +336,9 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)))
+                                .addComponent(btnSalvar)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,7 +346,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(consultarCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnOKConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnBuscar)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -331,36 +357,226 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(consultarCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOKConsultar))
+                    .addComponent(btnBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSalvar)
+                    .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        cadastrarAlterarCampanha();
+        formInicial();
+        limparTabela();
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void consultarCampanhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_consultarCampanhaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){  
+            consultarCampanhas();
+            carregarResultadoConsulta();
+            carregarCampanhaEscolhida();
+            formAlteracao();
+        }
+    }//GEN-LAST:event_consultarCampanhaKeyPressed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        consultarCampanhas();
+        carregarResultadoConsulta();
+        carregarCampanhaEscolhida();
+        formAlteracao();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+   
+    
+    private void carregarIgrejas(){
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igrejaCampanha.getModel();
+        modelo.removeAllElements();
+        for(Igreja igreja : listaIgrejas){
+            modelo.addElement(igreja);
+        }
+    }
+    
+    private void carregarTipoCampanha(){
+        List<TipoCampanha> listaTipoCampanha = this.tpCampanhaDao.consultarTiposCampanha();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.tipoCampanha.getModel();
+        modelo.removeAllElements();
+        for(TipoCampanha tpCampanha : listaTipoCampanha){
+            modelo.addElement(tpCampanha);
+        }
+    }
+    
+    private void cadastrarAlterarCampanha(){
+        
+        String descricaoCampanha = this.descricaoCampanha.getText();
+        TipoCampanha tipoCampanha = (TipoCampanha) this.tipoCampanha.getSelectedItem();
+        Integer duracaoCampanha = (Integer) this.duracaoCampanha.getValue();
+        Date dataInicioCampanha = conversor.convertendoStringDateSql(this.dataInicioCampanha.getText());
+        Date dataFimCampanha = conversor.convertendoStringDateSql(this.dataFimCampanha.getText());
+        Integer diaPagtCampanha = (Integer) this.diaPagamento.getValue();
+        Igreja igreja = (Igreja) this.igrejaCampanha.getSelectedItem();
+        double valorTotal = Double.parseDouble(this.valorTotalCampanha.getText());
+        String observacao = this.observacaoCampanha.getText();
+        List<Pessoa> participantes = cadastrarParticipantes();
+        Integer statusCampanha = 0;
+        if(this.statusCampanha.isSelected()){
+            statusCampanha = 1;
+        }
+        
+        if(this.campanhaSelec == null){
+            if(this.descricaoCampanha.getText().isEmpty() || this.valorTotalCampanha.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Informe os campos obrigatórios para cadastrar a campanha", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }else{
+                Campanha campanha = new Campanha();
+                campanha.setDescricaoCampanha(descricaoCampanha);
+                campanha.setTipoCampanha(tipoCampanha);
+                campanha.setDuracaoMeses(duracaoCampanha);
+                campanha.setDataInicial(dataInicioCampanha);
+                campanha.setDataFinal(dataFimCampanha);
+                campanha.setDiaPagamento(diaPagtCampanha);
+                campanha.setIgreja(igreja);
+                campanha.setValorTotalCampanha(valorTotal);
+                campanha.setObservacao(observacao);
+                campanha.setStatusCampanha(statusCampanha);
+                campanha.setParticipante(participantes);
+            }
+        }else{
+            this.campanhaSelec.setCodigo(Integer.valueOf(this.codCampanha.getText()));
+            this.campanhaSelec.setDescricaoCampanha(descricaoCampanha);
+            this.campanhaSelec.setDuracaoMeses(duracaoCampanha);
+            this.campanhaSelec.setDataFinal(dataFimCampanha);
+            this.campanhaSelec.setDiaPagamento(diaPagtCampanha);
+            this.campanhaSelec.setValorTotalCampanha(valorTotal);
+            this.campanhaSelec.setObservacao(observacao);
+            this.campanhaSelec.setStatusCampanha(statusCampanha);
+        }
+    }
+    
+    private List<Pessoa> cadastrarParticipantes(){
+        List<Pessoa> listaParticipantes = new ArrayList<>();
+        int qtdParticipantes = this.tabelaParticipantes.getRowCount();
+        
+        if(qtdParticipantes > 0){
+            for(int i = 0;i < qtdParticipantes; i++){
+                Pessoa pessoa = (Pessoa)this.tabelaParticipantes.getModel().getValueAt(i, 1);
+                listaParticipantes.add(pessoa);
+            }     
+        }
+
+        return listaParticipantes;
+    }
+ 
+    private void formInicial(){
+        carregarIgrejas();
+        carregarTipoCampanha();
+        limparTabela();
+        this.codCampanha.setText("");
+        this.descricaoCampanha.setText("");
+        this.duracaoCampanha.setValue(1);
+        this.dataInicioCampanha.setText(conversor.dataAtualString());
+        this.dataInicioCampanha.setEditable(true);
+        this.dataFimCampanha.setText(conversor.calcularData(this.dataInicioCampanha.getText(), (Integer)this.duracaoCampanha.getValue()));
+        this.statusCampanha.setSelected(true);
+        this.statusCampanha.setEnabled(false);
+        this.valorTotalCampanha.setText("");
+        this.diaPagamento.setValue(1);
+        this.observacaoCampanha.setText("");
+        this.codParticipante.setText("");
+        this.nomeParticipante.setText("");
+        this.consultarCampanha.setText("");
+        this.igrejaCampanha.setEnabled(true);
+        this.tipoCampanha.setEnabled(true);
+        this.btnAdicionar.setEnabled(true);
+        this.nomeParticipante.setEditable(true);    
+    }
+    
+    private void formAlteracao(){
+        this.tipoCampanha.setEnabled(false);
+        this.dataInicioCampanha.setEditable(false);
+        this.igrejaCampanha.setEnabled(false);
+        this.nomeParticipante.setEditable(false);
+        this.btnAdicionar.setEnabled(false);
+    }
+    
+    private void limparTabela(){
+        //Primeiro a condição testa se a quantidade de linhas é maior que 0, depois, limpa os dados
+        if(this.tabelaParticipantes.getRowCount() > 0){
+            DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
+            model.setRowCount(0);
+        }
+    }
+    
+    private void consultarCampanhas(){
+        if(this.consultarCampanha.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Para consutar a campanha é preciso informar o código ou nome", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }else{  
+            String textoConsulta = this.consultarCampanha.getText();
+            this.listaCampanhas = null;
+        } 
+    }
+    
+    private void carregarResultadoConsulta(){
+        ResultadosConsultas resultadoConsulta = new ResultadosConsultas((Frame) SwingUtilities.getWindowAncestor(this), true);
+        resultadoConsulta.setLocationRelativeTo(this);
+        resultadoConsulta.setVisible(true);
+        
+        for(Campanha camp : this.listaCampanhas){        
+            DefaultTableModel model = (DefaultTableModel) resultadoConsulta.tabelaResultadoConsulta.getModel();
+            model.setNumRows(0);
+        
+            model.addRow(new Object[]{camp.getCodigo(),camp});
+        }
+    }
+    
+    private void carregarCampanhaEscolhida(){
+        ResultadosConsultas resultadoConsulta = new ResultadosConsultas((Frame) SwingUtilities.getWindowAncestor(this), true);
+        this.campanhaSelec = resultadoConsulta.campanha;
+        
+        this.codCampanha.setText(String.valueOf(this.campanhaSelec.getCodigo()));
+        this.nomeParticipante.setText(this.campanhaSelec.getDescricaoCampanha());
+        this.tipoCampanha.setSelectedItem(this.campanhaSelec.getTipoCampanha());
+        this.duracaoCampanha.setValue(this.campanhaSelec.getDuracaoMeses());
+        this.dataInicioCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) this.campanhaSelec.getDataInicial()));
+        this.dataFimCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) this.campanhaSelec.getDataFinal()));
+        this.igrejaCampanha.setSelectedItem(this.campanhaSelec.getIgreja());
+        this.valorTotalCampanha.setText(String.valueOf(this.campanhaSelec.getValorTotalCampanha()));
+        this.diaPagamento.setValue(this.campanhaSelec.getDiaPagamento());
+        this.observacaoCampanha.setText(this.campanhaSelec.getObservacao());
+        
+        if(this.campanhaSelec.getStatusCampanha() == 1){
+            this.statusCampanha.setSelected(true);
+        }else{
+            this.statusCampanha.setSelected(false);
+        }
+        
+        for(Pessoa pessoa : this.campanhaSelec.getParticipante()){
+            DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
+            model.addRow(new Object[]{pessoa.getCodigo(),pessoa,pessoa.getCpfCnpj(),pessoa.getIgreja()});
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnOKConsultar;
-    private javax.swing.JButton btnOkParticipante;
+    private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField codCampanha;
     private javax.swing.JTextField codParticipante;
     private javax.swing.JTextField consultarCampanha;
     private javax.swing.JFormattedTextField dataFimCampanha;
     private javax.swing.JFormattedTextField dataInicioCampanha;
-    private javax.swing.JFormattedTextField dataLimitePagamento;
     private javax.swing.JTextField descricaoCampanha;
+    private javax.swing.JSpinner diaPagamento;
     private javax.swing.JSpinner duracaoCampanha;
     private javax.swing.JComboBox<String> igrejaCampanha;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

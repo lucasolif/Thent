@@ -4,7 +4,7 @@ package view.financeiro;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.TransferenciaDepositoDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -24,7 +24,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final TransferenciaDepositoDao transfDepositoDao = new TransferenciaDepositoDao();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     
     public TransferenciaContaForm() {
         initComponents();

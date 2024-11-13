@@ -11,14 +11,14 @@ public class Campanha {
     private TipoCampanha tipoCampanha;
     private String descricaoCampanha;
     private Igreja igreja;
-    private Integer tempoMeses;
+    private Integer duracaoMeses;
     private Date dataInicial;
     private Date dataFinal;
-    private Date dataLimitePagamento;
+    private Integer diaPagamento;
     private String observacao;
-    private List<Pessoa> membro;
+    private List<Pessoa> participante;
     private double valorTotalCampanha;
-    private Integer statusCapamnha;
+    private Integer statusCampanha;
 
     public Campanha() {
     }
@@ -55,12 +55,12 @@ public class Campanha {
         this.igreja = igreja;
     }
 
-    public Integer getTempoMeses() {
-        return tempoMeses;
+    public Integer getDuracaoMeses() {
+        return duracaoMeses;
     }
 
-    public void setTempoMeses(Integer tempoMeses) {
-        this.tempoMeses = tempoMeses;
+    public void setDuracaoMeses(Integer duracaoMeses) {
+        this.duracaoMeses = duracaoMeses;
     }
 
     public Date getDataInicial() {
@@ -87,12 +87,12 @@ public class Campanha {
         this.observacao = observacao;
     }
 
-    public List<Pessoa> getMembro() {
-        return membro;
+    public List<Pessoa> getParticipante() {
+        return participante;
     }
 
-    public void setMembro(List<Pessoa> membro) {
-        this.membro = membro;
+    public void setParticipante(List<Pessoa> participante) {
+        this.participante = participante;
     }
 
     public double getValorTotalCampanha() {
@@ -103,37 +103,39 @@ public class Campanha {
         this.valorTotalCampanha = valorTotalCampanha;
     }
 
-    public Integer getStatusCapamnha() {
-        return statusCapamnha;
+    public Integer getStatusCampanha() {
+        return statusCampanha;
     }
 
-    public void setStatusCapamnha(Integer statusCapamnha) {
-        this.statusCapamnha = statusCapamnha;
+    public void setStatusCampanha(Integer statusCampanha) {
+        this.statusCampanha = statusCampanha;
     }
 
-    public Date getDataLimitePagamento() {
-        return dataLimitePagamento;
+    public Integer getDiaPagamento() {
+        return diaPagamento;
     }
 
-    public void setDataLimitePagamento(Date dataLimitePagamento) {
-        this.dataLimitePagamento = dataLimitePagamento;
+    public void setDiaPagamento(Integer diaPagamento) {
+        this.diaPagamento = diaPagamento;
     }
 
+    
+    
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 3;
         hash = 29 * hash + Objects.hashCode(this.codigo);
         hash = 29 * hash + Objects.hashCode(this.tipoCampanha);
         hash = 29 * hash + Objects.hashCode(this.descricaoCampanha);
         hash = 29 * hash + Objects.hashCode(this.igreja);
-        hash = 29 * hash + Objects.hashCode(this.tempoMeses);
+        hash = 29 * hash + Objects.hashCode(this.duracaoMeses);
         hash = 29 * hash + Objects.hashCode(this.dataInicial);
         hash = 29 * hash + Objects.hashCode(this.dataFinal);
-        hash = 29 * hash + Objects.hashCode(this.dataLimitePagamento);
+        hash = 29 * hash + Objects.hashCode(this.diaPagamento);
         hash = 29 * hash + Objects.hashCode(this.observacao);
-        hash = 29 * hash + Objects.hashCode(this.membro);
+        hash = 29 * hash + Objects.hashCode(this.participante);
         hash = 29 * hash + (int) (Double.doubleToLongBits(this.valorTotalCampanha) ^ (Double.doubleToLongBits(this.valorTotalCampanha) >>> 32));
-        hash = 29 * hash + Objects.hashCode(this.statusCapamnha);
+        hash = 29 * hash + Objects.hashCode(this.statusCampanha);
         return hash;
     }
 
@@ -167,7 +169,7 @@ public class Campanha {
         if (!Objects.equals(this.igreja, other.igreja)) {
             return false;
         }
-        if (!Objects.equals(this.tempoMeses, other.tempoMeses)) {
+        if (!Objects.equals(this.duracaoMeses, other.duracaoMeses)) {
             return false;
         }
         if (!Objects.equals(this.dataInicial, other.dataInicial)) {
@@ -176,16 +178,14 @@ public class Campanha {
         if (!Objects.equals(this.dataFinal, other.dataFinal)) {
             return false;
         }
-        if (!Objects.equals(this.dataLimitePagamento, other.dataLimitePagamento)) {
+        if (!Objects.equals(this.diaPagamento, other.diaPagamento)) {
             return false;
         }
-        if (!Objects.equals(this.membro, other.membro)) {
+        if (!Objects.equals(this.participante, other.participante)) {
             return false;
         }
-        return Objects.equals(this.statusCapamnha, other.statusCapamnha);
+        return Objects.equals(this.statusCampanha, other.statusCampanha);
     }
-    
-    
     
     @Override
     public String toString() {

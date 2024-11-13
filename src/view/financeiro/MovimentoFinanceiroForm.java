@@ -9,7 +9,7 @@ import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;
 import dao.TransferenciaDepositoDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import ferramentas.PaletaCores;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,7 +41,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
     private RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
     private final PaletaCores cores = new PaletaCores();
     private Pessoa pessoa = new Pessoa();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     private MovimentoCaixa movimentoCaixa = new MovimentoCaixa();
     private List<MovimentoCaixa> listaMovimentacao = new ArrayList<>();
 

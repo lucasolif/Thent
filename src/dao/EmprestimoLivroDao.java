@@ -1,7 +1,7 @@
 
 package dao;
 
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ import model.Pessoa;
 
 public class EmprestimoLivroDao {
     
-    private final Conversores converteData = new Conversores();
+    private final Utilitarios converteData = new Utilitarios();
     private Connection conexao = null;
     private PreparedStatement selectStmt = null;
     private PreparedStatement insertStmt = null;

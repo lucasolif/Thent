@@ -9,11 +9,11 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class CriptografarSenhas {
     
-    // NÃºmero de iteraÃ§Ãµes e tamanho do hash
+    // Número de iterações e tamanho do hash
     private static final int ITERATIONS = 65536;
     private static final int KEY_LENGTH = 256;
     
-    // MÃ©todo para gerar um salt
+    // Método para gerar um salt
     public static byte[] gerarSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16]; // Tamanho do salt
@@ -22,7 +22,7 @@ public class CriptografarSenhas {
         return salt;
     }
     
-    // MÃ©todo para hash da senha
+    // Método para hash da senha
     public static String gerarHash(String password, byte[] salt) throws Exception {
         
         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, ITERATIONS, KEY_LENGTH);

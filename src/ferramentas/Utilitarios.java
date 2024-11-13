@@ -1,16 +1,17 @@
 
 package ferramentas;
 
-import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
-public class Conversores{
+public class Utilitarios{
      
     //Arredondando o valor para cima se for maior que 0.5 e para baixo se for menos que 0.5
     public double arrendodarValores(double valor){
@@ -82,5 +83,31 @@ public class Conversores{
     private static boolean verificarNumero(String valor) {
         return valor != null && valor.matches("[0-9]*");
     }
+    
+    public String calcularData(String data, Integer meses){
+        
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String novaDataString = null;
+        
+        // A string que representa a data
+        
+        try {
+            // Converter a string para o tipo LocalDate
+            LocalDate date = LocalDate.parse(data, formato);
+            
+            // Adicionar um mês à data
+            LocalDate newDate = date.plus(Period.ofMonths(meses));
+            
+            // Converte a nova data de volta para string
+            novaDataString = newDate.format(formato);
+            
+        } catch (DateTimeParseException e) {
+            // Lidar com possíveis erros de parsing
+            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar os cálculos de data", "Erro 080", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return novaDataString;
+    } 
+    
     
 }

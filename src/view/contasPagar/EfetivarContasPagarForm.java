@@ -7,7 +7,7 @@ import dao.FormaPagtoDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     private final ContasPagarDao contasPagarDao = new ContasPagarDao();
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
-    private final Conversores conversor = new Conversores(); 
+    private final Utilitarios conversor = new Utilitarios(); 
     ContasPagar contasPagar = new ContasPagar();
     Pessoa fornecedor = new Pessoa();  
     List<ContasPagar> listaContasPagar = new ArrayList<>();

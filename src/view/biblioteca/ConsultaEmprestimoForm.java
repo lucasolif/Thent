@@ -6,7 +6,7 @@ import dao.EmprestimoLivroDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     private List<EmprestimoLivro> listaEmpLivros = new ArrayList<>();
     
 

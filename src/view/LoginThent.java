@@ -2,7 +2,7 @@
 package view;
 
 import dao.LoginDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import ferramentas.CriptografarSenhas;
@@ -20,7 +20,7 @@ import model.Login;
 
 public class LoginThent extends javax.swing.JFrame {
 
-    private final Conversores cores = new Conversores();
+    private final Utilitarios cores = new Utilitarios();
     private File arquivo = new File("");
     private Login loginSelec = null;
 

@@ -3,7 +3,7 @@ package view.contasPagar;
 
 import dao.ContasPagarDao;
 import dao.PessoaDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import model.Pessoa;
 public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
     
     private final PessoaDao pessoaDao = new PessoaDao();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     private final ContasPagarDao contasPagarDao = new ContasPagarDao();
     private ContasPagar contasPagar = new ContasPagar();
     private Pessoa fornecedor = new Pessoa();

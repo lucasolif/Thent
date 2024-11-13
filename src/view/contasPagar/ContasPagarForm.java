@@ -6,7 +6,7 @@ import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private final ContasPagarDao contasPagarDao = new ContasPagarDao(); 
     private final Pessoa fornecedor = new Pessoa();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     
     public ContasPagarForm() {
         initComponents();
@@ -380,9 +380,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
             tabelaParcelas.setEnabled(false);
         }else{
             JOptionPane.showMessageDialog(null, "Para efetuar o lançamento de uma conta a pagar, tem que preencher os campos obrigatórios", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
         }
-
     }//GEN-LAST:event_btnGerarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -415,8 +413,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         }
     }
     
-    private void carregarIgrejas(){
-   
+    private void carregarIgrejas(){ 
         List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)igreja.getModel();
         modelo.removeAllElements();
@@ -429,21 +426,15 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
     private void gerarParcelas(){
         if(validarContaPagarExiste()){
             JOptionPane.showMessageDialog(null, "Já existe um contas a pagar com esse número, escolha outro número", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
         }else{
             limparTabela(); //Limpando a tabela, antes de inserir qualquer dado
             Integer codForn = Integer.valueOf(this.codFornecedor.getText());
             fornecedor.setCodigo(codForn);
             Integer numNota = Integer.valueOf(this.numNota.getText());
             Integer qtdParcela = Integer.valueOf(this.numParcela.getText());
-            Integer status = 0; //Status "0" singifica que não foi paga, como se trata do lançamento, então não foi paga.
-            String boleto = this.numBoleto.getText();
-            String observacao = observacaoConta.getText();
             String descricao = descricaoConta.getText().toUpperCase();
             double valorTotal = Double.parseDouble(this.valorTotal.getText().replace(",", "."));
             double valorParcela = valorTotal/qtdParcela; //Gerando o valor da parcela
-            FormaPagto formaPagto = (FormaPagto) formasPagto.getSelectedItem();
-            SubContaResultado subContResult = (SubContaResultado) this.subContaResultado.getSelectedItem();
             String primeiroVencimento = this.primeiroVencimento.getText();
 
             for(int i=0; i<qtdParcela; i++){      
@@ -452,7 +443,6 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
                 model.addRow(new Object[]{numNota,descricao,i+1,valorParcela,dataVencimento});
             }
         }
-
     }
     
     //Buscar o fornecedor
@@ -464,7 +454,6 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         for(Pessoa pessoa : listaPessoa){
             codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
             nomeFornecedor.setText(pessoa.getNome());
-
         } 
     } 
     
@@ -496,8 +485,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
             }    
         }else{
             JOptionPane.showMessageDialog(null, "Para efetuar o lançamento de uma conta a pagar, tem que preencher os campos obrigatórios", "Atenção", JOptionPane.WARNING_MESSAGE);
-        }
-        
+        }      
         return listaContasPagar;
     }
     
@@ -555,7 +543,6 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         String primeiroVenc = this.primeiroVencimento.getText();
         String valTotal = this.valorTotal.getText();
         String numParce = this.numParcela.getText();
-        String numBoleto = this.numBoleto.getText();
         String descrConta = this.descricaoConta.getText();
         
         if(codForn.isEmpty() || nomeForn.isEmpty() || numNota.isEmpty() || primeiroVenc.isEmpty() || valTotal.isEmpty() || numParce.isEmpty() || descrConta.isEmpty()){
@@ -582,8 +569,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         }else if(confirm == JOptionPane.NO_OPTION){
             JOptionPane.showMessageDialog(null, "Operação cancelada!");
         }
-        
-        
+               
         //Atualizando o valor e data das demais parcelas, após a remoção
         int qtdLinhaTabela = tabelaParcelas.getRowCount(); // Recebendo o número de linhas da tabela após a exclusão e uma das parcelas
         double valTotal = Double.parseDouble(this.valorTotal.getText().replace(",", ".")); //Recebendo o valor total, para atualizar os valores das parcelas, quando uma delas forem excluídas

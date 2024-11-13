@@ -8,7 +8,7 @@ import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.SubContaResultadoDao;
 import dao.TipoOfertaDao;
-import ferramentas.Conversores;
+import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame {
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
-    private final Conversores conversor = new Conversores();
+    private final Utilitarios conversor = new Utilitarios();
     private Pessoa ofertante = new Pessoa();   
     private RegistroDizimoOferta rgDizimoOfertas = new RegistroDizimoOferta();
     private List<RegistroDizimoOferta> listaRgDizimoOfertas = new ArrayList<>();

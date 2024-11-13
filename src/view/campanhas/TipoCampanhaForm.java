@@ -132,7 +132,7 @@ public class TipoCampanhaForm extends javax.swing.JInternalFrame {
     
     private void consultarTipoCampanha(){
         if(this.nomeCampanha.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "Para consutar é preciso informar o código do tipo da campanha", "Erro 001", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Para consutar é preciso informar o código do tipo da campanha", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else{  
             Integer codCampanha = Integer.valueOf(this.nomeCampanha.getText());
             this.tpCampanhaSelec = this.tpCampanhaDao.consultarTipoCampanha(codCampanha);
