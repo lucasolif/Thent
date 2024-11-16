@@ -90,7 +90,7 @@ public class UsuarioDao {
 
         String sql = null;
         List<Usuario> listaUsuarios = new ArrayList<>();
-        IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultar a igreja do usuário
+        IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultarIgreja a igreja do usuário
 
         sql = "SELECT * FROM Usuarios "
         + "WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?) OR (? IS NULL OR Usuario LIKE ?)"

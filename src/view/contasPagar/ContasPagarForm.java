@@ -448,7 +448,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
     //Buscar o fornecedor
     private void buscarFornecedor(){
         String textoBusca = codFornecedor.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = pessoaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        List<Pessoa> listaPessoa = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
         
         //Adicionando os dados encontrados, no formulário
         for(Pessoa pessoa : listaPessoa){

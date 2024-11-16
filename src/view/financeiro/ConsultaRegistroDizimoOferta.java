@@ -468,9 +468,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame {
     private void codOfertanteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codOfertanteKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             buscarOfertante();
-        } 
-        
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+        }else if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
             nomeOfertante.setText("");
         } 
     }//GEN-LAST:event_codOfertanteKeyPressed
@@ -656,9 +654,8 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame {
     }
     
     private void buscarOfertante(){
-        String textoBusca = codOfertante.getText(); // Texto digitado na busca
-        
-        List<Pessoa> listaPessoa = pessoaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        String textoBusca = codOfertante.getText(); // Texto digitado na busca     
+        List<Pessoa> listaPessoa = pessoaDao.consultarCadastroAtivoPessoa(textoBusca); //Lista recebe a busca retornada do banco
         
         //Adicionando os dados encontrados, no formulário
         for(Pessoa pessoa : listaPessoa){

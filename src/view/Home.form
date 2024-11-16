@@ -313,11 +313,33 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="criarCampanhaActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="pagamentosCampanha">
+            <MenuItem class="javax.swing.JMenuItem" name="gerenciarContaReceberCampanha">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Pagamentos Campanha"/>
+                <Property name="text" type="java.lang.String" value="Gerenciar Contas Receber"/>
               </Properties>
             </MenuItem>
+            <Menu class="javax.swing.JMenu" name="processosAvulsos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Processos Avulsos"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="adicionarParticipante">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Adicionar Participante"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="removerParticipante">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Remover Participante"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="lancarContasReceber">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas Receber "/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="configuracoes">

@@ -15,13 +15,13 @@ import model.Endereco;
 import model.Igreja;
 
 public class PessoaDao {
-    private Utilitarios conversor = new Utilitarios();
+    private final Utilitarios conversor = new Utilitarios();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
     
-    //Método para adicionar pessoa física
-    public void adicionar(Pessoa pessoa){
+    //Método para adicionarPessoa pessoa física
+    public void adicionarPessoa(Pessoa pessoa){
 
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -76,41 +76,84 @@ public class PessoaDao {
 
     }
     
-    //Método para consultar pessoa e listar na tabela
-    public List<Pessoa> consultar(String busca){
+    //Método para consultarPessoa pessoa e listar na tabela
+    public List<Pessoa> consultarPessoa(String buscaPessoa){
 
-        String sql = null;
         List<Pessoa> listaPessoas = new ArrayList<>();
-        IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultar a igreja da pessoa
-        
-        if(busca.length() >= 0){
-            if(verificarNumero(busca)){
-                sql = "SELECT * FROM Pessoas WHERE Codigo LIKE ?";
-            }else{
-                sql = "SELECT * FROM Pessoas WHERE Nome LIKE ?";
-            }   
-        }
-        else{
-            sql = "SELECT * FROM Pessoas";
-        }
+        IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultarPessoa a igreja da pessoa      
+        String sqlInsert = "SELECT * FROM Pessoas WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?)";  
         
         try{
-            conexao = Conexao.getDataSource().getConnection();
+            conexao = Conexao.getDataSource().getConnection();           
+            ps = conexao.prepareStatement(sqlInsert);
             
-            ps = conexao.prepareStatement(sql);
-            ps.setString(1, "%"+busca+"%");
-            
+            if (buscaPessoa != null) {
+                ps.setString(1,  "%" + buscaPessoa + "%");
+                ps.setString(2,  "%" + buscaPessoa + "%");
+                ps.setString(3,  "%" + buscaPessoa + "%");
+                ps.setString(4,  "%" + buscaPessoa + "%");
+            } else {
+                ps.setNull(1, java.sql.Types.INTEGER);
+                ps.setNull(2, java.sql.Types.INTEGER);
+                ps.setNull(3, java.sql.Types.INTEGER);
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }                      
             rs = ps.executeQuery();
 
             while(rs.next()){
-                String dataNasc = conversor.convertendoDataStringSql(rs.getDate("DataNascimento"));
-                
+                String dataNasc = conversor.convertendoDataStringSql(rs.getDate("DataNascimento"));               
                 Igreja igreja = igrejaDao.consultarIgrejas(rs.getInt("Igreja")); //Consultando a tabela Igreja, com base no código da igreja, obtido na tabela de pessoas, e retornando o objeto igreja
                 Endereco endereco = new Endereco(rs.getString("Logradouro"),rs.getInt("Numero"),rs.getString("CEP"),rs.getString("Bairro"),rs.getString("Cidade"),rs.getString("Estado"),rs.getString("Complemento"));
                 Pessoa pessoas = new Pessoa(rs.getString("Nome"), rs.getString("CPF"),dataNasc,rs.getString("RG"),rs.getString("Celular"),rs.getString("Email"),rs.getString("Sexo"),igreja,endereco,rs.getInt("Codigo"),rs.getInt("Ativo"));
                 listaPessoas.add(pessoas);
+            } 
+        } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar buscar a pessoa na base de dados", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
-  
+        }
+
+        return listaPessoas;     
+    }
+    
+        //Método para consultarPessoa pessoa e listar na tabela
+    public List<Pessoa> consultarCadastroAtivoPessoa(String buscaPessoa){
+
+        List<Pessoa> listaPessoas = new ArrayList<>();
+        IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultarPessoa a igreja da pessoa      
+        String sqlInsert = "SELECT * FROM Pessoas WHERE ((? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?)) AND Ativo = 1";  
+        
+        try{
+            conexao = Conexao.getDataSource().getConnection();           
+            ps = conexao.prepareStatement(sqlInsert);
+            
+            if (buscaPessoa != null) {
+                ps.setString(1,  "%" + buscaPessoa + "%");
+                ps.setString(2,  "%" + buscaPessoa + "%");
+                ps.setString(3,  "%" + buscaPessoa + "%");
+                ps.setString(4,  "%" + buscaPessoa + "%");
+            } else {
+                ps.setNull(1, java.sql.Types.INTEGER);
+                ps.setNull(2, java.sql.Types.INTEGER);
+                ps.setNull(3, java.sql.Types.INTEGER);
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }                      
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                String dataNasc = conversor.convertendoDataStringSql(rs.getDate("DataNascimento"));               
+                Igreja igreja = igrejaDao.consultarIgrejas(rs.getInt("Igreja")); //Consultando a tabela Igreja, com base no código da igreja, obtido na tabela de pessoas, e retornando o objeto igreja
+                Endereco endereco = new Endereco(rs.getString("Logradouro"),rs.getInt("Numero"),rs.getString("CEP"),rs.getString("Bairro"),rs.getString("Cidade"),rs.getString("Estado"),rs.getString("Complemento"));
+                Pessoa pessoas = new Pessoa(rs.getString("Nome"), rs.getString("CPF"),dataNasc,rs.getString("RG"),rs.getString("Celular"),rs.getString("Email"),rs.getString("Sexo"),igreja,endereco,rs.getInt("Codigo"),rs.getInt("Ativo"));
+                listaPessoas.add(pessoas);
+            } 
         } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar buscar a pessoa na base de dados", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -128,7 +171,7 @@ public class PessoaDao {
     }
     
     //Alterar o cadastro das pessoas
-    public void alterar(Pessoa pessoa){
+    public void alterarPessoa(Pessoa pessoa){
 
         try{ 
             conexao = Conexao.getDataSource().getConnection();
@@ -171,7 +214,7 @@ public class PessoaDao {
     }
     
     //Remover o cadastro das pessoas
-    public void remover(int codigo){
+    public void removerPessoa(int codigo){
 
         try{       
             conexao = Conexao.getDataSource().getConnection();
@@ -195,10 +238,6 @@ public class PessoaDao {
             }
         }
     }
-    
-    //Verifica se é String é um número
-    private static boolean verificarNumero(String valor) {
-        return valor != null && valor.matches("[0-9]*");
-    }
+   
     
 }

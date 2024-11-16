@@ -5,15 +5,16 @@ import java.util.Date;
 import java.util.Objects;
 
 
-public class PagamentosCampanha {
+public class ContasReceberCampanha {
     private Integer codigo;
     private Campanha campanha;
     private SubContaResultado contaResultado;
-    private Date dataLancamento;
+    private Date dataVencimento;
     private Date dataPagamento;
-    private Pessoa pessoa;
+    private Pessoa participante;
+    private Integer numParcela;    
     private Integer parcela;
-    private double valor;
+    private double valorParcela;
     private double valorPago;
     private double valorPendente;
     private Integer statusPagamento;
@@ -21,6 +22,14 @@ public class PagamentosCampanha {
     private Igreja igreja;
     private String observacaoPagamento;
 
+    public Integer getNumParcela() {
+        return numParcela;
+    }
+
+    public void setNumParcela(Integer numParcela) {
+        this.numParcela = numParcela;
+    }
+    
     public Integer getCodigo() {
         return codigo;
     }
@@ -45,12 +54,12 @@ public class PagamentosCampanha {
         this.contaResultado = contaResultado;
     }
 
-    public Date getDataLancamento() {
-        return dataLancamento;
+    public Date getDataVencimento() {
+        return dataVencimento;
     }
 
-    public void setDataLancamento(Date dataLancamento) {
-        this.dataLancamento = dataLancamento;
+    public void setDataVencimento(Date dataVencimento) {
+        this.dataVencimento = dataVencimento;
     }
 
     public Date getDataPagamento() {
@@ -61,12 +70,12 @@ public class PagamentosCampanha {
         this.dataPagamento = dataPagamento;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public Pessoa getParticipante() {
+        return participante;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public void setParticipante(Pessoa participante) {
+        this.participante = participante;
     }
 
     public Integer getParcela() {
@@ -77,12 +86,12 @@ public class PagamentosCampanha {
         this.parcela = parcela;
     }
 
-    public double getValor() {
-        return valor;
+    public double getValorParcela() {
+        return valorParcela;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
+    public void setValorParcela(double valorParcela) {
+        this.valorParcela = valorParcela;
     }
 
     public double getValorPago() {
@@ -138,11 +147,11 @@ public class PagamentosCampanha {
         int hash = 7;
         hash = 47 * hash + Objects.hashCode(this.codigo);
         hash = 47 * hash + Objects.hashCode(this.campanha);
-        hash = 47 * hash + Objects.hashCode(this.dataLancamento);
+        hash = 47 * hash + Objects.hashCode(this.dataVencimento);
         hash = 47 * hash + Objects.hashCode(this.dataPagamento);
-        hash = 47 * hash + Objects.hashCode(this.pessoa);
+        hash = 47 * hash + Objects.hashCode(this.participante);
         hash = 47 * hash + Objects.hashCode(this.parcela);
-        hash = 47 * hash + (int) (Double.doubleToLongBits(this.valor) ^ (Double.doubleToLongBits(this.valor) >>> 32));
+        hash = 47 * hash + (int) (Double.doubleToLongBits(this.valorParcela) ^ (Double.doubleToLongBits(this.valorParcela) >>> 32));
         hash = 47 * hash + (int) (Double.doubleToLongBits(this.valorPago) ^ (Double.doubleToLongBits(this.valorPago) >>> 32));
         hash = 47 * hash + (int) (Double.doubleToLongBits(this.valorPendente) ^ (Double.doubleToLongBits(this.valorPendente) >>> 32));
         hash = 47 * hash + Objects.hashCode(this.statusPagamento);
@@ -162,8 +171,8 @@ public class PagamentosCampanha {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final PagamentosCampanha other = (PagamentosCampanha) obj;
-        if (Double.doubleToLongBits(this.valor) != Double.doubleToLongBits(other.valor)) {
+        final ContasReceberCampanha other = (ContasReceberCampanha) obj;
+        if (Double.doubleToLongBits(this.valorParcela) != Double.doubleToLongBits(other.valorParcela)) {
             return false;
         }
         if (Double.doubleToLongBits(this.valorPago) != Double.doubleToLongBits(other.valorPago)) {
@@ -181,13 +190,13 @@ public class PagamentosCampanha {
         if (!Objects.equals(this.campanha, other.campanha)) {
             return false;
         }
-        if (!Objects.equals(this.dataLancamento, other.dataLancamento)) {
+        if (!Objects.equals(this.dataVencimento, other.dataVencimento)) {
             return false;
         }
         if (!Objects.equals(this.dataPagamento, other.dataPagamento)) {
             return false;
         }
-        if (!Objects.equals(this.pessoa, other.pessoa)) {
+        if (!Objects.equals(this.participante, other.participante)) {
             return false;
         }
         if (!Objects.equals(this.parcela, other.parcela)) {

@@ -540,7 +540,7 @@ public class PessoasForm extends javax.swing.JInternalFrame {
     
     private void consultarPessoas(){
         String textoBusca = campoBusca.getText();
-        listaPessoa = pessoaDao.consultar(textoBusca);          
+        listaPessoa = pessoaDao.consultarPessoa(textoBusca);          
     }
     
     private void atualizarTabela(){
@@ -598,7 +598,7 @@ public class PessoasForm extends javax.swing.JInternalFrame {
                 return;
             }
 
-            pessoaDao.adicionar(pessoa); //Chamando método para adicionar o novo cadastro
+            pessoaDao.adicionarPessoa(pessoa); //Chamando método para adicionarPessoa o novo cadastro
             limparFormulario();
         }
         else{
@@ -610,7 +610,7 @@ public class PessoasForm extends javax.swing.JInternalFrame {
             
             int codPessoa = Integer.parseInt(campoCodPessoa.getText());
             Pessoa pessoaSelecionada = new Pessoa(nome, cpfCnpj, dataNascimento, rg, celular, email, sexo, igreja, endereco, codPessoa, ativo);
-            pessoaDao.alterar(pessoaSelecionada); //Chamando o método que altera os dados da conta caixa
+            pessoaDao.alterarPessoa(pessoaSelecionada); //Chamando o método que altera os dados da conta caixa
             limparFormulario();
         }
 
@@ -631,7 +631,7 @@ public class PessoasForm extends javax.swing.JInternalFrame {
 
         int confirm = JOptionPane.showConfirmDialog(null,"Excluir a pessoa "+pessoaSelecionada.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if(confirm == JOptionPane.YES_OPTION){
-            pessoaDao.remover(pessoaSelecionada.getCodigo());
+            pessoaDao.removerPessoa(pessoaSelecionada.getCodigo());
         }else if(confirm == JOptionPane.NO_OPTION){
             JOptionPane.showMessageDialog(null, "Operação cancelada!");
         }

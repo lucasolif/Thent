@@ -311,9 +311,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame {
             this.livroDao.alterarLivro(this.livroSelec);
 
             this.livroSelec = null;
-        }
-        
-        
+        }     
     }
     
     private void limparFormulario(){

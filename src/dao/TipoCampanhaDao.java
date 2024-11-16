@@ -114,7 +114,7 @@ public class TipoCampanhaDao {
         try{
             this.conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM TiposCampanhas WHERE Status = 1 ORDER BY Nome";
+            String sql = "SELECT * FROM TiposCampanha WHERE Status = 1 ORDER BY Nome";
             this.ps = this.conexao.prepareStatement(sql);           
             this.rs = this.ps.executeQuery();
 
@@ -130,7 +130,6 @@ public class TipoCampanhaDao {
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar os tipos de campanhas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{
-            // Fechar recursos
             try{
                 if (this.rs != null) this.rs.close();
                 if (this.ps != null) this.ps.close();
@@ -140,6 +139,5 @@ public class TipoCampanhaDao {
             }
         }
         return listaTpCampanha;
-    }
-    
+    }   
 }

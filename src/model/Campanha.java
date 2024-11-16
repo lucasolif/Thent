@@ -17,12 +17,21 @@ public class Campanha {
     private Integer diaPagamento;
     private String observacao;
     private List<Pessoa> participante;
+    private List<ContasReceberCampanha> listaCrCampanha;
     private double valorTotalCampanha;
     private Integer statusCampanha;
 
     public Campanha() {
     }
 
+    public List<ContasReceberCampanha> getListaCrCampanha() {
+        return listaCrCampanha;
+    }
+
+    public void setListaCrCampanha(List<ContasReceberCampanha> listaCrCampanha) {
+        this.listaCrCampanha = listaCrCampanha;
+    }
+    
     public Integer getCodigo() {
         return codigo;
     }
@@ -119,8 +128,6 @@ public class Campanha {
         this.diaPagamento = diaPagamento;
     }
 
-    
-    
     @Override
     public int hashCode() {
         int hash = 3;

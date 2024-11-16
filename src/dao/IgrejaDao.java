@@ -20,7 +20,7 @@ public class IgrejaDao {
     private ResultSet rs = null;
 
     
-    public void adicionar(Igreja igreja){
+    public void cadastrarIgreja(Igreja igreja){
 
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -53,7 +53,7 @@ public class IgrejaDao {
         }
     }
     
-    public void alterar(Igreja igreja){
+    public void alterarIgreja(Igreja igreja){
 
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -89,7 +89,7 @@ public class IgrejaDao {
     }
     
     //Consulta a igreja para ser alterada
-    public List<Igreja> consultar(String buscaIgreja){
+    public List<Igreja> consultarIgreja(String buscaIgreja){
 
         List<Igreja> listaIgreja = new ArrayList<>();
         String sql = "SELECT * FROM Igrejas WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR NomeIgreja LIKE ?)";
@@ -108,14 +108,12 @@ public class IgrejaDao {
                 ps.setNull(2, java.sql.Types.INTEGER);
                 ps.setNull(3, java.sql.Types.INTEGER);
                 ps.setNull(4, java.sql.Types.INTEGER);
-            }
-            
+            }           
             rs = ps.executeQuery();
 
             while(rs.next()){
                 Endereco endereco = new Endereco(rs.getString("Logradouro"), rs.getInt("Numero"), rs.getString("CEP"), rs.getString("Bairro"), rs.getString("Cidade"), rs.getString("Estado"), rs.getString("Complemento"));
                 Igreja igreja = new Igreja(rs.getInt("Codigo"), rs.getString("NomeIgreja"),rs.getDate("DataCadastro"),endereco);
-
                 listaIgreja.add(igreja);
             }
         }catch (SQLException ex) {
@@ -204,7 +202,7 @@ public class IgrejaDao {
         return igreja;
     } 
     
-    public void remover(Igreja igreja){
+    public void removerIgreja(Igreja igreja){
         
         try{
             conexao = Conexao.getDataSource().getConnection();

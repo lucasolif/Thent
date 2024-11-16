@@ -687,7 +687,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
 
     private void buscarFornecedor(){
         String textoBusca = codFornecedorOfertante.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = pessoaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        List<Pessoa> listaPessoa = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
         
         //Adicionando os dados encontrados, no formulário
         for(Pessoa p : listaPessoa){

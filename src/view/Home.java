@@ -85,7 +85,11 @@ public class Home extends javax.swing.JFrame {
         campanha = new javax.swing.JMenu();
         cadastrarTipoCampanha = new javax.swing.JMenuItem();
         criarCampanha = new javax.swing.JMenuItem();
-        pagamentosCampanha = new javax.swing.JMenuItem();
+        gerenciarContaReceberCampanha = new javax.swing.JMenuItem();
+        processosAvulsos = new javax.swing.JMenu();
+        adicionarParticipante = new javax.swing.JMenuItem();
+        removerParticipante = new javax.swing.JMenuItem();
+        lancarContasReceber = new javax.swing.JMenuItem();
         configuracoes = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenu();
         alterarSenha = new javax.swing.JMenuItem();
@@ -378,8 +382,21 @@ public class Home extends javax.swing.JFrame {
         });
         campanha.add(criarCampanha);
 
-        pagamentosCampanha.setText("Pagamentos Campanha");
-        campanha.add(pagamentosCampanha);
+        gerenciarContaReceberCampanha.setText("Gerenciar Contas Receber");
+        campanha.add(gerenciarContaReceberCampanha);
+
+        processosAvulsos.setText("Processos Avulsos");
+
+        adicionarParticipante.setText("Adicionar Participante");
+        processosAvulsos.add(adicionarParticipante);
+
+        removerParticipante.setText("Remover Participante");
+        processosAvulsos.add(removerParticipante);
+
+        lancarContasReceber.setText("Lançar Contas Receber ");
+        processosAvulsos.add(lancarContasReceber);
+
+        campanha.add(processosAvulsos);
 
         menuBarra.add(campanha);
 
@@ -611,6 +628,7 @@ public class Home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem addLivroBiblioteca;
+    private javax.swing.JMenuItem adicionarParticipante;
     private javax.swing.JMenuItem alterarSenha;
     private javax.swing.JMenu biblioteca;
     private javax.swing.JMenuItem cadastrarTipoCampanha;
@@ -636,9 +654,11 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem efetivacaoDizimoOfertas;
     private javax.swing.JMenuItem efetivarContasPagar;
     private javax.swing.JMenu financeiro;
+    private javax.swing.JMenuItem gerenciarContaReceberCampanha;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem lancarContasPagar;
+    private javax.swing.JMenuItem lancarContasReceber;
     private javax.swing.JMenuBar menuBarra;
     private javax.swing.JMenu menuBiblioteca;
     private javax.swing.JMenu menuCadastros;
@@ -650,10 +670,11 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu operacaoContasPagar;
     private javax.swing.JMenu operacaoDizimoOfertas;
     private javax.swing.JMenuItem operacaoEmprestimo;
-    private javax.swing.JMenuItem pagamentosCampanha;
     public javax.swing.JDesktopPane painelHome;
+    private javax.swing.JMenu processosAvulsos;
     private javax.swing.JMenuItem registrarOfertasDizimo;
     private javax.swing.JMenu relatorios;
+    private javax.swing.JMenuItem removerParticipante;
     private javax.swing.JMenuItem saidaAvulsaLivro;
     private javax.swing.JMenuItem transferencia;
     // End of variables declaration//GEN-END:variables

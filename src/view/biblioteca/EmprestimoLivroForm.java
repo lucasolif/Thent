@@ -303,7 +303,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     
     private void buscarPessoa(){
         String textoBusca = this.nomePessoa.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = this.pessoaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        List<Pessoa> listaPessoa = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
         
         //Adicionando os dados encontrados, no formulário
         for(Pessoa pessoa : listaPessoa){

@@ -376,7 +376,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame {
     
     private void consultarIgreja(){      
         String textoBusca = campoBusca.getText(); // Texto digitado na busca       
-        listaIgreja = igrejaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        listaIgreja = igrejaDao.consultarIgreja(textoBusca); //Lista recebe a busca retornada do banco
     }
     
     private void atualizarTabela(){
@@ -418,7 +418,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame {
             igreja.setNome(nomeIgre);
             igreja.setEndereco(endereco);
           
-            igrejaDao.adicionar(igreja);
+            igrejaDao.cadastrarIgreja(igreja);
             limparFormulario();
         }else{
             Endereco endereco = new Endereco(logradouro, numCasa, cep, bairro, cidade, estado, complemento);
@@ -428,7 +428,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame {
             igreja.setCodigo(codIgrej);
             igreja.setEndereco(endereco);
 
-            igrejaDao.alterar(igreja);
+            igrejaDao.alterarIgreja(igreja);
             limparFormulario();
         }
         igrejaSelecionada = null;
@@ -449,7 +449,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame {
         int confirm = JOptionPane.showConfirmDialog(null,"Excluir a igreja "+igrejaSelecionada.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
 
         if(confirm == JOptionPane.YES_OPTION){
-            igrejaDao.remover(igrejaSelecionada);
+            igrejaDao.removerIgreja(igrejaSelecionada);
         }else if(confirm == JOptionPane.NO_OPTION){
             JOptionPane.showMessageDialog(null, "Operação cancelada!");
         }   
