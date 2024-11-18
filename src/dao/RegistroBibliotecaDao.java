@@ -62,6 +62,7 @@ public class RegistroBibliotecaDao {
                     this.conexao.rollback();
                 }catch(SQLException e){
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                    System.out.println("Erro: "+ex.getMessage());
                 }
             }
             JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar o livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
@@ -263,7 +264,6 @@ public class RegistroBibliotecaDao {
             if(this.rs.next()){
                 status = true;
             }else{
-                JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro", JOptionPane.ERROR_MESSAGE);
                 status = false;
             }
         }catch (SQLException ex) {
@@ -272,7 +272,6 @@ public class RegistroBibliotecaDao {
             // Fechar recursos
             try{
                 if (this.selectStmt != null) this.selectStmt.close();
-                if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }

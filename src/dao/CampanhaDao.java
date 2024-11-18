@@ -13,7 +13,6 @@ import jdbc.Conexao;
 import model.Campanha;
 import model.ContasReceberCampanha;
 import model.Pessoa;
-import model.RegistroDizimoOferta;
 
 
 public class CampanhaDao {
@@ -48,15 +47,19 @@ public class CampanhaDao {
 
             // Recuperar a chave primária gerada
             ResultSet generatedKeys = this.psCampanha.getGeneratedKeys();
+            int codCampanha = generatedKeys.getInt(1);
             
             //Método para adicionar participante na tabela de participante. Vincula com a campanha por meio do código da campanha
-            adicionarParticipantes(campanha.getParticipante(), generatedKeys);
+            if(!campanha.getParticipante().isEmpty() && generatedKeys.next()){
+                adicionarParticipantes(campanha.getParticipante(), codCampanha);
+                this.conexao.commit();
+            }
             
             //Se for escolhido para gerar contas a receber no form, o método chama a função para gerar a contas a receber
             if(geraContaReceber){
                 gerarContasReceberCampanha(campanha.getListaCrCampanha());
             } 
-            this.conexao.commit();
+
             JOptionPane.showMessageDialog(null, "Campanha cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
             if(this.conexao != null){
@@ -79,29 +82,25 @@ public class CampanhaDao {
         }
     }   
     
-    private void adicionarParticipantes(List<Pessoa> participantes, ResultSet codCampanha){
+    private void adicionarParticipantes(List<Pessoa> participantes, int codCampanha){
         
         String sqlInsert = "INSERT INTO ParticipantesCampanha (CodPessoa, NomePessoa, Campanha, Status, DataCadastro) VALUES (?,?,?,?,GETDATE())";
-        
-        try{
+
+        try{    
             this.conexao = Conexao.getDataSource().getConnection();
             this.psParticipante = this.conexao.prepareStatement(sqlInsert);
             
-            if(codCampanha.next()){
-                for(Pessoa part : participantes){
-                    this.psParticipante.setInt(1, part.getCodigo());
-                    this.psParticipante.setString(2, part.getNome());
-                    this.psParticipante.setInt(3, codCampanha.getInt(1));
-                    this.psParticipante.setInt(4, 1);
-                    this.psParticipante.execute();
-                }   
-            }
-            
+            for(Pessoa part : participantes){
+                this.psParticipante.setInt(1, part.getCodigo());
+                this.psParticipante.setString(2, part.getNome());
+                this.psParticipante.setInt(3, codCampanha);
+                this.psParticipante.setInt(4, 1);
+                this.psParticipante.execute();
+            }         
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar os participantes", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
-                if(psParticipante != null) psParticipante.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);

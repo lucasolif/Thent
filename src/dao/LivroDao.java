@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.Autor;
 import model.Editora;
+import model.EmprestimoLivro;
 import model.Livro;
 
 public class LivroDao {

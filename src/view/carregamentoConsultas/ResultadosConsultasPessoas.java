@@ -113,7 +113,6 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
     private void pessoaEscolhida(){
         int linhaSelec = this.tabelaResultadoConsulta.getSelectedRow();
         if(linhaSelec >= 0){
-            dispose();
             Pessoa pessoa = (Pessoa)this.tabelaResultadoConsulta.getModel().getValueAt(linhaSelec, 1); 
             this.cadCampForm.adicionarParticipanteEscolhido(pessoa);
         }else{

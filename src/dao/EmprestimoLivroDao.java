@@ -27,9 +27,7 @@ public class EmprestimoLivroDao {
     
     public void emprestarLivros(EmprestimoLivro livrosEmprestados){
  
-        String sqlInsert1 = "INSERT INTO Emprestimo(Pessoa,Biblioteca,Data) VALUES(?,?,GETDATE())";
-
-        //Consulta os livros que estão disponível, e atribui os livros disponíveis para a lista.
+        String inserDadosEmprestimo = "INSERT INTO Emprestimo(Pessoa,Biblioteca,Data) VALUES(?,?,GETDATE())";
         List<Livro> livrosDisponiveis = livrosDisponiveisParaEmprestimo(livrosEmprestados);
  
         try{
@@ -39,17 +37,20 @@ public class EmprestimoLivroDao {
             //verfica se a lista de livros disponiveis não é vazia
             if(!livrosDisponiveis.isEmpty()){                          
                 //Pega os dados da Pessoa e da Biblioteca, e insere na tabela EmprestimoLivros
-                this.insertStmt = this.conexao.prepareStatement(sqlInsert1, PreparedStatement.RETURN_GENERATED_KEYS); 
-                this.insertStmt.setInt(1, livrosEmprestados.getPessoa().getCodigo());
-                this.insertStmt.setInt(2, livrosEmprestados.getBiblioteca().getCodigo());
-                this.insertStmt.executeUpdate();                              
-                ResultSet generatedKeysEmp = this.insertStmt.getGeneratedKeys();
+                insertStmt = this.conexao.prepareStatement(inserDadosEmprestimo, PreparedStatement.RETURN_GENERATED_KEYS); 
+                insertStmt.setInt(1, livrosEmprestados.getPessoa().getCodigo());
+                insertStmt.setInt(2, livrosEmprestados.getBiblioteca().getCodigo());
+                insertStmt.executeUpdate();                              
+                ResultSet generatedKeysEmp = insertStmt.getGeneratedKeys();
                 
-                if(generatedKeysEmp.next()){                                           
-                    adicionarLivroEmprestado(livrosDisponiveis, generatedKeysEmp, livrosEmprestados);                    
+                if(generatedKeysEmp.next()){          
+                    //Adiciona o livro para emprestimo
+                    adicionarLivroEmprestado(livrosDisponiveis,generatedKeysEmp,livrosEmprestados);     
                     JOptionPane.showMessageDialog(null, "Empréstimo do livro efetuado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-                    this.conexao.commit();                            
+                }else{
+                    JOptionPane.showMessageDialog(null, "Chave do empréstimo não foi gerada", "Erro", JOptionPane.INFORMATION_MESSAGE);
                 }
+                this.conexao.commit(); 
             }
         }catch(SQLException ex){
             if(this.conexao != null){
@@ -60,7 +61,6 @@ public class EmprestimoLivroDao {
                 }
             }
             JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ ex.getMessage());
         }finally{
             //Fechar os recursos abertos
             try{
@@ -72,6 +72,71 @@ public class EmprestimoLivroDao {
             }
         }
     }  
+    
+        
+    private void adicionarLivroEmprestado(List<Livro> livros, ResultSet generatedKeysEmp, EmprestimoLivro livrosEmprestados){     
+        
+        String insertLivrosEmprestados = "INSERT INTO LivrosEmprestados (Livro,CodEmprestimo,StatusEmprestimo,DataEmprestimo)VALUES (?,?,?,?)";
+        String insertRegistroSaida = "INSERT INTO RegistroSaidaEntradaLivro (CodEmprestimo,CodLivroEmprestados,TipoMovimentacao,DataMovimentacao)VALUES (?,?,'SAÍDA - EMPRÉSTIMO',GETDATE())";
+        String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade - 1 WHERE Livro=? AND Biblioteca=?";
+                   
+        try{
+            //int idRegistroEmprestimo = ;         
+            int codEmprestimo = generatedKeysEmp.getInt(1);
+                    
+            for(Livro empLivro : livros){                  
+                //Salvando os livros que foram emprestado    
+                insertStmt = this.conexao.prepareStatement(insertLivrosEmprestados, PreparedStatement.RETURN_GENERATED_KEYS); 
+                insertStmt.setInt(1, empLivro.getCodInterno());
+                insertStmt.setInt(2, codEmprestimo);
+                insertStmt.setInt(3, livrosEmprestados.getStatusEmprestimo());
+                insertStmt.setDate(4, (Date) livrosEmprestados.getDataEmprestimo());
+                insertStmt.executeUpdate();   
+                ResultSet generatedKeysLiv = insertStmt.getGeneratedKeys();
+                
+                if(generatedKeysLiv.next()){ 
+                    int keyLivroEmp = generatedKeysLiv.getInt(1); 
+                    //Atualiza o saldo do livro na biblioteca
+                    atualizarSaldoLivro(sqlUpdate, empLivro, livrosEmprestados.getBiblioteca());
+
+                    if(keyLivroEmp > 0){                  
+                        //Registra a movimentação do livro
+                        registrarEntradaSaidaLivro(insertRegistroSaida, codEmprestimo, keyLivroEmp);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "foi gerada a chave para o livro com o código " + empLivro.getCodInterno(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }                           
+                }else{
+                    JOptionPane.showMessageDialog(null, "Não foi gerada a chave para o empréstimo.", "Erro", JOptionPane.ERROR_MESSAGE);                                 
+                }          
+            }         
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar registrar o empréstimo do livro", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        } 
+    }
+    
+    private void atualizarSaldoLivro(String script, Livro livros, Biblioteca bibliteca){
+        try{           
+            //Atualizando o saldo do livro que foi emprestado
+            this.updateStmt = this.conexao.prepareStatement(script); 
+            this.updateStmt.setInt(1, livros.getCodInterno());
+            this.updateStmt.setInt(2, bibliteca.getCodigo());
+            this.updateStmt.executeUpdate();            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void registrarEntradaSaidaLivro(String script, int idEmprestimo, int idLivroEmprestado){ 
+        try{ 
+            this.insertStmt = this.conexao.prepareStatement(script);
+            this.insertStmt.setInt(1, idEmprestimo);
+            this.insertStmt.setInt(2, idLivroEmprestado);
+            this.insertStmt.execute(); 
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
     
     public List<EmprestimoLivro> consultarEmprestimosLivro(EmprestimoLivro filtroEmpLivro, java.util.Date dataEmprestimoInicial, java.util.Date dataEmprestimoFinal, java.util.Date dataDevolucaoInicial, java.util.Date dataDevolucaoFinal){
         
@@ -256,6 +321,41 @@ public class EmprestimoLivroDao {
         
     }
     
+    private List<Livro> livrosDisponiveisParaEmprestimo(EmprestimoLivro livrosEmprestados){
+        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=? AND Quantidade > 0";   
+        List<Livro> livrosDisponiveis = new ArrayList<>();
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();           
+            for(Livro lvEmp : livrosEmprestados.getLivro()){                  
+                //Consulta para saber se o livro existe na biblioteca informada
+                this.selectStmt = this.conexao.prepareStatement(sqlSelect); 
+                this.selectStmt.setInt(1, livrosEmprestados.getBiblioteca().getCodigo());
+                this.selectStmt.setInt(2, lvEmp.getCodInterno());
+                this.rs = this.selectStmt.executeQuery();
+                
+                if(this.rs.next()){                  
+                    livrosDisponiveis.add(lvEmp);  
+                }else{
+                    JOptionPane.showMessageDialog(null, "Livro "+lvEmp.getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+livrosEmprestados.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os livros disponíveis", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            //Fechar os recursos abertos
+            try{
+                if(this.selectStmt != null) this.selectStmt.close();
+                //if(this.conexao != null) this.conexao.close();
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }    
+        return livrosDisponiveis;
+    }   
+
+    
+    
     //Consulta que aparece todos os livros emprestados, quando abrir a tela;
     public List<EmprestimoLivro> consultarEmprestimosStatusEmprestado(){
         
@@ -318,118 +418,5 @@ public class EmprestimoLivroDao {
             }
         }   
         return listaEmpLivro;
-    }
-    
-    private List<Livro> livrosDisponiveisParaEmprestimo(EmprestimoLivro livrosEmprestados){
-        String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=? AND Quantidade > 0";   
-        List<Livro> livrosDisponiveis = new ArrayList<>();
-        
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();           
-            for(Livro lvEmp : livrosEmprestados.getLivro()){                  
-                //Consulta para saber se o livro existe na biblioteca informada
-                this.selectStmt = this.conexao.prepareStatement(sqlSelect); 
-                this.selectStmt.setInt(1, livrosEmprestados.getBiblioteca().getCodigo());
-                this.selectStmt.setInt(2, lvEmp.getCodInterno());
-                this.rs = this.selectStmt.executeQuery();
-                
-                if(this.rs.next()){                  
-                    livrosDisponiveis.add(lvEmp);  
-                }else{
-                    JOptionPane.showMessageDialog(null, "Livro "+lvEmp.getNomeLivro().toUpperCase()+" não encontrado na biblioteca "+livrosEmprestados.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Concluído", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os livros disponíveis", "Erro 007", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            //Fechar os recursos abertos
-            try{
-                if(this.selectStmt != null) this.selectStmt.close();
-                if(this.conexao != null) this.conexao.close();
-            }catch(SQLException ex){
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            }
-        }    
-        return livrosDisponiveis;
-    }   
-    
-    private ResultSet adicionarLivroEmprestado(List<Livro> livros, ResultSet generatedKeysEmp, EmprestimoLivro livrosEmprestados){
-             
-        String sqlInsert = "INSERT INTO LivrosEmprestados (Livro,CodEmprestimo,StatusEmprestimo,DataEmprestimo)VALUES (?,?,?,?)";
-        String sqlInsert2 = "INSERT INTO RegistroSaidaEntradaLivro (CodEmprestimo,CodLivroEmprestados,TipoMovimentacao,DataMovimentacao)VALUES (?,?,'SAÍDA - EMPRÉSTIMO',GETDATE())";
-        String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade - 1 WHERE Livro=? AND Biblioteca=?";
-        ResultSet generatedKeysLiv = null;
-                   
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();
- 
-            for(Livro empLivro : livros){      
-                int idRegistroEmprestimo = generatedKeysEmp.getInt(1);
-                //Salvando os livros que foram emprestado    
-                this.insertStmt = this.conexao.prepareStatement(sqlInsert, PreparedStatement.RETURN_GENERATED_KEYS); 
-                this.insertStmt.setInt(1, empLivro.getCodInterno());
-                this.insertStmt.setInt(2, idRegistroEmprestimo);
-                this.insertStmt.setInt(3, livrosEmprestados.getStatusEmprestimo());
-                this.insertStmt.setDate(4, (Date) livrosEmprestados.getDataEmprestimo());
-                this.insertStmt.executeUpdate();
-                generatedKeysLiv = this.insertStmt.getGeneratedKeys();
-                
-                //Atualiza o saldo dos livros
-                atualizarSaldoLivro(sqlUpdate, empLivro, livrosEmprestados.getBiblioteca());
-                
-                if(generatedKeysLiv.next()){
-                    int keyLivroEmp = generatedKeysLiv.getInt(1);   
-                    registrarEntradaSaidaLivro(sqlInsert2, idRegistroEmprestimo, keyLivroEmp);
-                }
-            }         
-        }catch(SQLException ex){
-            if(this.conexao != null){
-                try{
-                    this.conexao.rollback();
-                }catch(SQLException e){
-                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ ex.getMessage());
-        } 
-        return generatedKeysLiv;
-    }
-    
-    private void atualizarSaldoLivro(String script, Livro livros, Biblioteca bibliteca){
-        
-        
-        
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();
-            
-            //Atualizando o saldo do livro que foi emprestado
-            this.updateStmt = this.conexao.prepareStatement(script); 
-            this.updateStmt.setInt(1, livros.getCodInterno());
-            this.updateStmt.setInt(2, bibliteca.getCodigo());
-            this.updateStmt.executeUpdate();            
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            //Fechar os recursos abertos
-            try{
-                if(this.updateStmt != null) this.updateStmt.close();
-                if(this.conexao != null) this.conexao.close();
-            }catch(SQLException ex){
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-    
-    private void registrarEntradaSaidaLivro(String script, int idEmprestimo, int idLivroEmprestado){ 
-        try{ 
-            this.insertStmt = this.conexao.prepareStatement(script);
-            this.insertStmt.setInt(1, idEmprestimo);
-            this.insertStmt.setInt(2, idLivroEmprestado);
-            this.insertStmt.execute(); 
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
-        }
-        
     }
 }
