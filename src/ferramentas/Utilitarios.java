@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
@@ -84,7 +85,7 @@ public class Utilitarios{
         return valor != null && valor.matches("[0-9]*");
     }
     
-    public String calcularData(String data, Integer meses){
+    public String somarDatas(String data, Integer meses){
         
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String novaDataString = null;
@@ -109,5 +110,17 @@ public class Utilitarios{
         return novaDataString;
     } 
     
-    
+    public int diferencaDatas(String primeiraData, String segundaData){
+        // Definindo o formato de data (dd/MM/yyyy)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // Convertendo as strings para LocalDate
+        LocalDate dataInicial = LocalDate.parse(primeiraData, formatter);
+        LocalDate dataFinal = LocalDate.parse(segundaData, formatter);
+
+        // Calculando a diferença em meses
+        int meses = (int) ChronoUnit.MONTHS.between(dataInicial, dataFinal);
+
+        return meses;
+    }
 }

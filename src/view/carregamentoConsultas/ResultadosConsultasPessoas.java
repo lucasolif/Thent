@@ -4,6 +4,7 @@ package view.carregamentoConsultas;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.ConsultaPessoas;
 import model.Pessoa;
 import view.campanhas.CadastrarCampanhaForm;
 
@@ -11,13 +12,12 @@ import view.campanhas.CadastrarCampanhaForm;
 public class ResultadosConsultasPessoas extends javax.swing.JDialog {
     
     //Istanciação do Objeto "CadastrarCampanhaForm".
-    private CadastrarCampanhaForm cadCampForm = null;
+    private ConsultaPessoas consultaPessoas;
     
-    public ResultadosConsultasPessoas(java.awt.Frame parent, List<Pessoa> listaPessoa, CadastrarCampanhaForm cadCampForm) {
-        super(parent, true);
+    public ResultadosConsultasPessoas(java.awt.Frame owner, List<Pessoa> listaPessoa) {
+        super(owner, true);
         initComponents();
         carregarPessoasCosultadas(listaPessoa);
-        this.cadCampForm = cadCampForm;
     }
 
     @SuppressWarnings("unchecked")
@@ -78,7 +78,7 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnEscolher)))
@@ -89,9 +89,9 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEscolher)
-                .addGap(0, 30, Short.MAX_VALUE))
+                .addGap(0, 24, Short.MAX_VALUE))
         );
 
         pack();
@@ -114,13 +114,16 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
         int linhaSelec = this.tabelaResultadoConsulta.getSelectedRow();
         if(linhaSelec >= 0){
             Pessoa pessoa = (Pessoa)this.tabelaResultadoConsulta.getModel().getValueAt(linhaSelec, 1); 
-            this.cadCampForm.adicionarParticipanteEscolhido(pessoa);
+            this.consultaPessoas.pessoaSelecionada(pessoa);
         }else{
-            JOptionPane.showMessageDialog(null, "Não foi selecionado nenhum participante", "Atenção", JOptionPane.WARNING_MESSAGE);
- 
+            JOptionPane.showMessageDialog(null, "Não foi selecionado nenhum participante", "Atenção", JOptionPane.WARNING_MESSAGE);     
         }
     }
     
+    public void setPessoaSelecionada(ConsultaPessoas consultaPessoas) {
+        this.consultaPessoas = consultaPessoas;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEscolher;

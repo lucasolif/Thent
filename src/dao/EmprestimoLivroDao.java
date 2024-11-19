@@ -72,7 +72,6 @@ public class EmprestimoLivroDao {
             }
         }
     }  
-    
         
     private void adicionarLivroEmprestado(List<Livro> livros, ResultSet generatedKeysEmp, EmprestimoLivro livrosEmprestados){     
         
@@ -103,7 +102,7 @@ public class EmprestimoLivroDao {
                         //Registra a movimentação do livro
                         registrarEntradaSaidaLivro(insertRegistroSaida, codEmprestimo, keyLivroEmp);
                     }else{
-                        JOptionPane.showMessageDialog(null, "foi gerada a chave para o livro com o código " + empLivro.getCodInterno(), "Erro", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Não foi gerada a chave para o livro com o código " + empLivro.getCodInterno(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }                           
                 }else{
                     JOptionPane.showMessageDialog(null, "Não foi gerada a chave para o empréstimo.", "Erro", JOptionPane.ERROR_MESSAGE);                                 
@@ -353,8 +352,6 @@ public class EmprestimoLivroDao {
         }    
         return livrosDisponiveis;
     }   
-
-    
     
     //Consulta que aparece todos os livros emprestados, quando abrir a tela;
     public List<EmprestimoLivro> consultarEmprestimosStatusEmprestado(){

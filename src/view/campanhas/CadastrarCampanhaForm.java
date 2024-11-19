@@ -5,7 +5,6 @@ import dao.CampanhaDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import dao.TipoCampanhaDao;
 import ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -18,19 +17,18 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
+import model.ConsultaPessoas;
 import model.Igreja;
 import model.ContasReceberCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
-import model.TipoCampanha;
 import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
-public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
+public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final CampanhaDao campanhaDao = new CampanhaDao();
-    private final TipoCampanhaDao tpCampanhaDao = new TipoCampanhaDao();
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private List<Campanha> listaCampanhas = new ArrayList();
     private List<Pessoa> listaParticipantes = new ArrayList();
@@ -74,8 +72,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         jLabel11 = new javax.swing.JLabel();
         codCampanha = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        tipoCampanha = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         nomeParticipante = new javax.swing.JTextField();
         btnAdicionar = new javax.swing.JButton();
@@ -166,8 +162,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
 
         jLabel13.setText("Código");
 
-        jLabel2.setText("Tipo de Campanha*");
-
         jLabel12.setText("Participante");
 
         nomeParticipante.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -199,52 +193,47 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
+                            .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataInicioCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(134, 134, 134)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(134, 134, 134)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel9)
-                                            .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(diaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(statusCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbContaReceber)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel15)
-                                    .addComponent(contaResultado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel13)
-                                    .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(tipoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dataInicioCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))))
+                                    .addComponent(jLabel9)
+                                    .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(diaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbContaReceber)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(contaResultado, 0, 227, Short.MAX_VALUE))
                         .addGap(14, 14, 14))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,44 +256,41 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel2))
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tipoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(dataInicioCampanha)
-                                    .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel11))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(diaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(statusCampanha)
-                                    .addComponent(cbContaReceber)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel13))
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(descricaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(dataInicioCampanha)
+                            .addComponent(dataFimCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel11))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(igrejaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(valorTotalCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(diaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(statusCampanha)
+                                .addComponent(cbContaReceber))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(contaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -426,8 +412,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         cadastrarAlterarCampanha();
-        //formInicial();
-        //limparTabela();
+        formInicial();
+        limparTabela();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void consultarCampanhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_consultarCampanhaKeyPressed
@@ -464,7 +450,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){  
             String dataInicio = this.dataInicioCampanha.getText();
             Integer duracao = (Integer)this.duracaoCampanha.getValue();
-            String dataFinal = this.conversor.calcularData(dataInicio, duracao);    
+            String dataFinal = this.conversor.somarDatas(dataInicio, duracao);    
             this.dataFimCampanha.setText(dataFinal);
         }
     }//GEN-LAST:event_dataInicioCampanhaKeyPressed
@@ -472,7 +458,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
     private void duracaoCampanhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_duracaoCampanhaMouseClicked
         String dataInicio = this.dataInicioCampanha.getText();
         Integer duracao = (Integer)this.duracaoCampanha.getValue();
-        String dataFinal = this.conversor.calcularData(dataInicio, duracao);
+        String dataFinal = this.conversor.somarDatas(dataInicio, duracao);
         this.dataFimCampanha.setText(dataFinal);
     }//GEN-LAST:event_duracaoCampanhaMouseClicked
 
@@ -480,7 +466,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){  
             String dataInicio = this.dataInicioCampanha.getText();
             Integer duracao = (Integer)this.duracaoCampanha.getValue();
-            String dataFinal = this.conversor.calcularData(dataInicio, duracao);
+            String dataFinal = this.conversor.somarDatas(dataInicio, duracao);
             
             this.dataFimCampanha.setText(dataFinal);
         }
@@ -503,19 +489,9 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
             modelo.addElement(subCont);
         }
     }
-    
-    private void carregarTipoCampanha(){
-        List<TipoCampanha> listaTipoCampanha = this.tpCampanhaDao.consultarTiposCampanha();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.tipoCampanha.getModel();
-        modelo.removeAllElements();
-        for(TipoCampanha tpCampanha : listaTipoCampanha){
-            modelo.addElement(tpCampanha);
-        }
-    }
-    
+      
     private void cadastrarAlterarCampanha(){       
         String descricaoCampanha = this.descricaoCampanha.getText();
-        TipoCampanha tipoCampanha = (TipoCampanha) this.tipoCampanha.getSelectedItem();
         Integer duracaoCampanha = (Integer) this.duracaoCampanha.getValue();
         Date dataInicioCampanha = conversor.convertendoStringDateSql(this.dataInicioCampanha.getText());
         Date dataFimCampanha = conversor.convertendoStringDateSql(this.dataFimCampanha.getText());
@@ -530,10 +506,9 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
                 JOptionPane.showMessageDialog(null, "Informe os campos obrigatórios para cadastrar a campanha", "Atenção", JOptionPane.WARNING_MESSAGE);
             }else{
                 boolean geraContasReceber = false;
-                List<Pessoa> participantes = cadastrarParticipantes();
+                List<Pessoa> participantes = participantesCampanha();
                 Campanha campanha = new Campanha();
                 campanha.setDescricaoCampanha(descricaoCampanha);
-                campanha.setTipoCampanha(tipoCampanha);
                 campanha.setDuracaoMeses(duracaoCampanha);
                 campanha.setDataInicial(dataInicioCampanha);
                 campanha.setDataFinal(dataFimCampanha);
@@ -563,7 +538,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         }
     }
     
-    private List<Pessoa> cadastrarParticipantes(){
+    private List<Pessoa> participantesCampanha(){
         List<Pessoa> listaParticipantes = new ArrayList<>();
         int qtdParticipantes = this.tabelaParticipantes.getRowCount();
         if(qtdParticipantes > 0){
@@ -578,7 +553,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
  
     private void formInicial(){
         carregarIgrejas();
-        carregarTipoCampanha();
         carregarSubContaResultado();
         limparTabela();   
         this.codCampanha.setText("");
@@ -586,7 +560,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         this.duracaoCampanha.setValue(1);
         this.dataInicioCampanha.setText(conversor.dataAtualString());
         this.dataInicioCampanha.setEditable(true);
-        this.dataFimCampanha.setText(conversor.calcularData(this.dataInicioCampanha.getText(), (Integer)this.duracaoCampanha.getValue()));
+        this.dataFimCampanha.setText(conversor.somarDatas(this.dataInicioCampanha.getText(), (Integer)this.duracaoCampanha.getValue()));
         this.statusCampanha.setSelected(true);
         this.statusCampanha.setEnabled(false);
         this.valorTotalCampanha.setText("");
@@ -595,13 +569,11 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         this.nomeParticipante.setText("");
         this.consultarCampanha.setText("");
         this.igrejaCampanha.setEnabled(true);
-        this.tipoCampanha.setEnabled(true);
         this.btnAdicionar.setEnabled(true);
         this.nomeParticipante.setEditable(true);    
     }
     
     private void formAlteracao(){
-        this.tipoCampanha.setEnabled(false);
         this.dataInicioCampanha.setEditable(false);
         this.igrejaCampanha.setEnabled(false);
         this.nomeParticipante.setEditable(false);
@@ -609,7 +581,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
     }
     
     private void limparTabela(){
-        //Primeiro a condição testa se a quantidade de linhas é maior que 0, depois, limpa os dados
         if(this.tabelaParticipantes.getRowCount() > 0){
             DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
             model.setRowCount(0);
@@ -644,7 +615,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         
         this.codCampanha.setText(String.valueOf(this.campanhaSelec.getCodigo()));
         this.nomeParticipante.setText(this.campanhaSelec.getDescricaoCampanha());
-        this.tipoCampanha.setSelectedItem(this.campanhaSelec.getTipoCampanha());
         this.duracaoCampanha.setValue(this.campanhaSelec.getDuracaoMeses());
         this.dataInicioCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) this.campanhaSelec.getDataInicial()));
         this.dataFimCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) this.campanhaSelec.getDataFinal()));
@@ -673,7 +643,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
     
     //Carrrega todos os cadastros de pessoas encontrado, dentro do Dialog que é aberto, possibilitando a escolha
     private void carregarResultadoConsultaParticipante(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaParticipantes, this);
+        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaParticipantes);
+        resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);
     }
@@ -684,6 +655,12 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
         model.addRow(new Object[]{pessoa.getCodigo(),pessoa,pessoa.getCpfCnpj(),pessoa.getIgreja()});     
     }
     
+    //Manipula o dado que foi escolhido no JDialog, nesse caso, a pessoa
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        adicionarParticipanteEscolhido(pessoaSelecionada);
+    }
+
     //Gera o contas a receber da campanha.
     private List<ContasReceberCampanha> gerarContasReceberCampanha(){
         
@@ -704,7 +681,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
                 Pessoa participante = (Pessoa)this.tabelaParticipantes.getModel().getValueAt(i, 1);
                 
                 for(int j = 1; j <= qtdParcelas; j++ ){
-                    String dataVencimento = this.conversor.calcularData(dataInicio, j);
+                    String dataVencimento = this.conversor.somarDatas(dataInicio, j);
                     
                     ContasReceberCampanha crCampanha = new ContasReceberCampanha();
                     crCampanha.setContaResultado(contaResultado);
@@ -745,7 +722,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -759,8 +735,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame{
     private javax.swing.JTextField observacaoCampanha;
     private javax.swing.JCheckBox statusCampanha;
     private javax.swing.JTable tabelaParticipantes;
-    private javax.swing.JComboBox<String> tipoCampanha;
     private javax.swing.JFormattedTextField valorTotalCampanha;
     // End of variables declaration//GEN-END:variables
+
 
 }

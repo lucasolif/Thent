@@ -894,7 +894,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame {
         if(valSaldo < 0){
             this.saldo.setForeground(Color.red);
         }else{
-            this.saldo.setForeground(cores.CorAzul());
+            this.saldo.setForeground(cores.azul());
         }
     }
     

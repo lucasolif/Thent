@@ -550,9 +550,9 @@ public class UsuarioForm extends javax.swing.JInternalFrame {
         }
         
         this.usuarioLogin.setEditable(false);
-        this.usuarioLogin.setBackground(cores.CorCinza());
-        this.usuarioSenha.setBackground(cores.CorCinza());
-        this.usuarioConfirmSenha.setBackground(cores.CorCinza());
+        this.usuarioLogin.setBackground(cores.cinza());
+        this.usuarioSenha.setBackground(cores.cinza());
+        this.usuarioConfirmSenha.setBackground(cores.cinza());
         this.usuarioSenha.setEditable(false);
         this.usuarioConfirmSenha.setEditable(false);
     }

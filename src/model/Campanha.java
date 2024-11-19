@@ -8,7 +8,6 @@ import java.util.Objects;
 
 public class Campanha {
     private Integer codigo;
-    private TipoCampanha tipoCampanha;
     private String descricaoCampanha;
     private Igreja igreja;
     private Integer duracaoMeses;
@@ -20,8 +19,26 @@ public class Campanha {
     private List<ContasReceberCampanha> listaCrCampanha;
     private double valorTotalCampanha;
     private Integer statusCampanha;
+    private String descricaoStatus;
+    private Date dataCadastro;
 
     public Campanha() {
+    }
+
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public String getDescricaoStatus() {
+        return descricaoStatus;
+    }
+
+    public void setDescricaoStatus(String descricaoStatus) {
+        this.descricaoStatus = descricaoStatus;
     }
 
     public List<ContasReceberCampanha> getListaCrCampanha() {
@@ -38,14 +55,6 @@ public class Campanha {
 
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
-    }
-
-    public TipoCampanha getTipoCampanha() {
-        return tipoCampanha;
-    }
-
-    public void setTipoCampanha(TipoCampanha tipoCampanha) {
-        this.tipoCampanha = tipoCampanha;
     }
 
     public String getDescricaoCampanha() {
@@ -132,7 +141,6 @@ public class Campanha {
     public int hashCode() {
         int hash = 3;
         hash = 29 * hash + Objects.hashCode(this.codigo);
-        hash = 29 * hash + Objects.hashCode(this.tipoCampanha);
         hash = 29 * hash + Objects.hashCode(this.descricaoCampanha);
         hash = 29 * hash + Objects.hashCode(this.igreja);
         hash = 29 * hash + Objects.hashCode(this.duracaoMeses);
@@ -168,9 +176,6 @@ public class Campanha {
             return false;
         }
         if (!Objects.equals(this.codigo, other.codigo)) {
-            return false;
-        }
-        if (!Objects.equals(this.tipoCampanha, other.tipoCampanha)) {
             return false;
         }
         if (!Objects.equals(this.igreja, other.igreja)) {

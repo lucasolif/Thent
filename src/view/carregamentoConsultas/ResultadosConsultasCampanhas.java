@@ -1,37 +1,35 @@
 
 package view.carregamentoConsultas;
 
-import view.campanhas.*;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Campanha;
+import model.ConsultaCampanhas;
 
 
 public class ResultadosConsultasCampanhas extends javax.swing.JDialog {
     
-    public Campanha campanha = new Campanha();
+    private ConsultaCampanhas consultaCampanhas;
     
-    public ResultadosConsultasCampanhas(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public ResultadosConsultasCampanhas(java.awt.Frame owner, List<Campanha> listaCampanha) {
+        super(owner, true);
         initComponents();
+        carregarCampanhasCosultadas(listaCampanha);
     }
-    
-    public void campanhaEscolhida(){
-        int linhaSelec = this.tabelaResultadoConsulta.getSelectedRow();
-        this.campanha = (Campanha)this.tabelaResultadoConsulta.getModel().getValueAt(linhaSelec, 1);
-    }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaResultadoConsulta = new javax.swing.JTable();
+        tabelaConsultasCampanhas = new javax.swing.JTable();
         btnEscolher = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Resultados Consultas");
 
-        tabelaResultadoConsulta.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaConsultasCampanhas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -54,12 +52,12 @@ public class ResultadosConsultasCampanhas extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tabelaResultadoConsulta);
-        if (tabelaResultadoConsulta.getColumnModel().getColumnCount() > 0) {
-            tabelaResultadoConsulta.getColumnModel().getColumn(0).setResizable(false);
-            tabelaResultadoConsulta.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tabelaResultadoConsulta.getColumnModel().getColumn(1).setResizable(false);
-            tabelaResultadoConsulta.getColumnModel().getColumn(1).setPreferredWidth(350);
+        jScrollPane1.setViewportView(tabelaConsultasCampanhas);
+        if (tabelaConsultasCampanhas.getColumnModel().getColumnCount() > 0) {
+            tabelaConsultasCampanhas.getColumnModel().getColumn(0).setResizable(false);
+            tabelaConsultasCampanhas.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tabelaConsultasCampanhas.getColumnModel().getColumn(1).setResizable(false);
+            tabelaConsultasCampanhas.getColumnModel().getColumn(1).setPreferredWidth(350);
         }
 
         btnEscolher.setBackground(new java.awt.Color(0, 153, 255));
@@ -101,11 +99,34 @@ public class ResultadosConsultasCampanhas extends javax.swing.JDialog {
         campanhaEscolhida();
     }//GEN-LAST:event_btnEscolherActionPerformed
 
+    //Adiciona na tabela do Dialogm as pessoas que foram consulta no "CadastrarCampanhaForm", para serem escolhidas
+    private void carregarCampanhasCosultadas(List<Campanha> listaCampanha){         
+        for(Campanha camp : listaCampanha){        
+            DefaultTableModel model = (DefaultTableModel) this.tabelaConsultasCampanhas.getModel();    
+            model.addRow(new Object[]{camp.getCodigo(),camp});
+        }
+    }
+    
+    //Escolhe a pessoa, chama o método do "CadastrarCampanhaForm", e envia a pessoa selecionada
+    private void campanhaEscolhida(){
+        int linhaSelec = this.tabelaConsultasCampanhas.getSelectedRow();
+        if(linhaSelec >= 0){
+            Campanha campanha = (Campanha)this.tabelaConsultasCampanhas.getModel().getValueAt(linhaSelec, 1); 
+            this.consultaCampanhas.campanhaSelecionada(campanha);
+            dispose();
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi selecionado nenhum participante", "Atenção", JOptionPane.WARNING_MESSAGE);     
+        }
+    }
+    
+    public void setPessoaSelecionada(ConsultaCampanhas consultaCampanhas) {
+        this.consultaCampanhas = consultaCampanhas;
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEscolher;
     public javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTable tabelaResultadoConsulta;
+    public javax.swing.JTable tabelaConsultasCampanhas;
     // End of variables declaration//GEN-END:variables
 }

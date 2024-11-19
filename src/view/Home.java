@@ -20,7 +20,7 @@ import view.cadastros.SubContaResultadoForm;
 import view.cadastros.TipoOfertaForm;
 import view.cadastros.UsuarioForm;
 import view.campanhas.CadastrarCampanhaForm;
-import view.campanhas.TipoCampanhaForm;
+import view.campanhas.CadastrarParticipanteAvulso;
 import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
@@ -83,7 +83,6 @@ public class Home extends javax.swing.JFrame {
         operacaoEmprestimo = new javax.swing.JMenuItem();
         operacaoConsultaEmprestimo = new javax.swing.JMenuItem();
         campanha = new javax.swing.JMenu();
-        cadastrarTipoCampanha = new javax.swing.JMenuItem();
         criarCampanha = new javax.swing.JMenuItem();
         gerenciarContaReceberCampanha = new javax.swing.JMenuItem();
         processosAvulsos = new javax.swing.JMenu();
@@ -366,14 +365,6 @@ public class Home extends javax.swing.JFrame {
 
         campanha.setText("Campanha");
 
-        cadastrarTipoCampanha.setText("Cadastrar Tipo Campanha");
-        cadastrarTipoCampanha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastrarTipoCampanhaActionPerformed(evt);
-            }
-        });
-        campanha.add(cadastrarTipoCampanha);
-
         criarCampanha.setText("Criar Campanha");
         criarCampanha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -388,6 +379,11 @@ public class Home extends javax.swing.JFrame {
         processosAvulsos.setText("Processos Avulsos");
 
         adicionarParticipante.setText("Adicionar Participante");
+        adicionarParticipante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarParticipanteActionPerformed(evt);
+            }
+        });
         processosAvulsos.add(adicionarParticipante);
 
         removerParticipante.setText("Remover Participante");
@@ -609,19 +605,19 @@ public class Home extends javax.swing.JFrame {
         cadastroBiblioteca.setPosicao();
     }//GEN-LAST:event_cadastroBibliotecasActionPerformed
 
-    private void cadastrarTipoCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarTipoCampanhaActionPerformed
-        TipoCampanhaForm tpCampanhaForm = new TipoCampanhaForm();
-        this.painelHome.add(tpCampanhaForm);
-        tpCampanhaForm.setVisible(true);
-        tpCampanhaForm.setPosicao();
-    }//GEN-LAST:event_cadastrarTipoCampanhaActionPerformed
-
     private void criarCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarCampanhaActionPerformed
         CadastrarCampanhaForm cadastrarCampanha = new CadastrarCampanhaForm();
         this.painelHome.add(cadastrarCampanha);
         cadastrarCampanha.setVisible(true);
         cadastrarCampanha.setPosicao();
     }//GEN-LAST:event_criarCampanhaActionPerformed
+
+    private void adicionarParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarParticipanteActionPerformed
+        CadastrarParticipanteAvulso cadastrarParticipanteAvulso = new CadastrarParticipanteAvulso();
+        this.painelHome.add(cadastrarParticipanteAvulso);
+        cadastrarParticipanteAvulso.setVisible(true);
+        cadastrarParticipanteAvulso.setPosicao();
+    }//GEN-LAST:event_adicionarParticipanteActionPerformed
   
    
     
@@ -631,7 +627,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem adicionarParticipante;
     private javax.swing.JMenuItem alterarSenha;
     private javax.swing.JMenu biblioteca;
-    private javax.swing.JMenuItem cadastrarTipoCampanha;
     private javax.swing.JMenuItem cadastroAutor;
     private javax.swing.JMenuItem cadastroBiblioteca;
     private javax.swing.JMenuItem cadastroBibliotecas;

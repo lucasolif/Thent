@@ -297,14 +297,6 @@
             <Property name="text" type="java.lang.String" value="Campanha"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="cadastrarTipoCampanha">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Cadastrar Tipo Campanha"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cadastrarTipoCampanhaActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="criarCampanha">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Criar Campanha"/>
@@ -327,6 +319,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Adicionar Participante"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="adicionarParticipanteActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="removerParticipante">
                   <Properties>

@@ -131,7 +131,6 @@ public class ContaCaixaDao {
                 ps.setNull(3, java.sql.Types.INTEGER);
                 ps.setNull(4, java.sql.Types.INTEGER);
             }
-
             rs = ps.executeQuery();
 
             while(rs.next()){
@@ -142,9 +141,6 @@ public class ContaCaixaDao {
 
                 listaCaixas.add(caixa);
             }
-            
-            ps.execute();
-            
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a Conta Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
@@ -157,7 +153,6 @@ public class ContaCaixaDao {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
         return listaCaixas;
     }
     
