@@ -90,7 +90,6 @@ public class BibliotecaDao {
             
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar a biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Mensagem de erro "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
@@ -107,20 +106,20 @@ public class BibliotecaDao {
     
     public void alterarBiblioteca(Biblioteca biblioteca){
         
-        String sqlUpdate = "UPDATE Bibliotecas SET AtivoInativo=? WHERE Codigo=?";
+        String sqlUpdate = "UPDATE Bibliotecas SET AtivoInativo=?, NomeBiblioteca=? WHERE Codigo=?";
 
         try{       
             this.conexao = Conexao.getDataSource().getConnection();
             
             this.updateStmt = this.conexao.prepareStatement(sqlUpdate); 
             this.updateStmt.setInt(1, biblioteca.getStatus());
-            this.updateStmt.setInt(2, biblioteca.getCodigo());
+            this.updateStmt.setString(2, biblioteca.getNomeBiblioteca());
+            this.updateStmt.setInt(3, biblioteca.getCodigo());
             this.updateStmt.executeUpdate();
             
             JOptionPane.showMessageDialog(null, "Biblioteca alterada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a biblioteca", "Erro 007", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Mensagem de erro "+ex.getMessage());
         }finally{
             //Fechar os recursos abertos
             try{

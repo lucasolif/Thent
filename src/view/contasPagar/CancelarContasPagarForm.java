@@ -4,17 +4,21 @@ package view.contasPagar;
 import dao.ContasPagarDao;
 import dao.PessoaDao;
 import ferramentas.Utilitarios;
+import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.ContasPagar;
 import model.Pessoa;
+import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
-public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
+public class CancelarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas {
     
     private final PessoaDao pessoaDao = new PessoaDao();
     private final Utilitarios conversor = new Utilitarios();
@@ -22,6 +26,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
     private ContasPagar contasPagar = new ContasPagar();
     private Pessoa fornecedor = new Pessoa();
     private List<ContasPagar> listaContasPagar = new ArrayList<>();
+    private List<Pessoa> listaFornecedor = null;
     
     public CancelarContasPagarForm() {
         initComponents();
@@ -53,7 +58,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
         codFornecedor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         nomeFornecedor = new javax.swing.JTextField();
-        btnOk = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         numNota = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -147,22 +152,24 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
                 .addGap(14, 14, 14))
         );
 
-        codFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                codFornecedorKeyPressed(evt);
-            }
-        });
+        codFornecedor.setEditable(false);
+        codFornecedor.setBackground(new java.awt.Color(204, 204, 204));
+        codFornecedor.setFocusable(false);
 
         jLabel1.setText("Fornecedor");
 
-        nomeFornecedor.setEditable(false);
-        nomeFornecedor.setBackground(new java.awt.Color(204, 204, 204));
+        nomeFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeFornecedorKeyPressed(evt);
+            }
+        });
 
-        btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnOk.setText("OK");
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -170,7 +177,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Descrição");
 
-        btnFiltrar.setBackground(new java.awt.Color(0, 153, 255));
+        btnFiltrar.setBackground(new java.awt.Color(255, 153, 0));
         btnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -267,11 +274,11 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
                                             .addComponent(btnFiltrar))
                                         .addComponent(descricaoContas, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnBuscar))
                             .addComponent(jLabel1))
                         .addGap(0, 167, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -285,7 +292,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOk))
+                    .addComponent(btnBuscar))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
@@ -328,18 +335,13 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
         txData.setText("Lançamento:");
     }//GEN-LAST:event_rbDataLancamentoActionPerformed
 
-    private void codFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codFornecedorKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            buscarFornecedor();
-        }
-    }//GEN-LAST:event_codFornecedorKeyPressed
-
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         buscarFornecedor();
-    }//GEN-LAST:event_btnOkActionPerformed
+        carregarResultadoConsultaFornecedor();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-        listaContasPagar.clear(); //Limpando a lista, antes de receber novos dados.
+        listaFornecedor.clear(); //Limpando a lista, antes de receber novos dados.
         consultarContasPagar();
         atualizarTabela();
     }//GEN-LAST:event_btnFiltrarActionPerformed
@@ -355,16 +357,29 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
         atualizarTabela();
     }//GEN-LAST:event_iconExcluirActionPerformed
 
+    private void nomeFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeFornecedorKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            buscarFornecedor();
+            carregarResultadoConsultaFornecedor();
+        }
+    }//GEN-LAST:event_nomeFornecedorKeyPressed
+
     private void buscarFornecedor(){
-        String textoBusca = codFornecedor.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
-        
-        //Adicionando os dados encontrados, no formulário
-        for(Pessoa pessoa : listaPessoa){
-            codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
-            nomeFornecedor.setText(pessoa.getNome());
-        } 
+        String textoBusca = nomeFornecedor.getText(); // Texto digitado na busca        
+        this.listaFornecedor = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
     } 
+         
+    private void carregarResultadoConsultaFornecedor(){
+        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
+        resultConsultParticipante.setPessoaSelecionada(this);
+        resultConsultParticipante.setLocationRelativeTo(this);
+        resultConsultParticipante.setVisible(true);
+    }
+    
+    private void carregarFornecedorEscolhido(Pessoa pessoa){
+        this.codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
+        this.nomeFornecedor.setText(pessoa.getNome());
+    }
     
     private void limparFormulario(){
         codFornecedor.setText("");
@@ -394,42 +409,38 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
                 codForn = Integer.valueOf(this.codFornecedor.getText());
                 fornecedor.setCodigo(codForn);
             } catch (NumberFormatException e) {
-                // Tratar exceção se a conversão falhar
-                e.printStackTrace();
             }
         }
         //Tratando o número da nota
         if (!this.numNota.getText().isEmpty()) {
             try {
-                numeroNota = Integer.parseInt(this.numNota.getText());
+                numeroNota = Integer.valueOf(this.numNota.getText());
             } catch (NumberFormatException e) {
-                // Tratar exceção se a conversão falhar
-                e.printStackTrace();
-                // Você pode definir codFornecedor como null ou lidar com a exceção de acordo
+
             }
         }
         
         //Validando qual data foi selecionado, e convertendo a String para tipo data
-        if(rbDataLancamento.isSelected()){
+        if(this.rbDataLancamento.isSelected()){
             dataLancamentoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText()); 
             dataLancamentoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
 
-        }else if(rbDataPagamento.isSelected()){
+        }else if(this.rbDataPagamento.isSelected()){
             dataPagamentoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
             dataPagamentoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
 
-        }else if(rbDataVencimento.isSelected()){
+        }else if(this.rbDataVencimento.isSelected()){
             dataVencimentoInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
             dataVencimentoFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
 
         }
 
-        contasPagar.setFornecedor(fornecedor);
-        contasPagar.setNumNota(numeroNota);
-        contasPagar.setDescricaoConta(descricao);
+        this.contasPagar.setFornecedor(this.fornecedor);
+        this.contasPagar.setNumNota(numeroNota);
+        this.contasPagar.setDescricaoConta(descricao);
         
         //Adiciona o resultado da consulta dentro de uma lista
-        listaContasPagar = contasPagarDao.consultarContasPagar(contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
+        this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
     }
     
     private void atualizarTabela(){
@@ -457,10 +468,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
         for(int index : numLinhaSelec){
             //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
             listaCpExcluida.add(listaContasPagar.get(index));    
-            
-            //Excluí a conta da lista de contas a pagar
-            listaContasPagar.remove(index);
-            
+            this.listaFornecedor.remove(index);    
         }
         
         //Verificando se alguma contas a pagar já foi baixada
@@ -491,10 +499,15 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame {
             model.setRowCount(0);
         }
     }
+    
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        carregarFornecedorEscolhido(pessoaSelecionada);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnFiltrar;
-    private javax.swing.JButton btnOk;
     private javax.swing.JTextField codFornecedor;
     private javax.swing.JFormattedTextField dataFinal;
     private javax.swing.JFormattedTextField dataInicial;

@@ -7,21 +7,25 @@ import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
 import ferramentas.Utilitarios;
+import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
 import model.Pessoa;
+import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
 
-public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
+public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
     private final LivroDao livroDao = new LivroDao();
     private final PessoaDao pessoaDao = new PessoaDao();
@@ -31,6 +35,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
     private final Utilitarios conversor = new Utilitarios();
     private List<EmprestimoLivro> listaEmpLivros = new ArrayList<>();
+    private List<Pessoa> listaPessoa = null;
     
 
     public ConsultaEmprestimoForm() {
@@ -77,6 +82,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         dataDevolucao = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
+        btnBuscar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -86,6 +92,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         codPessoa.setEditable(false);
         codPessoa.setBackground(new java.awt.Color(204, 204, 204));
         codPessoa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codPessoa.setFocusable(false);
 
         nomePessoa.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -170,13 +177,13 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rbDataEmprestimo)
                     .addComponent(rbDataDevolucao))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dataInicial)
                     .addComponent(dataFinal)
                     .addComponent(jLabel4)
                     .addComponent(txData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Status Empréstimo", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
@@ -306,6 +313,15 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Biblioteca");
 
+        btnBuscar.setBackground(new java.awt.Color(51, 153, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -313,77 +329,83 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFiltrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDevolver))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(livros, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(livros, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bibliotecaJComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel3))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnFiltrar)))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDevolver)))
+                                        .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnBuscar)))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(livros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnFiltrar)))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar)
+                            .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(livros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnDevolver)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDevolver)
+                        .addComponent(btnFiltrar))
                     .addComponent(btnLimpar))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -404,6 +426,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private void nomePessoaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomePessoaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             buscarPessoa();
+            carregarResultadoConsultaPessoa();
         } 
     }//GEN-LAST:event_nomePessoaKeyPressed
 
@@ -444,6 +467,25 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
         carregarBibliotecas();
     }//GEN-LAST:event_bibliotecaJComboBoxMousePressed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        buscarPessoa();
+        carregarResultadoConsultaPessoa();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void formInicial(){
+        this.rbDataEmprestimo.setSelected(true);
+        this.rbEmprestado.setSelected(true);
+        this.btnDevolver.setEnabled(true);
+        this.dataInicial.setText(conversor.dataAtualString());
+        this.dataFinal.setText(conversor.dataAtualString());
+        this.dataDevolucao.setText(conversor.dataAtualString());
+        this.codPessoa.setText("");
+        this.nomePessoa.setText("");
+        this.livros.setSelectedItem("");
+        this.txData.setText("Empréstimo:");
+        this.bibliotecaJComboBox.setSelectedItem("");
+    }
+    
     private void carregarLivros(){  
         List<Livro> listaLivro = this.livroDao.consultarLivros();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.livros.getModel();
@@ -464,27 +506,19 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     
     private void buscarPessoa(){
         String textoBusca = this.nomePessoa.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
-        
-        //Adicionando os dados encontrados, no formulário
-        for(Pessoa pessoa : listaPessoa){
-            this.codPessoa.setText(Integer.toString(pessoa.getCodigo()));
-            this.nomePessoa.setText(pessoa.getNome());
-        } 
+        this.listaPessoa = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco    
     } 
     
-    private void formInicial(){
-        this.rbDataEmprestimo.setSelected(true);
-        this.rbEmprestado.setSelected(true);
-        this.btnDevolver.setEnabled(true);
-        this.dataInicial.setText(conversor.dataAtualString());
-        this.dataFinal.setText(conversor.dataAtualString());
-        this.dataDevolucao.setText(conversor.dataAtualString());
-        this.codPessoa.setText("");
-        this.nomePessoa.setText("");
-        this.livros.setSelectedItem("");
-        this.txData.setText("Empréstimo:");
-        this.bibliotecaJComboBox.setSelectedItem("");
+    private void carregarResultadoConsultaPessoa(){
+        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaPessoa);
+        resultConsultParticipante.setPessoaSelecionada(this);
+        resultConsultParticipante.setLocationRelativeTo(this);
+        resultConsultParticipante.setVisible(true);
+    }
+    
+    private void carregarPessoaEscolhido(Pessoa pessoa){
+        this.codPessoa.setText(String.valueOf(pessoa.getCodigo()));
+        this.nomePessoa.setText(pessoa.getNome());
     }
     
     private void consultarEmprestimos(){
@@ -588,7 +622,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
                        
             int confirm = JOptionPane.showConfirmDialog(null,"Confirmar devolução?", "Confirmar", JOptionPane.YES_NO_OPTION);
             if(confirm == JOptionPane.YES_OPTION){
-                this.empLivroDao.devolverLivro(listaEmpDevolvido);
+                this.empLivroDao.devolverLivroEmprestado(listaEmpDevolvido);
                 this.listaEmpLivros.clear();
             }else if(confirm == JOptionPane.NO_OPTION){
                 JOptionPane.showMessageDialog(null, "Operação cancelada!");
@@ -600,9 +634,15 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private void consultarTodosEmprestimos(){
         this.listaEmpLivros = this.empLivroDao.consultarEmprestimosStatusEmprestado();
     }
+    
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        carregarPessoaEscolhido(pessoaSelecionada);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> bibliotecaJComboBox;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnDevolver;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpar;
@@ -630,4 +670,5 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame {
     private javax.swing.JTable tabelaEmprestimos;
     private javax.swing.JLabel txData;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -36,8 +36,7 @@ public class TransferenciaDepositoDao {
             generatedKeys = psRegistro.getGeneratedKeys();
             
             //No caso da transfêrencia, ele satisfaz as duas condiçãos, uma para saída e outra para entrada.
-            if(generatedKeys.next()){
-                
+            if(generatedKeys.next()){               
                 int idRegistro = generatedKeys.getInt(1);             
                 String sqlMov = "INSERT INTO MovimentoCaixa (Pessoa,TransferenciaDeposito,ValorEntrada,ValorSaida,ContaCaixa,Complemento,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,GETDATE(),?)";
             
@@ -86,7 +85,6 @@ public class TransferenciaDepositoDao {
                     e.printStackTrace();
                 }
             }
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao efetuar o serviço bancário", "Erro 011", JOptionPane.ERROR_MESSAGE);
         }finally{
             //Fechar os recursos abertos
@@ -96,7 +94,6 @@ public class TransferenciaDepositoDao {
                 if(psMovimento != null) psMovimento.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -115,7 +112,6 @@ public class TransferenciaDepositoDao {
             JOptionPane.showMessageDialog(null, "Transferência/Deposito excluído com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a Transferência/Deposito. ", "Erro 014", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -123,7 +119,6 @@ public class TransferenciaDepositoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

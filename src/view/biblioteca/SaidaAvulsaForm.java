@@ -8,6 +8,7 @@ import dao.RegistroBibliotecaDao;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import model.Biblioteca;
 import model.Livro;
 import model.RegistroBiblioteca;
@@ -147,7 +148,11 @@ public class SaidaAvulsaForm extends javax.swing.JInternalFrame {
         rgBiblioteca.setBiblioteca(biblioteca);
         rgBiblioteca.setQtdLivro(qtdLivro);
         
-        this.rgBibliotecaDao.removerLivroBiblioteca(rgBiblioteca);
+        if(this.rgBibliotecaDao.verificarExistenciaLivroBiblioteca(rgBiblioteca)){
+            this.rgBibliotecaDao.removerLivroBiblioteca(rgBiblioteca);
+        }else{
+            JOptionPane.showMessageDialog(null, "Livro não existe na biblioteca escolhida", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     private void formInicial(){

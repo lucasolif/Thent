@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import model.Autor;
 import model.Biblioteca;
 import model.Editora;
-import model.Igreja;
 import model.Livro;
 import model.RegistroBiblioteca;
 
@@ -183,8 +182,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
             }
         });
 
-        volume.setModel(new javax.swing.SpinnerNumberModel());
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -299,11 +296,11 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
             tabelaLivros.getColumnModel().getColumn(2).setResizable(false);
             tabelaLivros.getColumnModel().getColumn(2).setPreferredWidth(20);
             tabelaLivros.getColumnModel().getColumn(3).setResizable(false);
-            tabelaLivros.getColumnModel().getColumn(3).setPreferredWidth(230);
+            tabelaLivros.getColumnModel().getColumn(3).setPreferredWidth(180);
             tabelaLivros.getColumnModel().getColumn(4).setResizable(false);
-            tabelaLivros.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tabelaLivros.getColumnModel().getColumn(4).setPreferredWidth(30);
             tabelaLivros.getColumnModel().getColumn(5).setResizable(false);
-            tabelaLivros.getColumnModel().getColumn(5).setPreferredWidth(100);
+            tabelaLivros.getColumnModel().getColumn(5).setPreferredWidth(150);
         }
 
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
@@ -437,8 +434,12 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         Livro livro = (Livro) this.livro.getSelectedItem();
         Editora editora = (Editora) this.editora.getSelectedItem();
         Biblioteca biblioteca = (Biblioteca) this.bibliotecaIgreja.getSelectedItem();
+        Integer volumeLivro = null;
         Integer status = null;
-        Integer volumeLivro = (Integer) this.volume.getValue();
+        
+        if((Integer)this.volume.getValue() != 0){
+            volumeLivro = (Integer) this.volume.getValue();
+        }
         
         if(this.rbAtivo.isSelected()){
             status = 1;
@@ -468,7 +469,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarLivros(){  
-        List<Livro> listaLivro = this.livroDao.consultarLivros();
+        List<Livro> listaLivro = this.rgBibliotecaDao.consultarLivrosTodasBibliotecas();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.livro.getModel();
         modelo.removeAllElements();
         for(Livro livro : listaLivro){
@@ -499,7 +500,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         this.editora.setSelectedItem("");
         this.autor.setSelectedItem("");
         this.bibliotecaIgreja.setSelectedItem("");
-        this.volume.setValue(1);
+        this.volume.setValue(0);
         this.rbAtivo.setSelected(true);
         
     }
@@ -517,10 +518,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         addLivroBiblioteca.setVisible(true);
     }
     
-    private void formEmprestarLivro(){
-        EmprestimoLivroForm formEmprestimo = new EmprestimoLivroForm();
-        formEmprestimo.setVisible(true);
-    }
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adicionarLivro;

@@ -25,9 +25,9 @@ import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
 import view.contasPagar.EfetivarContasPagarForm;
-import view.financeiro.ConsultaRegistroDizimoOferta;
+import view.dizimosOfertas.ConsultaRegistroDizimoOferta;
 import view.financeiro.MovimentoFinanceiroForm;
-import view.financeiro.RegistroDizimoOfertaForm;
+import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.TransferenciaContaForm;
 
 

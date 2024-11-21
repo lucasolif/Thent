@@ -34,7 +34,7 @@ public class RegistroBibliotecaDao {
             this.conexao = Conexao.getDataSource().getConnection();  
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso
 
-            if(verificarExistenciaLivro(rgBiblioteca)){
+            if(verificarExistenciaLivroBiblioteca(rgBiblioteca)){
                 //Caso tenha livro ele atualiza a quantidade
                 this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
                 this.updateStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
@@ -206,7 +206,7 @@ public class RegistroBibliotecaDao {
             this.conexao = Conexao.getDataSource().getConnection();  
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso
             
-            if(verificarExistenciaLivro(rgBiblioteca)){
+            if(verificarExistenciaLivroBiblioteca(rgBiblioteca)){
                 //Caso tenha livro ele atualiza a quantidade
                 this.updateStmt = this.conexao.prepareStatement(sqlUpdate);                
                 this.updateStmt.setInt(1,  rgBiblioteca.getBiblioteca().getCodigo());
@@ -247,7 +247,7 @@ public class RegistroBibliotecaDao {
         }
     }
     
-    private boolean verificarExistenciaLivro(RegistroBiblioteca rgBiblioteca){
+    public boolean verificarExistenciaLivroBiblioteca(RegistroBiblioteca rgBiblioteca){
         String sqlSelect = "SELECT * FROM RegistroBiblioteca WHERE Biblioteca=? AND Livro=? AND Quantidade > 0";
         boolean status = false;
         
@@ -263,8 +263,6 @@ public class RegistroBibliotecaDao {
             
             if(this.rs.next()){
                 status = true;
-            }else{
-                status = false;
             }
         }catch (SQLException ex) {
 
@@ -275,7 +273,126 @@ public class RegistroBibliotecaDao {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
-        }      
+        }   
+        
         return status;
     }
+    
+    public List<Livro> verificarDisponibilidadeEmprestimo(Biblioteca biblioteca){
+        List<Livro> listaLivros = new ArrayList<>();
+        String sqlSelect = "SELECT LV.Codigo AS CodigoInternoLivro, " +
+            "LV.CodLivro AS CodLivro, " +
+            "LV.Nome AS NomeLivro, " +
+            "LV.Volume AS Volume, " +
+            "LV.Caracteristica AS Caracteristica, " +
+            "LV.Ano AS Ano, " +
+            "AUT.Codigo AS CodAutor, " +
+            "AUT.Nome AS NomeAutor, " +
+            "EDT.Codigo AS CodEditora, " +
+            "EDT.Nome AS NomeEditora " +
+            "FROM RegistroBiblioteca AS RGB " +
+            "INNER JOIN Livros AS LV ON LV.Codigo = RGB.Livro AND LV.Ativo = 1 " +
+            "INNER JOIN Autores AS AUT ON AUT.Codigo = LV.Autor " +
+            "INNER JOIN Editoras AS EDT ON EDT.Codigo = LV.Editora " +
+            "WHERE Biblioteca = ? AND Quantidade > 0";
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();  
+            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
+            
+            //Consulta para verificar se o livro já está na biblioteca
+            this.selectStmt = this.conexao.prepareStatement(sqlSelect);       
+            this.selectStmt.setInt(1,  biblioteca.getCodigo());       
+            this.rs = selectStmt.executeQuery();
+            
+            while(this.rs.next()){
+                Autor autor = new Autor();
+                Livro livro = new Livro();
+                Editora editora = new Editora();
+                autor.setCodigo(rs.getInt("CodAutor"));
+                autor.setNome(rs.getString("NomeAutor"));               
+                editora.setCodigo(rs.getInt("CodEditora"));
+                editora.setNome(rs.getString("NomeEditora"));                
+                livro.setCodInterno(rs.getInt("CodigoInternoLivro"));
+                livro.setCodLivro(rs.getInt("CodLivro"));
+                livro.setNomeLivro(rs.getString("NomeLivro"));
+                livro.setVolume(rs.getInt("Volume"));              
+                livro.setCaracteristica(rs.getString("Caracteristica"));
+                livro.setAnoPublicacao(rs.getInt("Ano"));
+                livro.setEditora(editora);
+                livro.setAutor(autor);
+                
+                listaLivros.add(livro);
+            }
+        }catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao consultar livros disponível para empréstimo na biblioteca: "+biblioteca.getNomeBiblioteca(), "Erro 012", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.selectStmt != null) this.selectStmt.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }      
+        return listaLivros;
+    }
+    
+    public List<Livro> consultarLivrosTodasBibliotecas(){
+        
+        List<Livro> listaLivros = new ArrayList<>();
+        String sqlSelect = "SELECT LV.Codigo AS CodigoInternoLivro, " +
+            "LV.CodLivro AS CodLivro, " +
+            "LV.Nome AS NomeLivro, " +
+            "LV.Volume AS Volume, " +
+            "LV.Caracteristica AS Caracteristica, " +
+            "LV.Ano AS Ano, " +
+            "AUT.Codigo AS CodAutor, " +
+            "AUT.Nome AS NomeAutor, " +
+            "EDT.Codigo AS CodEditora, " +
+            "EDT.Nome AS NomeEditora " +
+            "FROM RegistroBiblioteca AS RGB " +
+            "INNER JOIN Livros AS LV ON LV.Codigo = RGB.Livro AND LV.Ativo = 1 " +
+            "INNER JOIN Autores AS AUT ON AUT.Codigo = LV.Autor " +
+            "INNER JOIN Editoras AS EDT ON EDT.Codigo = LV.Editora";
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();  
+            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
+            
+            //Consulta para verificar se o livro já está na biblioteca
+            this.selectStmt = this.conexao.prepareStatement(sqlSelect);            
+            this.rs = selectStmt.executeQuery();
+            
+            while(this.rs.next()){
+                Autor autor = new Autor();
+                Livro livro = new Livro();
+                Editora editora = new Editora();
+                autor.setCodigo(rs.getInt("CodAutor"));
+                autor.setNome(rs.getString("NomeAutor"));               
+                editora.setCodigo(rs.getInt("CodEditora"));
+                editora.setNome(rs.getString("NomeEditora"));                
+                livro.setCodInterno(rs.getInt("CodigoInternoLivro"));
+                livro.setCodLivro(rs.getInt("CodLivro"));
+                livro.setNomeLivro(rs.getString("NomeLivro"));
+                livro.setVolume(rs.getInt("Volume"));              
+                livro.setCaracteristica(rs.getString("Caracteristica"));
+                livro.setAnoPublicacao(rs.getInt("Ano"));
+                livro.setEditora(editora);
+                livro.setAutor(autor);
+                
+                listaLivros.add(livro);
+            }
+        }catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao consultar livros disponível na biblioteca", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.selectStmt != null) this.selectStmt.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }      
+        return listaLivros;
+    }
+    
 }

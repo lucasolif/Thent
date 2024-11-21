@@ -7,22 +7,26 @@ import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
 import ferramentas.Utilitarios;
+import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
 import model.Pessoa;
+import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
 
 
-public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
+public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements ConsultaPessoas {
 
     private final EmprestimoLivroDao emprestimoDao = new EmprestimoLivroDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
@@ -31,6 +35,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     private final LivroDao livroDao = new LivroDao();
     private final Utilitarios conversor = new Utilitarios(); 
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
+    List<Pessoa> listaPessoa;
 
     public EmprestimoLivroForm() {
         initComponents();
@@ -70,6 +75,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         codPessoa.setEditable(false);
         codPessoa.setBackground(new java.awt.Color(204, 204, 204));
         codPessoa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codPessoa.setFocusable(false);
 
         jLabel1.setText("Pessoa");
 
@@ -80,6 +86,12 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         });
 
         jLabel2.setText("Livro");
+
+        bibliotecaJComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                bibliotecaJComboBoxItemStateChanged(evt);
+            }
+        });
 
         jLabel6.setText("Biblioteca");
 
@@ -93,7 +105,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
 
         btnOk.setBackground(new java.awt.Color(51, 102, 255));
         btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnOk.setText("OK");
+        btnOk.setText("Adicionar");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOkActionPerformed(evt);
@@ -165,31 +177,31 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(livro, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(livro, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(dataEmprestimo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnOk))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnLimpar)
@@ -245,7 +257,8 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
 
     private void nomePessoaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomePessoaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            buscarPessoa();
+            consultarPessoas();
+            abrirTelaEscolhaPessoa();
         } 
     }//GEN-LAST:event_nomePessoaKeyPressed
 
@@ -253,7 +266,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         this.nomePessoa.setEditable(false);
         this.dataEmprestimo.setEditable(false);
         this.bibliotecaJComboBox.setEnabled(false);
-        adicionarLivro(); 
+        adicionarLivroListaEmprestimo(); 
         carregarLivros();
     }//GEN-LAST:event_btnOkActionPerformed
 
@@ -272,15 +285,22 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         excluirLivroAdicionado();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void formInicial(){
-        this.dataEmprestimo.setText(conversor.dataAtualString());
-        carregarBibliotecas();
+    private void bibliotecaJComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_bibliotecaJComboBoxItemStateChanged
         carregarLivros();
+    }//GEN-LAST:event_bibliotecaJComboBoxItemStateChanged
+
+    private void formInicial(){
+        carregarBibliotecas();
+        this.nomePessoa.setEditable(true);
+        this.nomePessoa.requestFocusInWindow();
+        this.dataEmprestimo.setEditable(true);
+        this.dataEmprestimo.setEditable(true);
+        this.bibliotecaJComboBox.setEnabled(true); 
+        this.dataEmprestimo.setText(conversor.dataAtualString());
         this.codPessoa.setText("");
         this.nomePessoa.setText("");
-        this.nomePessoa.setEditable(true);
-        this.dataEmprestimo.setEditable(true);
-        this.bibliotecaJComboBox.setEnabled(true);       
+
+        carregarLivros();
     }
     
     private void carregarBibliotecas(){  
@@ -293,7 +313,8 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarLivros(){  
-        List<Livro> listaLivro = this.livroDao.consultarLivros();
+        Biblioteca biblioteca = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
+        List<Livro> listaLivro = this.rgBibliotecaDao.verificarDisponibilidadeEmprestimo(biblioteca);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.livro.getModel();
         modelo.removeAllElements();
         for(Livro livro : listaLivro){
@@ -301,48 +322,54 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         }
     }
     
-    private void buscarPessoa(){
+    private void consultarPessoas(){
         String textoBusca = this.nomePessoa.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
-        
-        //Adicionando os dados encontrados, no formulário
-        for(Pessoa pessoa : listaPessoa){
-            this.codPessoa.setText(Integer.toString(pessoa.getCodigo()));
-            this.nomePessoa.setText(pessoa.getNome());
-        } 
+        this.listaPessoa = this.pessoaDao.consultarCadastroAtivoPessoa(textoBusca); //Lista recebe a busca retornada do banco
+
     } 
     
-    private void adicionarLivro(){
+    private void abrirTelaEscolhaPessoa(){
+        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaPessoa);
+        resultConsultParticipante.setPessoaSelecionada(this);
+        resultConsultParticipante.setLocationRelativeTo(this);
+        resultConsultParticipante.setVisible(true);
+    }
+    
+    public void pessoaEscolhida(Pessoa pessoa){
+        this.codPessoa.setText(String.valueOf(pessoa.getCodigo()));
+        this.nomePessoa.setText(String.valueOf(pessoa));
+    }
+    
+    private void adicionarLivroListaEmprestimo(){
         int cont = 0;
         final Livro livro = (Livro) this.livro.getSelectedItem();
+        final Integer codPessoa = Integer.valueOf(this.codPessoa.getText()); 
         final int qtdLinhas = this.tabelaLivros.getRowCount();
         boolean livroJaAdicionado = false;
         
-        //Verificar se o livro já foi adicionado na tabela
-        while(cont < qtdLinhas){
-            Integer codLivro = (Integer) this.tabelaLivros.getModel().getValueAt(cont, 0);
-            
-            // Se encontrar o código do livro, significa que já foi adicionado
-            if (codLivro.equals(livro.getCodLivro())) {
-                 livroJaAdicionado = true;
-                 break;
+        if(emprestimoDao.validarEmprestimoPessoa(livro,codPessoa) == false){          
+            //Verificar se o livro já foi adicionado na lista/tabela de empréstimo
+            while(cont < qtdLinhas){
+                Integer codLivro = (Integer) this.tabelaLivros.getModel().getValueAt(cont, 0);
+
+                // Se encontrar o código do livro, significa que já foi adicionado na lista
+                if (codLivro.equals(livro.getCodLivro())) {
+                     livroJaAdicionado = true;
+                     break;
+                }
+                cont++;
+            }           
+            if(livroJaAdicionado){
+                JOptionPane.showMessageDialog(null, "O livro já foi adicionado na lista de empréstimos", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }else{           
+                DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
+                model.addRow(new Object[]{livro.getCodLivro(),livro, livro.getAutor()});
             }
-            cont++;
-        }           
-        if(livroJaAdicionado){
-            JOptionPane.showMessageDialog(null, "O livro já foi adicionado na lista de empréstimos", "Atenção", JOptionPane.WARNING_MESSAGE);
-        }else{           
-            DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
-            model.addRow(new Object[]{livro.getCodLivro(),livro, livro.getAutor()});
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "O livro "+livro.getNomeLivro().toUpperCase()+" já está emprestado à "+this.nomePessoa.getText().toUpperCase(), "Atenção", JOptionPane.WARNING_MESSAGE);
         }
     }   
-    
-    private void limparTabela(){
-        if(this.tabelaLivros.getRowCount() > 0){
-            DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
-            model.setRowCount(0);
-        }
-    }
     
     private void excluirLivroAdicionado(){       
         Integer livroSelec = this.tabelaLivros.getSelectedRow();
@@ -357,8 +384,14 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         }     
     }
     
+    private void limparTabela(){
+        if(this.tabelaLivros.getRowCount() > 0){
+            DefaultTableModel model = (DefaultTableModel) this.tabelaLivros.getModel();
+            model.setRowCount(0);
+        }
+    }
+    
     private void emprestarLivros(){
-
         Pessoa pessoa = new Pessoa();
         List<Livro> livrosEmprestado = new ArrayList<>();
         EmprestimoLivro emprestimoLivro  = new EmprestimoLivro();  
@@ -388,6 +421,11 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
         }
 
     }
+    
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        pessoaEscolhida(pessoaSelecionada);
+    }
         
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -407,4 +445,6 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame {
     private javax.swing.JTextField nomePessoa;
     private javax.swing.JTable tabelaLivros;
     // End of variables declaration//GEN-END:variables
+
+
 }

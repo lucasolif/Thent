@@ -7,7 +7,9 @@ import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import ferramentas.Utilitarios;
+import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.Period;
@@ -17,15 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.ContasPagar;
 import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
+import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
 
-public class ContasPagarForm extends javax.swing.JInternalFrame {
+public class ContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
@@ -33,6 +37,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private final ContasPagarDao contasPagarDao = new ContasPagarDao(); 
     private final Pessoa fornecedor = new Pessoa();
+    private List<Pessoa> listaFornecedor = null;
     private final Utilitarios conversor = new Utilitarios();
     
     public ContasPagarForm() {
@@ -53,7 +58,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
 
         codFornecedor = new javax.swing.JTextField();
         nomeFornecedor = new javax.swing.JTextField();
-        btnOk = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         numNota = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -87,19 +92,23 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         setIconifiable(true);
         setTitle("Contas a Pagar");
 
-        codFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
+        codFornecedor.setEditable(false);
+        codFornecedor.setBackground(new java.awt.Color(204, 204, 204));
+        codFornecedor.setFocusable(false);
+
+        nomeFornecedor.setBackground(new java.awt.Color(255, 255, 255));
+        nomeFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                codFornecedorKeyPressed(evt);
+                nomeFornecedorKeyPressed(evt);
             }
         });
 
-        nomeFornecedor.setEditable(false);
-        nomeFornecedor.setBackground(new java.awt.Color(204, 204, 204));
-
-        btnOk.setText("OK");
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -119,7 +128,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Observação");
 
-        btnGerar.setBackground(new java.awt.Color(0, 153, 255));
+        btnGerar.setBackground(new java.awt.Color(255, 153, 0));
         btnGerar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnGerar.setText("Gerar");
         btnGerar.addActionListener(new java.awt.event.ActionListener() {
@@ -227,12 +236,6 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(numNota, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -244,7 +247,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(primeiroVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(91, 91, 91))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
@@ -292,7 +295,14 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
                                             .addComponent(numBoleto, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel6)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscar)
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -304,7 +314,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOk))
+                    .addComponent(btnBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -364,15 +374,10 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         limparFormulario();
     }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void codFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codFornecedorKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            buscarFornecedor();
-        } 
-    }//GEN-LAST:event_codFornecedorKeyPressed
-
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         buscarFornecedor();
-    }//GEN-LAST:event_btnOkActionPerformed
+        carregarResultadoConsultaFornecedor();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
         if(validarCampos()){
@@ -394,6 +399,13 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
     private void iconAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconAlterarActionPerformed
         tabelaParcelas.setEnabled(true);
     }//GEN-LAST:event_iconAlterarActionPerformed
+
+    private void nomeFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeFornecedorKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            buscarFornecedor();
+            carregarResultadoConsultaFornecedor();
+        } 
+    }//GEN-LAST:event_nomeFornecedorKeyPressed
 
     private void carregarFormaPagto(){
         List<FormaPagto> listaFormaPagto = formaPagtoDao.consultarFormaPagto();
@@ -445,17 +457,22 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         }
     }
     
-    //Buscar o fornecedor
     private void buscarFornecedor(){
-        String textoBusca = codFornecedor.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
-        
-        //Adicionando os dados encontrados, no formulário
-        for(Pessoa pessoa : listaPessoa){
-            codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
-            nomeFornecedor.setText(pessoa.getNome());
-        } 
+        String textoBusca = nomeFornecedor.getText(); // Texto digitado na busca        
+        this.listaFornecedor = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco      
     } 
+    
+    private void carregarResultadoConsultaFornecedor(){
+        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
+        resultConsultParticipante.setPessoaSelecionada(this);
+        resultConsultParticipante.setLocationRelativeTo(this);
+        resultConsultParticipante.setVisible(true);
+    }
+    
+    private void carregarFornecedorEscolhido(Pessoa pessoa){
+        codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
+        nomeFornecedor.setText(pessoa.getNome());
+    }
     
     //Salvar os dados no banco de dados
     private List<ContasPagar> lançarContasPagar(){
@@ -596,12 +613,17 @@ public class ContasPagarForm extends javax.swing.JInternalFrame {
         return cpExiste;
     }
     
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        carregarFornecedorEscolhido(pessoaSelecionada);
+    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnGerar;
     private javax.swing.JButton btnLimpar;
-    private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField codFornecedor;
     private javax.swing.JTextField descricaoConta;

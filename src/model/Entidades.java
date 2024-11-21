@@ -9,6 +9,7 @@ public class Entidades {
     private String nome;
     private Date dataCadastro;
     private Integer codigo;
+    private Integer status;
 
     public Entidades(String descricao, Date dataCadastro) {
         this.nome = descricao;
@@ -28,6 +29,16 @@ public class Entidades {
 
     public Entidades() {
     }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+    
+    
     
     public String getNome() {
         return nome;

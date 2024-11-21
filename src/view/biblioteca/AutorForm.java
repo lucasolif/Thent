@@ -2,13 +2,16 @@
 package view.biblioteca;
 
 import dao.AutorDao;
+import interfaces.ConsultaAutores;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingUtilities;
 import model.Autor;
+import view.carregamentoConsultas.TelaConsultasAutores;
 
-public class AutorForm extends javax.swing.JDialog {
+public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
     
     Autor autorSelec = null;
     private final AutorDao autorDao = new AutorDao();
@@ -18,6 +21,7 @@ public class AutorForm extends javax.swing.JDialog {
     public AutorForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.autor.requestFocusInWindow();
     }
 
 
@@ -27,15 +31,12 @@ public class AutorForm extends javax.swing.JDialog {
 
         btnOk = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaAutor = new javax.swing.JTable();
         autor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         codigoAutor = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        btnAlterar = new javax.swing.JButton();
         buscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,40 +58,6 @@ public class AutorForm extends javax.swing.JDialog {
             }
         });
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Autores", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP));
-
-        tabelaAutor.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "Autor(a)"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tabelaAutor.setShowGrid(true);
-        jScrollPane1.setViewportView(tabelaAutor);
-        if (tabelaAutor.getColumnModel().getColumnCount() > 0) {
-            tabelaAutor.getColumnModel().getColumn(0).setResizable(false);
-            tabelaAutor.getColumnModel().getColumn(0).setPreferredWidth(100);
-            tabelaAutor.getColumnModel().getColumn(1).setResizable(false);
-            tabelaAutor.getColumnModel().getColumn(1).setPreferredWidth(500);
-        }
-
         autor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 autorKeyPressed(evt);
@@ -104,6 +71,7 @@ public class AutorForm extends javax.swing.JDialog {
         codigoAutor.setEditable(false);
         codigoAutor.setBackground(new java.awt.Color(204, 204, 204));
         codigoAutor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codigoAutor.setFocusable(false);
 
         btnSalvar.setBackground(new java.awt.Color(0, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -116,14 +84,6 @@ public class AutorForm extends javax.swing.JDialog {
 
         jLabel3.setText("Buscar:");
 
-        btnAlterar.setBackground(new java.awt.Color(51, 153, 255));
-        btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-editar-16.png"))); // NOI18N
-        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarActionPerformed(evt);
-            }
-        });
-
         buscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 buscarKeyPressed(evt);
@@ -134,34 +94,31 @@ public class AutorForm extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(codigoAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(autor, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1))))
-                        .addGap(0, 48, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAlterar)
+                        .addComponent(btnSalvar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvar)))
+                        .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(codigoAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(autor))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -180,14 +137,11 @@ public class AutorForm extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(autor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(codigoAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(21, 21, 21))
+                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -200,23 +154,17 @@ public class AutorForm extends javax.swing.JDialog {
     private void buscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             consultarAutor();
-            atualizarTabela();
+            carregarResultadoConsultaAutores();
         }
     }//GEN-LAST:event_buscarKeyPressed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         consultarAutor();
-        atualizarTabela();
+        carregarResultadoConsultaAutores();
     }//GEN-LAST:event_btnOkActionPerformed
-
-    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        alterarAutor();
-    }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         excluirAutor();
-        consultarAutor();
-        atualizarTabela();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void autorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_autorKeyPressed
@@ -230,14 +178,17 @@ public class AutorForm extends javax.swing.JDialog {
         this.listaAutor = this.autorDao.consultarAutor(textoBusca); //Lista recebe a busca retornada do banco
     }
     
-    private void atualizarTabela(){
-        //Adicionando os dados encontrados, dentro da tabela
-        DefaultTableModel tabela = (DefaultTableModel) this.tabelaAutor.getModel();
-        tabela.setNumRows(0);
-
-        for(Autor aut : this.listaAutor){
-            tabela.addRow(new Object[]{aut.getCodigo(), aut.getNome()});
-        } 
+    private void carregarResultadoConsultaAutores(){
+        TelaConsultasAutores resultConsultaAutores = new TelaConsultasAutores((Frame) SwingUtilities.getWindowAncestor(this), this.listaAutor);
+        resultConsultaAutores.setAutorSelecionado(this);
+        resultConsultaAutores.setLocationRelativeTo(this);
+        resultConsultaAutores.setVisible(true);
+    }
+    
+    private void carregarAutorEscolhido(Autor autor){
+        this.codigoAutor.setText(String.valueOf(autor.getCodigo()));
+        this.autor.setText(autor.getNome());    
+        this.autorSelec = autor;
     }
     
     private void cadastrarAlterarAutor(){
@@ -265,35 +216,13 @@ public class AutorForm extends javax.swing.JDialog {
             limparFormulario();
         }       
         this.autorSelec = null; //Variável de controle setada como nula, para saber se é um novo cadastro ou uma alteração
-        limparTabela();
     }
     
-    private void alterarAutor(){
-        //Variável recebe o número da linha selecionado.
-        int numLinhaSelec = this.tabelaAutor.getSelectedRow();
-        
-        //Verificando se foi selecionado algum autor
-        if(numLinhaSelec < 0){
-            JOptionPane.showMessageDialog(null, "Selecione um autor", "Atenção", JOptionPane.WARNING_MESSAGE);
-        }else{                  
-            //Objeto autor recebe os dados que estavam na lista, ou seja, que foram selecionados
-            this.autorSelec = this.listaAutor.get(numLinhaSelec);
-
-            this.codigoAutor.setText(Integer.toString(this.autorSelec.getCodigo()));
-            this.autor.setText(this.autorSelec.getNome());
-        }
-    }
-    
-    private void excluirAutor(){
-        int numLinhaSelec = this.tabelaAutor.getSelectedRow();
-        
+    private void excluirAutor(){    
         //Verifica se foi selecionado algum autor da lista
-        if(numLinhaSelec < 0){
-            JOptionPane.showMessageDialog(null, "Selecione um autor a ser excluída", "Atenção", JOptionPane.WARNING_MESSAGE);
+        if(this.codigoAutor.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Selecione um autor a ser excluído", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else{
-            //Recebe o a linha que foi selecionada na tabela, ou seja, a conta caixa
-            this.autorSelec = this.listaAutor.get(numLinhaSelec);
-
             int confirm = JOptionPane.showConfirmDialog(null,"Excluir o autor "+this.autorSelec.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
             if(confirm == JOptionPane.YES_OPTION){
                 autorDao.removerAutor(this.autorSelec);
@@ -307,18 +236,15 @@ public class AutorForm extends javax.swing.JDialog {
         this.autor.setText("");
         this.codigoAutor.setText("");
     }
-    
-    private void limparTabela(){
-        if(tabelaAutor.getRowCount() > 0){
-            DefaultTableModel model = (DefaultTableModel) tabelaAutor.getModel();
-            model.setRowCount(0);
-        }
+
+    @Override
+    public void autorSelecionado(Autor autorSelecionado) {
+        carregarAutorEscolhido(autorSelecionado);
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField autor;
-    private javax.swing.JButton btnAlterar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
@@ -327,7 +253,7 @@ public class AutorForm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabelaAutor;
     // End of variables declaration//GEN-END:variables
+
+
 }

@@ -85,15 +85,13 @@ public class UsuarioDao {
         }   
     } 
     
-    //Consultar para mostra na tabela todos os caixas cadastrados
     public List<Usuario> consultar(String usuario){
-
-        String sql = null;
         List<Usuario> listaUsuarios = new ArrayList<>();
-        IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultarIgreja a igreja do usuário
+         //Estanciando o objeto para consultarIgreja a igreja do usuário
 
-        sql = "SELECT * FROM Usuarios "
-        + "WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?) OR (? IS NULL OR Usuario LIKE ?)"
+        String sql = "SELECT I.Codigo AS CodIgreja, I.NomeIgreja AS NomeIgreja, * FROM Usuarios AS U "
+        + "INNER JOIN Igrejas AS I ON I.Codigo = U.Igreja "       
+        + "WHERE ((? IS NULL OR U.Codigo LIKE ?) OR (? IS NULL OR U.Nome LIKE ?) OR (? IS NULL OR U.Usuario LIKE ?))"
         + "AND Ativo = 1";
     
         try{
@@ -120,7 +118,9 @@ public class UsuarioDao {
 
             while(rs.next()){
                 Usuario user = new Usuario();
-                Igreja igreja = igrejaDao.consultarIgrejas(rs.getInt("Igreja")); //Consultando a tabela Igreja, com base no código da igreja, obtido na tabela de pessoas, e retornando o objeto igreja
+                Igreja igreja = new Igreja();
+                igreja.setCodigo(rs.getInt("CodIgreja"));
+                igreja.setNome(rs.getString("NomeIgreja"));
                 user.setCodigo(rs.getInt("Codigo"));
                 user.setNome(rs.getString("Nome"));
                 user.setEmail(rs.getString("Email"));
@@ -132,10 +132,7 @@ public class UsuarioDao {
                 user.setSaltSenha(rs.getString("SaltSenha"));
 
                 listaUsuarios.add(user);
-            }
-            
-            ps.execute();
-            
+            }          
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{

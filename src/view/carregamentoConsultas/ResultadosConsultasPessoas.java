@@ -4,10 +4,8 @@ package view.carregamentoConsultas;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.ConsultaPessoas;
+import interfaces.ConsultaPessoas;
 import model.Pessoa;
-import view.campanhas.CadastrarCampanhaForm;
-
 
 public class ResultadosConsultasPessoas extends javax.swing.JDialog {
     
@@ -24,26 +22,37 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnEscolher = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaResultadoConsulta = new javax.swing.JTable();
-        btnEscolher = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Resultados Consultas");
+        setTitle("Listagem Pessoas Consultadas");
+
+        btnEscolher.setBackground(new java.awt.Color(0, 153, 255));
+        btnEscolher.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEscolher.setText("Escolher");
+        btnEscolher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEscolherActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setToolTipText("Pessoas/Membros");
 
         tabelaResultadoConsulta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Código", "Nome/Descrição"
+                "Código", "Nome", "CPF/CNPJ", "Campo/Igreja"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -59,39 +68,38 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
             tabelaResultadoConsulta.getColumnModel().getColumn(0).setResizable(false);
             tabelaResultadoConsulta.getColumnModel().getColumn(0).setPreferredWidth(50);
             tabelaResultadoConsulta.getColumnModel().getColumn(1).setResizable(false);
-            tabelaResultadoConsulta.getColumnModel().getColumn(1).setPreferredWidth(350);
+            tabelaResultadoConsulta.getColumnModel().getColumn(1).setPreferredWidth(400);
+            tabelaResultadoConsulta.getColumnModel().getColumn(2).setResizable(false);
+            tabelaResultadoConsulta.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tabelaResultadoConsulta.getColumnModel().getColumn(3).setResizable(false);
+            tabelaResultadoConsulta.getColumnModel().getColumn(3).setPreferredWidth(150);
         }
-
-        btnEscolher.setBackground(new java.awt.Color(0, 153, 255));
-        btnEscolher.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEscolher.setText("Escolher");
-        btnEscolher.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEscolherActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEscolher)))
+                .addContainerGap(687, Short.MAX_VALUE)
+                .addComponent(btnEscolher)
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(334, Short.MAX_VALUE)
                 .addComponent(btnEscolher)
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(11, 11, 11)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(75, Short.MAX_VALUE)))
         );
 
         pack();
@@ -105,7 +113,7 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
     private void carregarPessoasCosultadas(List<Pessoa> listaPessoa){         
         for(Pessoa pessoa : listaPessoa){        
             DefaultTableModel model = (DefaultTableModel) this.tabelaResultadoConsulta.getModel();    
-            model.addRow(new Object[]{pessoa.getCodigo(),pessoa});
+            model.addRow(new Object[]{pessoa.getCodigo(),pessoa, pessoa.getCpfCnpj(), pessoa.getIgreja()});
         }
     }
     
@@ -115,6 +123,7 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
         if(linhaSelec >= 0){
             Pessoa pessoa = (Pessoa)this.tabelaResultadoConsulta.getModel().getValueAt(linhaSelec, 1); 
             this.consultaPessoas.pessoaSelecionada(pessoa);
+            dispose();
         }else{
             JOptionPane.showMessageDialog(null, "Não foi selecionado nenhum participante", "Atenção", JOptionPane.WARNING_MESSAGE);     
         }
@@ -127,7 +136,7 @@ public class ResultadosConsultasPessoas extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEscolher;
-    public javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTable tabelaResultadoConsulta;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabelaResultadoConsulta;
     // End of variables declaration//GEN-END:variables
 }

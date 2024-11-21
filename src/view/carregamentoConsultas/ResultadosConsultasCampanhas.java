@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
-import model.ConsultaCampanhas;
+import interfaces.ConsultaCampanhas;
 
 
 public class ResultadosConsultasCampanhas extends javax.swing.JDialog {
@@ -27,14 +27,14 @@ public class ResultadosConsultasCampanhas extends javax.swing.JDialog {
         btnEscolher = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Resultados Consultas");
+        setTitle("Listagem Campanhas Consultada");
 
         tabelaConsultasCampanhas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Código", "Nome/Descrição"
+                "Código", "Nome Campanha"
             }
         ) {
             Class[] types = new Class [] {
@@ -115,11 +115,11 @@ public class ResultadosConsultasCampanhas extends javax.swing.JDialog {
             this.consultaCampanhas.campanhaSelecionada(campanha);
             dispose();
         }else{
-            JOptionPane.showMessageDialog(null, "Não foi selecionado nenhum participante", "Atenção", JOptionPane.WARNING_MESSAGE);     
+            JOptionPane.showMessageDialog(null, "Não foi selecionado nenhuma campanha", "Atenção", JOptionPane.WARNING_MESSAGE);     
         }
     }
     
-    public void setPessoaSelecionada(ConsultaCampanhas consultaCampanhas) {
+    public void setCampanhaSelecionada(ConsultaCampanhas consultaCampanhas) {
         this.consultaCampanhas = consultaCampanhas;
     }
 

@@ -8,13 +8,16 @@ import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import ferramentas.Utilitarios;
+import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.ContaCaixa;
 import model.ContasPagar;
@@ -22,8 +25,9 @@ import model.FormaPagto;
 import model.MovimentoCaixa;
 import model.Pessoa;
 import model.SubContaResultado;
+import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
-public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
+public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
     private final PessoaDao pessoaDao = new PessoaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
@@ -32,9 +36,10 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private final Utilitarios conversor = new Utilitarios(); 
-    ContasPagar contasPagar = new ContasPagar();
-    Pessoa fornecedor = new Pessoa();  
-    List<ContasPagar> listaContasPagar = new ArrayList<>();
+    private ContasPagar contasPagar = new ContasPagar();
+    private Pessoa fornecedor = new Pessoa();  
+    private List<ContasPagar> listaContasPagar = new ArrayList<>();
+    private List<Pessoa> listaFornecedor = null;
 
     public EfetivarContasPagarForm() {
         initComponents();
@@ -67,7 +72,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
         codFornecedor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         nomeFornecedor = new javax.swing.JTextField();
-        btnOk = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         rbSomenteAbertas = new javax.swing.JRadioButton();
         rbSomentePagas = new javax.swing.JRadioButton();
@@ -92,6 +97,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         rbConsultar = new javax.swing.JRadioButton();
         rbEfetivar = new javax.swing.JRadioButton();
+        jLabel9 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -176,6 +182,10 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
                 .addGap(14, 14, 14))
         );
 
+        codFornecedor.setEditable(false);
+        codFornecedor.setBackground(new java.awt.Color(204, 204, 204));
+        codFornecedor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codFornecedor.setFocusable(false);
         codFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 codFornecedorKeyPressed(evt);
@@ -184,14 +194,18 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Fornecedor");
 
-        nomeFornecedor.setEditable(false);
-        nomeFornecedor.setBackground(new java.awt.Color(204, 204, 204));
+        nomeFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeFornecedorKeyPressed(evt);
+            }
+        });
 
-        btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnOk.setText("OK");
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -245,7 +259,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Descrição");
 
-        btnFiltrar.setBackground(new java.awt.Color(0, 153, 255));
+        btnFiltrar.setBackground(new java.awt.Color(255, 153, 0));
         btnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -387,6 +401,9 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel9.setText("Operação");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -395,22 +412,11 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(nomeFornecedor)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -422,37 +428,56 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel2)
-                                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(rbConsultar)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(rbEfetivar)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(iconLimpar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnFiltrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEfetivar)))
-                        .addContainerGap())))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnBuscar)))
+                                .addGap(118, 118, 118)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(iconLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFiltrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEfetivar)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnOk)
-                            .addComponent(rbConsultar)
-                            .addComponent(rbEfetivar))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(rbConsultar)
+                                .addComponent(rbEfetivar))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnBuscar)))
+                        .addGap(7, 7, 7)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -469,8 +494,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(numNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(numNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -479,7 +503,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
                         .addComponent(btnEfetivar)
                         .addComponent(btnFiltrar))
                     .addComponent(iconLimpar))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -491,9 +515,9 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
         } 
     }//GEN-LAST:event_codFornecedorKeyPressed
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         buscarFornecedor();
-    }//GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void rbDataVencimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataVencimentoActionPerformed
         this.txData.setText("Vencimento:");
@@ -555,16 +579,29 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
         carregarSubContaResultado();
     }//GEN-LAST:event_subContaResultadoMousePressed
 
-    private void buscarFornecedor(){
-        String textoBusca = this.codFornecedor.getText(); // Texto digitado na busca        
-        List<Pessoa> listaPessoa = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
-        
-        //Adicionando os dados encontrados, no formulário
-        for(Pessoa pessoa : listaPessoa){
-            this.codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
-            this.nomeFornecedor.setText(pessoa.getNome());
+    private void nomeFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeFornecedorKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            buscarFornecedor();
+            carregarResultadoConsultaFornecedor();
         } 
+    }//GEN-LAST:event_nomeFornecedorKeyPressed
+
+    private void buscarFornecedor(){
+        String textoBusca = this.nomeFornecedor.getText(); // Texto digitado na busca        
+        this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
     } 
+    
+    private void carregarResultadoConsultaFornecedor(){
+        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
+        resultConsultParticipante.setPessoaSelecionada(this);
+        resultConsultParticipante.setLocationRelativeTo(this);
+        resultConsultParticipante.setVisible(true);
+    }
+    
+    private void carregarFornecedorEscolhido(Pessoa pessoa){
+        this.codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
+        this.nomeFornecedor.setText(pessoa.getNome());
+    }
     
     private void consultarContas(){
         
@@ -751,11 +788,16 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
         atualizarTabela(); 
     }
     
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        carregarFornecedorEscolhido(pessoaSelecionada);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEfetivar;
     private javax.swing.JButton btnFiltrar;
-    private javax.swing.JButton btnOk;
     private javax.swing.JTextField codFornecedor;
     private javax.swing.JComboBox<String> contaCaixa;
     private javax.swing.JFormattedTextField dataFinal;
@@ -775,6 +817,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

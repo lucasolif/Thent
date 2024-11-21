@@ -141,6 +141,7 @@ public class ContaResultadoForm extends javax.swing.JInternalFrame {
 
         codContaResultado.setEditable(false);
         codContaResultado.setBackground(new java.awt.Color(204, 204, 204));
+        codContaResultado.setFocusable(false);
 
         jLabel3.setText("Código");
 

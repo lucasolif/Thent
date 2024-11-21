@@ -123,7 +123,7 @@ public class PessoaDao {
         return listaPessoas;     
     }
     
-        //Método para consultarPessoa pessoa e listar na tabela
+    //Método para consultarPessoa pessoa e listar na tabela
     public List<Pessoa> consultarCadastroAtivoPessoa(String buscaPessoa){
 
         List<Pessoa> listaPessoas = new ArrayList<>();

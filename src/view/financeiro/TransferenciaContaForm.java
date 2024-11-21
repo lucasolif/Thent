@@ -234,8 +234,8 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         ContaCaixa cxEntrada = (ContaCaixa) contaCaixaEntrada.getSelectedItem();
         double valor = Double.parseDouble(this.valor.getText().replace(",", "."));
         String dataOp = dataOperacao.getText();
-        pessoa.setCodigo(2);
-        usuario.setCodigo(1);
+        this.pessoa.setCodigo(1);
+        this.usuario.setCodigo(1);
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         
         
@@ -250,9 +250,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
             
         if(!rbTransferencia.isSelected() && !rbDeposito.isSelected() && !rbSaida.isSelected() || valor <= 0){
             JOptionPane.showMessageDialog(null, "Selecione a operação", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }else if(rbTransferencia.isSelected()){
-           
+        }else if(rbTransferencia.isSelected()){          
             complemento = "TRANSFERÊNCIA | "+cxSaida.getNome().toUpperCase()+" -  "+cxEntrada.getNome().toUpperCase();
             mvCaixa.setComplemento(complemento);       
             transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 1);

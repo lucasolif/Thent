@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
-import model.ConsultaCampanhas;
-import model.ConsultaPessoas;
+import interfaces.ConsultaCampanhas;
+import interfaces.ConsultaPessoas;
 import model.ContasReceberCampanha;
 import model.Igreja;
 import model.Pessoa;
@@ -356,7 +356,7 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        cadastrarParticipantesGerarCr();
+        cadastrarParticipantesGerarContaReceber();
         formInicial();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -367,31 +367,7 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
             formGerarCr(false, cores.cinza());                         
         }
     }//GEN-LAST:event_cbGerarContasReceberItemStateChanged
-
-    private void consultarCampanhas(){
-        if(!this.nomeCampanha.getText().isEmpty()){
-            String busca = this.nomeCampanha.getText();
-            this.listaCampanha = campanhaDao.consultarCampanhasAtiva(busca);
-        }else{
-            JOptionPane.showMessageDialog(null, "Informe o código ou nome da campanha!", "Atenção", JOptionPane.WARNING_MESSAGE);     
-        }        
-    }
-    
-    private void carregarResultadoConsultaCampanha(){
-        ResultadosConsultasCampanhas resultConsultaCampanhas = new ResultadosConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanha);
-        resultConsultaCampanhas.setPessoaSelecionada(this);
-        resultConsultaCampanhas.setLocationRelativeTo(this);
-        resultConsultaCampanhas.setVisible(true);
-    }
-    
-    private void carregarCampanhaEscolhida(Campanha campanhaEscolhida){
-        this.codCampanha.setText(String.valueOf(campanhaEscolhida.getCodigo()));
-        this.nomeCampanha.setText(String.valueOf(campanhaEscolhida));
-        this.duracaoCampanha.setValue(campanhaEscolhida.getDuracaoMeses());
-        this.dataFimCampanha.setText(conversor.convertendoDataStringSql((Date) campanhaEscolhida.getDataFinal()));
-        this.diaPagamento.setText(String.valueOf(campanha.getDiaPagamento()));
-    }
-
+  
     private void formInicial(){
         carregarSubContaResultado();
         this.dataInicioPagamento.setText(this.conversor.dataAtualString());
@@ -424,6 +400,30 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
         }
     }
     
+    private void consultarCampanhas(){
+        if(!this.nomeCampanha.getText().isEmpty()){
+            String busca = this.nomeCampanha.getText();
+            this.listaCampanha = campanhaDao.consultarCampanhasAtiva(busca);
+        }else{
+            JOptionPane.showMessageDialog(null, "Informe o código ou nome da campanha!", "Atenção", JOptionPane.WARNING_MESSAGE);     
+        }        
+    }
+    
+    private void carregarResultadoConsultaCampanha(){
+        ResultadosConsultasCampanhas resultConsultaCampanhas = new ResultadosConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanha);
+        resultConsultaCampanhas.setCampanhaSelecionada(this);
+        resultConsultaCampanhas.setLocationRelativeTo(this);
+        resultConsultaCampanhas.setVisible(true);
+    }
+    
+    private void carregarCampanhaEscolhida(Campanha campanhaEscolhida){
+        this.codCampanha.setText(String.valueOf(campanhaEscolhida.getCodigo()));
+        this.nomeCampanha.setText(String.valueOf(campanhaEscolhida));
+        this.duracaoCampanha.setValue(campanhaEscolhida.getDuracaoMeses());
+        this.dataFimCampanha.setText(conversor.convertendoDataStringSql((Date) campanhaEscolhida.getDataFinal()));
+        this.diaPagamento.setText(String.valueOf(campanha.getDiaPagamento()));
+    }
+    
     private void carregarSubContaResultado(){
         List<SubContaResultado> listaSubContResult = this.contaResultadoDao.consultarSubContaResultado();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaResultado.getModel();
@@ -445,12 +445,12 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
         resultConsultParticipante.setVisible(true);
     }
     
-    public void carregarParticipanteEscolhido(Pessoa pessoa){
+    private void carregarParticipanteEscolhido(Pessoa pessoa){
         DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
         model.addRow(new Object[]{pessoa.getCodigo(),pessoa,pessoa.getCpfCnpj()});     
     }
     
-    public void cadastrarParticipantesGerarCr(){
+    private void cadastrarParticipantesGerarContaReceber(){
         
         final int qtdParticipantes = this.tabelaParticipantes.getRowCount();
         

@@ -11,48 +11,48 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.Autor;
 import model.Editora;
-import model.EmprestimoLivro;
 import model.Livro;
 
 public class LivroDao {
     
     private Connection conexao = null;
     private PreparedStatement ps = null;
+    private PreparedStatement insertStmt = null;
+    private PreparedStatement updateStmt = null;
+    private PreparedStatement selectStmt = null;
     private ResultSet rs = null;
     
     public void cadastrarLivro(Livro livro){
-
+        
+        String sql= "INSERT INTO Livros (CodLivro,Nome,Volume,Autor,Caracteristica,Editora,Ano,DataCadastro,Ativo)VALUES (?,?,?,?,?,?,?,GETDATE(),?)";
+        
         try{
-            conexao = Conexao.getDataSource().getConnection();
-            
-            String sql= "INSERT INTO Livros (CodLivro,Nome,Volume,Autor,Caracteristica,Editora,Ano,DataCadastro,Ativo)VALUES (?,?,?,?,?,?,?,GETDATE(),?)";
-            ps = conexao.prepareStatement(sql);
+            this.conexao = Conexao.getDataSource().getConnection();            
+            this.insertStmt = this.conexao.prepareStatement(sql);
 
-            ps.setInt(1, livro.getCodLivro());
-            ps.setString(2, livro.getNomeLivro());
-            ps.setInt(3, livro.getVolume());
-            ps.setInt(4, livro.getAutor().getCodigo());
-            ps.setString(5, livro.getCaracteristica());
-            ps.setInt(6, livro.getEditora().getCodigo());
-            ps.setInt(7, livro.getAnoPublicacao());
-            ps.setInt(8, livro.getStatus());
-            
-            ps.execute();
+            this.insertStmt.setInt(1, livro.getCodLivro());
+            this.insertStmt.setString(2, livro.getNomeLivro());
+            this.insertStmt.setInt(3, livro.getVolume());
+            this.insertStmt.setInt(4, livro.getAutor().getCodigo());
+            this.insertStmt.setString(5, livro.getCaracteristica());
+            this.insertStmt.setInt(6, livro.getEditora().getCodigo());
+            this.insertStmt.setInt(7, livro.getAnoPublicacao());
+            this.insertStmt.setInt(8, livro.getStatus());         
+            this.insertStmt.execute();
             
             JOptionPane.showMessageDialog(null, "Livro Cadastrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE
                 JOptionPane.showMessageDialog(null, "Já existe um livro cadastrado com esse código", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            } else {
+            }else {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o livro.", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            }
-            
+            }            
         }finally{
             // Fechar recursos
             try{
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
+                if (this.insertStmt != null) this.insertStmt.close();
+                if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
@@ -60,91 +60,105 @@ public class LivroDao {
     }
     
     public void alterarLivro(Livro livro){
+        
+        String sql= "UPDATE Livros SET Nome=?,Volume=?,Autor=?,Caracteristica=?,Editora=?,Ano=?,Ativo=? "
+        + "WHERE Codigo=? AND CodLivro=?";          
 
        try{
-            conexao = Conexao.getDataSource().getConnection();
-            
-            String sql= "UPDATE Livros SET Nome=?,Volume=?,Autor=?,Caracteristica=?,Editora=?,Ano=?,Ativo=? "
-            + "WHERE Codigo=? AND CodLivro=?";
-            
-            ps = conexao.prepareStatement(sql);
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.updateStmt = this.conexao.prepareStatement(sql);
 
-            ps.setString(1, livro.getNomeLivro());
-            ps.setInt(2, livro.getVolume());
-            ps.setInt(3, livro.getAutor().getCodigo());
-            ps.setString(4, livro.getCaracteristica());
-            ps.setInt(5, livro.getEditora().getCodigo());
-            ps.setInt(6, livro.getAnoPublicacao());
-            ps.setInt(7, livro.getStatus());
-            ps.setInt(8, livro.getCodInterno());
-            ps.setInt(9, livro.getCodLivro());
+            this.updateStmt.setString(1, livro.getNomeLivro());
+            this.updateStmt.setInt(2, livro.getVolume());
+            this.updateStmt.setInt(3, livro.getAutor().getCodigo());
+            this.updateStmt.setString(4, livro.getCaracteristica());
+            this.updateStmt.setInt(5, livro.getEditora().getCodigo());
+            this.updateStmt.setInt(6, livro.getAnoPublicacao());
+            this.updateStmt.setInt(7, livro.getStatus());
+            this.updateStmt.setInt(8, livro.getCodInterno());
+            this.updateStmt.setInt(9, livro.getCodLivro());          
+            this.updateStmt.executeUpdate();
             
-            ps.executeUpdate();
-            
-            JOptionPane.showMessageDialog(null, "Livro alterado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-            
+            JOptionPane.showMessageDialog(null, "Livro alterado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);           
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o livro", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
+                if (this.updateStmt != null) this.updateStmt.close();
+                if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
- 
     }
     
-    public Livro consultarLivro(Integer codLivro){
-        
-        Livro livro = new Livro();
+    public List<Livro> consultarLivro(String busca){
 
-        String sql = "SELECT AUT.Nome As NomeAutor, EDT.Nome As NomeEditora, * FROM Livros AS LV "
+        String sql = "SELECT AUT.Nome As NomeAutor, AUT.Codigo As CodAutor, EDT.Nome As NomeEditora, EDT.Codigo AS CodEditora, * FROM Livros AS LV "
         + "INNER JOIN Autores AUT ON AUT.Codigo = LV.Autor "
         + "INNER JOIN Editoras EDT ON EDT.Codigo = LV.Editora "
-        + "WHERE (CodLivro=?)";
-        
+        + "WHERE (? IS NULL OR LV.CodLivro LIKE ?) OR (? IS NULL OR LV.Nome LIKE ?) OR (? IS NULL OR AUT.Nome LIKE ?)";
+ 
+        List<Livro> listaLivros = new ArrayList<>();
+ 
         try{
-            conexao = Conexao.getDataSource().getConnection();            
-            ps = conexao.prepareStatement(sql);
-               
-            ps.setInt(1,  codLivro);
-            rs = ps.executeQuery();
-
-            while(rs.next()){
-                Autor autor = new Autor();
-                autor.setCodigo(rs.getInt("Autor"));
-                autor.setNome(rs.getString("NomeAutor"));
-                Editora editora = new Editora();
-                editora.setCodigo(rs.getInt("Editora"));
-                editora.setNome(rs.getString("NomeEditora"));                
-                livro.setCodInterno(rs.getInt("Codigo"));
-                livro.setCodLivro(rs.getInt("CodLivro"));
-                livro.setNomeLivro(rs.getString("Nome"));
-                livro.setVolume(rs.getInt("Volume"));
-                livro.setAutor(autor);
-                livro.setCaracteristica(rs.getString("Caracteristica"));
-                livro.setEditora(editora);
-                livro.setAnoPublicacao(rs.getInt("Ano"));
-                livro.setStatus(rs.getInt("Ativo"));
-
+            this.conexao = Conexao.getDataSource().getConnection();        
+            this.selectStmt = this.conexao.prepareStatement(sql);
+                 
+            if (busca != null) {
+                this.selectStmt.setString(1,  "%" + busca + "%");
+                this.selectStmt.setString(2,  "%" + busca + "%");
+                this.selectStmt.setString(3,  "%" + busca + "%");
+                this.selectStmt.setString(4,  "%" + busca + "%");
+                this.selectStmt.setString(5,  "%" + busca + "%");
+                this.selectStmt.setString(6,  "%" + busca + "%");
+            } else {
+                this.selectStmt.setNull(1, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(2, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(3, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(4, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(5, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(6, java.sql.Types.INTEGER);
             }
-        }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o livro", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                Livro livro = new Livro();
+                Autor autor = new Autor();
+                Editora editora = new Editora();
+                autor.setCodigo(this.rs.getInt("CodAutor"));
+                autor.setNome(this.rs.getString("NomeAutor"));
+                editora.setCodigo(this.rs.getInt("CodEditora"));
+                editora.setNome(this.rs.getString("NomeEditora"));
+                livro.setCodInterno(this.rs.getInt("Codigo"));
+                livro.setCodLivro(this.rs.getInt("CodLivro"));
+                livro.setNomeLivro(this.rs.getString("Nome"));
+                livro.setVolume(this.rs.getInt("Volume"));
+                livro.setCaracteristica(this.rs.getString("Caracteristica"));
+                livro.setAnoPublicacao(this.rs.getInt("Ano"));
+                livro.setStatus(this.rs.getInt("Ativo"));
+                livro.setAutor(autor);
+                livro.setEditora(editora);
+
+                listaLivros.add(livro);
+            }
+            this.selectStmt.execute();
+          
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao consultar o livro", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ ex.getMessage());
         }finally{
             // Fechar recursos
             try{
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
-        return livro;
+        return listaLivros;
     }
     
     //Consultar para popular o JComboBox
@@ -153,24 +167,24 @@ public class LivroDao {
         List<Livro> listaLivros = new ArrayList<>();
         
         try{
-            conexao = Conexao.getDataSource().getConnection();
+            this.conexao = Conexao.getDataSource().getConnection();
             
             String sql = "SELECT A.Codigo AS CodAutor, A.Nome AS NomeLivro, * "
                 + "FROM Livros AS L "                  
                 + "INNER JOIN Autores AS A ON A.Codigo = L.Autor "
                 + "Order By L.Nome ";
-            ps = conexao.prepareStatement(sql);           
-            rs = ps.executeQuery();
+            this.selectStmt = this.conexao.prepareStatement(sql);           
+            this.rs = this.selectStmt.executeQuery();
 
-            while(rs.next()){
+            while(this.rs.next()){
                 Livro livro = new Livro();
                 Autor autor = new Autor();
-                autor.setCodigo(rs.getInt("CodAutor"));
-                autor.setNome(rs.getString("NomeLivro"));
-                livro.setCodInterno(rs.getInt("Codigo"));
-                livro.setCodLivro(rs.getInt("CodLivro"));
-                livro.setNomeLivro(rs.getString("Nome"));
-                livro.setVolume(rs.getInt("Volume"));
+                autor.setCodigo(this.rs.getInt("CodAutor"));
+                autor.setNome(this.rs.getString("NomeLivro"));
+                livro.setCodInterno(this.rs.getInt("Codigo"));
+                livro.setCodLivro(this.rs.getInt("CodLivro"));
+                livro.setNomeLivro(this.rs.getString("Nome"));
+                livro.setVolume(this.rs.getInt("Volume"));
                 livro.setAutor(autor);
  
                 listaLivros.add(livro);
@@ -181,9 +195,9 @@ public class LivroDao {
         finally{
             // Fechar recursos
             try{
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }

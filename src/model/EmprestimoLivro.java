@@ -13,12 +13,21 @@ public class EmprestimoLivro {
     private List<Livro> livro;
     private Biblioteca biblioteca;
     private Integer StatusEmprestimo;
+    private String descricaoStatus;
     private Date dataEmprestimo;
     private Date dataDevolucao;
 
     public EmprestimoLivro() {
     }
 
+    public String getDescricaoStatus() {
+        return descricaoStatus;
+    }
+
+    public void setDescricaoStatus(String descricaoStatus) {
+        this.descricaoStatus = descricaoStatus;
+    }
+    
     public Integer getCodigo() {
         return codigo;
     }

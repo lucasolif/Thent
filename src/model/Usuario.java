@@ -142,6 +142,10 @@ public class Usuario {
         }
         return Objects.equals(this.igreja, other.igreja);
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return login;
+    }
+ 
 }

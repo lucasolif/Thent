@@ -6,6 +6,7 @@ import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import ferramentas.Utilitarios;
+import interfaces.ConsultaCampanhas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -17,14 +18,15 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
-import model.ConsultaPessoas;
+import interfaces.ConsultaPessoas;
 import model.Igreja;
 import model.ContasReceberCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
+import view.carregamentoConsultas.ResultadosConsultasCampanhas;
 import view.carregamentoConsultas.ResultadosConsultasPessoas;
 
-public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
+public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements ConsultaPessoas, ConsultaCampanhas{
 
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
@@ -420,7 +422,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){  
             consultarCampanhas();
             carregarResultadoConsultaCampanha();
-            carregarCampanhaEscolhida();
             formAlteracao();
         }
     }//GEN-LAST:event_consultarCampanhaKeyPressed
@@ -428,7 +429,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         consultarCampanhas();
         carregarResultadoConsultaCampanha();
-        carregarCampanhaEscolhida();
         formAlteracao();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -592,44 +592,36 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
             JOptionPane.showMessageDialog(null, "Para consutar a campanha é preciso informar o código ou nome", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else{  
             String textoConsulta = this.consultarCampanha.getText();
-            this.listaParticipantes = null;
+            this.listaCampanhas = null;
         } 
     }
     
     private void carregarResultadoConsultaCampanha(){
-        ResultadosConsultas resultadoConsulta = new ResultadosConsultas((Frame) SwingUtilities.getWindowAncestor(this), true);
+        ResultadosConsultasCampanhas resultadoConsulta = new ResultadosConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanhas);
+        resultadoConsulta.setCampanhaSelecionada(this);
         resultadoConsulta.setLocationRelativeTo(this);
         resultadoConsulta.setVisible(true);
-        
-        for(Campanha camp : this.listaCampanhas){        
-            DefaultTableModel model = (DefaultTableModel) resultadoConsulta.tabelaResultadoConsulta.getModel();
-            model.setNumRows(0);
-        
-            model.addRow(new Object[]{camp.getCodigo(),camp});
-        }
     }
     
-    private void carregarCampanhaEscolhida(){
-        ResultadosConsultas resultadoConsulta = new ResultadosConsultas((Frame) SwingUtilities.getWindowAncestor(this), true);
-        this.campanhaSelec = resultadoConsulta.campanha;
+    private void carregarCampanhaEscolhida(Campanha campanha){
         
-        this.codCampanha.setText(String.valueOf(this.campanhaSelec.getCodigo()));
-        this.nomeParticipante.setText(this.campanhaSelec.getDescricaoCampanha());
-        this.duracaoCampanha.setValue(this.campanhaSelec.getDuracaoMeses());
-        this.dataInicioCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) this.campanhaSelec.getDataInicial()));
-        this.dataFimCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) this.campanhaSelec.getDataFinal()));
-        this.igrejaCampanha.setSelectedItem(this.campanhaSelec.getIgreja());
-        this.valorTotalCampanha.setText(String.valueOf(this.campanhaSelec.getValorTotalCampanha()));
-        this.diaPagamento.setValue(this.campanhaSelec.getDiaPagamento());
-        this.observacaoCampanha.setText(this.campanhaSelec.getObservacao());
+        this.codCampanha.setText(String.valueOf(campanha.getCodigo()));
+        this.nomeParticipante.setText(campanha.getDescricaoCampanha());
+        this.duracaoCampanha.setValue(campanha.getDuracaoMeses());
+        this.dataInicioCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) campanha.getDataInicial()));
+        this.dataFimCampanha.setText(conversor.convertendoDataStringSql((java.sql.Date) campanha.getDataFinal()));
+        this.igrejaCampanha.setSelectedItem(campanha.getIgreja());
+        this.valorTotalCampanha.setText(String.valueOf(campanha.getValorTotalCampanha()));
+        this.diaPagamento.setValue(campanha.getDiaPagamento());
+        this.observacaoCampanha.setText(campanha.getObservacao());
         
-        if(this.campanhaSelec.getStatusCampanha() == 1){
+        if(campanha.getStatusCampanha() == 1){
             this.statusCampanha.setSelected(true);
         }else{
             this.statusCampanha.setSelected(false);
         }
         
-        for(Pessoa pessoa : this.campanhaSelec.getParticipante()){
+        for(Pessoa pessoa : campanha.getParticipante()){
             DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
             model.addRow(new Object[]{pessoa.getCodigo(),pessoa,pessoa.getCpfCnpj(),pessoa.getIgreja()});
         }
@@ -653,12 +645,6 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     public void adicionarParticipanteEscolhido(Pessoa pessoa){
         DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
         model.addRow(new Object[]{pessoa.getCodigo(),pessoa,pessoa.getCpfCnpj(),pessoa.getIgreja()});     
-    }
-    
-    //Manipula o dado que foi escolhido no JDialog, nesse caso, a pessoa
-    @Override
-    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
-        adicionarParticipanteEscolhido(pessoaSelecionada);
     }
 
     //Gera o contas a receber da campanha.
@@ -700,6 +686,17 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
         }         
         return listaCrCampanhas;
     }
+    
+    @Override
+    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
+        adicionarParticipanteEscolhido(pessoaSelecionada);
+    }
+    
+    @Override
+    public void campanhaSelecionada(Campanha campanhaSelecionada) {
+        carregarCampanhaEscolhida(campanhaSelecionada);
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -737,6 +734,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     private javax.swing.JTable tabelaParticipantes;
     private javax.swing.JFormattedTextField valorTotalCampanha;
     // End of variables declaration//GEN-END:variables
+
 
 
 }
