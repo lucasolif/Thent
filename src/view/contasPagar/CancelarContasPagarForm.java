@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.ContasPagar;
 import model.Pessoa;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class CancelarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas {
     
@@ -370,7 +370,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
     } 
          
     private void carregarResultadoConsultaFornecedor(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

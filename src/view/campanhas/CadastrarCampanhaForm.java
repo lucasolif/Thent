@@ -23,8 +23,8 @@ import model.Igreja;
 import model.ContasReceberCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
-import view.carregamentoConsultas.ResultadosConsultasCampanhas;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasCampanhas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements ConsultaPessoas, ConsultaCampanhas{
 
@@ -597,7 +597,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     }
     
     private void carregarResultadoConsultaCampanha(){
-        ResultadosConsultasCampanhas resultadoConsulta = new ResultadosConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanhas);
+        TelaConsultasCampanhas resultadoConsulta = new TelaConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanhas);
         resultadoConsulta.setCampanhaSelecionada(this);
         resultadoConsulta.setLocationRelativeTo(this);
         resultadoConsulta.setVisible(true);
@@ -635,7 +635,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     
     //Carrrega todos os cadastros de pessoas encontrado, dentro do Dialog que é aberto, possibilitando a escolha
     private void carregarResultadoConsultaParticipante(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaParticipantes);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaParticipantes);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

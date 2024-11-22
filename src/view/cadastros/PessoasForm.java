@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Endereco;
 import model.Igreja;
 import model.Pessoa;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -470,7 +470,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
     }
     
     private void abrirTelaEscolhaPessoa(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaPessoa);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaPessoa);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

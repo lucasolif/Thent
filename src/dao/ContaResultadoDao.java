@@ -60,7 +60,7 @@ public class ContaResultadoDao {
             String sql= "INSERT INTO ContasResultado (Descricao,ReceitaDespesa,DataCadastro)VALUES (?,?,GETDATE())";
             ps = conexao.prepareStatement(sql);
             ps.setString(1, contaResultado.getNome());
-            ps.setString(2, contaResultado.getTipoContaResultado());
+            ps.setString(2, contaResultado.getTipoReceitaDespesa());
             ps.execute();
             
             JOptionPane.showMessageDialog(null, "Conta Resultado cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
@@ -86,7 +86,7 @@ public class ContaResultadoDao {
             String sql= "UPDATE ContasResultado SET Descricao=?,ReceitaDespesa=?" + " WHERE Codigo=?";
             ps = conexao.prepareStatement(sql);
             ps.setString(1, contaResultado.getNome());
-            ps.setString(2, contaResultado.getTipoContaResultado());
+            ps.setString(2, contaResultado.getTipoReceitaDespesa());
             ps.setInt(3, contaResultado.getCodigo());
             ps.executeUpdate(); 
             
@@ -136,7 +136,7 @@ public class ContaResultadoDao {
                 ContaResultado cResultado = new ContaResultado();
                 cResultado.setCodigo(rs.getInt("Codigo"));
                 cResultado.setNome(rs.getString("Descricao"));
-                cResultado.setTipoContaResultado(rs.getString("ReceitaDespesa"));
+                cResultado.setTipoReceitaDespesa(rs.getString("ReceitaDespesa"));
                 cResultado.setDataCadastro(rs.getDate("DataCadastro"));
 
                 listaContaResultado.add(cResultado);

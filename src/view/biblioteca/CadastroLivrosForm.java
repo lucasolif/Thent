@@ -4,7 +4,6 @@ package view.biblioteca;
 import dao.AutorDao;
 import dao.EditoraDao;
 import dao.LivroDao;
-import interfaces.ConsultaLivros;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -15,7 +14,8 @@ import javax.swing.SwingUtilities;
 import model.Autor;
 import model.Editora;
 import model.Livro;
-import view.carregamentoConsultas.ResultadosConsultasLivros;
+import view.carregamentoConsultas.TelaConsultasLivros;
+import interfaces.ConsultaLivros;
 
 
 public class CadastroLivrosForm extends javax.swing.JInternalFrame implements ConsultaLivros {
@@ -96,7 +96,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
 
         jLabel7.setText("Publicadora/Editora*");
 
-        btnSalvar.setBackground(new java.awt.Color(0, 255, 0));
+        btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSalvar.setText("Salvar");
         btnSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -107,7 +107,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
 
         cbAtivo.setText("Ativo");
 
-        btnBuscar.setBackground(new java.awt.Color(51, 102, 255));
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -388,7 +388,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
     }
     
     private void carregarResultadoConsultaLivros(){
-        ResultadosConsultasLivros resultConsultaLivros = new ResultadosConsultasLivros((Frame) SwingUtilities.getWindowAncestor(this), this.listaLivro);
+        TelaConsultasLivros resultConsultaLivros = new TelaConsultasLivros((Frame) SwingUtilities.getWindowAncestor(this), this.listaLivro);
         resultConsultaLivros.setLivroSelecionada(this);
         resultConsultaLivros.setLocationRelativeTo(this);
         resultConsultaLivros.setVisible(true);

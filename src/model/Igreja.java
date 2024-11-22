@@ -7,6 +7,7 @@ import java.util.Objects;
 public class Igreja extends Entidades{
 
     private Endereco endereco;
+    private Integer status;
 
     public Igreja() {
     }
@@ -27,6 +28,14 @@ public class Igreja extends Entidades{
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override
@@ -50,6 +59,5 @@ public class Igreja extends Entidades{
         final Igreja other = (Igreja) obj;
         return Objects.equals(this.endereco, other.endereco);
     }
-   
-    
+
 }

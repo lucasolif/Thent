@@ -25,7 +25,7 @@ import model.FormaPagto;
 import model.MovimentoCaixa;
 import model.Pessoa;
 import model.SubContaResultado;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
@@ -592,7 +592,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     } 
     
     private void carregarResultadoConsultaFornecedor(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

@@ -28,7 +28,7 @@ import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.SubContaResultado;
 import model.TipoOferta;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -164,10 +164,12 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                             .addComponent(tipoOferta, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(igrejaCampo, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(37, 37, 37)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                                 .addComponent(btnAdicionar))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,7 +188,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,10 +315,11 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(iconLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(iconDeletar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalvar)))
                 .addContainerGap())
         );
@@ -444,7 +447,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     }
         
     private void carregarResultadoConsultaFornecedor(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaOfertante);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaOfertante);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

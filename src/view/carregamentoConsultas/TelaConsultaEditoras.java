@@ -25,7 +25,7 @@ public class TelaConsultaEditoras extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
-        btnEscolher = new javax.swing.JButton();
+        btnSelecionar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Listagem Editoras Consultada");
@@ -61,12 +61,12 @@ public class TelaConsultaEditoras extends javax.swing.JDialog {
             tabela.getColumnModel().getColumn(1).setPreferredWidth(350);
         }
 
-        btnEscolher.setBackground(new java.awt.Color(0, 153, 255));
-        btnEscolher.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnEscolher.setText("Escolher");
-        btnEscolher.addActionListener(new java.awt.event.ActionListener() {
+        btnSelecionar.setBackground(new java.awt.Color(0, 153, 255));
+        btnSelecionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSelecionar.setText("Selecionar");
+        btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEscolherActionPerformed(evt);
+                btnSelecionarActionPerformed(evt);
             }
         });
 
@@ -80,7 +80,7 @@ public class TelaConsultaEditoras extends javax.swing.JDialog {
                 .addGap(0, 8, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEscolher)
+                .addComponent(btnSelecionar)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -89,16 +89,16 @@ public class TelaConsultaEditoras extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnEscolher)
+                .addComponent(btnSelecionar)
                 .addGap(0, 27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnEscolherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscolherActionPerformed
+    private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
         editoraEscolhida();
-    }//GEN-LAST:event_btnEscolherActionPerformed
+    }//GEN-LAST:event_btnSelecionarActionPerformed
 
     private void carregarEditorasConsultadas(List<Editora> listaEditoras){         
         for(Editora editora : listaEditoras){        
@@ -122,10 +122,8 @@ public class TelaConsultaEditoras extends javax.swing.JDialog {
         this.consultaEditoras = consultaEditoras;
     }
 
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEscolher;
+    private javax.swing.JButton btnSelecionar;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable tabela;
     // End of variables declaration//GEN-END:variables

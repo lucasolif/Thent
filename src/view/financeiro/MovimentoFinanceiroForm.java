@@ -30,7 +30,7 @@ import model.MovimentoCaixa;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
@@ -729,7 +729,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     } 
         
     private void carregarResultadoConsultaFornecedor(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaOfertante);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaOfertante);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

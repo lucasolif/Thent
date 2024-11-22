@@ -29,7 +29,7 @@ public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnOk = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         autor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -42,12 +42,12 @@ public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Autor");
 
-        btnOk.setBackground(new java.awt.Color(204, 204, 204));
-        btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnOk.setText("OK");
-        btnOk.addActionListener(new java.awt.event.ActionListener() {
+        btnBuscar.setBackground(new java.awt.Color(51, 153, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOkActionPerformed(evt);
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -105,9 +105,9 @@ public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(btnBuscar)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,7 +128,7 @@ public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOk))
+                    .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -158,10 +158,10 @@ public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
         }
     }//GEN-LAST:event_buscarKeyPressed
 
-    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         consultarAutor();
         carregarResultadoConsultaAutores();
-    }//GEN-LAST:event_btnOkActionPerformed
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         excluirAutor();
@@ -245,8 +245,8 @@ public class AutorForm extends javax.swing.JDialog implements ConsultaAutores {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField autor;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField buscar;
     private javax.swing.JTextField codigoAutor;

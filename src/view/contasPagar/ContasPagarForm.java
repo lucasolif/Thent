@@ -26,7 +26,7 @@ import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class ContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -463,7 +463,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     } 
     
     private void carregarResultadoConsultaFornecedor(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaFornecedor);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

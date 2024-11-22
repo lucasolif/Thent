@@ -34,8 +34,9 @@
                   <Component id="jScrollPane1" max="32767" attributes="0"/>
                   <Component id="jPanel1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="btnLimpar" min="-2" pref="73" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="btnLimpar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="adicionarLivro" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="emprestar" min="-2" max="-2" attributes="0"/>
@@ -349,7 +350,7 @@
         <Component class="javax.swing.JButton" name="btnFiltrar">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="66" red="33" type="rgb"/>
+              <Color blue="ff" green="99" red="0" type="rgb"/>
             </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>

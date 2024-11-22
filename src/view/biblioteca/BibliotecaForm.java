@@ -173,7 +173,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
 
         jLabel6.setText("Blbioteca");
 
-        btnFiltrar.setBackground(new java.awt.Color(51, 102, 255));
+        btnFiltrar.setBackground(new java.awt.Color(0, 153, 255));
         btnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -340,8 +340,9 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(adicionarLivro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(emprestar)))

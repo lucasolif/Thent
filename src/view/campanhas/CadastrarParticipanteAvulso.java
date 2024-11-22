@@ -25,8 +25,8 @@ import model.ContasReceberCampanha;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
-import view.carregamentoConsultas.ResultadosConsultasCampanhas;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasCampanhas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame implements ConsultaCampanhas,ConsultaPessoas{
     
@@ -410,7 +410,7 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
     }
     
     private void carregarResultadoConsultaCampanha(){
-        ResultadosConsultasCampanhas resultConsultaCampanhas = new ResultadosConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanha);
+        TelaConsultasCampanhas resultConsultaCampanhas = new TelaConsultasCampanhas((Frame) SwingUtilities.getWindowAncestor(this), this.listaCampanha);
         resultConsultaCampanhas.setCampanhaSelecionada(this);
         resultConsultaCampanhas.setLocationRelativeTo(this);
         resultConsultaCampanhas.setVisible(true);
@@ -439,7 +439,7 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
     }
     
     private void carregarResultadoConsultaParticipante(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaParticipantes);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaParticipantes);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

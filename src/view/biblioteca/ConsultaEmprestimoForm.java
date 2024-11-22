@@ -22,7 +22,7 @@ import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
 import model.Pessoa;
-import view.carregamentoConsultas.ResultadosConsultasPessoas;
+import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -267,7 +267,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             tabelaEmprestimos.getColumnModel().getColumn(6).setPreferredWidth(150);
         }
 
-        btnFiltrar.setBackground(new java.awt.Color(51, 153, 255));
+        btnFiltrar.setBackground(new java.awt.Color(255, 153, 0));
         btnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -276,7 +276,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             }
         });
 
-        btnDevolver.setBackground(new java.awt.Color(255, 153, 0));
+        btnDevolver.setBackground(new java.awt.Color(51, 204, 0));
         btnDevolver.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDevolver.setText("Devolver");
         btnDevolver.addActionListener(new java.awt.event.ActionListener() {
@@ -378,10 +378,11 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscar)
-                            .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnBuscar)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -435,13 +436,6 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         atualizarTabela();
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
-    private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
-        devolverEmprestimo();
-        formInicial();
-        consultarTodosEmprestimos();
-        atualizarTabela();
-    }//GEN-LAST:event_btnDevolverActionPerformed
-
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         formInicial();
         limparTabela();
@@ -471,6 +465,13 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         buscarPessoa();
         carregarResultadoConsultaPessoa();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
+        devolverEmprestimo();
+        formInicial();
+        consultarTodosEmprestimos();
+        atualizarTabela();
+    }//GEN-LAST:event_btnDevolverActionPerformed
 
     private void formInicial(){
         this.rbDataEmprestimo.setSelected(true);
@@ -510,7 +511,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     } 
     
     private void carregarResultadoConsultaPessoa(){
-        ResultadosConsultasPessoas resultConsultParticipante = new ResultadosConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaPessoa);
+        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaPessoa);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
         resultConsultParticipante.setVisible(true);

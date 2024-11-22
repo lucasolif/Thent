@@ -127,11 +127,12 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar)
                         .addGap(0, 31, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(iconExcluir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSalvar)))
                 .addContainerGap())
         );
@@ -143,7 +144,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                     .addComponent(campoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar)
                     .addComponent(jLabel2))
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
@@ -160,7 +161,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                     .addComponent(btnLimpar, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(iconExcluir, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         pack();

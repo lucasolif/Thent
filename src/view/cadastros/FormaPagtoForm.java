@@ -2,14 +2,17 @@
 package view.cadastros;
 
 import dao.FormaPagtoDao;
+import interfaces.ConsultaFormaPagto;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.KeyEvent;
-import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import model.FormaPagto;
+import view.carregamentoConsultas.TelaConsultaFormaPagto;
 
-public class FormaPagtoForm extends javax.swing.JInternalFrame {
+public class FormaPagtoForm extends javax.swing.JInternalFrame implements ConsultaFormaPagto{
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
     private FormaPagto formaPagtoSelec;
     private List<FormaPagto> listaFormaPagto;
@@ -25,18 +28,14 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
 
         buscarFormaPagto = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaFormaPagto = new javax.swing.JTable();
         btnSalvar = new javax.swing.JButton();
         iconExcluir = new javax.swing.JButton();
-        iconAlterar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        dados = new javax.swing.JPanel();
+        btnLimpar = new javax.swing.JButton();
         codFormaPagto = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         descricaoFormaPagto = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnLimpar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -48,6 +47,7 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
             }
         });
 
+        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -55,39 +55,6 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
                 btnBuscarActionPerformed(evt);
             }
         });
-
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Formas Pagto", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
-
-        tabelaFormaPagto.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Codigo", "Descrição"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tabelaFormaPagto);
-        if (tabelaFormaPagto.getColumnModel().getColumnCount() > 0) {
-            tabelaFormaPagto.getColumnModel().getColumn(0).setResizable(false);
-            tabelaFormaPagto.getColumnModel().getColumn(0).setPreferredWidth(10);
-            tabelaFormaPagto.getColumnModel().getColumn(1).setResizable(false);
-            tabelaFormaPagto.getColumnModel().getColumn(1).setPreferredWidth(250);
-        }
 
         btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -108,56 +75,7 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
             }
         });
 
-        iconAlterar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        iconAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-editar-16.png"))); // NOI18N
-        iconAlterar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        iconAlterar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                iconAlterarActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Buscar");
-
-        dados.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Dados", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
-
-        codFormaPagto.setEditable(false);
-        codFormaPagto.setBackground(new java.awt.Color(204, 204, 204));
-
-        jLabel3.setText("Código");
-
-        jLabel1.setText("Descrição*");
-
-        javax.swing.GroupLayout dadosLayout = new javax.swing.GroupLayout(dados);
-        dados.setLayout(dadosLayout);
-        dadosLayout.setHorizontalGroup(
-            dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dadosLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(codFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(descricaoFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(111, 111, 111))
-        );
-        dadosLayout.setVerticalGroup(
-            dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dadosLayout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
-                .addGroup(dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(dadosLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(descricaoFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(dadosLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(codFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(13, 13, 13))
-        );
 
         btnLimpar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
@@ -168,29 +86,42 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
             }
         });
 
+        codFormaPagto.setEditable(false);
+        codFormaPagto.setBackground(new java.awt.Color(204, 204, 204));
+        codFormaPagto.setFocusable(false);
+
+        jLabel3.setText("Código");
+
+        jLabel1.setText("Descrição*");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnLimpar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(iconExcluir)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnSalvar))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(buscarFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnBuscar)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLimpar)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(codFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(iconExcluir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(iconAlterar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSalvar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(dados, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buscarFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(descricaoFormaPagto))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -201,18 +132,24 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(buscarFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
-                .addGap(30, 30, 30)
-                .addComponent(dados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(28, 28, 28))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(codFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(descricaoFormaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSalvar)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(iconExcluir)
-                        .addComponent(iconAlterar)
                         .addComponent(btnLimpar)))
-                .addGap(19, 19, 19))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         pack();
@@ -225,18 +162,13 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
     
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         consultarFormaPagto();
-        atualizarTabela();
+        carregarResultadoConsultaContaCaixa();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void iconExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconExcluirActionPerformed
         excluirFormaPagto(); 
-        consultarFormaPagto();
-        atualizarTabela();
+        limparFormulario();
     }//GEN-LAST:event_iconExcluirActionPerformed
-
-    private void iconAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconAlterarActionPerformed
-        alterarFormaPagto();
-    }//GEN-LAST:event_iconAlterarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         salvarCadastroAlteracao();
@@ -245,20 +177,19 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
     private void buscarFormaPagtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarFormaPagtoKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             consultarFormaPagto();
-            atualizarTabela();
+            carregarResultadoConsultaContaCaixa();
         }
     }//GEN-LAST:event_buscarFormaPagtoKeyPressed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        formaPagtoSelec = null;
         limparFormulario();
-        limparTabela();
     }//GEN-LAST:event_btnLimparActionPerformed
      
     private void limparFormulario(){
         buscarFormaPagto.setText("");
         descricaoFormaPagto.setText("");
         codFormaPagto.setText("");
+        this.formaPagtoSelec = null;
     }
     
     private void consultarFormaPagto(){  
@@ -266,79 +197,55 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
         this.listaFormaPagto = this.formaPagtoDao.consultarFormaPagto(textoBusca);
     }
     
-    private void atualizarTabela(){
-        DefaultTableModel model = (DefaultTableModel) this.tabelaFormaPagto.getModel();
-        model.setNumRows(0);
-
-        for(FormaPagto pagto : this.listaFormaPagto){
-            model.addRow(new Object[]{pagto.getCodigo(), pagto.getNome()});
-        }
+    private void carregarResultadoConsultaContaCaixa(){
+        TelaConsultaFormaPagto resultConsultaContaCaixa = new TelaConsultaFormaPagto((Frame) SwingUtilities.getWindowAncestor(this), this.listaFormaPagto);
+        resultConsultaContaCaixa.setFormaPagtoSelecionada(this);
+        resultConsultaContaCaixa.setLocationRelativeTo(this);
+        resultConsultaContaCaixa.setVisible(true);
     }
     
-    private void limparTabela(){
-        if(tabelaFormaPagto.getRowCount() > 0){
-            DefaultTableModel model = (DefaultTableModel) tabelaFormaPagto.getModel();
-            model.setRowCount(0);
-        }
+    private void carregarFormaPagtoEscolhida(FormaPagto formaPagto){
+        this.codFormaPagto.setText(String.valueOf(formaPagto.getCodigo()));
+        this.descricaoFormaPagto.setText(formaPagto.getNome());  
+        
+        this.formaPagtoSelec = formaPagto;
     }
     
     private void salvarCadastroAlteracao(){
-        String descricao = descricaoFormaPagto.getText();
-        
-        if(formaPagtoSelec == null){
-            if(descricao.isEmpty()){
+      
+        if(this.formaPagtoSelec == null){
+            if(this.descricaoFormaPagto.getText().isEmpty()){
                 JOptionPane.showMessageDialog(null, "Para cadastrar uma forma de pagamento, informe a descrição", "Atenção", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            
-            FormaPagto formaPagto = new FormaPagto();
-            formaPagto.setNome(descricao);
-            formaPagtoDao.adicionar(formaPagto);
-            limparFormulario();
+            }else{
+                FormaPagto formaPagto = new FormaPagto();
+                formaPagto.setNome(this.descricaoFormaPagto.getText());
+                
+                this.formaPagtoDao.adicionar(formaPagto);
+            } 
         }else{                 
-            formaPagtoSelec.setNome(descricao);
-            formaPagtoDao.alterar(formaPagtoSelec);
-            limparFormulario();
+            this.formaPagtoSelec.setNome(this.descricaoFormaPagto.getText());
+            this.formaPagtoDao.alterar(this.formaPagtoSelec);
         }
-        
-        limparTabela();
-        formaPagtoSelec = null;
+        limparFormulario();
     }
     
     private void excluirFormaPagto(){
-        int numLinhaSelec = tabelaFormaPagto.getSelectedRow();
-        
-        //Verifica se foi selecionado algum cliente da lista
-        if(numLinhaSelec < 0){
+
+        if(this.codFormaPagto.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Selecione uma forma de pagamento a ser excluída", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        //Recebe o a linha que foi selecionada na tabela, ou seja, o cliente
-        formaPagtoSelec = listaFormaPagto.get(numLinhaSelec);
-       
-        int confirm = JOptionPane.showConfirmDialog(null,"Excluir a forma de pagamento "+formaPagtoSelec.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if(confirm == JOptionPane.YES_OPTION){
-            formaPagtoDao.remover(formaPagtoSelec);
-        }else if(confirm == JOptionPane.NO_OPTION){
-            JOptionPane.showMessageDialog(null, "Operação cancelada!");
-        }            
-    }
+        }else{
+            int confirm = JOptionPane.showConfirmDialog(null,"Excluir a forma de pagamento "+formaPagtoSelec.getNome()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION){
+                this.formaPagtoDao.remover(this.formaPagtoSelec);
+            }else if(confirm == JOptionPane.NO_OPTION){
+                JOptionPane.showMessageDialog(null, "Operação cancelada!");
+            }   
+        }      
+    } 
     
-    private void alterarFormaPagto(){
-        //Variável recebe o número da linha selecionado.
-        int numLinhaSelec = tabelaFormaPagto.getSelectedRow();
-        
-        //Verificando se foi selecionado algum estoque
-        if(numLinhaSelec < 0){
-            JOptionPane.showMessageDialog(null, "Selecione uma forma de pagamento", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-             
-        formaPagtoSelec = listaFormaPagto.get(numLinhaSelec);
-        
-        codFormaPagto.setText(Integer.toString(formaPagtoSelec.getCodigo()));
-        buscarFormaPagto.setText(formaPagtoSelec.getNome());
-        descricaoFormaPagto.setText(formaPagtoSelec.getNome());
+    @Override
+    public void formaPagtoSelecionada(FormaPagto formaPagtoSelecionada) {
+        carregarFormaPagtoEscolhida(formaPagtoSelecionada);    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -347,14 +254,10 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField buscarFormaPagto;
     private javax.swing.JTextField codFormaPagto;
-    private javax.swing.JPanel dados;
     private javax.swing.JTextField descricaoFormaPagto;
-    private javax.swing.JButton iconAlterar;
     private javax.swing.JButton iconExcluir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tabelaFormaPagto;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ContaResultado extends Entidades{
 
-    private String tipoContaResultado;
+    private String tipoReceitaDespesa;
     
     public ContaResultado(){
         
@@ -14,29 +14,29 @@ public class ContaResultado extends Entidades{
 
     public ContaResultado(String tipoContaResultado, String descricao, Date dataCadastro) {
         super(descricao, dataCadastro);
-        this.tipoContaResultado = tipoContaResultado;
+        this.tipoReceitaDespesa = tipoContaResultado;
     }
 
     public ContaResultado(String tipoContaResultado, String descricao, Date dataCadastro, Integer codigo) {
         super(descricao, dataCadastro, codigo);
-        this.tipoContaResultado = tipoContaResultado;
+        this.tipoReceitaDespesa = tipoContaResultado;
     }
 
     public ContaResultado(String tipoContaResultado, String descricao, Integer codigo) {
         super(descricao, codigo);
-        this.tipoContaResultado = tipoContaResultado;
+        this.tipoReceitaDespesa = tipoContaResultado;
     }
 
     public ContaResultado(String tipoContaResultado) {
-        this.tipoContaResultado = tipoContaResultado;
+        this.tipoReceitaDespesa = tipoContaResultado;
     }
 
-    public String getTipoContaResultado() {
-        return tipoContaResultado;
+    public String getTipoReceitaDespesa() {
+        return tipoReceitaDespesa;
     }
 
-    public void setTipoContaResultado(String tipoContaResultado) {
-        this.tipoContaResultado = tipoContaResultado;
+    public void setTipoReceitaDespesa(String tipoReceitaDespesa) {
+        this.tipoReceitaDespesa = tipoReceitaDespesa;
     }    
     
 }

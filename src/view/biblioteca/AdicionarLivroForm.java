@@ -49,7 +49,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
 
         jLabel3.setText("Qtd.");
 
-        btnSalvar.setBackground(new java.awt.Color(102, 204, 0));
+        btnSalvar.setBackground(new java.awt.Color(0, 255, 51));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
