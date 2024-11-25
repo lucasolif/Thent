@@ -327,11 +327,17 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Remover Participante"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removerParticipanteActionPerformed"/>
+                  </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="lancarContasReceber">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas Receber "/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="lancarContasReceberActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

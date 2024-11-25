@@ -81,6 +81,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
         cbContaReceber = new javax.swing.JCheckBox();
         jLabel15 = new javax.swing.JLabel();
         contaResultado = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaParticipantes = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -187,6 +188,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
 
         jLabel15.setText("Conta Resultado");
 
+        jLabel2.setText("Gerar");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -231,7 +234,9 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statusCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbContaReceber)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbContaReceber)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
@@ -293,7 +298,9 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
                                 .addComponent(statusCampanha)
                                 .addComponent(cbContaReceber))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(contaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -532,9 +539,13 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
             this.campanhaSelec.setDuracaoMeses(duracaoCampanha);
             this.campanhaSelec.setDataFinal(dataFimCampanha);
             this.campanhaSelec.setDiaPagamento(diaPagtCampanha);
-            this.campanhaSelec.setValorTotalCampanha(valorTotal);
             this.campanhaSelec.setObservacao(observacao);
             this.campanhaSelec.setStatusCampanha(statusCampanha);
+            if(this.statusCampanha.isSelected()){
+                this.campanhaSelec.setDescricaoStatus("Ativa");
+            }else{
+                this.campanhaSelec.setDescricaoStatus("Inativa");
+            }
         }
     }
     
@@ -557,7 +568,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
         limparTabela();   
         this.codCampanha.setText("");
         this.descricaoCampanha.setText("");
-        this.duracaoCampanha.setValue(1);
+        this.duracaoCampanha.setValue(12);
         this.dataInicioCampanha.setText(conversor.dataAtualString());
         this.dataInicioCampanha.setEditable(true);
         this.dataFimCampanha.setText(conversor.somarDatas(this.dataInicioCampanha.getText(), (Integer)this.duracaoCampanha.getValue()));
@@ -719,6 +730,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

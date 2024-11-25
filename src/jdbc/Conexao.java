@@ -53,12 +53,12 @@ public class Conexao {
     }
 
     //Fecha a conexão
-    public static void closeDataSource() {
+    public void closeDataSource() {
         if (dataSource != null) {
             try {
                 dataSource.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }    

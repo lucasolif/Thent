@@ -127,7 +127,8 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
 
         jLabel18.setText("Estado*");
 
-        campoEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estado", "AC", "AL", "AP", "AM", "BA", "CE", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SP", "SC", "SE", "TO", "DF" }));
+        campoEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AC", "AL", "AP", "AM", "BA", "CE", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SP", "SC", "SE", "TO", "DF" }));
+        campoEstado.setSelectedIndex(14);
 
         jLabel19.setText("Complemento");
 

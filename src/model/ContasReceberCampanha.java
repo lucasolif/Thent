@@ -25,7 +25,7 @@ public class ContasReceberCampanha {
     public Integer getNumParcela() {
         return numParcela;
     }
-
+    
     public void setNumParcela(Integer numParcela) {
         this.numParcela = numParcela;
     }

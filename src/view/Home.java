@@ -20,7 +20,9 @@ import view.cadastros.SubContaResultadoForm;
 import view.cadastros.TipoOfertaForm;
 import view.cadastros.UsuarioForm;
 import view.campanhas.CadastrarCampanhaForm;
-import view.campanhas.CadastrarParticipanteAvulso;
+import view.campanhas.CadastrarParticipanteAvulsoForm;
+import view.campanhas.GerarContasReceberAvulsa;
+import view.campanhas.RemoverParticipanteForm;
 import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
@@ -387,9 +389,19 @@ public class Home extends javax.swing.JFrame {
         processosAvulsos.add(adicionarParticipante);
 
         removerParticipante.setText("Remover Participante");
+        removerParticipante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerParticipanteActionPerformed(evt);
+            }
+        });
         processosAvulsos.add(removerParticipante);
 
         lancarContasReceber.setText("Lançar Contas Receber ");
+        lancarContasReceber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lancarContasReceberActionPerformed(evt);
+            }
+        });
         processosAvulsos.add(lancarContasReceber);
 
         campanha.add(processosAvulsos);
@@ -613,11 +625,25 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_criarCampanhaActionPerformed
 
     private void adicionarParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarParticipanteActionPerformed
-        CadastrarParticipanteAvulso cadastrarParticipanteAvulso = new CadastrarParticipanteAvulso();
+        CadastrarParticipanteAvulsoForm cadastrarParticipanteAvulso = new CadastrarParticipanteAvulsoForm();
         this.painelHome.add(cadastrarParticipanteAvulso);
         cadastrarParticipanteAvulso.setVisible(true);
         cadastrarParticipanteAvulso.setPosicao();
     }//GEN-LAST:event_adicionarParticipanteActionPerformed
+
+    private void lancarContasReceberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasReceberActionPerformed
+        GerarContasReceberAvulsa gerarCrAvulsa = new GerarContasReceberAvulsa();
+        this.painelHome.add(gerarCrAvulsa);
+        gerarCrAvulsa.setVisible(true);
+        gerarCrAvulsa.setPosicao();
+    }//GEN-LAST:event_lancarContasReceberActionPerformed
+
+    private void removerParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerParticipanteActionPerformed
+        RemoverParticipanteForm removerParticipante = new RemoverParticipanteForm();
+        this.painelHome.add(removerParticipante);
+        removerParticipante.setVisible(true);
+        removerParticipante.setPosicao();
+    }//GEN-LAST:event_removerParticipanteActionPerformed
   
    
     

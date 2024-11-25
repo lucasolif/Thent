@@ -139,7 +139,7 @@ public class IgrejaDao {
     // Consulta igreja para popular o JComboBox de Igreja, no cadastro das pessoas
     public List<Igreja> consultarTodasIgrejas(){
         
-        String sql = "SELECT * FROM Igrejas ORDER BY NomeIgreja";
+        String sql = "SELECT * FROM Igrejas WHERE Status = 1 ORDER BY NomeIgreja";
         List<Igreja> todasIgrejas = new ArrayList<>();
 
         try{

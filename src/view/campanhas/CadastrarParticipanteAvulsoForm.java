@@ -28,7 +28,7 @@ import model.SubContaResultado;
 import view.carregamentoConsultas.TelaConsultasCampanhas;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
-public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame implements ConsultaCampanhas,ConsultaPessoas{
+public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame implements ConsultaCampanhas,ConsultaPessoas{
     
     private final CampanhaDao campanhaDao = new CampanhaDao();
     private final PaletaCores cores = new PaletaCores();
@@ -40,7 +40,7 @@ public class CadastrarParticipanteAvulso extends javax.swing.JInternalFrame impl
     private Pessoa participanteSelec = null;
     private List<Pessoa> listaParticipantes = null;
 
-    public CadastrarParticipanteAvulso() {
+    public CadastrarParticipanteAvulsoForm() {
         initComponents();
         formInicial();
     }

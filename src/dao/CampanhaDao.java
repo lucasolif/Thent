@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.Campanha;
 import model.ContasReceberCampanha;
+import model.Igreja;
 import model.Pessoa;
 
 
@@ -23,41 +24,47 @@ public class CampanhaDao {
     private PreparedStatement insertStmt = null;
     private PreparedStatement updateStmt = null;
     private PreparedStatement selectStmt = null;
+    private PreparedStatement deleteStmt = null;
     private ResultSet rs = null;
     
     public void cadastrarCampanha(Campanha campanha, boolean geraContaReceber){
 
-        String sqlInsert = "INSERT INTO Campanhas (DescricaoCampanha, Igreja, DuracaoCampanha, DataInicioCampanha, DataFinalCampanha, Observacao, ValorTotalCampanha, StatusCampanha, DiaPagamento, DataCadastro) VALUES (?,?,?,?,?,?,?,?,?,?,GETDATE())";
+        String sqlInsert = "INSERT INTO Campanhas (DescricaoCampanha, Igreja, DuracaoCampanha, DataInicioCampanha, DataFinalCampanha, Observacao, ValorTotalCampanha, StatusCampanha, DescricaoStatus, DiaPagamento, DataCadastro) VALUES (?,?,?,?,?,?,?,?,'Ativa',?,GETDATE())";
 
         try{
             this.conexao = Conexao.getDataSource().getConnection();
             this.conexao.setAutoCommit(false); //Setando o autocomit como falso   
             
             this.insertStmt = this.conexao.prepareStatement(sqlInsert, PreparedStatement.RETURN_GENERATED_KEYS); 
-            this.insertStmt.setString(2, campanha.getDescricaoCampanha());
-            this.insertStmt.setInt(3, campanha.getIgreja().getCodigo());
-            this.insertStmt.setInt(4, campanha.getDuracaoMeses());
-            this.insertStmt.setDate(5, (Date) campanha.getDataInicial());
-            this.insertStmt.setDate(6, (Date) campanha.getDataFinal());
-            this.insertStmt.setString(7, campanha.getObservacao());
-            this.insertStmt.setDouble(8, campanha.getValorTotalCampanha());
-            this.insertStmt.setInt(9, campanha.getStatusCampanha());
-            this.insertStmt.setInt(10, campanha.getDiaPagamento());
+            this.insertStmt.setString(1, campanha.getDescricaoCampanha());
+            this.insertStmt.setInt(2, campanha.getIgreja().getCodigo());
+            this.insertStmt.setInt(3, campanha.getDuracaoMeses());
+            this.insertStmt.setDate(4, (Date) campanha.getDataInicial());
+            this.insertStmt.setDate(5, (Date) campanha.getDataFinal());
+            this.insertStmt.setString(6, campanha.getObservacao());
+            this.insertStmt.setDouble(7, campanha.getValorTotalCampanha());
+            this.insertStmt.setInt(8, campanha.getStatusCampanha());
+            this.insertStmt.setInt(9, campanha.getDiaPagamento());
             this.insertStmt.executeUpdate();
+            
             ResultSet generatedKeys = this.insertStmt.getGeneratedKeys();
-            int codCampanha = generatedKeys.getInt(1);
-            
-            //Método para adicionar participante na tabela de participante. Vincula com a campanha por meio do código da campanha
-            if(!campanha.getParticipante().isEmpty() && generatedKeys.next()){         
-                adicionarParticipantes(campanha.getParticipante(), codCampanha);            
-            }
-            
-            //Se for escolhido para gerar contas a receber no form, o método chama a função para gerar a contas a receber
-            if(geraContaReceber){
-                gerarContasReceberCampanha(campanha.getListaCrCampanha(), codCampanha);
-            } 
+            if(generatedKeys.next()){
+                int codCampanha = generatedKeys.getInt(1);
+                
+                //Método para adicionar participante na tabela de participante. Vincula com a campanha por meio do código da campanha
+                if(!campanha.getParticipante().isEmpty()){         
+                    adicionarParticipantes(campanha.getParticipante(), codCampanha);   
+                    
+                    //Se for escolhido para gerar contas a receber no form, o método chama a função para gerar a contas a receber
+                    if(geraContaReceber){
+                        gerarContasReceberCampanha(campanha.getListaCrCampanha(), codCampanha);
+                    } 
 
-            JOptionPane.showMessageDialog(null, "Campanha cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                }
+                JOptionPane.showMessageDialog(null, "Campanha cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);             
+            }else{
+                JOptionPane.showMessageDialog(null, "Erro ao tentar recuperar a chave da campanha", "Erro 007", JOptionPane.ERROR_MESSAGE);
+            }
             this.conexao.commit();
         }catch(SQLException ex){
             if(this.conexao != null){
@@ -108,9 +115,11 @@ public class CampanhaDao {
         
         String sqlInsert = "INSERT INTO ContasReceberCampanhas (CodPessoa,NomePessoa,Parcela,ValorParcela,ValorPendente,DataVencimento,StatusPagamento,DescricaoStatus,Campanha,ContaResultado,Igreja,DataCadastro) Values(?,?,?,?,?,?,?,?,?,?,?,GETDATE())";
 
-        try{                            
-            for(ContasReceberCampanha crCamp : listaCrCamp){
-                this.insertStmt = this.conexao.prepareStatement(sqlInsert); 
+        try{                 
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.insertStmt = this.conexao.prepareStatement(sqlInsert); 
+            
+            for(ContasReceberCampanha crCamp : listaCrCamp){             
                 this.insertStmt.setInt(1, crCamp.getParticipante().getCodigo());
                 this.insertStmt.setString(2, crCamp.getParticipante().getNome());
                 this.insertStmt.setInt(3, crCamp.getParcela());
@@ -189,5 +198,149 @@ public class CampanhaDao {
             }
         }
         return listaCampanhas;
+    }
+    
+    public List<Campanha> consultarCampanhasAtiva(){
+    
+        String sql = "SELECT * FROM Campanhas WHERE StatusCampanha = 1 ORDER BY DescricaoCampanha ";  
+        List<Campanha> listaCampanhas = new ArrayList<>();
+ 
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();         
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            this.rs = this.selectStmt.executeQuery();
+
+            while(rs.next()){
+                Campanha campanha = new Campanha();
+                Igreja igreja = new Igreja();
+                campanha.setCodigo(rs.getInt("Codigo"));
+                campanha.setDescricaoCampanha(rs.getString("DescricaoCampanha"));
+                igreja.setCodigo(rs.getInt("Igreja"));
+                campanha.setDuracaoMeses(rs.getInt("DuracaoCampanha"));
+                campanha.setDataInicial(rs.getDate("DataInicioCampanha"));
+                campanha.setDataFinal(rs.getDate("DataFinalCampanha"));
+                campanha.setDiaPagamento(rs.getInt("DiaPagamento"));               
+                campanha.setObservacao(rs.getString("Observacao"));
+                campanha.setValorTotalCampanha(rs.getDouble("ValorTotalCampanha"));
+                campanha.setStatusCampanha(rs.getInt("StatusCampanha"));
+                campanha.setDescricaoStatus(rs.getString("DescricaoStatus"));
+                campanha.setDataCadastro(rs.getDate("DataCadastro"));
+                campanha.setIgreja(igreja);
+
+                listaCampanhas.add(campanha);
+            }
+          
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as campanhas ativas", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaCampanhas;
+        
+    }
+    
+    public boolean verificarParticipanteCampanha(Campanha campanha, Pessoa participante){
+        
+        String sql = "SELECT * FROM Campanhas AS C INNER JOIN ParticipantesCampanha AS PC ON PC.Campanha = C.Codigo WHERE C.StatusCampanha = 1 AND PC.Campanha = ? AND PC.CodPessoa = ? AND PC.Status = 1";  
+        boolean controle = false;
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();
+            
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            this.selectStmt.setInt(1, campanha.getCodigo());
+            this.selectStmt.setInt(2, participante.getCodigo());
+            this.rs = this.selectStmt.executeQuery();
+
+            if(this.rs.next()){
+                controle = true;
+            }   
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar verficar a existencia do participante na campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return controle;
+    } 
+    
+    public void inativarParticipante(Campanha campanha, Pessoa participante){
+                  
+        String sql = "UPDATE ParticipantesCampanha SET Status=0 OUTPUT inserted.Codigo WHERE CodPessoa=? AND Campanha=?";  
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();   
+            
+            this.updateStmt = this.conexao.prepareStatement(sql);
+            this.updateStmt.setInt(1, participante.getCodigo());
+            this.updateStmt.setInt(2, campanha.getCodigo());
+            this.rs = this.updateStmt.executeQuery();
+
+            if(this.rs.next()){
+                excluirContasReceberCampanha(campanha, participante);
+                JOptionPane.showMessageDialog(null, "Participante inativado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "Não foi encontrado o participante na campanha selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
+            }   
+        }catch(SQLException ex){
+            if(this.conexao != null){
+                try{
+                    if(!this.conexao.isClosed()){
+                        this.conexao.rollback();
+                    }              
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao tentar inativar o participante", "Erro", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.updateStmt != null) this.updateStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }      
+    }
+    
+    public void excluirContasReceberCampanha(Campanha campanha, Pessoa participante){
+        String sql = "DELETE FROM ContasReceberCampanhas WHERE CodPessoa=? AND Campanha=? AND StatusPagamento=0 AND ValorPago IS NULL";  
+        
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();      
+            
+            this.deleteStmt = this.conexao.prepareStatement(sql);
+            this.deleteStmt.setInt(1, participante.getCodigo());
+            this.deleteStmt.setInt(2, campanha.getCodigo());         
+            this.deleteStmt.execute();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao excluir as contas a pagar em aberto", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.deleteStmt != null) this.deleteStmt.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }
