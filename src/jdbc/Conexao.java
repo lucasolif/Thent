@@ -22,8 +22,8 @@ public class Conexao {
             dataSource.setPassword(config.getSenha());
 
             // Configurações adicionais do pool
-            dataSource.setInitialSize(5); // Número inicial de conexões no pool
-            dataSource.setMaxTotal(10);    // Número máximo de conexões no pool
+            dataSource.setInitialSize(20); // Número inicial de conexões no pool
+            dataSource.setMaxTotal(50);    // Número máximo de conexões no pool
             dataSource.setMinIdle(5);      // Número mínimo de conexões ociosas no pool
             dataSource.setMaxIdle(10);     // Número máximo de conexões ociosas no pool
             dataSource.setMaxWaitMillis(10000); // Tempo máximo de espera por uma conexão
@@ -38,7 +38,6 @@ public class Conexao {
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Falha ao tentar estabelecer a conexão com o banco de dados.", "Concluído", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
         return conectado;
 
@@ -51,7 +50,7 @@ public class Conexao {
         }
         return dataSource;
     }
-
+    
     //Fecha a conexão
     public void closeDataSource() {
         if (dataSource != null) {

@@ -188,7 +188,7 @@ public class ContaResultadoForm extends javax.swing.JInternalFrame implements Co
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         this.contaResultadoSelec = null;
-        limparFormulario();
+        formInicial();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -197,13 +197,14 @@ public class ContaResultadoForm extends javax.swing.JInternalFrame implements Co
 
     private void iconExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconExcluirActionPerformed
         excluirContaCaixa();
-        limparFormulario();
+        formInicial();
     }//GEN-LAST:event_iconExcluirActionPerformed
 
-    private void limparFormulario(){
+    private void formInicial(){
         this.buscarContaResultado.setText("");
         this.descricaoContaResultado.setText("");
-        this. codContaResultado.setText("");
+        this.descricaoContaResultado.requestFocusInWindow();
+        this.codContaResultado.setText("");
         this.receitaDespesa.setSelectedItem("R");
         this.contaResultadoSelec = null;
     }
@@ -246,7 +247,7 @@ public class ContaResultadoForm extends javax.swing.JInternalFrame implements Co
             this.contaResultadoSelec.setTipoReceitaDespesa(tpContaResultado);
             this.contaResultadoDao.alterar(this.contaResultadoSelec);
         }
-        limparFormulario();
+        formInicial();
     }    
     
     private void excluirContaCaixa(){

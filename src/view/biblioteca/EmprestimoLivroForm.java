@@ -291,7 +291,6 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
     }//GEN-LAST:event_bibliotecaJComboBoxItemStateChanged
 
     private void formInicial(){
-        carregarBibliotecas();
         this.nomePessoa.setEditable(true);
         this.nomePessoa.requestFocusInWindow();
         this.dataEmprestimo.setEditable(true);
@@ -300,8 +299,11 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
         this.dataEmprestimo.setText(conversor.dataAtualString());
         this.codPessoa.setText("");
         this.nomePessoa.setText("");
-
-        carregarLivros();
+        carregarBibliotecas();
+        while(this.bibliotecaJComboBox.getItemCount() <= 0){
+            carregarLivros();
+        }
+        
     }
     
     private void carregarBibliotecas(){  
@@ -412,8 +414,9 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
             pessoa.setNome(nomePessoa);
             emprestimoLivro.setPessoa(pessoa);
             emprestimoLivro.setDataEmprestimo(dataEmprestimo);
-            emprestimoLivro.setLivro(livrosEmprestado);
-            emprestimoLivro.setStatusEmprestimo(1);
+            emprestimoLivro.setListaLivro(livrosEmprestado);
+            emprestimoLivro.setStatusEmprestimo("E");
+            emprestimoLivro.setDescricaoStatus("Emprestado");
             emprestimoLivro.setBiblioteca(biblioteca);
 
             this.emprestimoDao.emprestarLivros(emprestimoLivro);

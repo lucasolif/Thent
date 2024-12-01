@@ -21,7 +21,8 @@ import view.cadastros.TipoOfertaForm;
 import view.cadastros.UsuarioForm;
 import view.campanhas.CadastrarCampanhaForm;
 import view.campanhas.CadastrarParticipanteAvulsoForm;
-import view.campanhas.GerarContasReceberAvulsa;
+import view.campanhas.ConsultarCampanhasForm;
+import view.campanhas.GerarContasReceberAvulsaForm;
 import view.campanhas.RemoverParticipanteForm;
 import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
@@ -91,6 +92,7 @@ public class Home extends javax.swing.JFrame {
         adicionarParticipante = new javax.swing.JMenuItem();
         removerParticipante = new javax.swing.JMenuItem();
         lancarContasReceber = new javax.swing.JMenuItem();
+        consultarCampanhas = new javax.swing.JMenuItem();
         configuracoes = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenu();
         alterarSenha = new javax.swing.JMenuItem();
@@ -406,6 +408,15 @@ public class Home extends javax.swing.JFrame {
 
         campanha.add(processosAvulsos);
 
+        consultarCampanhas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, 0));
+        consultarCampanhas.setText("Consultar Campanhas");
+        consultarCampanhas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultarCampanhasActionPerformed(evt);
+            }
+        });
+        campanha.add(consultarCampanhas);
+
         menuBarra.add(campanha);
 
         configuracoes.setText("Configurações");
@@ -632,7 +643,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_adicionarParticipanteActionPerformed
 
     private void lancarContasReceberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasReceberActionPerformed
-        GerarContasReceberAvulsa gerarCrAvulsa = new GerarContasReceberAvulsa();
+        GerarContasReceberAvulsaForm gerarCrAvulsa = new GerarContasReceberAvulsaForm();
         this.painelHome.add(gerarCrAvulsa);
         gerarCrAvulsa.setVisible(true);
         gerarCrAvulsa.setPosicao();
@@ -644,6 +655,13 @@ public class Home extends javax.swing.JFrame {
         removerParticipante.setVisible(true);
         removerParticipante.setPosicao();
     }//GEN-LAST:event_removerParticipanteActionPerformed
+
+    private void consultarCampanhasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarCampanhasActionPerformed
+        ConsultarCampanhasForm consultarCampanhas = new ConsultarCampanhasForm();
+        this.painelHome.add(consultarCampanhas);
+        consultarCampanhas.setVisible(true);
+        consultarCampanhas.setPosicao();
+    }//GEN-LAST:event_consultarCampanhasActionPerformed
   
    
     
@@ -671,6 +689,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu campanha;
     private javax.swing.JMenuItem cancelarContasPagar;
     private javax.swing.JMenu configuracoes;
+    private javax.swing.JMenuItem consultarCampanhas;
     private javax.swing.JMenuItem criarCampanha;
     private javax.swing.JMenuItem efetivacaoDizimoOfertas;
     private javax.swing.JMenuItem efetivarContasPagar;

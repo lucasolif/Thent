@@ -11,10 +11,8 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 import model.ContaResultado;
 import model.SubContaResultado;
-import view.carregamentoConsultas.TelaConsultaContaResultado;
 import view.carregamentoConsultas.TelaConsultaSubContaResultado;
 
 
@@ -213,6 +211,7 @@ public class SubContaResultadoForm extends javax.swing.JInternalFrame implements
     private void formInicial(){
         this.buscarSubContaResultado.setText("");
         this.descricaoSubContaResultado.setText("");
+        this.descricaoSubContaResultado.requestFocusInWindow();
         this.codSubContaResultado.setText("");
         this.subContaResultadoSelec = null;
         carregarContaResultado();

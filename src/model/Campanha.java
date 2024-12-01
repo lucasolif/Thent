@@ -15,10 +15,9 @@ public class Campanha {
     private Date dataFinal;
     private Integer diaPagamento;
     private String observacao;
-    private List<Pessoa> participante;
-    private List<ContasReceberCampanha> listaCrCampanha;
+    private List<ParticipanteCampanha> participante;
     private double valorTotalCampanha;
-    private Integer statusCampanha;
+    private String statusCampanha;
     private String descricaoStatus;
     private Date dataCadastro;
 
@@ -39,14 +38,6 @@ public class Campanha {
 
     public void setDescricaoStatus(String descricaoStatus) {
         this.descricaoStatus = descricaoStatus;
-    }
-
-    public List<ContasReceberCampanha> getListaCrCampanha() {
-        return listaCrCampanha;
-    }
-
-    public void setListaCrCampanha(List<ContasReceberCampanha> listaCrCampanha) {
-        this.listaCrCampanha = listaCrCampanha;
     }
     
     public Integer getCodigo() {
@@ -105,14 +96,6 @@ public class Campanha {
         this.observacao = observacao;
     }
 
-    public List<Pessoa> getParticipante() {
-        return participante;
-    }
-
-    public void setParticipante(List<Pessoa> participante) {
-        this.participante = participante;
-    }
-
     public double getValorTotalCampanha() {
         return valorTotalCampanha;
     }
@@ -121,11 +104,11 @@ public class Campanha {
         this.valorTotalCampanha = valorTotalCampanha;
     }
 
-    public Integer getStatusCampanha() {
+    public String getStatusCampanha() {
         return statusCampanha;
     }
 
-    public void setStatusCampanha(Integer statusCampanha) {
+    public void setStatusCampanha(String statusCampanha) {
         this.statusCampanha = statusCampanha;
     }
 
@@ -137,6 +120,14 @@ public class Campanha {
         this.diaPagamento = diaPagamento;
     }
 
+    public List<ParticipanteCampanha> getParticipante() {
+        return participante;
+    }
+
+    public void setParticipante(List<ParticipanteCampanha> participante) {
+        this.participante = participante;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;

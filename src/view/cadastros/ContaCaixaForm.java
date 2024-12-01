@@ -21,6 +21,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
 
     public ContaCaixaForm() {
         initComponents();
+        formInicial();
     }
 
 
@@ -202,6 +203,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     private void formInicial(){
         this.campoBusca.setText("");
         this.descricaoContaCaixa.setText("");
+        this.descricaoContaCaixa.requestFocusInWindow();
         this.codContaCaixa.setText("");
         this.cbAtivo.setSelected(true);
         this.cbAtivo.setEnabled(false);

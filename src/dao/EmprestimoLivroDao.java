@@ -42,7 +42,7 @@ public class EmprestimoLivroDao {
 
             if(generatedKeysEmp.next()){          
                 //Adiciona o livro para emprestimo
-                adicionarLivroEmprestado(livrosEmprestados.getLivro(),generatedKeysEmp,livrosEmprestados);     
+                adicionarLivroEmprestado(livrosEmprestados.getListaLivro(),generatedKeysEmp,livrosEmprestados);     
                 JOptionPane.showMessageDialog(null, "Empréstimo do livro efetuado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 JOptionPane.showMessageDialog(null, "Chave do empréstimo não foi gerada", "Erro", JOptionPane.INFORMATION_MESSAGE);
@@ -72,7 +72,7 @@ public class EmprestimoLivroDao {
         
     private void adicionarLivroEmprestado(List<Livro> livros, ResultSet generatedKeysEmp, EmprestimoLivro livrosEmprestados){     
         
-        String insertLivrosEmprestados = "INSERT INTO LivrosEmprestados (Livro,CodEmprestimo,StatusEmprestimo,DescricaoStatus,DataEmprestimo)VALUES (?,?,?,'Emprestado',?)";
+        String insertLivrosEmprestados = "INSERT INTO LivrosEmprestados (Livro,CodEmprestimo,StatusEmprestimo,DescricaoStatus,DataEmprestimo)VALUES (?,?,?,?,?)";
         String insertRegistroSaida = "INSERT INTO RegistroSaidaEntradaLivro (CodEmprestimo,CodLivroEmprestados,TipoMovimentacao,DataMovimentacao)VALUES (?,?,'SAÍDA - EMPRÉSTIMO',GETDATE())";
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade - 1 WHERE Livro=? AND Biblioteca=?";
                    
@@ -85,8 +85,9 @@ public class EmprestimoLivroDao {
                 insertStmt = this.conexao.prepareStatement(insertLivrosEmprestados, PreparedStatement.RETURN_GENERATED_KEYS); 
                 insertStmt.setInt(1, empLivro.getCodInterno());
                 insertStmt.setInt(2, codEmprestimo);
-                insertStmt.setInt(3, livrosEmprestados.getStatusEmprestimo());
-                insertStmt.setDate(4, (Date) livrosEmprestados.getDataEmprestimo());
+                insertStmt.setString(3, livrosEmprestados.getStatusEmprestimo());
+                insertStmt.setString(4, livrosEmprestados.getDescricaoStatus());
+                insertStmt.setDate(5, (Date) livrosEmprestados.getDataEmprestimo());
                 insertStmt.executeUpdate();   
                 ResultSet generatedKeysLiv = insertStmt.getGeneratedKeys();
                 
@@ -99,7 +100,7 @@ public class EmprestimoLivroDao {
                         //Registra a movimentação do livro
                         registrarEntradaSaidaLivro(insertRegistroSaida, codEmprestimo, keyLivroEmp);
                     }else{
-                        JOptionPane.showMessageDialog(null, "Não foi gerada a chave para o livro com o código " + empLivro.getCodInterno(), "Erro", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Não foi gerada a chave para o livro" + empLivro.getCodInterno(), "Erro", JOptionPane.ERROR_MESSAGE);
                     }                           
                 }else{
                     JOptionPane.showMessageDialog(null, "Não foi gerada a chave para o empréstimo.", "Erro", JOptionPane.ERROR_MESSAGE);                                 
@@ -118,7 +119,7 @@ public class EmprestimoLivroDao {
             this.updateStmt.setInt(2, bibliteca.getCodigo());
             this.updateStmt.executeUpdate();            
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar atualizar o saldo do livro", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -134,14 +135,67 @@ public class EmprestimoLivroDao {
         
     }
     
+    public void devolverLivroEmprestado(List<EmprestimoLivro> livrosDevolvido){
+        
+        String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro (CodEmprestimo,CodLivroEmprestados,TipoMovimentacao,DataMovimentacao)VALUES (?,?,'ENTRADA - DEVOLUÇÃO',GETDATE())";      
+        String sqlUpdate = "UPDATE LivrosEmprestados SET StatusEmprestimo = 'D', DescricaoStatus = 'Devolvido', DataDevolucao = ? OUTPUT INSERTED.Codigo, INSERTED.CodEmprestimo WHERE CodEmprestimo = ? AND Livro = ? AND Codigo = ?";
+        String sqlUpdate2 = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Livro = ? AND Biblioteca = ?";
+
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
+       
+            for(EmprestimoLivro devLivro : livrosDevolvido){               
+                this.updateStmt = conexao.prepareStatement(sqlUpdate); 
+    
+                this.updateStmt.setDate(1, (Date) devLivro.getDataDevolucao());
+                this.updateStmt.setInt(2, devLivro.getCodigoEmprestimo());
+                this.updateStmt.setInt(3, devLivro.getListaLivro().get(0).getCodInterno());
+                this.updateStmt.setInt(4, devLivro.getCodigoInternoEmprestimo());
+                this.rs = this.updateStmt.executeQuery(); 
+                
+                if (this.rs.next()) {
+                    int codigo = this.rs.getInt("Codigo");
+                    int codEmprestimo = this.rs.getInt("CodEmprestimo");
+
+                    // Atualizar a quantidade de livros da biblioteca
+                    atualizarSaldoLivro(sqlUpdate2, devLivro.getListaLivro().get(0), devLivro.getBiblioteca());
+                    registrarEntradaSaidaLivro(sqlInsert, codEmprestimo, codigo);
+                    
+                    JOptionPane.showMessageDialog(null, "Devolução efetuada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar a devolução", "Erro", JOptionPane.ERROR_MESSAGE); 
+                }
+            }
+            this.conexao.commit();        
+        }catch(SQLException ex){
+            if(this.conexao != null){
+                try{
+                    this.conexao.rollback();
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar a devolução", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                if(this.rs != null) this.rs.close();
+                if(this.updateStmt != null) this.updateStmt.close();
+                if(this.conexao != null) this.conexao.close();
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }
+    
     public List<EmprestimoLivro> consultarEmprestimosLivro(EmprestimoLivro filtroEmpLivro, java.util.Date dataEmprestimoInicial, java.util.Date dataEmprestimoFinal, java.util.Date dataDevolucaoInicial, java.util.Date dataDevolucaoFinal){
         
         List<EmprestimoLivro> listaEmpLivro = new ArrayList<>();
         
-        // Montando a query SQL com placeholders
         String sql = "SELECT EMP.Codigo AS CodigoEmprestimo, B.Codigo AS CodBiblioteca, B.NomeBiblioteca AS NomeBiblioteca, P.Codigo AS CodPessoa, P.Nome AS NomePessoa, " +
             "LV.Codigo AS CodInternoLivro, LV.CodLivro AS CodLivro, LV.Nome AS NomeLivro, LV.Volume AS VolumeLivro, " +
-            "LE.StatusEmprestimo AS StatusEmprestimo, LE.DescricaoStatus AS DescricaoStatus, LE.DataEmprestimo AS DataEmprestimo, LE.DataDevolucao AS DataDevolucao " +
+            "LE.Codigo As CodInternoLivroEmprestado, LE.StatusEmprestimo AS StatusEmprestimo, LE.DescricaoStatus AS DescricaoStatus, LE.DataEmprestimo AS DataEmprestimo, LE.DataDevolucao AS DataDevolucao " +
             "FROM Emprestimo AS EMP " +
             "INNER JOIN LivrosEmprestados LE ON LE.CodEmprestimo = EMP.Codigo " +
             "INNER JOIN Pessoas P ON EMP.Pessoa = P.Codigo " +
@@ -181,9 +235,9 @@ public class EmprestimoLivroDao {
             }
                        
             // Parâmetro para livro
-            if (!filtroEmpLivro.getLivro().isEmpty()) {
-                this.selectStmt.setInt(7, filtroEmpLivro.getLivro().get(0).getCodInterno());
-                this.selectStmt.setInt(8, filtroEmpLivro.getLivro().get(0).getCodInterno());
+            if (filtroEmpLivro.getLivro() != null) {
+                this.selectStmt.setInt(7, filtroEmpLivro.getLivro().getCodInterno());
+                this.selectStmt.setInt(8, filtroEmpLivro.getLivro().getCodInterno());
             } else {
                 this.selectStmt.setNull(7, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(8, java.sql.Types.INTEGER);
@@ -200,8 +254,8 @@ public class EmprestimoLivroDao {
 
             // Parâmetro para status
             if (filtroEmpLivro.getStatusEmprestimo()!= null) {
-                this.selectStmt.setInt(11, filtroEmpLivro.getStatusEmprestimo());
-                this.selectStmt.setInt(12, filtroEmpLivro.getStatusEmprestimo());
+                this.selectStmt.setString(11, filtroEmpLivro.getStatusEmprestimo());
+                this.selectStmt.setString(12, filtroEmpLivro.getStatusEmprestimo());
             } else {
                 this.selectStmt.setNull(11, java.sql.Types.INTEGER);
                 this.selectStmt.setNull(12, java.sql.Types.INTEGER);
@@ -233,8 +287,9 @@ public class EmprestimoLivroDao {
                 livro.setNomeLivro(rs.getString("NomeLivro"));
                 livro.setVolume(rs.getInt("VolumeLivro"));
                 listaLivro.add(livro);
-                empLivro.setCodigo(rs.getInt("CodigoEmprestimo"));
-                empLivro.setStatusEmprestimo(rs.getInt("StatusEmprestimo"));
+                empLivro.setCodigoInternoEmprestimo(rs.getInt("CodInternoLivroEmprestado"));
+                empLivro.setCodigoEmprestimo(rs.getInt("CodigoEmprestimo"));
+                empLivro.setStatusEmprestimo(rs.getString("StatusEmprestimo"));
                 empLivro.setDescricaoStatus(rs.getString("DescricaoStatus"));
                 empLivro.setDataEmprestimo(rs.getDate("DataEmprestimo"));
                 empLivro.setDataDevolucao(rs.getDate("DataDevolucao"));
@@ -242,7 +297,7 @@ public class EmprestimoLivroDao {
                 biblioteca.setNomeBiblioteca(rs.getString("NomeBiblioteca"));
                 empLivro.setBiblioteca(biblioteca);
                 empLivro.setPessoa(pessoa);
-                empLivro.setLivro(listaLivro);
+                empLivro.setListaLivro(listaLivro);
 
                 listaEmpLivro.add(empLivro);
             }
@@ -260,63 +315,6 @@ public class EmprestimoLivroDao {
         }   
         return listaEmpLivro;
     }
-
-    public void devolverLivroEmprestado(List<EmprestimoLivro> livrosDevolvido){
-        
-        String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro (CodEmprestimo,CodLivroEmprestados,TipoMovimentacao,DataMovimentacao)VALUES (?,?,'ENTRADA - DEVOLUÇÃO',GETDATE())";
-        String sqlUpdate = "UPDATE LE SET LE.StatusEmprestimo=?, LE.DataDevolucao=?, DescricaoStatus = 'Devolvido' "
-            + "OUTPUT inserted.Codigo, inserted.CodEmprestimo "
-            + "FROM LivrosEmprestados AS LE "
-            + "INNER JOIN Emprestimo AS EMP ON EMP.Codigo = LE.CodEmprestimo " 
-            + "WHERE LE.CodEmprestimo=? AND LE.Livro=? AND LE.StatusEmprestimo=1 AND LE.DataDevolucao IS NULL AND EMP.Pessoa=? AND EMP.Biblioteca=?";
-        String sqlUpdate2 = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Livro = ?";
-
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();
-            this.conexao.setAutoCommit(false); //Setando o autocomit como falso
-       
-            for(EmprestimoLivro devLivro : livrosDevolvido){ 
-                
-                this.updateStmt = conexao.prepareStatement(sqlUpdate, PreparedStatement.RETURN_GENERATED_KEYS); 
-                this.updateStmt.setInt(1, devLivro.getStatusEmprestimo());
-                this.updateStmt.setDate(2, (Date) devLivro.getDataDevolucao());
-                this.updateStmt.setInt(3, devLivro.getCodigo());
-                this.updateStmt.setInt(4, devLivro.getLivro().get(0).getCodLivro());
-                this.updateStmt.setInt(5, devLivro.getPessoa().getCodigo());
-                this.updateStmt.setInt(6, devLivro.getBiblioteca().getCodigo());                         
-                this.rs = this.updateStmt.executeQuery(); 
-                
-                if (this.rs.next()) {                           
-                    // Atualizar a quantidade de livros da biblioteca                  
-                    atualizarSaldoLivro(sqlUpdate2,devLivro.getLivro().get(0),devLivro.getBiblioteca());
-                    registrarEntradaSaidaLivro(sqlInsert,this.rs.getInt("CodEmprestimo"), this.rs.getInt("Codigo"));              
-                }
-            }
-            //Confimar a transação, ou seja, a inserção dos dados
-            this.conexao.commit();
-            JOptionPane.showMessageDialog(null, "Devolução efetuada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-        }catch(SQLException ex){
-            //Se ocorrer um erro, fazer rollback da transação
-            if(this.conexao != null){
-                try{
-                    this.conexao.rollback();
-                }catch(SQLException e){
-                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar a devolução", "Erro 007", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            //Fechar os recursos abertos
-            try{
-                if(this.rs != null) this.rs.close();
-                if(this.updateStmt != null) this.updateStmt.close();
-                if(this.conexao != null) this.conexao.close();
-            }catch(SQLException ex){
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        
-    }
     
     //Consulta que aparece todos os livros emprestados, quando abrir a tela;
     public List<EmprestimoLivro> consultarEmprestimosStatusEmprestado(){
@@ -326,13 +324,13 @@ public class EmprestimoLivroDao {
         // Montando a query SQL com placeholders
         String sqlSelect = "SELECT EMP.Codigo AS CodigoEmprestimo, B.Codigo AS CodBiblioteca, B.NomeBiblioteca AS NomeBiblioteca, P.Codigo AS CodPessoa, P.Nome AS NomePessoa, " +
             "LV.Codigo AS CodInternoLivro, LV.CodLivro AS CodLivro, LV.Nome AS NomeLivro, LV.Volume AS VolumeLivro, " +
-            "LE.StatusEmprestimo AS StatusEmprestimo, LE.DataEmprestimo AS DataEmprestimo, LE.DataDevolucao AS DataDevolucao " +
+            "LE.Codigo As CodInternoLivroEmprestado, LE.StatusEmprestimo AS StatusEmprestimo, LE.DescricaoStatus AS DescricaoStatus, LE.DataEmprestimo AS DataEmprestimo, LE.DataDevolucao AS DataDevolucao " +
             "FROM Emprestimo AS EMP " +
             "INNER JOIN LivrosEmprestados LE ON EMP.Codigo = LE.CodEmprestimo " +
             "INNER JOIN Pessoas P ON EMP.Pessoa = P.Codigo " +
             "INNER JOIN Livros LV ON LE.Livro = LV.Codigo " +
             "INNER JOIN Bibliotecas AS B ON B.Codigo = EMP.Biblioteca " +
-            "WHERE LE.StatusEmprestimo = 1 AND LE.DataDevolucao IS NULL";
+            "WHERE LE.StatusEmprestimo = 'E' AND LE.DataDevolucao IS NULL";
 
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -347,28 +345,31 @@ public class EmprestimoLivroDao {
                 List<Livro> listaLivro = new ArrayList<>();
                 Biblioteca biblioteca = new Biblioteca();
                 
-                pessoa.setCodigo(rs.getInt("CodPessoa"));
-                pessoa.setNome(rs.getString("NomePessoa"));
-                livro.setCodInterno(rs.getInt("CodInternoLivro"));
-                livro.setCodLivro(rs.getInt("CodLivro"));
-                livro.setNomeLivro(rs.getString("NomeLivro"));
-                livro.setVolume(rs.getInt("VolumeLivro"));
-                empLivro.setCodigo(rs.getInt("CodigoEmprestimo"));
-                empLivro.setStatusEmprestimo(rs.getInt("StatusEmprestimo"));
-                empLivro.setDataEmprestimo(rs.getDate("DataEmprestimo"));
-                empLivro.setDataDevolucao(rs.getDate("DataDevolucao"));
-                biblioteca.setCodigo(rs.getInt("CodBiblioteca"));
-                biblioteca.setNomeBiblioteca(rs.getString("NomeBiblioteca"));
+                pessoa.setCodigo(this.rs.getInt("CodPessoa"));
+                pessoa.setNome(this.rs.getString("NomePessoa"));
+                livro.setCodInterno(this.rs.getInt("CodInternoLivro"));
+                livro.setCodLivro(this.rs.getInt("CodLivro"));
+                livro.setNomeLivro(this.rs.getString("NomeLivro"));
+                livro.setVolume(this.rs.getInt("VolumeLivro"));
+                empLivro.setCodigoInternoEmprestimo(this.rs.getInt("CodInternoLivroEmprestado"));
+                empLivro.setCodigoEmprestimo(this.rs.getInt("CodigoEmprestimo"));
+                empLivro.setStatusEmprestimo(this.rs.getString("StatusEmprestimo"));
+                empLivro.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
+                empLivro.setDataEmprestimo(this.rs.getDate("DataEmprestimo"));
+                empLivro.setDataDevolucao(this.rs.getDate("DataDevolucao"));
+                biblioteca.setCodigo(this.rs.getInt("CodBiblioteca"));
+                biblioteca.setNomeBiblioteca(this.rs.getString("NomeBiblioteca"));
                 listaLivro.add(livro);
                 empLivro.setBiblioteca(biblioteca);
                 empLivro.setPessoa(pessoa);
-                empLivro.setLivro(listaLivro);
+                empLivro.setListaLivro(listaLivro);
 
                 listaEmpLivro.add(empLivro);
             }
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar todos os livros emprestados", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+e.getMessage());
         } finally {
             // Fechando recursos
             try {

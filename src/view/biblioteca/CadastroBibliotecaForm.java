@@ -9,7 +9,6 @@ import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.Biblioteca;
 import model.Igreja;

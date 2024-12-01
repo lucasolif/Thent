@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 import model.Endereco;
 import model.Igreja;
 import model.Pessoa;
@@ -449,6 +448,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         this.campoBusca.setText("");
         this.campoCodPessoa.setText("");
         this.campoNome.setText("");
+        this.campoNome.requestFocusInWindow();
         this.campoCpfCnpj.setText("");
         this.campoRg.setText("");
         this.campoDataNascimento.setText("");
@@ -503,6 +503,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
             this.cbAtivo.setSelected(false);
         }
         
+        this.cbAtivo.setEnabled(true);
         this.pessoaSelec = pessoa;
     }
 

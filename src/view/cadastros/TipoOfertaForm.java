@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 import model.TipoOferta;
 import view.carregamentoConsultas.TelaConsultaTiposOferta;
 
@@ -22,6 +21,7 @@ public class TipoOfertaForm extends javax.swing.JInternalFrame implements Consul
     
     public TipoOfertaForm() {
         initComponents();
+        formIncial();
     }
 
     @SuppressWarnings("unchecked")
@@ -193,6 +193,7 @@ public class TipoOfertaForm extends javax.swing.JInternalFrame implements Consul
     private void formIncial(){
         this.campoBuscar.setText("");
         this.descricaoOferta.setText("");
+        this.descricaoOferta.requestFocusInWindow();
         this.codTipoOferta.setText("");
         this.tpOfertaSelec = null;
     }

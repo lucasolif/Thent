@@ -14,6 +14,7 @@ import jdbc.Conexao;
 import model.Campanha;
 import model.ContasReceberCampanha;
 import model.Igreja;
+import model.ParticipanteCampanha;
 import model.Pessoa;
 
 
@@ -29,7 +30,7 @@ public class CampanhaDao {
     
     public void cadastrarCampanha(Campanha campanha, boolean geraContaReceber){
 
-        String sqlInsert = "INSERT INTO Campanhas (DescricaoCampanha, Igreja, DuracaoCampanha, DataInicioCampanha, DataFinalCampanha, Observacao, ValorTotalCampanha, StatusCampanha, DescricaoStatus, DiaPagamento, DataCadastro) VALUES (?,?,?,?,?,?,?,?,'Ativa',?,GETDATE())";
+        String sqlInsert = "INSERT INTO Campanhas (DescricaoCampanha, Igreja, DuracaoCampanha, DataInicioCampanha, DataFinalCampanha, Observacao, ValorTotalCampanha, StatusCampanha, DescricaoStatus, DiaPagamento, DataCadastro) VALUES (?,?,?,?,?,?,?,?,'Andamento',?,GETDATE())";
 
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -43,7 +44,7 @@ public class CampanhaDao {
             this.insertStmt.setDate(5, (Date) campanha.getDataFinal());
             this.insertStmt.setString(6, campanha.getObservacao());
             this.insertStmt.setDouble(7, campanha.getValorTotalCampanha());
-            this.insertStmt.setInt(8, campanha.getStatusCampanha());
+            this.insertStmt.setString(8, campanha.getStatusCampanha());
             this.insertStmt.setInt(9, campanha.getDiaPagamento());
             this.insertStmt.executeUpdate();
             
@@ -57,7 +58,7 @@ public class CampanhaDao {
                     
                     //Se for escolhido para gerar contas a receber no form, o método chama a função para gerar a contas a receber
                     if(geraContaReceber){
-                        gerarContasReceberCampanha(campanha.getListaCrCampanha(), codCampanha);
+                        gerarContasReceberCampanha(campanha.getParticipante() , codCampanha);
                     } 
 
                 }
@@ -76,7 +77,6 @@ public class CampanhaDao {
             }
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a campanha", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
-            //Fechar os recursos abertos
             try{
                 if(this.rs != null) this.rs.close();
                 if(this.insertStmt != null) this.insertStmt.close();
@@ -87,7 +87,7 @@ public class CampanhaDao {
         }
     }   
     
-    public void adicionarParticipantes(List<Pessoa> participantes, int codCampanha){
+    public void adicionarParticipantes(List<ParticipanteCampanha> participantes, int codCampanha){
         
         String sqlInsert = "INSERT INTO ParticipantesCampanha (CodPessoa, NomePessoa, Campanha, Status, DataCadastro) VALUES (?,?,?,?,GETDATE())";
 
@@ -111,27 +111,57 @@ public class CampanhaDao {
         }
     }
     
-    public void gerarContasReceberCampanha(List<ContasReceberCampanha> listaCrCamp, int codCampanha){
+    public void adicionarParticipantesAvulso(ParticipanteCampanha participantes, int codCampanha, boolean geraContaReceber){
+        
+        String sqlInsert = "INSERT INTO ParticipantesCampanha (CodPessoa, NomePessoa, Campanha, Status, DataCadastro) VALUES (?,?,?,?,GETDATE())";
+
+        try{                
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.insertStmt = this.conexao.prepareStatement(sqlInsert, PreparedStatement.RETURN_GENERATED_KEYS);
+            
+            this.insertStmt.setInt(1, participantes.getCodigo());
+            this.insertStmt.setString(2, participantes.getNome());
+            this.insertStmt.setInt(3, codCampanha);
+            this.insertStmt.setInt(4, 1);
+            this.insertStmt.executeUpdate();
+            
+            ResultSet generatedKeys = this.insertStmt.getGeneratedKeys();                      
+            if(generatedKeys.next() && geraContaReceber){
+                gerarContasReceberAvulsaCampanha(participantes, codCampanha);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar os participantes", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                if(this.insertStmt != null) this.insertStmt.close();
+                if(this.conexao != null) this.conexao.close();
+            }catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    public void gerarContasReceberCampanha(List<ParticipanteCampanha> listaParticipantes, int codCampanha){
         
         String sqlInsert = "INSERT INTO ContasReceberCampanhas (CodPessoa,NomePessoa,Parcela,ValorParcela,ValorPendente,DataVencimento,StatusPagamento,DescricaoStatus,Campanha,ContaResultado,Igreja,DataCadastro) Values(?,?,?,?,?,?,?,?,?,?,?,GETDATE())";
 
         try{                 
-            this.conexao = Conexao.getDataSource().getConnection();
             this.insertStmt = this.conexao.prepareStatement(sqlInsert); 
-            
-            for(ContasReceberCampanha crCamp : listaCrCamp){             
-                this.insertStmt.setInt(1, crCamp.getParticipante().getCodigo());
-                this.insertStmt.setString(2, crCamp.getParticipante().getNome());
-                this.insertStmt.setInt(3, crCamp.getParcela());
-                this.insertStmt.setDouble(4, crCamp.getValorParcela());
-                this.insertStmt.setDouble(5, crCamp.getValorPendente());
-                this.insertStmt.setDate(6, (Date) crCamp.getDataVencimento());
-                this.insertStmt.setInt(7, crCamp.getStatusPagamento());
-                this.insertStmt.setString(8, crCamp.getDescricaoStatus());
-                this.insertStmt.setInt(9, codCampanha);
-                this.insertStmt.setInt(10, crCamp.getContaResultado().getCodigo());
-                this.insertStmt.setInt(11, crCamp.getIgreja().getCodigo());
-                this.insertStmt.execute();
+            for(ParticipanteCampanha part : listaParticipantes){
+                for(ContasReceberCampanha crCamp : part.getListaCrCampanha()){             
+                    this.insertStmt.setInt(1, part.getCodigo());
+                    this.insertStmt.setString(2, part.getNome());
+                    this.insertStmt.setInt(3, crCamp.getParcela());
+                    this.insertStmt.setDouble(4, crCamp.getValorParcela());
+                    this.insertStmt.setDouble(5, crCamp.getValorPendente());
+                    this.insertStmt.setDate(6, (Date) crCamp.getDataVencimento());
+                    this.insertStmt.setInt(7, crCamp.getStatusPagamento());
+                    this.insertStmt.setString(8, crCamp.getDescricaoStatus());
+                    this.insertStmt.setInt(9, codCampanha);
+                    this.insertStmt.setInt(10, crCamp.getContaResultado().getCodigo());
+                    this.insertStmt.setInt(11, crCamp.getIgreja().getCodigo());
+                    this.insertStmt.execute();
+                }
             }
             JOptionPane.showMessageDialog(null, "Contas a receber gerada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
@@ -144,112 +174,46 @@ public class CampanhaDao {
             }
         }
     }
+    
+    public void gerarContasReceberAvulsaCampanha(ParticipanteCampanha participante, int codCampanha){
+        
+        String sqlInsert = "INSERT INTO ContasReceberCampanhas (CodPessoa,NomePessoa,Parcela,ValorParcela,ValorPendente,DataVencimento,StatusPagamento,DescricaoStatus,Campanha,ContaResultado,Igreja,DataCadastro) Values(?,?,?,?,?,?,?,?,?,?,?,GETDATE())";
 
-    public List<Campanha> consultarCampanhasAtiva(String busca){
-        String sql = "SELECT * FROM Campanhas WHERE ((? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR DescricaoCampanha LIKE ?)) "
-        + "AND StatusCampanha = 1 AND DescricaoStatus LIKE '%Ativa%' ORDER BY Descricao";  
-        List<Campanha> listaCampanhas = new ArrayList<>();
- 
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();        
-            this.selectStmt = this.conexao.prepareStatement(sql);
-                 
-            if (busca != null) {
-                this.selectStmt.setString(1,  "%" + busca + "%");
-                this.selectStmt.setString(2,  "%" + busca + "%");
-                this.selectStmt.setString(3,  "%" + busca + "%");
-                this.selectStmt.setString(4,  "%" + busca + "%");
-            } else {
-                this.selectStmt.setNull(1, java.sql.Types.INTEGER);
-                this.selectStmt.setNull(2, java.sql.Types.INTEGER);
-                this.selectStmt.setNull(3, java.sql.Types.INTEGER);
-                this.selectStmt.setNull(4, java.sql.Types.INTEGER);
+        try{           
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.insertStmt = this.conexao.prepareStatement(sqlInsert); 
+            
+            for(ContasReceberCampanha crCamp : participante.getListaCrCampanha()){             
+                this.insertStmt.setInt(1, participante.getCodigo());
+                this.insertStmt.setString(2, participante.getNome());
+                this.insertStmt.setInt(3, crCamp.getParcela());
+                this.insertStmt.setDouble(4, crCamp.getValorParcela());
+                this.insertStmt.setDouble(5, crCamp.getValorPendente());
+                this.insertStmt.setDate(6, (Date) crCamp.getDataVencimento());
+                this.insertStmt.setInt(7, crCamp.getStatusPagamento());
+                this.insertStmt.setString(8, crCamp.getDescricaoStatus());
+                this.insertStmt.setInt(9, codCampanha);
+                this.insertStmt.setInt(10, crCamp.getContaResultado().getCodigo());
+                this.insertStmt.setInt(11, crCamp.getIgreja().getCodigo());
+                this.insertStmt.execute();
             }
-            this.rs = this.selectStmt.executeQuery();
-
-            while(this.rs.next()){
-                Campanha campanha = new Campanha();
-                campanha.setCodigo(this.rs.getInt("Codigo"));
-                campanha.setDescricaoCampanha(this.rs.getString("DescricaoCampanha"));
-                campanha.setDuracaoMeses(this.rs.getInt("DuracaoCampanha"));
-                campanha.setDataInicial(this.rs.getDate("DataInicioCampanha"));
-                campanha.setDataFinal(this.rs.getDate("DataFinalCampanha"));
-                campanha.setDiaPagamento(this.rs.getInt("DiaPagamento"));
-                campanha.setObservacao(this.rs.getString("Observacao"));
-                campanha.setValorTotalCampanha(this.rs.getDouble("ValoTotalCampanha"));
-                campanha.setStatusCampanha(this.rs.getInt("StatusCampanha"));
-                campanha.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
-                campanha.setDataCadastro(this.rs.getDate("DataCadastro"));
-
-                listaCampanhas.add(campanha);
-            }
-            this.selectStmt.execute();
-          
+            
+            JOptionPane.showMessageDialog(null, "Contas a receber gerada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as Contas Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao gerar as contas a receber", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
-            // Fechar recursos
             try{
-                if (this.rs != null) this.rs.close();
-                if (this.selectStmt != null) this.selectStmt.close();
-                if (this.conexao != null) this.conexao.close();
-            } catch (SQLException ex) {
+                if(this.insertStmt != null) this.insertStmt.close();
+                if(this.conexao != null) this.conexao.close();
+            }catch(SQLException ex){
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-        return listaCampanhas;
     }
     
-    public List<Campanha> consultarCampanhasAtiva(){
-    
-        String sql = "SELECT * FROM Campanhas WHERE StatusCampanha = 1 ORDER BY DescricaoCampanha ";  
-        List<Campanha> listaCampanhas = new ArrayList<>();
- 
-        try{
-            this.conexao = Conexao.getDataSource().getConnection();         
-            this.selectStmt = this.conexao.prepareStatement(sql);
-            this.rs = this.selectStmt.executeQuery();
-
-            while(rs.next()){
-                Campanha campanha = new Campanha();
-                Igreja igreja = new Igreja();
-                campanha.setCodigo(rs.getInt("Codigo"));
-                campanha.setDescricaoCampanha(rs.getString("DescricaoCampanha"));
-                igreja.setCodigo(rs.getInt("Igreja"));
-                campanha.setDuracaoMeses(rs.getInt("DuracaoCampanha"));
-                campanha.setDataInicial(rs.getDate("DataInicioCampanha"));
-                campanha.setDataFinal(rs.getDate("DataFinalCampanha"));
-                campanha.setDiaPagamento(rs.getInt("DiaPagamento"));               
-                campanha.setObservacao(rs.getString("Observacao"));
-                campanha.setValorTotalCampanha(rs.getDouble("ValorTotalCampanha"));
-                campanha.setStatusCampanha(rs.getInt("StatusCampanha"));
-                campanha.setDescricaoStatus(rs.getString("DescricaoStatus"));
-                campanha.setDataCadastro(rs.getDate("DataCadastro"));
-                campanha.setIgreja(igreja);
-
-                listaCampanhas.add(campanha);
-            }
-          
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as campanhas ativas", "Erro 001", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            // Fechar recursos
-            try{
-                if (this.rs != null) this.rs.close();
-                if (this.selectStmt != null) this.selectStmt.close();
-                if (this.conexao != null) this.conexao.close();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-        return listaCampanhas;
+    public boolean verificarParticipanteCampanha(Campanha campanha, ParticipanteCampanha participante){
         
-    }
-    
-    public boolean verificarParticipanteCampanha(Campanha campanha, Pessoa participante){
-        
-        String sql = "SELECT * FROM Campanhas AS C INNER JOIN ParticipantesCampanha AS PC ON PC.Campanha = C.Codigo WHERE C.StatusCampanha = 1 AND PC.Campanha = ? AND PC.CodPessoa = ? AND PC.Status = 1";  
+        String sql = "SELECT * FROM Campanhas AS C INNER JOIN ParticipantesCampanha AS PC ON PC.Campanha = C.Codigo WHERE C.StatusCampanha = 'A' AND PC.Campanha = ? AND PC.CodPessoa = ? AND PC.Status = 1";  
         boolean controle = false;
         
         try{
@@ -265,9 +229,8 @@ public class CampanhaDao {
             }   
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar verficar a existencia do participante na campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("erro: "+ex.getMessage());
+            System.out.println("Erro: "+ex.getMessage());
         }finally{
-            // Fechar recursos
             try{
                 if (this.rs != null) this.rs.close();
                 if (this.selectStmt != null) this.selectStmt.close();
@@ -275,12 +238,11 @@ public class CampanhaDao {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        
+        }       
         return controle;
     } 
     
-    public void inativarParticipante(Campanha campanha, Pessoa participante){
+    public void inativarParticipante(Campanha campanha, ParticipanteCampanha participante){
                   
         String sql = "UPDATE ParticipantesCampanha SET Status=0 OUTPUT inserted.Codigo WHERE CodPessoa=? AND Campanha=?";  
         
@@ -320,7 +282,7 @@ public class CampanhaDao {
         }      
     }
     
-    public void excluirContasReceberCampanha(Campanha campanha, Pessoa participante){
+    public void excluirContasReceberCampanha(Campanha campanha, ParticipanteCampanha participante){
         String sql = "DELETE FROM ContasReceberCampanhas WHERE CodPessoa=? AND Campanha=? AND StatusPagamento=0 AND ValorPago IS NULL";  
         
         try{
@@ -343,4 +305,284 @@ public class CampanhaDao {
             }
         }
     }
+    
+    public List<ParticipanteCampanha> consultarParticipantesValores(Integer codCampanha){
+        
+        List<ParticipanteCampanha> listaParticipanteCampanha = new ArrayList<>();
+
+        String sql = "SELECT " +
+               "PC.CodPessoa AS CodPessoa, " +
+               "PC.NomePessoa AS NomePessoa, " +
+               "CASE PC.Status " +
+               "    WHEN 1 THEN 'Ativo' " +
+               "    ELSE 'Inativo' " +
+               "END AS StatusPessoa, " +
+               "(SELECT COUNT(Parcela) FROM ContasReceberCampanhas WHERE ValorPago Is Not Null) AS TotalParcelasPagas, " +
+               "SUM(ISNULL(CRC.ValorPago, 0)) AS TotalValorPago, " +
+               "SUM(ISNULL(CRC.ValorPendente, 0)) AS TotalPendente " +
+               "FROM ParticipantesCampanha AS PC " +
+               "LEFT JOIN ContasReceberCampanhas AS CRC ON CRC.CodPessoa = PC.CodPessoa AND CRC.Campanha = PC.Campanha " +
+               "WHERE PC.Campanha = ? " +  // Substituído por parâmetro
+               "GROUP BY " +
+               "PC.CodPessoa, " +
+               "PC.NomePessoa, " +
+               "PC.Campanha, " +
+               "PC.Status";
+
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();          
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            this.selectStmt.setInt(1, codCampanha);
+            
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                ParticipanteCampanha participante = new ParticipanteCampanha();
+                participante.setCodigo(this.rs.getInt("CodPessoa"));
+                participante.setNome(this.rs.getString("NomePessoa"));
+                participante.setDescricaoStatus(this.rs.getString("StatusPessoa"));
+                participante.setQtdParcelasPagas(this.rs.getInt("TotalParcelasPagas"));
+                participante.setValorTotalPago(this.rs.getDouble("TotalValorPago"));
+                participante.setValorTotalPendente(this.rs.getDouble("TotalPendente")); 
+                
+                listaParticipanteCampanha.add(participante);
+            }         
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os participantes e os valores", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return listaParticipanteCampanha;
+    }
+    
+    public List<Double> consultarValores(Integer codCampanha){
+        
+        List<Double> listaValores = new ArrayList<>();
+
+        String sql = "SELECT " +
+        "SUM(ISNULL(ValorPago, 0)) AS ValorPago, " +
+        "SUM(ValorPendente) AS ValorPendente, " +
+        "(SELECT COUNT(Parcela) FROM ContasReceberCampanhas WHERE ValorPago IS NOT NULL) AS ParcelaPaga " +
+        "FROM ContasReceberCampanhas " +
+        "WHERE Campanha = ?";
+
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();           
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            
+            this.selectStmt.setInt(1, codCampanha);  
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                double valorPagor = this.rs.getInt("ValorPago");
+                double valorPendente = this.rs.getInt("ValorPendente");
+                double qtdParcelasPaga = this.rs.getDouble("ParcelaPaga");
+
+                listaValores.add(valorPagor);
+                listaValores.add(valorPendente);
+                listaValores.add(qtdParcelasPaga);  
+            }         
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar valores totais da campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaValores;
+    }
+    
+    public List<Campanha> consultarCampanhas(String busca){
+        
+        List<Campanha> listaCampanhas = new ArrayList<>();
+
+        String sql = "SELECT " +
+        "I.Codigo AS CodIgreja, " +
+        "I.NomeIgreja AS NomeIgreja, " +
+        "C.* " +
+        "FROM Campanhas AS C " +
+        "LEFT JOIN Igrejas AS I ON I.Codigo = C.Igreja " +
+        "WHERE (? IS NULL OR C.Codigo LIKE ?) OR (? IS NULL OR C.DescricaoCampanha LIKE ?)";
+
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();           
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            
+            if (busca != null) {
+                this.selectStmt.setString(1,  "%" + busca + "%");
+                this.selectStmt.setString(2,  "%" + busca + "%");
+                this.selectStmt.setString(3,  "%" + busca + "%");
+                this.selectStmt.setString(4,  "%" + busca + "%");
+            } else {
+                this.selectStmt.setNull(1, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(2, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(3, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(4, java.sql.Types.INTEGER);
+            }
+
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                Campanha campanha = new Campanha();
+                Igreja igreja = new Igreja();
+                igreja.setCodigo(this.rs.getInt("CodIgreja"));
+                igreja.setNome(this.rs.getString("NomeIgreja"));
+                campanha.setCodigo(this.rs.getInt("Codigo"));
+                campanha.setDescricaoCampanha(this.rs.getString("DescricaoCampanha"));
+                campanha.setDuracaoMeses(this.rs.getInt("DuracaoCampanha"));
+                campanha.setDataInicial(this.rs.getDate("DataInicioCampanha"));
+                campanha.setDataFinal(this.rs.getDate("DataFinalCampanha"));
+                campanha.setDiaPagamento(this.rs.getInt("DiaPagamento"));
+                campanha.setObservacao(this.rs.getString("Observacao"));
+                campanha.setValorTotalCampanha(this.rs.getDouble("ValorTotalCampanha"));
+                campanha.setStatusCampanha(this.rs.getString("StatusCampanha"));
+                campanha.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
+                campanha.setDataCadastro(this.rs.getDate("DataCadastro"));
+                campanha.setIgreja(igreja);
+
+                listaCampanhas.add(campanha);
+            }         
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaCampanhas;
+    }
+
+    public List<Campanha> consultarCampanhasAtiva(String busca){
+        String sql = "SELECT I.Codigo As CodIgreja, I.NomeIgreja As NomeIgreja, C.* FROM Campanhas As C "
+        + "INNER JOIN Igrejas As I ON I.Codigo = C.Igreja "
+        + "WHERE ((? IS NULL OR C.Codigo LIKE ?) OR (? IS NULL OR C.DescricaoCampanha LIKE ?)) "
+        + "AND C.StatusCampanha = 'A' AND C.DescricaoStatus = 'Andamento' ORDER BY C.DescricaoCampanha";  
+        List<Campanha> listaCampanhas = new ArrayList<>();
+ 
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();        
+            this.selectStmt = this.conexao.prepareStatement(sql);
+                 
+            if (busca != null) {
+                this.selectStmt.setString(1,  "%" + busca + "%");
+                this.selectStmt.setString(2,  "%" + busca + "%");
+                this.selectStmt.setString(3,  "%" + busca + "%");
+                this.selectStmt.setString(4,  "%" + busca + "%");
+            } else {
+                this.selectStmt.setNull(1, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(2, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(3, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(4, java.sql.Types.INTEGER);
+            }
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                Campanha campanha = new Campanha();
+                Igreja igreja = new Igreja();
+                igreja.setCodigo(this.rs.getInt("CodIgreja"));
+                igreja.setNome(this.rs.getString("NomeIgreja"));
+                campanha.setCodigo(this.rs.getInt("Codigo"));
+                campanha.setDescricaoCampanha(this.rs.getString("DescricaoCampanha"));
+                campanha.setDuracaoMeses(this.rs.getInt("DuracaoCampanha"));
+                campanha.setDataInicial(this.rs.getDate("DataInicioCampanha"));
+                campanha.setDataFinal(this.rs.getDate("DataFinalCampanha"));
+                campanha.setDiaPagamento(this.rs.getInt("DiaPagamento"));
+                campanha.setObservacao(this.rs.getString("Observacao"));
+                campanha.setValorTotalCampanha(this.rs.getDouble("ValorTotalCampanha"));
+                campanha.setStatusCampanha(this.rs.getString("StatusCampanha"));
+                campanha.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
+                campanha.setDataCadastro(this.rs.getDate("DataCadastro"));
+                campanha.setIgreja(igreja);
+
+                listaCampanhas.add(campanha);
+            }
+            this.selectStmt.execute();
+          
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro consultar Campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ex.getMessage());
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return listaCampanhas;
+    }
+    
+    public List<Campanha> consultarTodasCampanhasAtiva(){
+    
+        String sql = "SELECT * FROM Campanhas WHERE StatusCampanha = 'A' ORDER BY DescricaoCampanha ";  
+        List<Campanha> listaCampanhas = new ArrayList<>();
+ 
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();         
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            this.rs = this.selectStmt.executeQuery();
+
+            while(rs.next()){
+                Campanha campanha = new Campanha();
+                Igreja igreja = new Igreja();
+                campanha.setCodigo(rs.getInt("Codigo"));
+                campanha.setDescricaoCampanha(rs.getString("DescricaoCampanha"));
+                igreja.setCodigo(rs.getInt("Igreja"));
+                campanha.setDuracaoMeses(rs.getInt("DuracaoCampanha"));
+                campanha.setDataInicial(rs.getDate("DataInicioCampanha"));
+                campanha.setDataFinal(rs.getDate("DataFinalCampanha"));
+                campanha.setDiaPagamento(rs.getInt("DiaPagamento"));               
+                campanha.setObservacao(rs.getString("Observacao"));
+                campanha.setValorTotalCampanha(rs.getDouble("ValorTotalCampanha"));
+                campanha.setStatusCampanha(rs.getString("StatusCampanha"));
+                campanha.setDescricaoStatus(rs.getString("DescricaoStatus"));
+                campanha.setDataCadastro(rs.getDate("DataCadastro"));
+                campanha.setIgreja(igreja);
+
+                listaCampanhas.add(campanha);
+            }
+          
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as campanhas ativas", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaCampanhas;
+        
+    }
+    
+
+    
 }

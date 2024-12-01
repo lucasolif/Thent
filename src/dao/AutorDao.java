@@ -23,11 +23,11 @@ public class AutorDao {
         String sql = "INSERT INTO Autores(Nome,DataCadastro) VALUES(?,GETDATE())";
         
         try{
-            conexao = Conexao.getDataSource().getConnection();
+            this.conexao = Conexao.getDataSource().getConnection();
             
-            ps = conexao.prepareStatement(sql);
-            ps.setString(1, autor.getNome());
-            ps.execute();
+            this.ps = this.conexao.prepareStatement(sql);
+            this.ps.setString(1, autor.getNome());
+            this.ps.execute();
             
             JOptionPane.showMessageDialog(null, "Autor(a) "+autor.getNome().toUpperCase()+" cadastrado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
@@ -79,7 +79,7 @@ public class AutorDao {
     }
     
     public List<Autor> consultarAutor(String buscaAutor){
-        List<Autor> listaEditora = new ArrayList<>();
+        List<Autor> listaAutores = new ArrayList<>();
 
         String sql = "SELECT * FROM Autores "
         + "WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?)";
@@ -107,7 +107,7 @@ public class AutorDao {
                 autor.setCodigo(rs.getInt("Codigo"));
                 autor.setNome(rs.getString("Nome"));
 
-                listaEditora.add(autor);
+                listaAutores.add(autor);
             }
             
             ps.execute();
@@ -125,7 +125,7 @@ public class AutorDao {
             }
         }
 
-        return listaEditora;
+        return listaAutores;
     }
     
     public void removerAutor(Autor autor){

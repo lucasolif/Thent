@@ -186,9 +186,10 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame implements Consul
     }//GEN-LAST:event_btnLimparActionPerformed
      
     private void limparFormulario(){
-        buscarFormaPagto.setText("");
-        descricaoFormaPagto.setText("");
-        codFormaPagto.setText("");
+        this.buscarFormaPagto.setText("");
+        this.descricaoFormaPagto.setText("");
+        this.descricaoFormaPagto.requestFocusInWindow();
+        this.codFormaPagto.setText("");
         this.formaPagtoSelec = null;
     }
     

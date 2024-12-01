@@ -18,22 +18,25 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
 import model.ContasReceberCampanha;
+import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
-public class GerarContasReceberAvulsa extends javax.swing.JInternalFrame implements ConsultaPessoas{
+public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
     private final CampanhaDao campanhaDao = new CampanhaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final SubContaResultadoDao subContaResultadoDao = new SubContaResultadoDao();
     private final Utilitarios utilitarios = new Utilitarios();
     private Pessoa pessoaSelec = null;
+    private ParticipanteCampanha participanteSelec = null;
+    private Campanha campanhaSelec = null;
     private List<Pessoa> listaParticipantes = null;
         
 
-    public GerarContasReceberAvulsa() {
+    public GerarContasReceberAvulsaForm() {
         initComponents();
         formInicial();
     }
@@ -315,7 +318,7 @@ public class GerarContasReceberAvulsa extends javax.swing.JInternalFrame impleme
     }
     
     private void carregarCampanhas(){
-        List<Campanha> listaCampanha = this.campanhaDao.consultarCampanhasAtiva();
+        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhasAtiva();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.campanha.getModel();
         modelo.removeAllElements();
         for(Campanha campanha : listaCampanha){
@@ -354,7 +357,14 @@ public class GerarContasReceberAvulsa extends javax.swing.JInternalFrame impleme
     private void carregarParticipanteEscolhido(Pessoa pessoa){
         this.codParticipante.setText(String.valueOf(pessoa.getCodigo()));
         this.nomeParticipante.setText(pessoa.getNome());
-        this.pessoaSelec = pessoa;
+        
+        ParticipanteCampanha participante = new ParticipanteCampanha();
+        participante.setCodigo(pessoa.getCodigo());
+        participante.setNome(pessoa.getNome());
+        participante.setCpfCnpj(pessoa.getCpfCnpj());
+        participante.setEndereco(pessoa.getEndereco());
+        
+        this.participanteSelec = participante;
     }
     
     private void gerarParcelas(){
@@ -376,7 +386,6 @@ public class GerarContasReceberAvulsa extends javax.swing.JInternalFrame impleme
     private void cadastrarContaReceber(){
         List<ContasReceberCampanha> listaCr = new ArrayList<>();
         double valorMensal = Double.parseDouble(this.valoPagtoMensal.getText().replace(",", "."));
-        Pessoa participante = this.pessoaSelec; 
         Campanha campanha = (Campanha) this.campanha.getSelectedItem();
         SubContaResultado contaResultado = (SubContaResultado) this.contaResultado.getSelectedItem();
         int qtdLinhasTabela = this.tabelaCrGerada.getRowCount();
@@ -386,23 +395,33 @@ public class GerarContasReceberAvulsa extends javax.swing.JInternalFrame impleme
             String data = (String) tabelaCrGerada.getModel().getValueAt(i, 2);
             Date dataVencimento = utilitarios.convertendoStringDateSql(data);
             
-            ContasReceberCampanha crCampanha = new ContasReceberCampanha();
-            
+            ContasReceberCampanha crCampanha = new ContasReceberCampanha();           
             crCampanha.setCampanha(campanha);
             crCampanha.setContaResultado(contaResultado);
             crCampanha.setDataVencimento(dataVencimento);
             crCampanha.setDescricaoStatus("Aberto");
             crCampanha.setIgreja(campanha.getIgreja());
             crCampanha.setParcela(parcela);
-            crCampanha.setParticipante(participante);
+            crCampanha.setParticipante(this.participanteSelec);
             crCampanha.setStatusPagamento(0);
             crCampanha.setValorParcela(valorMensal);
             crCampanha.setValorPendente(valorMensal);
             
             listaCr.add(crCampanha);
         }
+        this.participanteSelec.setListaCrCampanha(listaCr);
+        boolean verificarParticipante = this.campanhaDao.verificarParticipanteCampanha(campanha, this.participanteSelec);
         
-        this.campanhaDao.gerarContasReceberCampanha(listaCr, campanha.getCodigo());      
+        if(verificarParticipante){          
+            this.campanhaDao.gerarContasReceberAvulsaCampanha(this.participanteSelec, campanha.getCodigo());   
+        }else{
+            int confirm = JOptionPane.showConfirmDialog(null,"Participante não está na campanha, continuar?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION){
+                this.campanhaDao.gerarContasReceberAvulsaCampanha(this.participanteSelec, campanha.getCodigo());
+            }else if(confirm == JOptionPane.NO_OPTION){
+                JOptionPane.showMessageDialog(null, "Operação cancelada!");
+            }     
+        }          
     }
     
     @Override

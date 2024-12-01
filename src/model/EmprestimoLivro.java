@@ -8,11 +8,13 @@ import java.util.Objects;
 
 public class EmprestimoLivro {
     
-    private Integer codigo;
+    private Integer codigoInternoEmprestimo;
+    private Integer codigoEmprestimo;
     private Pessoa pessoa;
-    private List<Livro> livro;
+    private List<Livro> listaLivro;
+    private Livro livro;
     private Biblioteca biblioteca;
-    private Integer StatusEmprestimo;
+    private String StatusEmprestimo;
     private String descricaoStatus;
     private Date dataEmprestimo;
     private Date dataDevolucao;
@@ -20,6 +22,22 @@ public class EmprestimoLivro {
     public EmprestimoLivro() {
     }
 
+    public Integer getCodigoEmprestimo() {
+        return codigoEmprestimo;
+    }
+
+    public void setCodigoEmprestimo(Integer codigoEmprestimo) {
+        this.codigoEmprestimo = codigoEmprestimo;
+    }
+
+    public Livro getLivro() {
+        return livro;
+    }
+
+    public void setLivro(Livro livro) {
+        this.livro = livro;
+    }
+    
     public String getDescricaoStatus() {
         return descricaoStatus;
     }
@@ -28,12 +46,12 @@ public class EmprestimoLivro {
         this.descricaoStatus = descricaoStatus;
     }
     
-    public Integer getCodigo() {
-        return codigo;
+    public Integer getCodigoInternoEmprestimo() {
+        return codigoInternoEmprestimo;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public void setCodigoInternoEmprestimo(Integer codigoInternoEmprestimo) {
+        this.codigoInternoEmprestimo = codigoInternoEmprestimo;
     }
 
     public Pessoa getPessoa() {
@@ -44,12 +62,12 @@ public class EmprestimoLivro {
         this.pessoa = pessoa;
     }
 
-    public List<Livro> getLivro() {
-        return livro;
+    public List<Livro> getListaLivro() {
+        return listaLivro;
     }
 
-    public void setLivro(List<Livro> livro) {
-        this.livro = livro;
+    public void setListaLivro(List<Livro> listaLivro) {
+        this.listaLivro = listaLivro;
     }
     
     public Biblioteca getBiblioteca() {
@@ -60,11 +78,11 @@ public class EmprestimoLivro {
         this.biblioteca = biblioteca;
     }
 
-    public Integer getStatusEmprestimo() {
+    public String getStatusEmprestimo() {
         return StatusEmprestimo;
     }
 
-    public void setStatusEmprestimo(Integer StatusEmprestimo) {
+    public void setStatusEmprestimo(String StatusEmprestimo) {
         this.StatusEmprestimo = StatusEmprestimo;
     }
 
@@ -87,9 +105,9 @@ public class EmprestimoLivro {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.codigo);
+        hash = 37 * hash + Objects.hashCode(this.codigoInternoEmprestimo);
         hash = 37 * hash + Objects.hashCode(this.pessoa);
-        hash = 37 * hash + Objects.hashCode(this.livro);
+        hash = 37 * hash + Objects.hashCode(this.listaLivro);
         hash = 37 * hash + Objects.hashCode(this.biblioteca);
         hash = 37 * hash + Objects.hashCode(this.StatusEmprestimo);
         hash = 37 * hash + Objects.hashCode(this.dataEmprestimo);
@@ -109,13 +127,13 @@ public class EmprestimoLivro {
             return false;
         }
         final EmprestimoLivro other = (EmprestimoLivro) obj;
-        if (!Objects.equals(this.codigo, other.codigo)) {
+        if (!Objects.equals(this.codigoInternoEmprestimo, other.codigoInternoEmprestimo)) {
             return false;
         }
         if (!Objects.equals(this.pessoa, other.pessoa)) {
             return false;
         }
-        if (!Objects.equals(this.livro, other.livro)) {
+        if (!Objects.equals(this.listaLivro, other.listaLivro)) {
             return false;
         }
         if (!Objects.equals(this.biblioteca, other.biblioteca)) {

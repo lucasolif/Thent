@@ -298,6 +298,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
     private void formInicial(){
         this.codIgreja.setText("");
         this.nomeIgreja.setText("");
+        this.nomeIgreja.requestFocusInWindow();
         this.campoEstado.setName("Estado");
         this.campoCep.setText("");
         this.campoCidade.setText("");

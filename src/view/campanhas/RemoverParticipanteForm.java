@@ -12,6 +12,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.Campanha;
+import model.ParticipanteCampanha;
 import model.Pessoa;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
@@ -21,6 +22,7 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
     private final CampanhaDao campanhaDao = new CampanhaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private List<Pessoa> listaParticipantes = null;
+    private ParticipanteCampanha participanteSelec = null;
     private Pessoa pessoaSelec = null;
 
     public RemoverParticipanteForm() {
@@ -88,19 +90,21 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(campanha, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnRemover))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(codParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(nomeParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnBuscar))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(campanha, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRemover))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(codParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nomeParticipante, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscar))
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -116,10 +120,10 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(campanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnRemover)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRemover))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
@@ -149,7 +153,7 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarCampanhas(){
-        List<Campanha> listaCampanha = this.campanhaDao.consultarCampanhasAtiva();
+        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhasAtiva();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.campanha.getModel();
         modelo.removeAllElements();
         for(Campanha campanha : listaCampanha){
@@ -172,24 +176,31 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
     private void carregarParticipanteEscolhido(Pessoa pessoa){
         this.codParticipante.setText(String.valueOf(pessoa.getCodigo()));
         this.nomeParticipante.setText(pessoa.getNome());
-        this.pessoaSelec = pessoa;
+        
+        ParticipanteCampanha participante = new ParticipanteCampanha();
+        participante.setCodigo(pessoa.getCodigo());
+        participante.setNome(pessoa.getNome());
+        participante.setCpfCnpj(pessoa.getCpfCnpj());
+        participante.setEndereco(pessoa.getEndereco());
+        
+        this.participanteSelec = participante;
     }
     
     private void removerParticipante(){
         
         Campanha campanha = (Campanha) this.campanha.getSelectedItem();
-        boolean verifcarParticipante = this.campanhaDao.verificarParticipanteCampanha(campanha, this.pessoaSelec);
+        boolean verifcarParticipante = this.campanhaDao.verificarParticipanteCampanha(campanha, this.participanteSelec);
         
         if(verifcarParticipante){          
             int confirm = JOptionPane.showConfirmDialog(null,"Inativar o participante da campanha?", "Confirmar", JOptionPane.YES_NO_OPTION);
 
             if(confirm == JOptionPane.YES_OPTION){
-                this.campanhaDao.inativarParticipante(campanha, this.pessoaSelec);
+                this.campanhaDao.inativarParticipante(campanha, this.participanteSelec);
             }else if(confirm == JOptionPane.NO_OPTION){
                 JOptionPane.showMessageDialog(null, "Operação cancelada!");
             }     
         }else{
-            JOptionPane.showMessageDialog(null, "Erro!");
+            JOptionPane.showMessageDialog(null, "Participante não encontrado na campanha", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
     }
     

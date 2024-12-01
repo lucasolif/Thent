@@ -322,6 +322,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         this.usuarioCodigo.setText("");
         this.buscarUsuario.setText("");
         this.usuarioNome.setText("");
+        this.usuarioNome.requestFocusInWindow();
         this.usuarioCelular.setText("");
         this.usuarioEmail.setText("");
         this.usuarioLogin.setText("");

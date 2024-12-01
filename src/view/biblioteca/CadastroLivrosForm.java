@@ -263,7 +263,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
 
     private void btnSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalvarMouseClicked
         cadastrarAlterarLivro();
-        limparFormulario();
+        formInicial();
         carregarPublicadoras();
         carregarAutores();
     }//GEN-LAST:event_btnSalvarMouseClicked
@@ -354,14 +354,15 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
         }     
     }
     
-    private void limparFormulario(){
+    private void formInicial(){
         this.codLivro.setText("");
+        this.codLivro.setEditable(true);
         this.nomeLivro.setText("");
         this.anoPublicacao.setText("");
-        this.autorLivro.setSelectedIndex(0);
         this.caracteristicaLivro.setText("");
-        this.publicadoraLivro.setSelectedIndex(0);
         this.cbAtivo.setEnabled(false);
+        carregarAutores();
+        carregarPublicadoras();
     }
     
     private void carregarAutores(){
@@ -410,6 +411,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
         }    
         
         this.livroSelec = livro;
+        this.codLivro.setEditable(false);
     }
     
     private void adicionarEditora(){

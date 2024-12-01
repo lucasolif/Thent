@@ -72,7 +72,8 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         jPanel2 = new javax.swing.JPanel();
         rbEmprestado = new javax.swing.JRadioButton();
         rbDevolvido = new javax.swing.JRadioButton();
-        rbAmbos = new javax.swing.JRadioButton();
+        rbTodos = new javax.swing.JRadioButton();
+        rbPerdidos = new javax.swing.JRadioButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaEmprestimos = new javax.swing.JTable();
         btnFiltrar = new javax.swing.JButton();
@@ -193,34 +194,38 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
 
         rbGrupoStatus.add(rbDevolvido);
         rbDevolvido.setText("Devolvidos");
-        rbDevolvido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDevolvidoActionPerformed(evt);
-            }
-        });
 
-        rbGrupoStatus.add(rbAmbos);
-        rbAmbos.setText("Ambos");
+        rbGrupoStatus.add(rbTodos);
+        rbTodos.setText("Todos");
+
+        rbGrupoStatus.add(rbPerdidos);
+        rbPerdidos.setText("Perdidos");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rbEmprestado)
-                    .addComponent(rbDevolvido)
-                    .addComponent(rbAmbos))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rbEmprestado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbTodos, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rbDevolvido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbPerdidos, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(rbEmprestado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbDevolvido)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbAmbos)
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rbEmprestado)
+                    .addComponent(rbDevolvido))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rbTodos)
+                    .addComponent(rbPerdidos))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -231,14 +236,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
 
             },
             new String [] {
-                "Cod Emp", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Biblioteca"
+                "Cod Emp", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Status", "Biblioteca"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -264,7 +269,8 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             tabelaEmprestimos.getColumnModel().getColumn(5).setResizable(false);
             tabelaEmprestimos.getColumnModel().getColumn(5).setPreferredWidth(50);
             tabelaEmprestimos.getColumnModel().getColumn(6).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(6).setPreferredWidth(150);
+            tabelaEmprestimos.getColumnModel().getColumn(7).setResizable(false);
+            tabelaEmprestimos.getColumnModel().getColumn(7).setPreferredWidth(150);
         }
 
         btnFiltrar.setBackground(new java.awt.Color(255, 153, 0));
@@ -329,13 +335,6 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnLimpar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnFiltrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDevolver))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -348,25 +347,28 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
                                     .addComponent(dataDevolucao, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(jLabel5)
+                                    .addComponent(bibliotecaJComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(livros, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnBuscar)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscar)))
+                        .addGap(0, 42, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnFiltrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDevolver))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -378,11 +380,10 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnBuscar)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nomePessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar)
+                            .addComponent(codPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -420,14 +421,13 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         this.txData.setText("Devolução:");
     }//GEN-LAST:event_rbDataDevolucaoActionPerformed
 
-    private void rbDevolvidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDevolvidoActionPerformed
-        this.btnDevolver.setEnabled(false);
-    }//GEN-LAST:event_rbDevolvidoActionPerformed
-
     private void nomePessoaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomePessoaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             buscarPessoa();
             carregarResultadoConsultaPessoa();
+        } 
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codPessoa.setText("");
         } 
     }//GEN-LAST:event_nomePessoaKeyPressed
 
@@ -530,9 +530,9 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         Date dataDevolucaoInicial = null;
         Date dataDevolucaoFinal = null;
         Integer codPessoa = null;
-        Integer statusEmprestimo = null;
+        String statusEmprestimo = null;
         String nomePessoa = this.nomePessoa.getText();
-        List<Livro> livro = (List<Livro>) (Livro) this.livros.getSelectedItem();
+        Livro livro =  (Livro) this.livros.getSelectedItem();
         Biblioteca biblioteca = (Biblioteca) this.bibliotecaJComboBox.getSelectedItem();
         
         //Tratando o código da pessoa    
@@ -546,10 +546,12 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         
         //Verificando quais radios button dos status foram selecionados
         if(this.rbEmprestado.isSelected()){
-            statusEmprestimo = 1;
+            statusEmprestimo = "E";
         }else if(this.rbDevolvido.isSelected()){
-            statusEmprestimo = 0;
-        }else if(this.rbAmbos.isSelected()){
+            statusEmprestimo = "D";
+        }else if(this.rbPerdidos.isSelected()){
+            statusEmprestimo = "P";
+        }else{
             statusEmprestimo = null;
         }
         
@@ -578,8 +580,8 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         for(EmprestimoLivro empLivro : this.listaEmpLivros){    
             String dataEmprestimo = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataEmprestimo());
             String dataDevolucao = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataDevolucao());
-            for(Livro livro : empLivro.getLivro()){
-                model.addRow(new Object[]{empLivro.getCodigo(),livro.getCodLivro(),livro, empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getBiblioteca()});
+            for(Livro livro : empLivro.getListaLivro()){
+                model.addRow(new Object[]{empLivro.getCodigoEmprestimo(),livro.getCodLivro(),livro, empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getDescricaoStatus(), empLivro.getBiblioteca()});
             }        
         }
     }
@@ -602,23 +604,31 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             JOptionPane.showMessageDialog(null, "Selecione um empréstimo para ser devolvido", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else{
             for(int index : empSelec){
-                EmprestimoLivro emprestimoLivro = new EmprestimoLivro();           
-                Pessoa pessoa = this.listaEmpLivros.get(index).getPessoa();
-                List<Livro> livro = this.listaEmpLivros.get(index).getLivro();
-                Integer codEmprestimo = this.listaEmpLivros.get(index).getCodigo();
-                Biblioteca biblioteca = this.listaEmpLivros.get(index).getBiblioteca();
-                Date dataDevolucao = conversor.convertendoStringDateSql(this.dataDevolucao.getText());
-                Integer statusEmprestimo = 0;                   
-                
-                emprestimoLivro.setPessoa(pessoa);
-                emprestimoLivro.setLivro(livro);
-                emprestimoLivro.setBiblioteca(biblioteca);
-                emprestimoLivro.setDataDevolucao(dataDevolucao);
-                emprestimoLivro.setStatusEmprestimo(statusEmprestimo);
-                emprestimoLivro.setCodigo(codEmprestimo);
+                if(this.listaEmpLivros.get(index).getStatusEmprestimo().equalsIgnoreCase("e")){
+                    EmprestimoLivro emprestimoLivro = new EmprestimoLivro();           
+                    Pessoa pessoa = this.listaEmpLivros.get(index).getPessoa();
+                    List<Livro> livro = this.listaEmpLivros.get(index).getListaLivro();
+                    Integer codEmprestimo = this.listaEmpLivros.get(index).getCodigoEmprestimo();
+                    Integer codInterno = this.listaEmpLivros.get(index).getCodigoInternoEmprestimo();
+                    Biblioteca biblioteca = this.listaEmpLivros.get(index).getBiblioteca();
+                    Date dataDevolucao = conversor.convertendoStringDateSql(this.dataDevolucao.getText());
+                    String statusEmprestimo = "D";   
+                    String descricaoStatus = "Devolvido";
 
-                //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
-                listaEmpDevolvido.add(emprestimoLivro);   
+                    emprestimoLivro.setPessoa(pessoa);
+                    emprestimoLivro.setListaLivro(livro);
+                    emprestimoLivro.setBiblioteca(biblioteca);
+                    emprestimoLivro.setDataDevolucao(dataDevolucao);
+                    emprestimoLivro.setStatusEmprestimo(statusEmprestimo);
+                    emprestimoLivro.setCodigoInternoEmprestimo(codInterno);
+                    emprestimoLivro.setDescricaoStatus(descricaoStatus);
+                    emprestimoLivro.setCodigoEmprestimo(codEmprestimo);
+
+                    //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
+                    listaEmpDevolvido.add(emprestimoLivro);   
+                }else{
+                    JOptionPane.showMessageDialog(null, "O livro não está com status de emprestado", "Atenção", JOptionPane.WARNING_MESSAGE);
+                }
             }
                        
             int confirm = JOptionPane.showConfirmDialog(null,"Confirmar devolução?", "Confirmar", JOptionPane.YES_NO_OPTION);
@@ -661,13 +671,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<String> livros;
     private javax.swing.JTextField nomePessoa;
-    private javax.swing.JRadioButton rbAmbos;
     private javax.swing.JRadioButton rbDataDevolucao;
     private javax.swing.JRadioButton rbDataEmprestimo;
     private javax.swing.JRadioButton rbDevolvido;
     private javax.swing.JRadioButton rbEmprestado;
     private javax.swing.ButtonGroup rbGrupoData;
     private javax.swing.ButtonGroup rbGrupoStatus;
+    private javax.swing.JRadioButton rbPerdidos;
+    private javax.swing.JRadioButton rbTodos;
     private javax.swing.JTable tabelaEmprestimos;
     private javax.swing.JLabel txData;
     // End of variables declaration//GEN-END:variables

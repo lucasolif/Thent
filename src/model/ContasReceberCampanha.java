@@ -11,7 +11,7 @@ public class ContasReceberCampanha {
     private SubContaResultado contaResultado;
     private Date dataVencimento;
     private Date dataPagamento;
-    private Pessoa participante;
+    private ParticipanteCampanha participante;
     private Integer numParcela;    
     private Integer parcela;
     private double valorParcela;
@@ -74,7 +74,7 @@ public class ContasReceberCampanha {
         return participante;
     }
 
-    public void setParticipante(Pessoa participante) {
+    public void setParticipante(ParticipanteCampanha participante) {
         this.participante = participante;
     }
 
