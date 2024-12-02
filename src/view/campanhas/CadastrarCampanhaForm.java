@@ -528,7 +528,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
             crCampanha.setContaResultado(contaResultado);
             crCampanha.setDataVencimento(this.conversor.convertendoStringDateSql(dataVencimento));
             crCampanha.setParticipante(participante);
-            crCampanha.setParcela(j);
+            crCampanha.setNumParcela(j);
             crCampanha.setValorParcela(valorParelaFormatada);
             crCampanha.setValorPendente(valorParelaFormatada);
             crCampanha.setStatusPagamento(statusPagamento);

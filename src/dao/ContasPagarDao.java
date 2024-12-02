@@ -96,8 +96,8 @@ public class ContasPagarDao {
             "AND (? IS NULL OR CP.SubContaResultado = ?)";
 
         try {
-            conexao = Conexao.getDataSource().getConnection();         
-            ps = conexao.prepareStatement(sql);  
+            this.conexao = Conexao.getDataSource().getConnection();         
+            this.ps = this.conexao.prepareStatement(sql);  
             
             // Datas Pagamento
             if (dataPagamentoInicial != null && dataPagamentoFinal != null) {

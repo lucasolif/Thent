@@ -421,7 +421,7 @@ public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame 
                 crCampanha.setContaResultado(contaResultado);
                 crCampanha.setDataVencimento(conversor.convertendoStringDateSql(dataVencimento));
                 crCampanha.setParticipante(this.participanteSelec);
-                crCampanha.setParcela(j);
+                crCampanha.setNumParcela(j);
                 crCampanha.setValorParcela(valorParcela);
                 crCampanha.setValorPendente(valorParcela);
                 crCampanha.setStatusPagamento(statusPagamento);

@@ -23,6 +23,7 @@ import view.campanhas.CadastrarCampanhaForm;
 import view.campanhas.CadastrarParticipanteAvulsoForm;
 import view.campanhas.ConsultarCampanhasForm;
 import view.campanhas.GerarContasReceberAvulsaForm;
+import view.campanhas.GerenciarContasReceberForm;
 import view.campanhas.RemoverParticipanteForm;
 import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
@@ -378,6 +379,11 @@ public class Home extends javax.swing.JFrame {
         campanha.add(criarCampanha);
 
         gerenciarContaReceberCampanha.setText("Gerenciar Contas Receber");
+        gerenciarContaReceberCampanha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gerenciarContaReceberCampanhaActionPerformed(evt);
+            }
+        });
         campanha.add(gerenciarContaReceberCampanha);
 
         processosAvulsos.setText("Processos Avulsos");
@@ -662,6 +668,13 @@ public class Home extends javax.swing.JFrame {
         consultarCampanhas.setVisible(true);
         consultarCampanhas.setPosicao();
     }//GEN-LAST:event_consultarCampanhasActionPerformed
+
+    private void gerenciarContaReceberCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerenciarContaReceberCampanhaActionPerformed
+        GerenciarContasReceberForm gerenciarContasReceber = new GerenciarContasReceberForm();
+        this.painelHome.add(gerenciarContasReceber);
+        gerenciarContasReceber.setVisible(true);
+        gerenciarContasReceber.setPosicao();
+    }//GEN-LAST:event_gerenciarContaReceberCampanhaActionPerformed
   
    
     

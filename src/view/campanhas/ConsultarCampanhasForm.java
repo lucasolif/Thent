@@ -126,7 +126,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         duracaoCampanha.setEnabled(false);
         duracaoCampanha.setFocusable(false);
 
-        jLabel6.setText("Data Inicial");
+        jLabel6.setText("Inicio Campanha");
 
         valorTotalCampanha.setEditable(false);
         valorTotalCampanha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));

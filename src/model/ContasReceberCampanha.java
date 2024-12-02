@@ -13,7 +13,6 @@ public class ContasReceberCampanha {
     private Date dataPagamento;
     private ParticipanteCampanha participante;
     private Integer numParcela;    
-    private Integer parcela;
     private double valorParcela;
     private double valorPago;
     private double valorPendente;
@@ -21,7 +20,16 @@ public class ContasReceberCampanha {
     private String descricaoStatus;
     private Igreja igreja;
     private String observacaoPagamento;
+    private FormaPagto formaPagto;
 
+    public FormaPagto getFormaPagto() {
+        return formaPagto;
+    }
+
+    public void setFormaPagto(FormaPagto formaPagto) {
+        this.formaPagto = formaPagto;
+    }
+    
     public Integer getNumParcela() {
         return numParcela;
     }
@@ -76,14 +84,6 @@ public class ContasReceberCampanha {
 
     public void setParticipante(ParticipanteCampanha participante) {
         this.participante = participante;
-    }
-
-    public Integer getParcela() {
-        return parcela;
-    }
-
-    public void setParcela(Integer parcela) {
-        this.parcela = parcela;
     }
 
     public double getValorParcela() {
@@ -144,19 +144,22 @@ public class ContasReceberCampanha {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.codigo);
-        hash = 47 * hash + Objects.hashCode(this.campanha);
-        hash = 47 * hash + Objects.hashCode(this.dataVencimento);
-        hash = 47 * hash + Objects.hashCode(this.dataPagamento);
-        hash = 47 * hash + Objects.hashCode(this.participante);
-        hash = 47 * hash + Objects.hashCode(this.parcela);
-        hash = 47 * hash + (int) (Double.doubleToLongBits(this.valorParcela) ^ (Double.doubleToLongBits(this.valorParcela) >>> 32));
-        hash = 47 * hash + (int) (Double.doubleToLongBits(this.valorPago) ^ (Double.doubleToLongBits(this.valorPago) >>> 32));
-        hash = 47 * hash + (int) (Double.doubleToLongBits(this.valorPendente) ^ (Double.doubleToLongBits(this.valorPendente) >>> 32));
-        hash = 47 * hash + Objects.hashCode(this.statusPagamento);
-        hash = 47 * hash + Objects.hashCode(this.igreja);
-        hash = 47 * hash + Objects.hashCode(this.observacaoPagamento);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.codigo);
+        hash = 97 * hash + Objects.hashCode(this.campanha);
+        hash = 97 * hash + Objects.hashCode(this.contaResultado);
+        hash = 97 * hash + Objects.hashCode(this.dataVencimento);
+        hash = 97 * hash + Objects.hashCode(this.dataPagamento);
+        hash = 97 * hash + Objects.hashCode(this.participante);
+        hash = 97 * hash + Objects.hashCode(this.numParcela);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.valorParcela) ^ (Double.doubleToLongBits(this.valorParcela) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.valorPago) ^ (Double.doubleToLongBits(this.valorPago) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.valorPendente) ^ (Double.doubleToLongBits(this.valorPendente) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.statusPagamento);
+        hash = 97 * hash + Objects.hashCode(this.descricaoStatus);
+        hash = 97 * hash + Objects.hashCode(this.igreja);
+        hash = 97 * hash + Objects.hashCode(this.observacaoPagamento);
+        hash = 97 * hash + Objects.hashCode(this.formaPagto);
         return hash;
     }
 
@@ -181,6 +184,9 @@ public class ContasReceberCampanha {
         if (Double.doubleToLongBits(this.valorPendente) != Double.doubleToLongBits(other.valorPendente)) {
             return false;
         }
+        if (!Objects.equals(this.descricaoStatus, other.descricaoStatus)) {
+            return false;
+        }
         if (!Objects.equals(this.observacaoPagamento, other.observacaoPagamento)) {
             return false;
         }
@@ -188,6 +194,9 @@ public class ContasReceberCampanha {
             return false;
         }
         if (!Objects.equals(this.campanha, other.campanha)) {
+            return false;
+        }
+        if (!Objects.equals(this.contaResultado, other.contaResultado)) {
             return false;
         }
         if (!Objects.equals(this.dataVencimento, other.dataVencimento)) {
@@ -199,13 +208,17 @@ public class ContasReceberCampanha {
         if (!Objects.equals(this.participante, other.participante)) {
             return false;
         }
-        if (!Objects.equals(this.parcela, other.parcela)) {
+        if (!Objects.equals(this.numParcela, other.numParcela)) {
             return false;
         }
         if (!Objects.equals(this.statusPagamento, other.statusPagamento)) {
             return false;
         }
-        return Objects.equals(this.igreja, other.igreja);
+        if (!Objects.equals(this.igreja, other.igreja)) {
+            return false;
+        }
+        return Objects.equals(this.formaPagto, other.formaPagto);
     }
+
 
 }
