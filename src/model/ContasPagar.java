@@ -1,12 +1,18 @@
 
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 
 public class ContasPagar {
     private Integer codigo, parcela, numNota, status;
-    private String descricaoConta, dataVencimento, dataCadastro, dataPagamento, boleto, observacao;
+    private String descricaoConta;
+    private Date dataVencimento; 
+    private Date dataCadastro;
+    private Date dataPagamento; 
+    private String boleto;
+    private String observacao;
     private double valor;
     private Pessoa fornecedor;
     private FormaPagto formaPagto;
@@ -16,7 +22,7 @@ public class ContasPagar {
     public ContasPagar() {
     }
 
-    public ContasPagar(Pessoa fornecedor, Integer parcela, Integer numNota, Integer status, String descricaoConta, String dataVencimento, String boleto, String observacao, double valor, FormaPagto formaPagto, SubContaResultado subContaResultado, Igreja igreja) {
+    public ContasPagar(Pessoa fornecedor, Integer parcela, Integer numNota, Integer status, String descricaoConta, Date dataVencimento, String boleto, String observacao, double valor, FormaPagto formaPagto, SubContaResultado subContaResultado, Igreja igreja) {
         this.fornecedor = fornecedor;
         this.parcela = parcela;
         this.numNota = numNota;
@@ -32,7 +38,7 @@ public class ContasPagar {
     }
 
     //Para utilizar nos filtros da efetivação das contas
-    public ContasPagar(Integer codigo, Integer numNota, Integer status, String descricaoConta, String dataVencimento, String dataCadastro, String dataPagamento, Pessoa fornecedor, ContaResultado contaResultado) {
+    public ContasPagar(Integer codigo, Integer numNota, Integer status, String descricaoConta, Date dataVencimento, Date dataCadastro, Date dataPagamento, Pessoa fornecedor, SubContaResultado subContaResultado) {
         this.codigo = codigo;
         this.numNota = numNota;
         this.status = status;
@@ -84,27 +90,27 @@ public class ContasPagar {
         this.descricaoConta = descricaoConta;
     }
 
-    public String getDataVencimento() {
+    public Date getDataVencimento() {
         return dataVencimento;
     }
 
-    public void setDataVencimento(String dataVencimento) {
+    public void setDataVencimento(Date dataVencimento) {
         this.dataVencimento = dataVencimento;
     }
 
-    public String getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(String dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
-    public String getDataPagamento() {
+    public Date getDataPagamento() {
         return dataPagamento;
     }
 
-    public void setDataPagamento(String dataPagamento) {
+    public void setDataPagamento(Date dataPagamento) {
         this.dataPagamento = dataPagamento;
     }
 

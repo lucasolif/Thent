@@ -739,7 +739,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         for(int index : numLinhaSelec){
             
             //Setando a data de pagamento e a forma de pagamento
-            String dataPagamento = this.dataPagamento.getText();
+            Date dataPagamento = conversor.convertendoStringDateSql(this.dataPagamento.getText());
             FormaPagto formaPgto = (FormaPagto) this.formaPagto.getSelectedItem();
             ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
             Integer numNota = this.listaContasPagar.get(index).getNumNota();

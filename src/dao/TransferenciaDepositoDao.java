@@ -2,6 +2,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,7 +52,7 @@ public class TransferenciaDepositoDao {
                     psMovimento.setString(6, mvCaixa.getComplemento());
                     psMovimento.setInt(7, mvCaixa.getIgreja().getCodigo());
                     psMovimento.setInt(8, mvCaixa.getUsuarioCadastro().getCodigo());
-                    psMovimento.setString(9, mvCaixa.getDataPagamentoRecebimento());
+                    psMovimento.setDate(9, (Date) mvCaixa.getDataPagamentoRecebimento());
                     psMovimento.executeUpdate();
 
                 }
@@ -67,7 +68,7 @@ public class TransferenciaDepositoDao {
                     psMovimento.setString(6, mvCaixa.getComplemento());
                     psMovimento.setInt(7, mvCaixa.getIgreja().getCodigo());
                     psMovimento.setInt(8, mvCaixa.getUsuarioCadastro().getCodigo());
-                    psMovimento.setString(9, mvCaixa.getDataPagamentoRecebimento());
+                    psMovimento.setDate(9, (Date) mvCaixa.getDataPagamentoRecebimento());
                     psMovimento.executeUpdate();
                 }         
             }

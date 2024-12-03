@@ -151,7 +151,7 @@ public class CampanhaDao {
                 for(ContasReceberCampanha crCamp : part.getListaCrCampanha()){             
                     this.insertStmt.setInt(1, part.getCodigo());
                     this.insertStmt.setString(2, part.getNome());
-                    this.insertStmt.setInt(3, crCamp.getNumParcela());
+                    this.insertStmt.setInt(3, crCamp.getParcela());
                     this.insertStmt.setDouble(4, crCamp.getValorParcela());
                     this.insertStmt.setDouble(5, crCamp.getValorPendente());
                     this.insertStmt.setDate(6, (Date) crCamp.getDataVencimento());
@@ -186,7 +186,7 @@ public class CampanhaDao {
             for(ContasReceberCampanha crCamp : participante.getListaCrCampanha()){             
                 this.insertStmt.setInt(1, participante.getCodigo());
                 this.insertStmt.setString(2, participante.getNome());
-                this.insertStmt.setInt(3, crCamp.getNumParcela());
+                this.insertStmt.setInt(3, crCamp.getParcela());
                 this.insertStmt.setDouble(4, crCamp.getValorParcela());
                 this.insertStmt.setDouble(5, crCamp.getValorPendente());
                 this.insertStmt.setDate(6, (Date) crCamp.getDataVencimento());
@@ -410,18 +410,22 @@ public class CampanhaDao {
             while (this.rs.next()) {
                 //Convertendo as datas do tipo Date para String
                 Campanha campanha = new Campanha();
+                Igreja igreja = new Igreja();
                 ParticipanteCampanha participante = new ParticipanteCampanha();
                 ContasReceberCampanha contaReceber = new ContasReceberCampanha();
+                igreja.setCodigo(this.rs.getInt("Igreja"));
                 campanha.setCodigo(this.rs.getInt("Campanha"));
                 campanha.setDescricaoCampanha(this.rs.getString("DescricaoCampanha"));
                 participante.setCodigo(this.rs.getInt("CodPessoa"));
                 participante.setNome(this.rs.getString("NomePessoa"));
-                contaReceber.setCodigo(this.rs.getInt("Codigo"));
-                contaReceber.setNumParcela(this.rs.getInt("Parcela"));
+                contaReceber.setCodigo(this.rs.getInt("NumParcela"));
+                contaReceber.setNumParcela(this.rs.getInt("NumParcela"));
+                contaReceber.setParcela(this.rs.getInt("Parcela"));
                 contaReceber.setValorParcela(this.rs.getDouble("ValorParcela"));
                 contaReceber.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
                 contaReceber.setDataVencimento(this.rs.getDate("DataVencimento"));
                 contaReceber.setDataPagamento(this.rs.getDate("DataPagamento"));
+                contaReceber.setIgreja(igreja);
                 contaReceber.setCampanha(campanha);
                 contaReceber.setParticipante(participante);
 
@@ -499,6 +503,52 @@ public class CampanhaDao {
         }
         
         return listaParticipanteCampanha;
+    }
+    
+    public void atualizarContaReceberCampanha(ContasReceberCampanha crCampanha){
+        
+        String sql = "UPDATE ContasReceberCampanhas "
+        + "SET ValorPago=?, ValorPendente=?, DataPagamento=?, StatusPagamento=?, DescricaoStatus=?, FormaPagto=?, ObservacaoPagamento=?"
+        + "WHERE NumParcela=?";
+        
+        double valorPendente = Math.round((crCampanha.getValorParcela() - crCampanha.getValorPago()) * 100.0) / 100.0;
+        int statusPagto = 0;
+        String descStatus = "Aberto";
+        
+        if(valorPendente == 0){
+            statusPagto = 1;
+            descStatus = "Pago";
+        }else if(valorPendente > 0 || valorPendente != crCampanha.getValorParcela()){
+            statusPagto = 0;
+            descStatus = "Pago Parcialmente";
+        }
+        
+        try{        
+            this.conexao = Conexao.getDataSource().getConnection();   
+            this.updateStmt = this.conexao.prepareStatement(sql);
+            
+            this.updateStmt.setDouble(1, crCampanha.getValorPago());
+            this.updateStmt.setDouble(2, valorPendente);
+            this.updateStmt.setDate(3, (Date) crCampanha.getDataPagamento());
+            this.updateStmt.setInt(4, statusPagto);
+            this.updateStmt.setString(5, descStatus);
+            this.updateStmt.setInt(6, crCampanha.getFormaPagto().getCodigo());
+            this.updateStmt.setString(7, crCampanha.getObservacaoPagamento());
+            this.updateStmt.setInt(8, crCampanha.getCodigo());           
+            this.updateStmt.executeUpdate();  
+            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar atualizar o contas a receber", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("erro: "+ex.getMessage());
+        }finally{
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
     
     public List<Double> consultarValores(Integer codCampanha){
@@ -704,7 +754,6 @@ public class CampanhaDao {
           
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro consultar Campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{

@@ -1,7 +1,6 @@
 
 package dao;
 
-import ferramentas.Utilitarios;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,8 +15,7 @@ import model.Igreja;
 import model.Pessoa;
 
 public class ContasPagarDao {
-    
-    private final Utilitarios converteData = new Utilitarios();
+   
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
@@ -39,7 +37,7 @@ public class ContasPagarDao {
                 ps.setDouble(4, cp.getValor());
                 ps.setInt(5, cp.getNumNota());
                 ps.setInt(6, cp.getParcela());
-                ps.setString(7, cp.getDataVencimento());
+                ps.setDate(7, (java.sql.Date) cp.getDataVencimento());
                 ps.setInt(8, cp.getSubContaResultado().getCodigo());
                 ps.setInt(9, cp.getStatus());
                 ps.setString(10, cp.getObservacao());
@@ -47,7 +45,6 @@ public class ContasPagarDao {
                 ps.setInt(12, cp.getIgreja().getCodigo());
                 
                 ps.executeUpdate();
-
             }
             //Confimar a transação, ou seja, a inserção dos dados
             conexao.commit();
@@ -176,14 +173,10 @@ public class ContasPagarDao {
                 ps.setNull(18, java.sql.Types.INTEGER);
                 ps.setNull(19, java.sql.Types.INTEGER);
             }
-            
-            // Executando a consulta
             rs = ps.executeQuery();
 
             // Iterando sobre os resultados
             while (rs.next()) {
-                //Convertendo as datas do tipo Date para String
-                
                 Pessoa fornecedor = new Pessoa();
                 ContasPagar contaPagar=  new ContasPagar();
                 Igreja igreja = new Igreja();
@@ -197,14 +190,9 @@ public class ContasPagarDao {
                 contaPagar.setValor(rs.getDouble("Valor"));
                 contaPagar.setNumNota(rs.getInt("NumNota"));
                 contaPagar.setParcela(rs.getInt("Parcela"));
-
-                String dataVenc = converteData.convertendoDataStringSql(rs.getDate("DataVencimento"));
-                String dataPag = converteData.convertendoDataStringSql(rs.getDate("DataPagamento"));
-                String dataCad = converteData.convertendoDataStringSql(rs.getDate("DataCadastro"));
-
-                contaPagar.setDataPagamento(dataPag);
-                contaPagar.setDataCadastro(dataCad);
-                contaPagar.setDataVencimento(dataVenc);
+                contaPagar.setDataPagamento(rs.getDate("DataPagamento"));
+                contaPagar.setDataCadastro(rs.getDate("DataCadastro"));
+                contaPagar.setDataVencimento(rs.getDate("DataVencimento"));
 
                 listaContasPagar.add(contaPagar);
             }
@@ -250,7 +238,6 @@ public class ContasPagarDao {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }
     
     public boolean verificarExistenciaContaPagar(Integer numNota, Integer fornecedor){
@@ -283,19 +270,17 @@ public class ContasPagarDao {
                 
             }
         }
-
         return cpExiste;
     }
     
-    public void alterarStatusContaPagar(ContasPagar cpEfetivada, String dataPagamento){
-                     
+    public void alterarStatusContaPagar(ContasPagar cpEfetivada, Date dataPagamento){                   
         try{            
             conexao = Conexao.getDataSource().getConnection();
             String sql= "UPDATE ContasPagar SET Baixada=?,DataPagamento=?" + " WHERE Codigo=?";
                      
             ps = conexao.prepareStatement(sql);
             ps.setInt(1,1);
-            ps.setString(2, dataPagamento);
+            ps.setDate(2, (java.sql.Date) dataPagamento);
             ps.setInt(3,cpEfetivada.getCodigo());
 
             ps.executeUpdate();           

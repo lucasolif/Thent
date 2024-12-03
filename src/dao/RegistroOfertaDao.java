@@ -46,7 +46,7 @@ public class RegistroOfertaDao {
                 psRegistro.setDouble(3, rg.getValorOferta());
                 psRegistro.setInt(4, rg.getFormaPagto().getCodigo());
                 psRegistro.setInt(5, rg.getSubContaResultado().getCodigo());
-                psRegistro.setString(6, rg.getDataOferta());
+                psRegistro.setDate(6, (java.sql.Date) rg.getDataOferta());
                 psRegistro.setInt(7, 1);
                 psRegistro.setInt(8, rg.getIgreja().getCodigo());
                 psRegistro.setInt(9, 2);
@@ -72,7 +72,7 @@ public class RegistroOfertaDao {
                     psMovimento.setInt(7, rg.getFormaPagto().getCodigo());
                     psMovimento.setInt(8, rg.getIgreja().getCodigo());
                     psMovimento.setInt(9, 2);
-                    psMovimento.setString(10, rg.getDataOferta());
+                    psMovimento.setDate(10, (java.sql.Date) rg.getDataOferta());
                     
                     psMovimento.execute();
 
@@ -235,8 +235,6 @@ public class RegistroOfertaDao {
                 Integer codFormPagto = rs.getInt("CodFormaPagto");
                 Integer codIgreja = rs.getInt("CodIgreja");
                 Integer codContaCx = rs.getInt("CodContaCaixa");
-                
-                //Setando os valores vindo da consulta, nos objetos.
                 igreja.setCodigo(codIgreja);
                 igreja.setNome(rs.getString("Igreja"));
                 tpOferta.setCodigo(codTpOferta);
@@ -247,9 +245,9 @@ public class RegistroOfertaDao {
                 formaPagto.setNome(rs.getString("FormaPagto"));
                 contaCaixa.setCodigo(codContaCx);
                 contaCaixa.setNome(rs.getString("ContaCaixa"));
-                
-                String dataLanc = converteData.convertendoDataStringSql(rs.getDate("DataCadastro"));
-                String dataOfer = converteData.convertendoDataStringSql(rs.getDate("DataOferta"));
+              
+                Date dataLanc = rs.getDate("DataCadastro");
+                Date dataOfer = rs.getDate("DataOferta");
                 
                 RegistroDizimoOferta registrosDizimoOferta = new RegistroDizimoOferta(codRegistro, tpOferta, valorOferta, formaPagto, ofertante, dataOfer, igreja, contaCaixa, dataLanc);
                 listaRegistros.add(registrosDizimoOferta);

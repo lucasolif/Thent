@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
-/**
- *
- * @author Lucas Oliveira
- */
 public class MovimentoCaixa {
     private Integer codigo, excluido;
     private RegistroDizimoOferta rgOferta;
     private ContasPagar contaPagar;
-    private String complemento, dataMovimento, dataPagamentoRecebimento;
+    private String complemento;
+    private Date dataMovimento;
+    private Date dataPagamentoRecebimento;
     private double valorEntrada, valorSaida;
     private Pessoa pessoa;
     private ContaCaixa contaCaixa;
@@ -22,11 +18,12 @@ public class MovimentoCaixa {
     private Igreja igreja;
     private Usuario usuarioCadastro;
     private TransferenciaConta transferecia;
+    private ContasReceberCampanha crCampanha;
 
     public MovimentoCaixa() {
     }
 
-    public MovimentoCaixa(Integer excluido, RegistroDizimoOferta rgOferta, String complemento, String dataMovimento, double valorEntrada, double valorSaida, ContaCaixa contaCaixa, FormaPagto formaPagto, Igreja igreja, Usuario usuarioCadastro) {
+    public MovimentoCaixa(Integer excluido, RegistroDizimoOferta rgOferta, String complemento, Date dataMovimento, double valorEntrada, double valorSaida, ContaCaixa contaCaixa, FormaPagto formaPagto, Igreja igreja, Usuario usuarioCadastro) {
         this.excluido = excluido;
         this.rgOferta = rgOferta;
         this.complemento = complemento;
@@ -39,6 +36,14 @@ public class MovimentoCaixa {
         this.usuarioCadastro = usuarioCadastro;
     }
 
+    public ContasReceberCampanha getCrCampanha() {
+        return crCampanha;
+    }
+
+    public void setCrCampanha(ContasReceberCampanha crCampanha) {
+        this.crCampanha = crCampanha;
+    }
+    
     public Integer getCodigo() {
         return codigo;
     }
@@ -59,11 +64,11 @@ public class MovimentoCaixa {
         return complemento;
     }
 
-    public String getDataMovimento() {
+    public Date getDataMovimento() {
         return dataMovimento;
     }
 
-    public String getDataPagamentoRecebimento() {
+    public Date getDataPagamentoRecebimento() {
         return dataPagamentoRecebimento;
     }
 
@@ -119,11 +124,11 @@ public class MovimentoCaixa {
         this.complemento = complemento;
     }
 
-    public void setDataMovimento(String dataMovimento) {
+    public void setDataMovimento(Date dataMovimento) {
         this.dataMovimento = dataMovimento;
     }
 
-    public void setDataPagamentoRecebimento(String dataPagamentoRecebimento) {
+    public void setDataPagamentoRecebimento(Date dataPagamentoRecebimento) {
         this.dataPagamentoRecebimento = dataPagamentoRecebimento;
     }
 

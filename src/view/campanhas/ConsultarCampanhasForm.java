@@ -8,9 +8,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
@@ -51,7 +49,6 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         jLabel7 = new javax.swing.JLabel();
         dataFimCampanha = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        duracaoCampanha = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         valorTotalCampanha = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -67,6 +64,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         jLabel11 = new javax.swing.JLabel();
         totalParcelasPagas = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        duracaoCampanha = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaParticipantes = new javax.swing.JTable();
 
@@ -96,75 +94,96 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         jLabel2.setText("Campanha");
 
         codCampanha.setEditable(false);
+        codCampanha.setBackground(new java.awt.Color(204, 204, 204));
+        codCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         codCampanha.setFocusable(false);
 
         nomeCampanha.setEditable(false);
+        nomeCampanha.setBackground(new java.awt.Color(204, 204, 204));
+        nomeCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         nomeCampanha.setFocusable(false);
 
         dataInicioCampanha.setEditable(false);
+        dataInicioCampanha.setBackground(new java.awt.Color(204, 204, 204));
         try {
             dataInicioCampanha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
         dataInicioCampanha.setFocusable(false);
+        dataInicioCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel7.setText("Final Campanha");
 
         dataFimCampanha.setEditable(false);
+        dataFimCampanha.setBackground(new java.awt.Color(204, 204, 204));
         try {
             dataFimCampanha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
         dataFimCampanha.setFocusable(false);
+        dataFimCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel3.setText("Duração");
-
-        duracaoCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        duracaoCampanha.setModel(new javax.swing.SpinnerNumberModel());
-        duracaoCampanha.setEnabled(false);
-        duracaoCampanha.setFocusable(false);
 
         jLabel6.setText("Inicio Campanha");
 
         valorTotalCampanha.setEditable(false);
+        valorTotalCampanha.setBackground(new java.awt.Color(204, 204, 204));
         valorTotalCampanha.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         valorTotalCampanha.setFocusable(false);
+        valorTotalCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel4.setText("Total Camp");
 
         jLabel5.setText("Status Camp");
 
         statusCampanha.setEditable(false);
+        statusCampanha.setBackground(new java.awt.Color(204, 204, 204));
+        statusCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         statusCampanha.setFocusable(false);
 
         valorArrecadado.setEditable(false);
+        valorArrecadado.setBackground(new java.awt.Color(204, 204, 204));
         valorArrecadado.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         valorArrecadado.setFocusable(false);
+        valorArrecadado.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel8.setText("Val. Arrecadado");
 
         valorPendente.setEditable(false);
+        valorPendente.setBackground(new java.awt.Color(204, 204, 204));
         valorPendente.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         valorPendente.setFocusable(false);
 
         jLabel9.setText("Val. Pendente");
 
         qtdParticipante.setEditable(false);
+        qtdParticipante.setBackground(new java.awt.Color(204, 204, 204));
+        qtdParticipante.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         qtdParticipante.setFocusable(false);
 
         jLabel10.setText("Qtd Partici");
 
         igreja.setEditable(false);
+        igreja.setBackground(new java.awt.Color(204, 204, 204));
+        igreja.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         igreja.setFocusable(false);
 
         jLabel11.setText("Igreja Campanha");
 
         totalParcelasPagas.setEditable(false);
+        totalParcelasPagas.setBackground(new java.awt.Color(204, 204, 204));
+        totalParcelasPagas.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         totalParcelasPagas.setFocusable(false);
 
         jLabel12.setText("Tot. Parc Paga");
+
+        duracaoCampanha.setEditable(false);
+        duracaoCampanha.setBackground(new java.awt.Color(204, 204, 204));
+        duracaoCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        duracaoCampanha.setFocusable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -180,7 +199,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dataInicioCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,8 +256,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
                         .addComponent(dataInicioCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -248,7 +266,8 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(codCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nomeCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(nomeCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(duracaoCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -313,17 +332,16 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(consultaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar)
-                                .addGap(0, 339, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jScrollPane1)
                         .addContainerGap())
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(consultaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,7 +378,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
     private void formInicial(){
         this.codCampanha.setText("");
         this.nomeCampanha.setText("");
-        this.duracaoCampanha.setValue(1);
+        this.duracaoCampanha.setText("");
         this.dataInicioCampanha.setText("");
         this.dataFimCampanha.setText("");
         this.valorTotalCampanha.setText("");
@@ -399,7 +417,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         
         this.codCampanha.setText(String.valueOf(campanha.getCodigo()));
         this.nomeCampanha.setText(campanha.getDescricaoCampanha());
-        this.duracaoCampanha.setValue(campanha.getDuracaoMeses());
+        this.duracaoCampanha.setText(String.valueOf(campanha.getDuracaoMeses()));
         this.dataInicioCampanha.setText(this.conversor.convertendoDataStringSql((Date) campanha.getDataInicial()));
         this.dataFimCampanha.setText(this.conversor.convertendoDataStringSql((Date) campanha.getDataFinal()));
         this.igreja.setText(campanha.getIgreja().getNome());
@@ -429,7 +447,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
     private javax.swing.JTextField consultaCampanha;
     private javax.swing.JFormattedTextField dataFimCampanha;
     private javax.swing.JFormattedTextField dataInicioCampanha;
-    private javax.swing.JSpinner duracaoCampanha;
+    private javax.swing.JTextField duracaoCampanha;
     private javax.swing.JTextField igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

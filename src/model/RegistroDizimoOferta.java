@@ -1,6 +1,7 @@
 
 package model;
 
+import java.util.Date;
 import java.util.Objects;
 
 
@@ -11,7 +12,8 @@ public class RegistroDizimoOferta {
     private double valorOferta;
     private FormaPagto formaPagto;
     private Pessoa ofertante;
-    private String dataOferta, DataCadastro;
+    private Date dataOferta;
+    private Date DataCadastro;
     private Igreja igreja;
     private Usuario usuario;
     private ContaCaixa contaCaixa;
@@ -20,7 +22,7 @@ public class RegistroDizimoOferta {
     public RegistroDizimoOferta() {
     }
     
-    public RegistroDizimoOferta(TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, String dataOferta, Igreja igreja, ContaCaixa contaCaixa, SubContaResultado subContaResultado) {
+    public RegistroDizimoOferta(TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, SubContaResultado subContaResultado) {
         this.tpOferta = tpOferta;
         this.valorOferta = valorOferta;
         this.formaPagto = formaPagto;
@@ -32,7 +34,7 @@ public class RegistroDizimoOferta {
     }
 
     //Construtor utilizado na consulta de Dizimo e Ofertas
-    public RegistroDizimoOferta(Integer codRegistro, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, String dataOferta, Igreja igreja, ContaCaixa contaCaixa, String dataCadastro ) {
+    public RegistroDizimoOferta(Integer codRegistro, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Date dataCadastro ) {
         this.codRegistro = codRegistro;
         this.tpOferta = tpOferta;
         this.valorOferta = valorOferta;
@@ -44,7 +46,7 @@ public class RegistroDizimoOferta {
         this.DataCadastro = dataCadastro;
     }
     
-    public RegistroDizimoOferta(Integer codigo, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, String dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
+    public RegistroDizimoOferta(Integer codigo, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
         this.codRegistro = codigo;
         this.tpOferta = tpOferta;
         this.valorOferta = valorOferta;
@@ -56,7 +58,7 @@ public class RegistroDizimoOferta {
         this.usuario = usuario;
     }
 
-    public RegistroDizimoOferta(TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, String dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
+    public RegistroDizimoOferta(TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
         this.tpOferta = tpOferta;
         this.valorOferta = valorOferta;
         this.formaPagto = formaPagto;
@@ -107,19 +109,19 @@ public class RegistroDizimoOferta {
         this.ofertante = ofertante;
     }
 
-    public String getDataOferta() {
+    public Date getDataOferta() {
         return dataOferta;
     }
 
-    public void setDataOferta(String dataOferta) {
+    public void setDataOferta(Date dataOferta) {
         this.dataOferta = dataOferta;
     }
 
-    public String getDataCadastro() {
+    public Date getDataCadastro() {
         return DataCadastro;
     }
 
-    public void setDataCadastro(String DataCadastro) {
+    public void setDataCadastro(Date DataCadastro) {
         this.DataCadastro = DataCadastro;
     }
 

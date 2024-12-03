@@ -16,6 +16,7 @@ import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -315,7 +316,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(iconLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(iconDeletar)
@@ -331,10 +331,10 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(iconDeletar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(iconLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSalvar))
                 .addGap(36, 36, 36))
         );
 
@@ -519,7 +519,8 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
             FormaPagto formaPagto = (FormaPagto) tabelaOfertas.getModel().getValueAt(i, 3);
             ContaCaixa contaCx = (ContaCaixa) tabelaOfertas.getModel().getValueAt(i, 4);
             SubContaResultado subContResult = (SubContaResultado) tabelaOfertas.getModel().getValueAt(i, 5);
-            String dataOferta = (String)tabelaOfertas.getModel().getValueAt(i, 6);
+            String stringDataOferta = (String)tabelaOfertas.getModel().getValueAt(i, 6);
+            Date dataOferta = this.conversor.convertendoStringDateSql(stringDataOferta);
             Igreja igreja = (Igreja) igrejaCampo.getSelectedItem();
                        
             RegistroDizimoOferta registro = new RegistroDizimoOferta(tpOferta, valOferta, formaPagto, ofertante, dataOferta, igreja, contaCx, subContResult);

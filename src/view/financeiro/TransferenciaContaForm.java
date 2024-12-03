@@ -6,6 +6,7 @@ import dao.IgrejaDao;
 import dao.TransferenciaDepositoDao;
 import ferramentas.Utilitarios;
 import java.awt.Dimension;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -233,7 +234,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         ContaCaixa cxSaida = (ContaCaixa) contaCaixaSaida.getSelectedItem();
         ContaCaixa cxEntrada = (ContaCaixa) contaCaixaEntrada.getSelectedItem();
         double valor = Double.parseDouble(this.valor.getText().replace(",", "."));
-        String dataOp = dataOperacao.getText();
+        Date dataOp = this.conversor.convertendoStringDateSql(dataOperacao.getText());
         this.pessoa.setCodigo(1);
         this.usuario.setCodigo(1);
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();

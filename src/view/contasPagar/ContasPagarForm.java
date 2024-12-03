@@ -16,6 +16,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -495,7 +496,8 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
                 String descricao = (String) tabelaParcelas.getModel().getValueAt(i, 1);  
                 int parcela = (Integer) tabelaParcelas.getModel().getValueAt(i, 2);
                 double valorParcela = (Double) tabelaParcelas.getModel().getValueAt(i, 3);
-                String dataVencimento = (String) tabelaParcelas.getModel().getValueAt(i, 4);
+                String StringDataVencimento = (String) tabelaParcelas.getModel().getValueAt(i, 4);
+                Date dataVencimento = this.conversor.convertendoStringDateSql(StringDataVencimento);
             
                 ContasPagar contasPagar  = new ContasPagar(fornecedor, parcela, numNota, status, descricao, dataVencimento, boleto, observacao, valorParcela, formaPagto, subContResult, igreja);     
                 listaContasPagar.add(contasPagar);

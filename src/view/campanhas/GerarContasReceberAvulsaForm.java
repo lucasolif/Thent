@@ -401,7 +401,7 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
             crCampanha.setDataVencimento(dataVencimento);
             crCampanha.setDescricaoStatus("Aberto");
             crCampanha.setIgreja(campanha.getIgreja());
-            crCampanha.setNumParcela(parcela);
+            crCampanha.setParcela(parcela);
             crCampanha.setParticipante(this.participanteSelec);
             crCampanha.setStatusPagamento(0);
             crCampanha.setValorParcela(valorMensal);

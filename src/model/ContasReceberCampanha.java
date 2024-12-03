@@ -12,7 +12,8 @@ public class ContasReceberCampanha {
     private Date dataVencimento;
     private Date dataPagamento;
     private ParticipanteCampanha participante;
-    private Integer numParcela;    
+    private Integer numParcela;
+    private Integer parcela;    
     private double valorParcela;
     private double valorPago;
     private double valorPendente;
@@ -26,16 +27,24 @@ public class ContasReceberCampanha {
         return formaPagto;
     }
 
+    public Integer getNumParcela() {
+        return numParcela;
+    }
+
+    public void setNumParcela(Integer numParcela) {
+        this.numParcela = numParcela;
+    }
+    
     public void setFormaPagto(FormaPagto formaPagto) {
         this.formaPagto = formaPagto;
     }
     
-    public Integer getNumParcela() {
-        return numParcela;
+    public Integer getParcela() {
+        return parcela;
     }
     
-    public void setNumParcela(Integer numParcela) {
-        this.numParcela = numParcela;
+    public void setParcela(Integer parcela) {
+        this.parcela = parcela;
     }
     
     public Integer getCodigo() {
@@ -78,7 +87,7 @@ public class ContasReceberCampanha {
         this.dataPagamento = dataPagamento;
     }
 
-    public Pessoa getParticipante() {
+    public ParticipanteCampanha getParticipante() {
         return participante;
     }
 
@@ -151,7 +160,7 @@ public class ContasReceberCampanha {
         hash = 97 * hash + Objects.hashCode(this.dataVencimento);
         hash = 97 * hash + Objects.hashCode(this.dataPagamento);
         hash = 97 * hash + Objects.hashCode(this.participante);
-        hash = 97 * hash + Objects.hashCode(this.numParcela);
+        hash = 97 * hash + Objects.hashCode(this.parcela);
         hash = 97 * hash + (int) (Double.doubleToLongBits(this.valorParcela) ^ (Double.doubleToLongBits(this.valorParcela) >>> 32));
         hash = 97 * hash + (int) (Double.doubleToLongBits(this.valorPago) ^ (Double.doubleToLongBits(this.valorPago) >>> 32));
         hash = 97 * hash + (int) (Double.doubleToLongBits(this.valorPendente) ^ (Double.doubleToLongBits(this.valorPendente) >>> 32));
@@ -208,7 +217,7 @@ public class ContasReceberCampanha {
         if (!Objects.equals(this.participante, other.participante)) {
             return false;
         }
-        if (!Objects.equals(this.numParcela, other.numParcela)) {
+        if (!Objects.equals(this.parcela, other.parcela)) {
             return false;
         }
         if (!Objects.equals(this.statusPagamento, other.statusPagamento)) {
