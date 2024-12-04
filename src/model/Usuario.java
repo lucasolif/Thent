@@ -13,8 +13,17 @@ public class Usuario {
     private String celular;
     private String hashSenha;
     private String saltSenha;
+    private Integer perfilAcesso;
 
     public Usuario() {
+    }
+
+    public Integer getPerfilAcesso() {
+        return perfilAcesso;
+    }
+
+    public void setPerfilAcesso(Integer perfilAcesso) {
+        this.perfilAcesso = perfilAcesso;
     }
 
     public Integer getCodigo() {

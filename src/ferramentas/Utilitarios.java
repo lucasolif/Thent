@@ -3,6 +3,7 @@ package ferramentas;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -20,6 +21,18 @@ public class Utilitarios{
         double novoValorArredondado = bd.doubleValue();
         
         return novoValorArredondado;
+    }
+    
+    public Integer formatarValores(double valor, int qtdCasasDecimais){
+        DecimalFormat df = new DecimalFormat();
+        
+        if(qtdCasasDecimais == 0){
+            df = new DecimalFormat("0");
+        }
+
+        String numeroFormatado = df.format(valor);
+        
+        return Integer.valueOf(numeroFormatado);
     }
     
     public String convertendoDataStringSql(java.sql.Date data){

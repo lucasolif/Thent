@@ -7,20 +7,15 @@ import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
-import dao.SubContaResultadoDao;
 import ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
 import model.ContaCaixa;
@@ -51,6 +46,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     public GerenciarContasReceberForm() {
         initComponents();
         formInicial();
+        tabelaInicia();
     }
 
     public void setPosicao() {
@@ -173,14 +169,14 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
 
             },
             new String [] {
-                "N° CR", "Participante", "Parcela", "Valor", "Dt Venc", "Dt Pagto", "Status", "Campanha"
+                "Participante", "N° CR", "Parcela", "Val Parcela", "Val Pago", "Dt Venc", "Dt Pagto", "Status", "Campanha"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -201,21 +197,22 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         jScrollPane1.setViewportView(tabelaCr);
         if (tabelaCr.getColumnModel().getColumnCount() > 0) {
             tabelaCr.getColumnModel().getColumn(0).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tabelaCr.getColumnModel().getColumn(0).setPreferredWidth(250);
             tabelaCr.getColumnModel().getColumn(1).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(1).setPreferredWidth(250);
+            tabelaCr.getColumnModel().getColumn(1).setPreferredWidth(30);
             tabelaCr.getColumnModel().getColumn(2).setResizable(false);
             tabelaCr.getColumnModel().getColumn(2).setPreferredWidth(30);
             tabelaCr.getColumnModel().getColumn(3).setResizable(false);
             tabelaCr.getColumnModel().getColumn(3).setPreferredWidth(40);
             tabelaCr.getColumnModel().getColumn(4).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(4).setPreferredWidth(60);
             tabelaCr.getColumnModel().getColumn(5).setResizable(false);
             tabelaCr.getColumnModel().getColumn(5).setPreferredWidth(60);
             tabelaCr.getColumnModel().getColumn(6).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(6).setPreferredWidth(40);
+            tabelaCr.getColumnModel().getColumn(6).setPreferredWidth(60);
             tabelaCr.getColumnModel().getColumn(7).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(7).setPreferredWidth(200);
+            tabelaCr.getColumnModel().getColumn(7).setPreferredWidth(40);
+            tabelaCr.getColumnModel().getColumn(8).setResizable(false);
+            tabelaCr.getColumnModel().getColumn(8).setPreferredWidth(200);
         }
 
         btnFiltrar.setBackground(new java.awt.Color(51, 153, 255));
@@ -417,31 +414,27 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                         .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
-                                .addComponent(dataPagtoPagamento)
-                                .addContainerGap())))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(dataPagtoPagamento)))
                     .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
                         .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(formaPagtoBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(crSelecionada, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
-                                .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(formaPagtoBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(crSelecionada, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(valorBaixar, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)))
-                            .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(obsPagamento)))
-                        .addContainerGap())))
+                                .addComponent(jLabel11)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(valorBaixar, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)))
+                    .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(obsPagamento)))
+                .addContainerGap())
         );
         painelDadosPagamentoLayout.setVerticalGroup(
             painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -681,6 +674,19 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         formConsulta();
     }
     
+    private void tabelaInicia(){
+        Date dataAtual = conversor.convertendoStringDateSql(conversor.dataAtualString());
+        List<ContasReceberCampanha> listaCrCampanha = this.campanhaDao.consultarContasReceberCampanhaMesAtual((java.sql.Date) dataAtual);
+        DefaultTableModel tabelaCr = (DefaultTableModel) this.tabelaCr.getModel();
+        tabelaCr.setNumRows(0);
+
+        for(ContasReceberCampanha cr : listaCrCampanha){      
+            String dataVencimento =  this.conversor.convertendoDataStringSql((java.sql.Date) cr.getDataVencimento());
+            String dataPagamento =  this.conversor.convertendoDataStringSql((java.sql.Date) cr.getDataPagamento());
+            tabelaCr.addRow(new Object[]{cr.getParticipante(),cr.getNumParcela(),cr.getParcela(), cr.getValorParcela(), cr.getValorPago(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
+        }
+    }
+    
     private void formBaixa(){
         this.contaCaixaPagamento.setEnabled(true);
         this.formaPagtoBaixa.setEnabled(true);
@@ -837,7 +843,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         for(ContasReceberCampanha cr : this.listaCrCampanha){      
             String dataVencimento =  conversor.convertendoDataStringSql((java.sql.Date) cr.getDataVencimento());
             String dataPagamento =  conversor.convertendoDataStringSql((java.sql.Date) cr.getDataPagamento());
-            tabelaCr.addRow(new Object[]{cr.getCodigo(),cr.getParticipante(),cr.getParcela(), cr.getValorParcela(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
+            tabelaCr.addRow(new Object[]{cr.getParticipante(),cr.getNumParcela(),cr.getParcela(), cr.getValorParcela(), cr.getValorPago(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
         }
     
     }
@@ -864,7 +870,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     
     private void duplicataSelecionada(){    
         int linhaSelecionada = tabelaCr.getSelectedRow();
-        Integer cr = (Integer) tabelaCr.getValueAt(linhaSelecionada, 0);
+        Integer cr = (Integer) tabelaCr.getValueAt(linhaSelecionada, 1);
         double valor = (double) tabelaCr.getValueAt(linhaSelecionada, 3);
         
         this.crSelecionada.setText(String.valueOf(cr));

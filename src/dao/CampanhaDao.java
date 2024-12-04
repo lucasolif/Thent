@@ -422,6 +422,7 @@ public class CampanhaDao {
                 contaReceber.setNumParcela(this.rs.getInt("NumParcela"));
                 contaReceber.setParcela(this.rs.getInt("Parcela"));
                 contaReceber.setValorParcela(this.rs.getDouble("ValorParcela"));
+                contaReceber.setValorPago(this.rs.getDouble("ValorPago"));
                 contaReceber.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
                 contaReceber.setDataVencimento(this.rs.getDate("DataVencimento"));
                 contaReceber.setDataPagamento(this.rs.getDate("DataPagamento"));
@@ -447,33 +448,87 @@ public class CampanhaDao {
         return listaCrCampanha;       
     }
     
-    public List<ParticipanteCampanha> consultarParticipantesValores(Integer codCampanha){
+    public List<ContasReceberCampanha> consultarContasReceberCampanhaMesAtual(Date dataAtual){
+        
+        List<ContasReceberCampanha> listaCrCampanha = new ArrayList<>();
+
+        String sql = "SELECT (SELECT DescricaoCampanha FROM Campanhas As C WHERE CRC.Campanha = C.Codigo) As DescricaoCampanha,CRC.* FROM ContasReceberCampanhas As CRC "
+        + "WHERE CRC.ValorPendente > 0 AND CRC.DataPagamento Is Null AND (CRC.DescricaoStatus = 'Aberto' OR CRC.DescricaoStatus = 'Pendente') AND MONTH(CRC.DataVencimento) = MONTH(?)";
+
+        try {
+            this.conexao = Conexao.getDataSource().getConnection();         
+            this.selectStmt = this.conexao.prepareStatement(sql);  
+            
+            this.selectStmt.setDate(1, dataAtual);
+            this.rs = this.selectStmt .executeQuery();
+
+            while (this.rs.next()) {
+                Campanha campanha = new Campanha();
+                Igreja igreja = new Igreja();
+                ParticipanteCampanha participante = new ParticipanteCampanha();
+                ContasReceberCampanha contaReceber = new ContasReceberCampanha();
+                igreja.setCodigo(this.rs.getInt("Igreja"));
+                campanha.setCodigo(this.rs.getInt("Campanha"));
+                campanha.setDescricaoCampanha(this.rs.getString("DescricaoCampanha"));
+                participante.setCodigo(this.rs.getInt("CodPessoa"));
+                participante.setNome(this.rs.getString("NomePessoa"));
+                contaReceber.setCodigo(this.rs.getInt("NumParcela"));
+                contaReceber.setNumParcela(this.rs.getInt("NumParcela"));
+                contaReceber.setParcela(this.rs.getInt("Parcela"));
+                contaReceber.setValorParcela(this.rs.getDouble("ValorParcela"));
+                contaReceber.setValorPago(this.rs.getDouble("ValorPago"));
+                contaReceber.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
+                contaReceber.setDataVencimento(this.rs.getDate("DataVencimento"));
+                contaReceber.setDataPagamento(this.rs.getDate("DataPagamento"));
+                contaReceber.setIgreja(igreja);
+                contaReceber.setCampanha(campanha);
+                contaReceber.setParticipante(participante);
+
+                listaCrCampanha.add(contaReceber);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a receber da campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+ e.getMessage());
+        } finally {
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt  != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return listaCrCampanha;      
+    }
+    
+    public List<ParticipanteCampanha> consultarParticipantesValores(Campanha campanha){
         
         List<ParticipanteCampanha> listaParticipanteCampanha = new ArrayList<>();
-
+        
         String sql = "SELECT " +
-               "PC.CodPessoa AS CodPessoa, " +
-               "PC.NomePessoa AS NomePessoa, " +
-               "CASE PC.Status " +
-               "    WHEN 1 THEN 'Ativo' " +
-               "    ELSE 'Inativo' " +
-               "END AS StatusPessoa, " +
-               "(SELECT COUNT(Parcela) FROM ContasReceberCampanhas WHERE ValorPago Is Not Null) AS TotalParcelasPagas, " +
-               "SUM(ISNULL(CRC.ValorPago, 0)) AS TotalValorPago, " +
-               "SUM(ISNULL(CRC.ValorPendente, 0)) AS TotalPendente " +
-               "FROM ParticipantesCampanha AS PC " +
-               "LEFT JOIN ContasReceberCampanhas AS CRC ON CRC.CodPessoa = PC.CodPessoa AND CRC.Campanha = PC.Campanha " +
-               "WHERE PC.Campanha = ? " +  // Substituído por parâmetro
-               "GROUP BY " +
-               "PC.CodPessoa, " +
-               "PC.NomePessoa, " +
-               "PC.Campanha, " +
-               "PC.Status";
+        "PC.CodPessoa AS CodPessoa, " +
+        "PC.NomePessoa AS NomePessoa, " +
+        "CASE PC.Status " +
+        "    WHEN 1 THEN 'Ativo' " +
+        "    ELSE 'Inativo' " +
+        "END AS StatusPessoa, " +
+        "(SELECT COUNT(Parcela) FROM ContasReceberCampanhas WHERE ValorPago Is Not Null) AS TotalParcelasPagas, " +
+        "SUM(ISNULL(CRC.ValorPago, 0)) AS TotalValorPago, " +
+        "SUM(ISNULL(CRC.ValorPendente, 0)) AS TotalPendente " +
+        "FROM ParticipantesCampanha AS PC " +
+        "LEFT JOIN ContasReceberCampanhas AS CRC ON CRC.CodPessoa = PC.CodPessoa AND CRC.Campanha = PC.Campanha " +
+        "WHERE PC.Campanha = ? " +  // Substituído por parâmetro
+        "GROUP BY " +
+        "PC.CodPessoa, " +
+        "PC.NomePessoa, " +
+        "PC.Campanha, " +
+        "PC.Status";
 
         try{
             this.conexao = Conexao.getDataSource().getConnection();          
             this.selectStmt = this.conexao.prepareStatement(sql);
-            this.selectStmt.setInt(1, codCampanha);
+            this.selectStmt.setInt(1, campanha.getCodigo());
             
             this.rs = this.selectStmt.executeQuery();
 
@@ -520,7 +575,7 @@ public class CampanhaDao {
             descStatus = "Pago";
         }else if(valorPendente > 0 || valorPendente != crCampanha.getValorParcela()){
             statusPagto = 0;
-            descStatus = "Pago Parcialmente";
+            descStatus = "Pendente";
         }
         
         try{        

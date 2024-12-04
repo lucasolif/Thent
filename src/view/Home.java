@@ -57,19 +57,19 @@ public class Home extends javax.swing.JFrame {
         cadastroFormaPagto = new javax.swing.JMenuItem();
         cadastroContaCaixa = new javax.swing.JMenuItem();
         cadastroTipoOferta = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        cadastroPlanoContas = new javax.swing.JMenu();
         cadastroContaResultado = new javax.swing.JMenuItem();
         cadastroSubContaResultado = new javax.swing.JMenuItem();
         financeiro = new javax.swing.JMenu();
-        operacaoDizimoOfertas = new javax.swing.JMenu();
+        financeiroDizimoOfertas = new javax.swing.JMenu();
         registrarOfertasDizimo = new javax.swing.JMenuItem();
         efetivacaoDizimoOfertas = new javax.swing.JMenuItem();
-        operacaoContasPagar = new javax.swing.JMenu();
+        financeiroContasPagar = new javax.swing.JMenu();
         lancarContasPagar = new javax.swing.JMenuItem();
         efetivarContasPagar = new javax.swing.JMenuItem();
         cancelarContasPagar = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        operacaoCaixa = new javax.swing.JMenu();
+        financeiroCaixa = new javax.swing.JMenu();
         transferencia = new javax.swing.JMenuItem();
         movimentoFinanceiro = new javax.swing.JMenuItem();
         relatorios = new javax.swing.JMenu();
@@ -115,7 +115,7 @@ public class Home extends javax.swing.JFrame {
         painelHome.setLayout(painelHomeLayout);
         painelHomeLayout.setHorizontalGroup(
             painelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 766, Short.MAX_VALUE)
         );
         painelHomeLayout.setVerticalGroup(
             painelHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -177,7 +177,7 @@ public class Home extends javax.swing.JFrame {
         });
         cadastroEntidades.add(cadastroTipoOferta);
 
-        jMenu1.setText("Plano de Contas");
+        cadastroPlanoContas.setText("Plano de Contas");
 
         cadastroContaResultado.setText("Conta de Resultado");
         cadastroContaResultado.addActionListener(new java.awt.event.ActionListener() {
@@ -185,7 +185,7 @@ public class Home extends javax.swing.JFrame {
                 cadastroContaResultadoActionPerformed(evt);
             }
         });
-        jMenu1.add(cadastroContaResultado);
+        cadastroPlanoContas.add(cadastroContaResultado);
 
         cadastroSubContaResultado.setText("SubConta de Resultado");
         cadastroSubContaResultado.addActionListener(new java.awt.event.ActionListener() {
@@ -193,9 +193,9 @@ public class Home extends javax.swing.JFrame {
                 cadastroSubContaResultadoActionPerformed(evt);
             }
         });
-        jMenu1.add(cadastroSubContaResultado);
+        cadastroPlanoContas.add(cadastroSubContaResultado);
 
-        cadastroEntidades.add(jMenu1);
+        cadastroEntidades.add(cadastroPlanoContas);
 
         cadastros.add(cadastroEntidades);
 
@@ -204,7 +204,7 @@ public class Home extends javax.swing.JFrame {
         financeiro.setText("Financeiro");
         financeiro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        operacaoDizimoOfertas.setText("Operações Dízimo/Ofertas");
+        financeiroDizimoOfertas.setText("Operações Dízimo/Ofertas");
 
         registrarOfertasDizimo.setText("Registrar Dizimo/Ofertas");
         registrarOfertasDizimo.addActionListener(new java.awt.event.ActionListener() {
@@ -212,7 +212,7 @@ public class Home extends javax.swing.JFrame {
                 registrarOfertasDizimoActionPerformed(evt);
             }
         });
-        operacaoDizimoOfertas.add(registrarOfertasDizimo);
+        financeiroDizimoOfertas.add(registrarOfertasDizimo);
 
         efetivacaoDizimoOfertas.setText("Consulta de Dizimo/Oferta");
         efetivacaoDizimoOfertas.addActionListener(new java.awt.event.ActionListener() {
@@ -220,11 +220,11 @@ public class Home extends javax.swing.JFrame {
                 efetivacaoDizimoOfertasActionPerformed(evt);
             }
         });
-        operacaoDizimoOfertas.add(efetivacaoDizimoOfertas);
+        financeiroDizimoOfertas.add(efetivacaoDizimoOfertas);
 
-        financeiro.add(operacaoDizimoOfertas);
+        financeiro.add(financeiroDizimoOfertas);
 
-        operacaoContasPagar.setText("Contas a Pagar");
+        financeiroContasPagar.setText("Contas a Pagar");
 
         lancarContasPagar.setText("Lançar Contas a Pagar");
         lancarContasPagar.addActionListener(new java.awt.event.ActionListener() {
@@ -232,7 +232,7 @@ public class Home extends javax.swing.JFrame {
                 lancarContasPagarActionPerformed(evt);
             }
         });
-        operacaoContasPagar.add(lancarContasPagar);
+        financeiroContasPagar.add(lancarContasPagar);
 
         efetivarContasPagar.setText("Efetivar/Consultar Contas a Pagar");
         efetivarContasPagar.addActionListener(new java.awt.event.ActionListener() {
@@ -240,7 +240,7 @@ public class Home extends javax.swing.JFrame {
                 efetivarContasPagarActionPerformed(evt);
             }
         });
-        operacaoContasPagar.add(efetivarContasPagar);
+        financeiroContasPagar.add(efetivarContasPagar);
 
         cancelarContasPagar.setText("Cancelar Contas a Pagar");
         cancelarContasPagar.addActionListener(new java.awt.event.ActionListener() {
@@ -248,14 +248,14 @@ public class Home extends javax.swing.JFrame {
                 cancelarContasPagarActionPerformed(evt);
             }
         });
-        operacaoContasPagar.add(cancelarContasPagar);
+        financeiroContasPagar.add(cancelarContasPagar);
 
         jMenuItem1.setText("Alterar Contas a Pagar");
-        operacaoContasPagar.add(jMenuItem1);
+        financeiroContasPagar.add(jMenuItem1);
 
-        financeiro.add(operacaoContasPagar);
+        financeiro.add(financeiroContasPagar);
 
-        operacaoCaixa.setText("Operações Caixa");
+        financeiroCaixa.setText("Operações Caixa");
 
         transferencia.setText("Transferência de Contas");
         transferencia.addActionListener(new java.awt.event.ActionListener() {
@@ -263,7 +263,7 @@ public class Home extends javax.swing.JFrame {
                 transferenciaActionPerformed(evt);
             }
         });
-        operacaoCaixa.add(transferencia);
+        financeiroCaixa.add(transferencia);
 
         movimentoFinanceiro.setText("Movimento Financeiro");
         movimentoFinanceiro.addActionListener(new java.awt.event.ActionListener() {
@@ -271,9 +271,9 @@ public class Home extends javax.swing.JFrame {
                 movimentoFinanceiroActionPerformed(evt);
             }
         });
-        operacaoCaixa.add(movimentoFinanceiro);
+        financeiroCaixa.add(movimentoFinanceiro);
 
-        financeiro.add(operacaoCaixa);
+        financeiro.add(financeiroCaixa);
 
         menuBarra.add(financeiro);
 
@@ -695,6 +695,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem cadastroIgreja;
     private javax.swing.JMenuItem cadastroLivros;
     private javax.swing.JMenuItem cadastroPessoas;
+    private javax.swing.JMenu cadastroPlanoContas;
     private javax.swing.JMenuItem cadastroSubContaResultado;
     private javax.swing.JMenuItem cadastroTipoOferta;
     private javax.swing.JMenuItem cadastroUsuario;
@@ -707,8 +708,10 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem efetivacaoDizimoOfertas;
     private javax.swing.JMenuItem efetivarContasPagar;
     private javax.swing.JMenu financeiro;
+    private javax.swing.JMenu financeiroCaixa;
+    private javax.swing.JMenu financeiroContasPagar;
+    private javax.swing.JMenu financeiroDizimoOfertas;
     private javax.swing.JMenuItem gerenciarContaReceberCampanha;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem lancarContasPagar;
     private javax.swing.JMenuItem lancarContasReceber;
@@ -718,10 +721,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu menuEmprestimoLivros;
     private javax.swing.JMenu menuUsuario;
     private javax.swing.JMenuItem movimentoFinanceiro;
-    private javax.swing.JMenu operacaoCaixa;
     private javax.swing.JMenuItem operacaoConsultaEmprestimo;
-    private javax.swing.JMenu operacaoContasPagar;
-    private javax.swing.JMenu operacaoDizimoOfertas;
     private javax.swing.JMenuItem operacaoEmprestimo;
     public javax.swing.JDesktopPane painelHome;
     private javax.swing.JMenu processosAvulsos;

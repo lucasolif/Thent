@@ -135,7 +135,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         valorTotalCampanha.setFocusable(false);
         valorTotalCampanha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
-        jLabel4.setText("Total Camp");
+        jLabel4.setText("Total Camp (R$)");
 
         jLabel5.setText("Status Camp");
 
@@ -156,6 +156,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         valorPendente.setBackground(new java.awt.Color(204, 204, 204));
         valorPendente.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         valorPendente.setFocusable(false);
+        valorPendente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel9.setText("Val. Pendente");
 
@@ -292,14 +293,14 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
 
             },
             new String [] {
-                "Cod", "Nome Participantes", "Status", "Qtd Parc Paga", "Valor Pagor"
+                "Cod", "Nome Participantes", "Status Participante", "Valor Pagor"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -320,8 +321,6 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
             tabelaParticipantes.getColumnModel().getColumn(2).setPreferredWidth(50);
             tabelaParticipantes.getColumnModel().getColumn(3).setResizable(false);
             tabelaParticipantes.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tabelaParticipantes.getColumnModel().getColumn(4).setResizable(false);
-            tabelaParticipantes.getColumnModel().getColumn(4).setPreferredWidth(50);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -331,17 +330,18 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(consultaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(consultaCampanha, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscar)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -411,7 +411,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
     }
     
     private void carregarCampanhaEscolhida(Campanha campanha){
-        List<ParticipanteCampanha> listaParticiCampanha = this.campanhaDao.consultarParticipantesValores(campanha.getCodigo());
+        List<ParticipanteCampanha> listaParticiCampanha = this.campanhaDao.consultarParticipantesValores(campanha);
         List<Double> listaValores = this.campanhaDao.consultarValores(campanha.getCodigo());
         campanha.setParticipante(listaParticiCampanha);
         
@@ -421,17 +421,22 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         this.dataInicioCampanha.setText(this.conversor.convertendoDataStringSql((Date) campanha.getDataInicial()));
         this.dataFimCampanha.setText(this.conversor.convertendoDataStringSql((Date) campanha.getDataFinal()));
         this.igreja.setText(campanha.getIgreja().getNome());
-        this.valorTotalCampanha.setText(String.valueOf(campanha.getValorTotalCampanha()));
+        this.valorTotalCampanha.setText(String.valueOf(this.conversor.arrendodarValores(campanha.getValorTotalCampanha())));
         this.statusCampanha.setText(campanha.getDescricaoStatus());
         this.qtdParticipante.setText(String.valueOf(campanha.getParticipante().size()));
-        this.valorArrecadado.setText(String.valueOf(listaValores.get(0)));
-        this.valorPendente.setText(String.valueOf(listaValores.get(1)));
-        this.totalParcelasPagas.setText(String.valueOf(listaValores.get(2)));
+        this.valorArrecadado.setText(String.valueOf(this.conversor.arrendodarValores(listaValores.get(0))));
+        this.valorPendente.setText(String.valueOf(this.conversor.arrendodarValores(listaValores.get(1))));
+        this.totalParcelasPagas.setText(String.valueOf(this.conversor.formatarValores(listaValores.get(2), 0)));
         this.campanhaSelec = campanha;      
           
         for(ParticipanteCampanha part : listaParticiCampanha){
             DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
-            model.addRow(new Object[]{part.getCodigo(),part,part.getDescricaoStatus(),part.getQtdParcelasPagas(),part.getValorTotalPago()});   
+            
+            Integer codParticipante = part.getCodigo();
+            String status = part.getDescricaoStatus();
+            double valorPago = this.conversor.arrendodarValores(part.getValorTotalPago());
+            
+            model.addRow(new Object[]{codParticipante,part,status,valorPago});   
         }  
     }
     
