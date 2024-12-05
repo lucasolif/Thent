@@ -70,9 +70,17 @@ public class Home extends javax.swing.JFrame {
         cancelarContasPagar = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         financeiroCaixa = new javax.swing.JMenu();
-        transferencia = new javax.swing.JMenuItem();
+        transferenciasBancarias = new javax.swing.JMenuItem();
         movimentoFinanceiro = new javax.swing.JMenuItem();
         relatorios = new javax.swing.JMenu();
+        relatorioFinanceiro = new javax.swing.JMenu();
+        relatorioExtratoCaixa = new javax.swing.JMenuItem();
+        relatorioContasPagar = new javax.swing.JMenuItem();
+        relatorioContasReceber = new javax.swing.JMenuItem();
+        relatorioCaixaContaResultado = new javax.swing.JMenuItem();
+        relatorioDizimoOferta = new javax.swing.JMenu();
+        relatorioMovimentoDizimoOferta = new javax.swing.JMenuItem();
+        relatorioEspecifico = new javax.swing.JMenu();
         biblioteca = new javax.swing.JMenu();
         menuCadastros = new javax.swing.JMenu();
         cadastroLivros = new javax.swing.JMenuItem();
@@ -257,13 +265,13 @@ public class Home extends javax.swing.JFrame {
 
         financeiroCaixa.setText("Operações Caixa");
 
-        transferencia.setText("Transferência de Contas");
-        transferencia.addActionListener(new java.awt.event.ActionListener() {
+        transferenciasBancarias.setText("Transferências Bancárias");
+        transferenciasBancarias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                transferenciaActionPerformed(evt);
+                transferenciasBancariasActionPerformed(evt);
             }
         });
-        financeiroCaixa.add(transferencia);
+        financeiroCaixa.add(transferenciasBancarias);
 
         movimentoFinanceiro.setText("Movimento Financeiro");
         movimentoFinanceiro.addActionListener(new java.awt.event.ActionListener() {
@@ -278,6 +286,33 @@ public class Home extends javax.swing.JFrame {
         menuBarra.add(financeiro);
 
         relatorios.setText("Relatórios");
+
+        relatorioFinanceiro.setText("Financeiro");
+
+        relatorioExtratoCaixa.setText("Extrato Caixa");
+        relatorioFinanceiro.add(relatorioExtratoCaixa);
+
+        relatorioContasPagar.setText("Contas a Pagar");
+        relatorioFinanceiro.add(relatorioContasPagar);
+
+        relatorioContasReceber.setText("Contas a Receber");
+        relatorioFinanceiro.add(relatorioContasReceber);
+
+        relatorioCaixaContaResultado.setText("Caixa Conta Resultado");
+        relatorioFinanceiro.add(relatorioCaixaContaResultado);
+
+        relatorios.add(relatorioFinanceiro);
+
+        relatorioDizimoOferta.setText("Dizimo/Oferta");
+
+        relatorioMovimentoDizimoOferta.setText("Movimento Dizimo/Oferta");
+        relatorioDizimoOferta.add(relatorioMovimentoDizimoOferta);
+
+        relatorios.add(relatorioDizimoOferta);
+
+        relatorioEspecifico.setText("Específico");
+        relatorios.add(relatorioEspecifico);
+
         menuBarra.add(relatorios);
 
         biblioteca.setText("Biblioteca");
@@ -520,12 +555,12 @@ public class Home extends javax.swing.JFrame {
         rgDizimoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_registrarOfertasDizimoActionPerformed
 
-    private void transferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferenciaActionPerformed
+    private void transferenciasBancariasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferenciasBancariasActionPerformed
         TransferenciaContaForm trasnfConta = new TransferenciaContaForm();
         this.painelHome.add(trasnfConta);
         trasnfConta.setVisible(true);
         trasnfConta.setPosicao();
-    }//GEN-LAST:event_transferenciaActionPerformed
+    }//GEN-LAST:event_transferenciasBancariasActionPerformed
 
     private void alterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarSenhaActionPerformed
         AlterarSenhaForm alterarSenha = new AlterarSenhaForm();
@@ -726,9 +761,17 @@ public class Home extends javax.swing.JFrame {
     public javax.swing.JDesktopPane painelHome;
     private javax.swing.JMenu processosAvulsos;
     private javax.swing.JMenuItem registrarOfertasDizimo;
+    private javax.swing.JMenuItem relatorioCaixaContaResultado;
+    private javax.swing.JMenuItem relatorioContasPagar;
+    private javax.swing.JMenuItem relatorioContasReceber;
+    private javax.swing.JMenu relatorioDizimoOferta;
+    private javax.swing.JMenu relatorioEspecifico;
+    private javax.swing.JMenuItem relatorioExtratoCaixa;
+    private javax.swing.JMenu relatorioFinanceiro;
+    private javax.swing.JMenuItem relatorioMovimentoDizimoOferta;
     private javax.swing.JMenu relatorios;
     private javax.swing.JMenuItem removerParticipante;
     private javax.swing.JMenuItem saidaAvulsaLivro;
-    private javax.swing.JMenuItem transferencia;
+    private javax.swing.JMenuItem transferenciasBancarias;
     // End of variables declaration//GEN-END:variables
 }

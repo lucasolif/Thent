@@ -167,12 +167,12 @@
                 <Property name="text" type="java.lang.String" value="Opera&#xe7;&#xf5;es Caixa"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="transferencia">
+                <MenuItem class="javax.swing.JMenuItem" name="transferenciasBancarias">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Transfer&#xea;ncia de Contas"/>
+                    <Property name="text" type="java.lang.String" value="Transfer&#xea;ncias Banc&#xe1;rias"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="transferenciaActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="transferenciasBancariasActionPerformed"/>
                   </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="movimentoFinanceiro">
@@ -191,6 +191,52 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Relat&#xf3;rios"/>
           </Properties>
+          <SubComponents>
+            <Menu class="javax.swing.JMenu" name="relatorioFinanceiro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Financeiro"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="relatorioExtratoCaixa">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Extrato Caixa"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="relatorioContasPagar">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Contas a Pagar"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="relatorioContasReceber">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Contas a Receber"/>
+                  </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="relatorioCaixaContaResultado">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Caixa Conta Resultado"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="relatorioDizimoOferta">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Dizimo/Oferta"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="relatorioMovimentoDizimoOferta">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Movimento Dizimo/Oferta"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="relatorioEspecifico">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Espec&#xed;fico"/>
+              </Properties>
+            </Menu>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="biblioteca">
           <Properties>

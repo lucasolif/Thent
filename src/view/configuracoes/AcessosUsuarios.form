@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" value="Acessos do Usu&#xe1;rio"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="cadastroUsuarios" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="marcarTodos" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="desmarcarTodos" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="inverterSelecao" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="btnSalvar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="cadastroUsuarios" pref="369" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnSalvar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="marcarTodos" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="desmarcarTodos" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inverterSelecao" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JTabbedPane" name="cadastroUsuarios">
+      <Properties>
+        <Property name="tabLayoutPolicy" type="int" value="1"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="acessosCadastro">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Cadastros">
+                <Property name="tabTitle" type="java.lang.String" value="Cadastros"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jSeparator11" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="formCadastroFormaPagto" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formCadastroContaCaixa" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formCadastroTipoOferta" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="subMenuPlanoContas" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="8" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="menuCadastro" min="-2" max="-2" attributes="0"/>
+                                  <Component id="subMenuEntidades" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="formCadastroPessoaMembros" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formCadastroIgrejaCampos" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formCadastroUsuario" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="formCadastroSubContaResultado" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formCadastroContaResultado" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="menuCadastro" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator11" min="-2" pref="4" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formCadastroPessoaMembros" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroIgrejaCampos" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="subMenuEntidades" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formCadastroFormaPagto" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroContaCaixa" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroTipoOferta" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuPlanoContas" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formCadastroSubContaResultado" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroContaResultado" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="176" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JCheckBox" name="formCadastroPessoaMembros">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Pessoas e Membros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroIgrejaCampos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Igrejas/Campos"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroUsuario">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Usu&#xe1;rio"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroFormaPagto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro Forma Pagto"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroContaCaixa">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro Conta Caixa"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroTipoOferta">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro Tipo de Oferta"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroContaResultado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro Conta de Resultado"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroSubContaResultado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro Sub Conta de Resultado"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuEntidades">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Entidades"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator2">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuPlanoContas">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Plano De Contas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator1">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="menuCadastro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator11">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="acessosFinanceiro">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName=" Financeiro">
+                <Property name="tabTitle" type="java.lang.String" value=" Financeiro"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jSeparator12" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator3" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator4" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator5" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator6" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="menuFinanceiro" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="subMenuOperacaoDizimoOferta" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="subMenuContasPagar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="subMenuOperacaoCaixa" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="formRegistrarDizimoOferta" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formConsultarDizimosOfertas" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="formLancarContasPagar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formEfetivarConsultarContasPagar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formCancelarContasPagar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="formAlterarContasPagar" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="formTransferenciaBancaria" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formMovimentoFinanceiro" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="62" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="menuFinanceiro" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator12" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="subMenuOperacaoDizimoOferta" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuContasPagar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuOperacaoCaixa" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formRegistrarDizimoOferta" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formConsultarDizimosOfertas" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator4" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formLancarContasPagar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formEfetivarConsultarContasPagar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCancelarContasPagar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="formAlterarContasPagar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator5" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formTransferenciaBancaria" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formMovimentoFinanceiro" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator6" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="133" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JCheckBox" name="subMenuOperacaoDizimoOferta">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Opera&#xe7;&#xe3;o Dizimos/Ofertas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuContasPagar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Contas a Pagar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuOperacaoCaixa">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Opera&#xe7;&#xf5;es Caixa"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator3">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formRegistrarDizimoOferta">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Registrar Dizimo ou Ofertas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formConsultarDizimosOfertas">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consultar D&#xed;zimos ou Ofertas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator4">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formLancarContasPagar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas a Pagar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formEfetivarConsultarContasPagar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Efetivar/Consutar Contas a Pagar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCancelarContasPagar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cancelar Contas a Pagar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formAlterarContasPagar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Alterar Contas a Pagar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator5">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formTransferenciaBancaria">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Transfer&#xea;ncias Banc&#xe1;rias"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formMovimentoFinanceiro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Movimento Financeiro"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator6">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="menuFinanceiro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Financeiro"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator12">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="acessosRelatorios">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Relat&#xf3;rios">
+                <Property name="tabTitle" type="java.lang.String" value="Relat&#xf3;rios"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="568" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="334" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+        </Container>
+        <Container class="javax.swing.JPanel" name="acessosBiblioteca">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Biblioteca">
+                <Property name="tabTitle" type="java.lang.String" value="Biblioteca"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jSeparator13" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator7" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator8" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator9" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="SubMenuCadastro" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="subMenuBiblioteca" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="subMenuEmprestimosLivros" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="formCadastroLivros" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formCadastroAutores" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formCadastroEditora" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="formCadastroBiblioteca" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="formConsultaBiblioteca" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formAdicionarLivroBiblioteca" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formSaidaAvulsaLivros" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="101" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="formEmprestimoLivro" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="formGerenciarEmprestimo" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator13" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="SubMenuCadastro" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuBiblioteca" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuEmprestimosLivros" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator7" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formCadastroLivros" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroAutores" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formCadastroEditora" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="formCadastroBiblioteca" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator8" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formConsultaBiblioteca" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formAdicionarLivroBiblioteca" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formSaidaAvulsaLivros" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator9" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formEmprestimoLivro" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formGerenciarEmprestimo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="142" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JCheckBox" name="SubMenuCadastro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuBiblioteca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Biblioteca"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuEmprestimosLivros">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Empr&#xe9;stimos Livros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator7">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroLivros">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Livros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroAutores">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Autores"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroEditora">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Editora/Publicadoras"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formCadastroBiblioteca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cadastro de Bibliotecas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator8">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formConsultaBiblioteca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consultar Bibliotecas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formAdicionarLivroBiblioteca">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Adiconar Livros Bibliotecas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formSaidaAvulsaLivros">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Sa&#xed;da Avulsa de Livros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator9">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formEmprestimoLivro">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Empr&#xe9;stimos de Livros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formGerenciarEmprestimo">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Gerenciar Empr&#xe9;stimos"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Biblioteca"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator13">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="acessosCampanha">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Campanhas">
+                <Property name="tabTitle" type="java.lang.String" value="Campanhas"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jSeparator14" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator10" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="menuCampanha" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="formCriarCadastrarCampanha" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formGerenciarContaReceber" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="subMenuProcessosAvulsos" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="formAdicionarParticipante" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formRemoverParticipante" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="formLancarContaReceber" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="43" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="menuCampanha" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator14" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formCriarCadastrarCampanha" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formGerenciarContaReceber" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="subMenuProcessosAvulsos" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator10" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="formAdicionarParticipante" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formRemoverParticipante" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="formLancarContaReceber" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="238" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JCheckBox" name="formCriarCadastrarCampanha">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Criar/Cadastrar Campanhas"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formGerenciarContaReceber">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Gerenciar Contas Receber Campanha"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="subMenuProcessosAvulsos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Processos Avulsos"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator10">
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formAdicionarParticipante">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Adicionar Participantes"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formRemoverParticipante">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Remover Participantes"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="formLancarContaReceber">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas a Receber Campanha"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="menuCampanha">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Campanha"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator14">
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="acessosConfigura&#xe7;&#xf5;es">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Configura&#xe7;&#xf5;es">
+                <Property name="tabTitle" type="java.lang.String" value="Configura&#xe7;&#xf5;es"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="568" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <EmptySpace min="0" pref="334" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="btnSalvar">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="cc" red="33" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Salvar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="marcarTodos">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Marcar todos"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="marcarTodosMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="desmarcarTodos">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Desmarca todos"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="desmarcarTodosMouseClicked"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="inverterSelecao">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Inverter Sele&#xe7;&#xe3;o"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="inverterSelecaoMouseClicked"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
