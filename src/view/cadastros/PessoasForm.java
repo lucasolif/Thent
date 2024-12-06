@@ -444,7 +444,6 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
     }//GEN-LAST:event_iconLimparActionPerformed
 
     private void formInicial(){
-        
         this.campoBusca.setText("");
         this.campoCodPessoa.setText("");
         this.campoNome.setText("");

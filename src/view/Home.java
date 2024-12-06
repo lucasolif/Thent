@@ -563,10 +563,10 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_transferenciasBancariasActionPerformed
 
     private void alterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarSenhaActionPerformed
-        AlterarSenhaForm alterarSenha = new AlterarSenhaForm();
+       /* AlterarSenhaForm alterarSenha = new AlterarSenhaForm();
         this.painelHome.add(alterarSenha);
         alterarSenha.setVisible(true);
-        alterarSenha.setPosicao();
+        alterarSenha.setPosicao();*/
     }//GEN-LAST:event_alterarSenhaActionPerformed
 
     private void cadastroContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaResultadoActionPerformed

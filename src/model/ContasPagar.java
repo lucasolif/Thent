@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class ContasPagar {
     private Integer codigo, parcela, numNota, status;
+    private String descricaoStatus;
     private String descricaoConta;
     private Date dataVencimento; 
     private Date dataCadastro;
@@ -22,11 +23,12 @@ public class ContasPagar {
     public ContasPagar() {
     }
 
-    public ContasPagar(Pessoa fornecedor, Integer parcela, Integer numNota, Integer status, String descricaoConta, Date dataVencimento, String boleto, String observacao, double valor, FormaPagto formaPagto, SubContaResultado subContaResultado, Igreja igreja) {
+    public ContasPagar(Pessoa fornecedor, Integer parcela, Integer numNota, Integer status,String descricaoStatus, String descricaoConta, Date dataVencimento, String boleto, String observacao, double valor, FormaPagto formaPagto, SubContaResultado subContaResultado, Igreja igreja) {
         this.fornecedor = fornecedor;
         this.parcela = parcela;
         this.numNota = numNota;
         this.status = status;
+        this.descricaoStatus = descricaoStatus;
         this.descricaoConta = descricaoConta;
         this.dataVencimento = dataVencimento;
         this.boleto = boleto;
@@ -48,6 +50,14 @@ public class ContasPagar {
         this.dataPagamento = dataPagamento;
         this.fornecedor = fornecedor;
         this.subContaResultado = subContaResultado;
+    }
+
+    public String getDescricaoStatus() {
+        return descricaoStatus;
+    }
+
+    public void setDescricaoStatus(String descricaoStatus) {
+        this.descricaoStatus = descricaoStatus;
     }
 
     public Integer getCodigo() {

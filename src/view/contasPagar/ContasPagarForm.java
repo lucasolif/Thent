@@ -383,7 +383,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
         if(validarCampos()){
             gerarParcelas();
-            tabelaParcelas.setEnabled(false);
+            this.tabelaParcelas.setEnabled(false);
         }else{
             JOptionPane.showMessageDialog(null, "Para efetuar o lançamento de uma conta a pagar, tem que preencher os campos obrigatórios", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
@@ -391,14 +391,14 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         List<ContasPagar> contaPagar = lançarContasPagar();
-        contasPagarDao.adicionarContasPagar(contaPagar);
+        this.contasPagarDao.adicionarContasPagar(contaPagar);
         limparTabela();
         limparFormulario();
         contaPagar.clear(); //Limpando a lista com os dados
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void iconAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconAlterarActionPerformed
-        tabelaParcelas.setEnabled(true);
+        this.tabelaParcelas.setEnabled(true);
     }//GEN-LAST:event_iconAlterarActionPerformed
 
     private void nomeFornecedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeFornecedorKeyPressed
@@ -409,8 +409,8 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }//GEN-LAST:event_nomeFornecedorKeyPressed
 
     private void carregarFormaPagto(){
-        List<FormaPagto> listaFormaPagto = formaPagtoDao.consultarFormaPagto();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)formasPagto.getModel();
+        List<FormaPagto> listaFormaPagto = this.formaPagtoDao.consultarFormaPagto();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.formasPagto.getModel();
         modelo.removeAllElements();
         for(FormaPagto pagto : listaFormaPagto){
             modelo.addElement(pagto);
@@ -418,8 +418,8 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     private void carregarSubContaResultado(){
-        List<SubContaResultado> listaSubContResult = subContResultDao.consultarSubContaResultado();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)subContaResultado.getModel();
+        List<SubContaResultado> listaSubContResult = this.subContResultDao.consultarSubContaResultado();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.subContaResultado.getModel();
         modelo.removeAllElements();
         for(SubContaResultado subCont : listaSubContResult){
             modelo.addElement(subCont);
@@ -427,8 +427,8 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     private void carregarIgrejas(){ 
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)igreja.getModel();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){
             modelo.addElement(igreja);
@@ -442,25 +442,25 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
         }else{
             limparTabela(); //Limpando a tabela, antes de inserir qualquer dado
             Integer codForn = Integer.valueOf(this.codFornecedor.getText());
-            fornecedor.setCodigo(codForn);
+            this.fornecedor.setCodigo(codForn);
             Integer numNota = Integer.valueOf(this.numNota.getText());
             Integer qtdParcela = Integer.valueOf(this.numParcela.getText());
-            String descricao = descricaoConta.getText().toUpperCase();
+            String descricao = this.descricaoConta.getText().toUpperCase();
             double valorTotal = Double.parseDouble(this.valorTotal.getText().replace(",", "."));
             double valorParcela = valorTotal/qtdParcela; //Gerando o valor da parcela
             String primeiroVencimento = this.primeiroVencimento.getText();
 
             for(int i=0; i<qtdParcela; i++){      
-                String dataVencimento = calcularData(primeiroVencimento, i); //Passa a primeira data e parcela, para somar os meses.          
-                DefaultTableModel model = (DefaultTableModel) tabelaParcelas.getModel();
+                String dataVencimento = this.conversor.somarDatas(primeiroVencimento, i); //Passa a primeira data e parcela, para somar os meses.          
+                DefaultTableModel model = (DefaultTableModel) this.tabelaParcelas.getModel();
                 model.addRow(new Object[]{numNota,descricao,i+1,valorParcela,dataVencimento});
             }
         }
     }
     
     private void buscarFornecedor(){
-        String textoBusca = nomeFornecedor.getText(); // Texto digitado na busca        
-        this.listaFornecedor = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco      
+        String textoBusca = this.nomeFornecedor.getText(); // Texto digitado na busca        
+        this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco      
     } 
     
     private void carregarResultadoConsultaFornecedor(){
@@ -471,35 +471,37 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     private void carregarFornecedorEscolhido(Pessoa pessoa){
-        codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
-        nomeFornecedor.setText(pessoa.getNome());
+        this.codFornecedor.setText(Integer.toString(pessoa.getCodigo()));
+        this.nomeFornecedor.setText(pessoa.getNome());
     }
     
     //Salvar os dados no banco de dados
     private List<ContasPagar> lançarContasPagar(){
         
         List<ContasPagar> listaContasPagar = new ArrayList<>();
-        int qtdLinhasTabela = tabelaParcelas.getRowCount();
+        int qtdLinhasTabela = this.tabelaParcelas.getRowCount();
         
         if(validarCampos()){           
             Integer codForne = Integer.valueOf(this.codFornecedor.getText());
             Integer status = 0; //Status "0" singifica que não foi paga, como se trata do lançamento, então não foi paga.
-            fornecedor.setCodigo(codForne);
+            String descricaoStatus = "Aberta";
+            this.fornecedor.setCodigo(codForne);
             String boleto = this.numBoleto.getText();
-            String observacao = observacaoConta.getText();
-            FormaPagto formaPagto = (FormaPagto) formasPagto.getSelectedItem();
+            String observacao = this.observacaoConta.getText();
+            FormaPagto formaPagto = (FormaPagto) this.formasPagto.getSelectedItem();
             SubContaResultado subContResult = (SubContaResultado) this.subContaResultado.getSelectedItem();
             Igreja igreja = (Igreja) this.igreja.getSelectedItem();
                        
             for(int i = 0; i < qtdLinhasTabela; i++){           
-                int numNota  = (Integer)tabelaParcelas.getModel().getValueAt(i, 0);
-                String descricao = (String) tabelaParcelas.getModel().getValueAt(i, 1);  
-                int parcela = (Integer) tabelaParcelas.getModel().getValueAt(i, 2);
-                double valorParcela = (Double) tabelaParcelas.getModel().getValueAt(i, 3);
-                String StringDataVencimento = (String) tabelaParcelas.getModel().getValueAt(i, 4);
+                int numNota  = (Integer)this.tabelaParcelas.getModel().getValueAt(i, 0);
+                String descricao = (String) this.tabelaParcelas.getModel().getValueAt(i, 1);  
+                int parcela = (Integer) this.tabelaParcelas.getModel().getValueAt(i, 2);
+                double valorParcela = (Double) this.tabelaParcelas.getModel().getValueAt(i, 3);
+                String StringDataVencimento = (String) this.tabelaParcelas.getModel().getValueAt(i, 4);
                 Date dataVencimento = this.conversor.convertendoStringDateSql(StringDataVencimento);
             
-                ContasPagar contasPagar  = new ContasPagar(fornecedor, parcela, numNota, status, descricao, dataVencimento, boleto, observacao, valorParcela, formaPagto, subContResult, igreja);     
+                ContasPagar contasPagar  = new ContasPagar(this.fornecedor, parcela, numNota, status, descricaoStatus, descricao, dataVencimento, boleto, observacao, valorParcela, formaPagto, subContResult, igreja);     
+                
                 listaContasPagar.add(contasPagar);
             }    
         }else{
@@ -508,35 +510,11 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
         return listaContasPagar;
     }
     
-    //Faz a soma de datas, calculada com base no número de parcelas e no primeiro vencimento
-    private String calcularData(String data, int meses){
-        
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String novaDataString = null;
-        
-        // A string que representa a data
-        
-        try {
-            // Converter a string para o tipo LocalDate
-            LocalDate date = LocalDate.parse(data, formato);
-            
-            // Adicionar um mês à data
-            LocalDate newDate = date.plus(Period.ofMonths(meses));
-            
-            // Converte a nova data de volta para string
-            novaDataString = newDate.format(formato);
-            
-        } catch (DateTimeParseException e) {
-            // Lidar com possíveis erros de parsing
-            System.out.println("Erro ao converter a data: " + e.getMessage());
-        }
-        
-        return novaDataString;
-    } 
+
     
     private void limparTabela(){
-        if(tabelaParcelas.getRowCount() > 0){
-            DefaultTableModel model = (DefaultTableModel) tabelaParcelas.getModel();
+        if(this.tabelaParcelas.getRowCount() > 0){
+            DefaultTableModel model = (DefaultTableModel) this.tabelaParcelas.getModel();
             model.setRowCount(0);
         }
     }
@@ -572,7 +550,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     private void removerParcelaGerada(){
-        int numLinhaSelec = tabelaParcelas.getSelectedRow();
+        int numLinhaSelec = this.tabelaParcelas.getSelectedRow();
         int novaParcela = 1; //Variável de controle da nova parcela após a exclusão
         String primeiroVenc = this.primeiroVencimento.getText();
 
@@ -583,22 +561,22 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
         }
         int confirm = JOptionPane.showConfirmDialog(null,"Remover a parcela selecionada?", "Confirmar", JOptionPane.YES_NO_OPTION);
         if(confirm == JOptionPane.YES_OPTION){
-            DefaultTableModel model = (DefaultTableModel) tabelaParcelas.getModel();
+            DefaultTableModel model = (DefaultTableModel) this.tabelaParcelas.getModel();
             model.removeRow(numLinhaSelec);
         }else if(confirm == JOptionPane.NO_OPTION){
             JOptionPane.showMessageDialog(null, "Operação cancelada!");
         }
                
         //Atualizando o valor e data das demais parcelas, após a remoção
-        int qtdLinhaTabela = tabelaParcelas.getRowCount(); // Recebendo o número de linhas da tabela após a exclusão e uma das parcelas
+        int qtdLinhaTabela = this.tabelaParcelas.getRowCount(); // Recebendo o número de linhas da tabela após a exclusão e uma das parcelas
         double valTotal = Double.parseDouble(this.valorTotal.getText().replace(",", ".")); //Recebendo o valor total, para atualizar os valores das parcelas, quando uma delas forem excluídas
-        double novoValorParcela = conversor.arrendodarValores(valTotal/qtdLinhaTabela) ; //Calculando o novo valor das parcelas, após a exclusão
+        double novoValorParcela = this.conversor.arrendodarValores(valTotal/qtdLinhaTabela) ; //Calculando o novo valor das parcelas, após a exclusão
         
         //Percorrendo a tabela com base na quantidade de linhas
         for(int i=0; i<qtdLinhaTabela; i++){ 
-            DefaultTableModel model = (DefaultTableModel) tabelaParcelas.getModel();
+            DefaultTableModel model = (DefaultTableModel) this.tabelaParcelas.getModel();
     
-            String novoVencimento = calcularData(primeiroVenc, i); //Passa a primeira data e parcela, para somar os meses.
+            String novoVencimento = this.conversor.somarDatas(primeiroVenc, i); //Passa a primeira data e parcela, para somar os meses.
             model.setValueAt(novaParcela, i, 2); //Alterando a parcela
             model.setValueAt(novoValorParcela, i, 3);
             model.setValueAt(novoVencimento, i, 4);
@@ -610,7 +588,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     private boolean validarContaPagarExiste(){
         Integer nota = Integer.valueOf(this.numNota.getText());
         Integer forne = Integer.valueOf(this.codFornecedor.getText());
-        boolean cpExiste = contasPagarDao.verificarExistenciaContaPagar(nota, forne);
+        boolean cpExiste = this.contasPagarDao.verificarExistenciaContaPagar(nota, forne);
         
         return cpExiste;
     }
