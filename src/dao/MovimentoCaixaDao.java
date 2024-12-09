@@ -235,7 +235,7 @@ public class MovimentoCaixaDao {
                 this.stmInsert.setInt(1, mv.getContaPagar().getFornecedor().getCodigo());
                 this.stmInsert.setInt(2, mv.getContaPagar().getCodigo());
                 this.stmInsert.setDouble(3, 0);
-                this.stmInsert.setDouble(4, mv.getContaPagar().getValor());
+                this.stmInsert.setDouble(4, mv.getContaPagar().getValorPago());
                 this.stmInsert.setInt(5, mv.getContaCaixa().getCodigo());
                 this.stmInsert.setString(6, mv.getComplemento());
                 this.stmInsert.setInt(7, mv.getFormaPagto().getCodigo());

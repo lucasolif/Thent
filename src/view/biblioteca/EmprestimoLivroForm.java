@@ -300,7 +300,8 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
         this.codPessoa.setText("");
         this.nomePessoa.setText("");
         carregarBibliotecas();
-        while(this.bibliotecaJComboBox.getItemCount() <= 0){
+        
+        if(this.bibliotecaJComboBox.getItemCount() > 0){
             carregarLivros();
         }
         
@@ -309,7 +310,6 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
     private void carregarBibliotecas(){  
         List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.bibliotecaJComboBox.getModel();
-        modelo.removeAllElements();
         for(Biblioteca bibli : listaBiblioteca){
             modelo.addElement(bibli);
         }

@@ -33,6 +33,7 @@ import view.dizimosOfertas.ConsultaRegistroDizimoOferta;
 import view.financeiro.MovimentoFinanceiroForm;
 import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.TransferenciaContaForm;
+import view.relatorios.RelatorioContasPagarForm;
 
 
 
@@ -292,7 +293,13 @@ public class Home extends javax.swing.JFrame {
         relatorioExtratoCaixa.setText("Extrato Caixa");
         relatorioFinanceiro.add(relatorioExtratoCaixa);
 
+        relatorioContasPagar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         relatorioContasPagar.setText("Contas a Pagar");
+        relatorioContasPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                relatorioContasPagarActionPerformed(evt);
+            }
+        });
         relatorioFinanceiro.add(relatorioContasPagar);
 
         relatorioContasReceber.setText("Contas a Receber");
@@ -710,6 +717,13 @@ public class Home extends javax.swing.JFrame {
         gerenciarContasReceber.setVisible(true);
         gerenciarContasReceber.setPosicao();
     }//GEN-LAST:event_gerenciarContaReceberCampanhaActionPerformed
+
+    private void relatorioContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioContasPagarActionPerformed
+        RelatorioContasPagarForm relatorioContasPagar = new RelatorioContasPagarForm();
+        this.painelHome.add(relatorioContasPagar);
+        relatorioContasPagar.setVisible(true);
+        relatorioContasPagar.setPosicao();
+    }//GEN-LAST:event_relatorioContasPagarActionPerformed
   
    
     

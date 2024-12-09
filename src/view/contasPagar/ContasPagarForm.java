@@ -11,10 +11,6 @@ import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -484,7 +480,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
         if(validarCampos()){           
             Integer codForne = Integer.valueOf(this.codFornecedor.getText());
             Integer status = 0; //Status "0" singifica que não foi paga, como se trata do lançamento, então não foi paga.
-            String descricaoStatus = "Aberta";
+            String descricaoStatus = "Aberto";
             this.fornecedor.setCodigo(codForne);
             String boleto = this.numBoleto.getText();
             String observacao = this.observacaoConta.getText();
@@ -497,10 +493,12 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
                 String descricao = (String) this.tabelaParcelas.getModel().getValueAt(i, 1);  
                 int parcela = (Integer) this.tabelaParcelas.getModel().getValueAt(i, 2);
                 double valorParcela = (Double) this.tabelaParcelas.getModel().getValueAt(i, 3);
+                double valorPago = 0;
+                double valorPendente = valorParcela;
                 String StringDataVencimento = (String) this.tabelaParcelas.getModel().getValueAt(i, 4);
                 Date dataVencimento = this.conversor.convertendoStringDateSql(StringDataVencimento);
             
-                ContasPagar contasPagar  = new ContasPagar(this.fornecedor, parcela, numNota, status, descricaoStatus, descricao, dataVencimento, boleto, observacao, valorParcela, formaPagto, subContResult, igreja);     
+                ContasPagar contasPagar  = new ContasPagar(this.fornecedor, parcela, numNota, status, descricaoStatus, descricao, dataVencimento, boleto, observacao, valorParcela, valorPago, valorPendente, formaPagto, subContResult, igreja);     
                 
                 listaContasPagar.add(contasPagar);
             }    

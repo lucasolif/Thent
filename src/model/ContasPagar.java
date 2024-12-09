@@ -6,7 +6,10 @@ import java.util.Objects;
 
 
 public class ContasPagar {
-    private Integer codigo, parcela, numNota, status;
+    private Integer codigo;
+    private Integer parcela;
+    private Integer numNota;
+    private Integer status;
     private String descricaoStatus;
     private String descricaoConta;
     private Date dataVencimento; 
@@ -15,6 +18,8 @@ public class ContasPagar {
     private String boleto;
     private String observacao;
     private double valor;
+    private double valorPago;
+    private double valorPendente;
     private Pessoa fornecedor;
     private FormaPagto formaPagto;
     private SubContaResultado subContaResultado;
@@ -23,7 +28,7 @@ public class ContasPagar {
     public ContasPagar() {
     }
 
-    public ContasPagar(Pessoa fornecedor, Integer parcela, Integer numNota, Integer status,String descricaoStatus, String descricaoConta, Date dataVencimento, String boleto, String observacao, double valor, FormaPagto formaPagto, SubContaResultado subContaResultado, Igreja igreja) {
+    public ContasPagar(Pessoa fornecedor, Integer parcela, Integer numNota, Integer status, String descricaoStatus, String descricaoConta, Date dataVencimento, String boleto, String observacao, double valor, double valorPago, double valorPendente, FormaPagto formaPagto, SubContaResultado subContaResultado, Igreja igreja) {
         this.fornecedor = fornecedor;
         this.parcela = parcela;
         this.numNota = numNota;
@@ -34,6 +39,8 @@ public class ContasPagar {
         this.boleto = boleto;
         this.observacao = observacao;
         this.valor = valor;
+        this.valorPago = valorPago;
+        this.valorPendente = valorPendente;
         this.formaPagto = formaPagto;
         this.subContaResultado = subContaResultado;
         this.igreja = igreja;
@@ -50,6 +57,22 @@ public class ContasPagar {
         this.dataPagamento = dataPagamento;
         this.fornecedor = fornecedor;
         this.subContaResultado = subContaResultado;
+    }
+
+    public double getValorPago() {
+        return valorPago;
+    }
+
+    public void setValorPago(double valorPago) {
+        this.valorPago = valorPago;
+    }
+
+    public double getValorPendente() {
+        return valorPendente;
+    }
+
+    public void setValorPendente(double valorPendente) {
+        this.valorPendente = valorPendente;
     }
 
     public String getDescricaoStatus() {

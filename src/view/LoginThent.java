@@ -29,6 +29,8 @@ public class LoginThent extends javax.swing.JFrame {
         setLocationRelativeTo( null );
         getContentPane().setBackground(Color.WHITE); // Aplicando a cor que eu criei
         verificandoConexao();
+        this.campoLogin.setText("admin");
+        this.campoSenha.setText("D8hj0ptr");
     }
     
     @SuppressWarnings("unchecked")
@@ -140,11 +142,9 @@ public class LoginThent extends javax.swing.JFrame {
 
             }else{
                 JOptionPane.showMessageDialog(null, "Login ou senha inválida", "Erro 004",JOptionPane.WARNING_MESSAGE);
-                return;
             }
         }else{
             JOptionPane.showMessageDialog(null, "Campo vazio. Preencha todos os campos", "Erro",JOptionPane.WARNING_MESSAGE);
-            return;
         }
         
     }

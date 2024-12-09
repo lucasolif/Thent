@@ -2,15 +2,23 @@
 package view.campanhas;
 
 import dao.CampanhaDao;
+import ferramentas.PaletaCores;
 import ferramentas.Utilitarios;
 import interfaces.ConsultaCampanhas;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import model.Campanha;
 import model.ParticipanteCampanha;
 import view.carregamentoConsultas.TelaConsultasCampanhas;
@@ -20,6 +28,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
 
     private final CampanhaDao campanhaDao =  new CampanhaDao();
     private final Utilitarios conversor = new Utilitarios();
+    private final PaletaCores paletaCores = new PaletaCores();
     private List<Campanha> listaCampanhas = null;
     private Campanha campanhaSelec = null;
 
@@ -293,14 +302,14 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
 
             },
             new String [] {
-                "Cod", "Nome Participantes", "Status Participante", "Valor Pagor"
+                "", "Cod", "Nome Participantes", "Status Participante", "Parc Paga", "Valor Pagor", "Val. Pendente"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -314,13 +323,19 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         jScrollPane1.setViewportView(tabelaParticipantes);
         if (tabelaParticipantes.getColumnModel().getColumnCount() > 0) {
             tabelaParticipantes.getColumnModel().getColumn(0).setResizable(false);
-            tabelaParticipantes.getColumnModel().getColumn(0).setPreferredWidth(10);
+            tabelaParticipantes.getColumnModel().getColumn(0).setPreferredWidth(50);
             tabelaParticipantes.getColumnModel().getColumn(1).setResizable(false);
-            tabelaParticipantes.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tabelaParticipantes.getColumnModel().getColumn(1).setPreferredWidth(100);
             tabelaParticipantes.getColumnModel().getColumn(2).setResizable(false);
-            tabelaParticipantes.getColumnModel().getColumn(2).setPreferredWidth(50);
+            tabelaParticipantes.getColumnModel().getColumn(2).setPreferredWidth(350);
             tabelaParticipantes.getColumnModel().getColumn(3).setResizable(false);
-            tabelaParticipantes.getColumnModel().getColumn(3).setPreferredWidth(50);
+            tabelaParticipantes.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tabelaParticipantes.getColumnModel().getColumn(4).setResizable(false);
+            tabelaParticipantes.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tabelaParticipantes.getColumnModel().getColumn(5).setResizable(false);
+            tabelaParticipantes.getColumnModel().getColumn(5).setPreferredWidth(100);
+            tabelaParticipantes.getColumnModel().getColumn(6).setResizable(false);
+            tabelaParticipantes.getColumnModel().getColumn(6).setPreferredWidth(100);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -421,11 +436,11 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         this.dataInicioCampanha.setText(this.conversor.convertendoDataStringSql((Date) campanha.getDataInicial()));
         this.dataFimCampanha.setText(this.conversor.convertendoDataStringSql((Date) campanha.getDataFinal()));
         this.igreja.setText(campanha.getIgreja().getNome());
-        this.valorTotalCampanha.setText(String.valueOf(this.conversor.arrendodarValores(campanha.getValorTotalCampanha())));
+        this.valorTotalCampanha.setText(String.valueOf(campanha.getValorTotalCampanha()));
         this.statusCampanha.setText(campanha.getDescricaoStatus());
         this.qtdParticipante.setText(String.valueOf(campanha.getParticipante().size()));
-        this.valorArrecadado.setText(String.valueOf(this.conversor.arrendodarValores(listaValores.get(0))));
-        this.valorPendente.setText(String.valueOf(this.conversor.arrendodarValores(listaValores.get(1))));
+        this.valorArrecadado.setText(String.valueOf(listaValores.get(0)));
+        this.valorPendente.setText(String.valueOf(listaValores.get(1)));
         this.totalParcelasPagas.setText(String.valueOf(this.conversor.formatarValores(listaValores.get(2), 0)));
         this.campanhaSelec = campanha;      
           
@@ -436,10 +451,53 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
             String status = part.getDescricaoStatus();
             double valorPago = this.conversor.arrendodarValores(part.getValorTotalPago());
             
-            model.addRow(new Object[]{codParticipante,part,status,valorPago});   
+            model.addRow(new Object[]{" ",codParticipante,part,status," ",valorPago," "});             
         }  
+        
+        statusParticipante();
     }
     
+    private void statusParticipante(){
+      // Definindo a cor conforme a data de vencimento
+        this.tabelaParticipantes.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                // Criar um JLabel para a célula
+                JLabel label = new JLabel(value.toString()) {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g); // Chama o método para garantir a renderização padrão da célula
+
+                        // Definir o tamanho do círculo (ajuste de acordo com o tamanho da célula)
+                        int diameter = Math.min(getWidth(), getHeight()) - 4; // Aumente o valor (-5, 0 ou outro valor) para maior bolinha
+                        String status = (String) table.getValueAt(row, 3);
+
+                        // Determinar a cor do círculo com base no vencimento
+                        Color corFundo = Color.GRAY; // Cor padrão
+                        
+                        if(status.equalsIgnoreCase("ativo")){
+                            corFundo = paletaCores.verdeLimao();  
+                        }else if(status.equalsIgnoreCase("inativo")){
+                            corFundo = paletaCores.vermelhoEscuro();
+                        }
+                        // Definir a cor de preenchimento do círculo
+                        g.setColor(corFundo);
+
+                        // Desenhar o círculo (elipse preenchida)
+                        g.fillOval((getWidth() - diameter) / 2, (getHeight() - diameter) / 2, diameter, diameter); 
+                    }
+                };
+
+                // Garantir que o JLabel não tenha borda ou fundo
+                label.setOpaque(false); // Deixar o fundo transparente para desenharmos o círculo
+                label.setHorizontalAlignment(SwingConstants.CENTER); // Alinhar o texto ao centro (opcional)
+                label.setVerticalAlignment(SwingConstants.CENTER); // Alinhar o texto ao centro (opcional)
+
+                return label; // Retorna o JLabel modificado
+            }
+        });
+    }
         
     @Override
     public void campanhaSelecionada(Campanha campanhaSelecionada) {

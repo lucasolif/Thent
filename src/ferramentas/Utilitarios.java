@@ -4,6 +4,8 @@ package ferramentas;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -135,5 +137,30 @@ public class Utilitarios{
         int meses = (int) ChronoUnit.MONTHS.between(dataInicial, dataFinal);
 
         return meses;
+    }
+    
+    public Integer compararDatas(String vencimento){
+        
+        Integer valor = null;
+        
+        try {           
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            
+            Date dtAtual = sdf.parse(dataAtualString());
+            Date dtVencimento = sdf.parse(vencimento);
+
+            if (dtVencimento.compareTo(dtAtual) < 0) {
+                valor = 1; //Nesse caso a data de vencimento é menor que a data atual, ou seja, ja venceu
+            } else if (dtVencimento.compareTo(dtAtual) == 0) {
+                valor = 2; //Nesse caso as data são iguais, logo, vence hoje
+            } else {
+                valor = 3; // O vencimento é maior que a data atual, ou seja, não venceu
+            }
+
+        }catch (ParseException ex) {
+            
+        }
+        
+        return valor;
     }
 }

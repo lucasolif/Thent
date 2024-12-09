@@ -7,16 +7,25 @@ import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
+import ferramentas.PaletaCores;
+import ferramentas.StatusCoresContaPagarReceber;
 import ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import model.Campanha;
 import model.ContaCaixa;
 import model.ContasReceberCampanha;
@@ -38,6 +47,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
    private final PessoaDao pessoaDao = new PessoaDao();
    private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
    private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
+   private final PaletaCores paletaCores = new PaletaCores();
    private List<Pessoa> listaParticipantes = null;
    private List<ContasReceberCampanha> listaCrCampanha = null;
    private Pessoa pessoaSelec = null;
@@ -46,7 +56,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     public GerenciarContasReceberForm() {
         initComponents();
         formInicial();
-        tabelaInicia();
+        tabelaInicial();
     }
 
     public void setPosicao() {
@@ -98,14 +108,16 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         jLabel9 = new javax.swing.JLabel();
         formaPagtoBaixa = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        crSelecionada = new javax.swing.JTextField();
+        numContaReceber = new javax.swing.JTextField();
         valorBaixar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         obsPagamento = new javax.swing.JTextField();
+        parcelaContaReceber = new javax.swing.JTextField();
         rbConsultar = new javax.swing.JRadioButton();
         rbBaixar = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
+        statusCores = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -169,14 +181,14 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
 
             },
             new String [] {
-                "Participante", "N° CR", "Parcela", "Val Parcela", "Val Pago", "Dt Venc", "Dt Pagto", "Status", "Campanha"
+                "", "Participante", "N° CR", "Parcela", "Val Parcela", "Val Pago", "Dt Venc", "Dt Pagto", "Status", "Campanha"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -197,22 +209,24 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         jScrollPane1.setViewportView(tabelaCr);
         if (tabelaCr.getColumnModel().getColumnCount() > 0) {
             tabelaCr.getColumnModel().getColumn(0).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(0).setPreferredWidth(250);
+            tabelaCr.getColumnModel().getColumn(0).setPreferredWidth(10);
             tabelaCr.getColumnModel().getColumn(1).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(1).setPreferredWidth(30);
+            tabelaCr.getColumnModel().getColumn(1).setPreferredWidth(250);
             tabelaCr.getColumnModel().getColumn(2).setResizable(false);
             tabelaCr.getColumnModel().getColumn(2).setPreferredWidth(30);
             tabelaCr.getColumnModel().getColumn(3).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(3).setPreferredWidth(40);
+            tabelaCr.getColumnModel().getColumn(3).setPreferredWidth(30);
             tabelaCr.getColumnModel().getColumn(4).setResizable(false);
+            tabelaCr.getColumnModel().getColumn(4).setPreferredWidth(40);
             tabelaCr.getColumnModel().getColumn(5).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(5).setPreferredWidth(60);
             tabelaCr.getColumnModel().getColumn(6).setResizable(false);
             tabelaCr.getColumnModel().getColumn(6).setPreferredWidth(60);
             tabelaCr.getColumnModel().getColumn(7).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(7).setPreferredWidth(40);
+            tabelaCr.getColumnModel().getColumn(7).setPreferredWidth(60);
             tabelaCr.getColumnModel().getColumn(8).setResizable(false);
-            tabelaCr.getColumnModel().getColumn(8).setPreferredWidth(200);
+            tabelaCr.getColumnModel().getColumn(8).setPreferredWidth(40);
+            tabelaCr.getColumnModel().getColumn(9).setResizable(false);
+            tabelaCr.getColumnModel().getColumn(9).setPreferredWidth(200);
         }
 
         btnFiltrar.setBackground(new java.awt.Color(51, 153, 255));
@@ -390,14 +404,19 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
 
         jLabel11.setText("Val Baixar");
 
-        crSelecionada.setEditable(false);
-        crSelecionada.setBackground(new java.awt.Color(204, 204, 204));
-        crSelecionada.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        crSelecionada.setFocusable(false);
+        numContaReceber.setEditable(false);
+        numContaReceber.setBackground(new java.awt.Color(204, 204, 204));
+        numContaReceber.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        numContaReceber.setFocusable(false);
 
         jLabel10.setText("CR Baixa");
 
         jLabel12.setText("OBS Pagto:");
+
+        parcelaContaReceber.setEditable(false);
+        parcelaContaReceber.setBackground(new java.awt.Color(204, 204, 204));
+        parcelaContaReceber.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        parcelaContaReceber.setFocusable(false);
 
         javax.swing.GroupLayout painelDadosPagamentoLayout = new javax.swing.GroupLayout(painelDadosPagamento);
         painelDadosPagamento.setLayout(painelDadosPagamentoLayout);
@@ -421,15 +440,17 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                             .addComponent(formaPagtoBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(crSelecionada, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(numContaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(4, 4, 4)
+                        .addComponent(parcelaContaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
                                 .addComponent(jLabel11)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(valorBaixar, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)))
+                                .addGap(0, 22, Short.MAX_VALUE))
+                            .addComponent(valorBaixar)))
                     .addGroup(painelDadosPagamentoLayout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -454,8 +475,9 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(formaPagtoBaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(crSelecionada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valorBaixar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numContaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(valorBaixar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(parcelaContaReceber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(painelDadosPagamentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(obsPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -483,6 +505,13 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
 
         jLabel3.setText("Operação");
 
+        statusCores.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-cardápio-16.png"))); // NOI18N
+        statusCores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusCoresActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -492,7 +521,8 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(statusCores)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnBaixar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -575,7 +605,9 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnBaixar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBaixar)
+                    .addComponent(statusCores))
                 .addContainerGap(47, Short.MAX_VALUE))
         );
 
@@ -651,6 +683,12 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         duplicataSelecionada();
     }//GEN-LAST:event_tabelaCrMousePressed
 
+    private void statusCoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusCoresActionPerformed
+        StatusCoresContaPagarReceber statusCores = new StatusCoresContaPagarReceber((Frame) SwingUtilities.getWindowAncestor(this), true);
+        statusCores.setLocationRelativeTo(this);
+        statusCores.setVisible(true);
+    }//GEN-LAST:event_statusCoresActionPerformed
+
     private void formInicial(){
         this.codParticipante.setText("");
         this.nomeParticipante.setText("");
@@ -669,12 +707,12 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         this.obsPagamento.setEditable(false);
         this.obsPagamento.setText("");
         this.btnBaixar.setEnabled(false);
-        this.crSelecionada.setText("");
+        this.numContaReceber.setText("");
         limparTabela();  
         formConsulta();
     }
     
-    private void tabelaInicia(){
+    private void tabelaInicial(){
         Date dataAtual = conversor.convertendoStringDateSql(conversor.dataAtualString());
         List<ContasReceberCampanha> listaCrCampanha = this.campanhaDao.consultarContasReceberCampanhaMesAtual((java.sql.Date) dataAtual);
         DefaultTableModel tabelaCr = (DefaultTableModel) this.tabelaCr.getModel();
@@ -683,8 +721,10 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         for(ContasReceberCampanha cr : listaCrCampanha){      
             String dataVencimento =  this.conversor.convertendoDataStringSql((java.sql.Date) cr.getDataVencimento());
             String dataPagamento =  this.conversor.convertendoDataStringSql((java.sql.Date) cr.getDataPagamento());
-            tabelaCr.addRow(new Object[]{cr.getParticipante(),cr.getNumParcela(),cr.getParcela(), cr.getValorParcela(), cr.getValorPago(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
+            tabelaCr.addRow(new Object[]{" ", cr.getParticipante(),cr.getNumParcela(),cr.getParcela(), cr.getValorParcela(), cr.getValorPago(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
         }
+        
+        statusVencimento();
     }
     
     private void formBaixa(){
@@ -843,9 +883,10 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         for(ContasReceberCampanha cr : this.listaCrCampanha){      
             String dataVencimento =  conversor.convertendoDataStringSql((java.sql.Date) cr.getDataVencimento());
             String dataPagamento =  conversor.convertendoDataStringSql((java.sql.Date) cr.getDataPagamento());
-            tabelaCr.addRow(new Object[]{cr.getParticipante(),cr.getNumParcela(),cr.getParcela(), cr.getValorParcela(), cr.getValorPago(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
+            tabelaCr.addRow(new Object[]{" ", cr.getParticipante(),cr.getNumParcela(),cr.getParcela(), cr.getValorParcela(), cr.getValorPago(), dataVencimento, dataPagamento,cr.getDescricaoStatus(),cr.getCampanha()});
         }
-    
+        
+        statusVencimento();   
     }
     
     private void baixarContasReceberCampanha(){
@@ -870,11 +911,69 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     
     private void duplicataSelecionada(){    
         int linhaSelecionada = tabelaCr.getSelectedRow();
-        Integer cr = (Integer) tabelaCr.getValueAt(linhaSelecionada, 1);
-        double valor = (double) tabelaCr.getValueAt(linhaSelecionada, 3);
+        Integer numContaReceber = (Integer) tabelaCr.getValueAt(linhaSelecionada, 2);
+        Integer parcelaContaReceber = (Integer) tabelaCr.getValueAt(linhaSelecionada, 3);
+        double valor = (double) tabelaCr.getValueAt(linhaSelecionada, 4);
         
-        this.crSelecionada.setText(String.valueOf(cr));
+        this.numContaReceber.setText(String.valueOf(numContaReceber));
+        this.parcelaContaReceber.setText(String.valueOf(parcelaContaReceber));
         this.valorBaixar.setText(String.valueOf(valor));
+    }
+    
+    private void statusVencimento(){
+        // Definindo a cor conforme a data de vencimento
+        this.tabelaCr.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                // Criar um JLabel para a célula
+                JLabel label = new JLabel(value.toString()) {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g); // Chama o método para garantir a renderização padrão da célula
+
+                        // Definir o tamanho do círculo (ajuste de acordo com o tamanho da célula)
+                        int diameter = Math.min(getWidth(), getHeight()) - 4; // Aumente o valor (-5, 0 ou outro valor) para maior bolinha
+
+                        // Obter a data de vencimento da linha correspondente (coluna 8)
+                        String vencimento = (String) table.getValueAt(row, 6);
+                        String status = (String) table.getValueAt(row, 8);
+
+                        // Determinar a cor do círculo com base no vencimento
+                        Color corFundo = Color.GRAY; // Cor padrão
+                        
+                        if(status.equalsIgnoreCase("pago")){
+                            corFundo = paletaCores.azul(); 
+                        }else if(conversor.compararDatas(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
+                            corFundo = paletaCores.vermelhoEscuro(); 
+                        }else if(conversor.compararDatas(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
+                            corFundo = paletaCores.vermelhoClaro(); 
+                        }else if(conversor.compararDatas(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
+                            corFundo = paletaCores.amareloEscuro(); 
+                        }else if(conversor.compararDatas(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
+                            corFundo = paletaCores.amareloClaro(); 
+                        }else if(conversor.compararDatas(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
+                            corFundo = paletaCores.verdeLimao(); 
+                        }else if(conversor.compararDatas(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
+                            corFundo = paletaCores.verdeEscuro(); 
+                        }
+                        
+                        // Definir a cor de preenchimento do círculo
+                        g.setColor(corFundo);
+
+                        // Desenhar o círculo (elipse preenchida)
+                        g.fillOval((getWidth() - diameter) / 2, (getHeight() - diameter) / 2, diameter, diameter); 
+                    }
+                };
+
+                // Garantir que o JLabel não tenha borda ou fundo
+                label.setOpaque(false); // Deixar o fundo transparente para desenharmos o círculo
+                label.setHorizontalAlignment(SwingConstants.CENTER); // Alinhar o texto ao centro (opcional)
+                label.setVerticalAlignment(SwingConstants.CENTER); // Alinhar o texto ao centro (opcional)
+
+                return label; // Retorna o JLabel modificado
+            }
+        });
     }
     
     @Override
@@ -888,7 +987,6 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     private javax.swing.JComboBox<String> campanha;
     private javax.swing.JTextField codParticipante;
     private javax.swing.JComboBox<String> contaCaixaPagamento;
-    private javax.swing.JTextField crSelecionada;
     private javax.swing.JFormattedTextField dataFinal;
     private javax.swing.JFormattedTextField dataInicial;
     private javax.swing.JFormattedTextField dataPagtoPagamento;
@@ -912,9 +1010,11 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nomeParticipante;
+    private javax.swing.JTextField numContaReceber;
     private javax.swing.JTextField obsPagamento;
     private javax.swing.ButtonGroup operacao;
     private javax.swing.JPanel painelDadosPagamento;
+    private javax.swing.JTextField parcelaContaReceber;
     private javax.swing.JRadioButton rbAberto;
     private javax.swing.JRadioButton rbAmbos;
     private javax.swing.JRadioButton rbAndamento;
@@ -927,6 +1027,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     private javax.swing.JRadioButton rbPago;
     private javax.swing.JRadioButton rbTodos;
     private javax.swing.ButtonGroup statusCampanha;
+    private javax.swing.JButton statusCores;
     private javax.swing.ButtonGroup statusPagamento;
     private javax.swing.JTable tabelaCr;
     private javax.swing.JLabel txData;

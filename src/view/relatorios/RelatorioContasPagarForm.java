@@ -7,6 +7,7 @@ import dao.IgrejaDao;
 import dao.PessoaDao;
 import ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.Date;
@@ -18,14 +19,18 @@ import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import view.carregamentoConsultas.TelaConsultasPessoas;
-import org.apache.pdfbox.pdmodel.*;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.fontbox.type1.Type1Font;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 
 public class RelatorioContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -41,6 +46,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     public RelatorioContasPagarForm() {
         initComponents();
         formInicial();
+    }
+    
+    public void setPosicao() {
+        Dimension d = this.getDesktopPane().getSize();
+        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
     }
 
     @SuppressWarnings("unchecked")
@@ -264,6 +274,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         btnGerar.setBackground(new java.awt.Color(51, 153, 255));
         btnGerar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnGerar.setText("Gerar");
+        btnGerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -361,6 +376,14 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         }
     }//GEN-LAST:event_nomeFornecedorKeyPressed
 
+    private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
+        try {
+            gerarRelatorio();
+        } catch (IOException ex) {
+            
+        }
+    }//GEN-LAST:event_btnGerarActionPerformed
+
     private void formInicial(){
         this.codFornecedor.setText("");
         this.nomeFornecedor.setText("");
@@ -447,54 +470,140 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         contasPagar.setIgreja(igreja);
         contasPagar.getStatus();
         
-        listaContasPagar = this.contasPagarDao.consultarContasPagarRelatorio(contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
+        listaContasPagar = this.contasPagarDao.consultarContasPagar(contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
     
         return listaContasPagar;
     }
     
-    private void gerarRelatorio(){
-        List<ContasPagar> listaContasPagar = consultarContasPagar();
+    private void gerarRelatorio() throws IOException{
+        // List<ContasPagar> listaContasPagar = consultarContasPagar();  
+       
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
         
-        try {
-            // Criar um novo documento PDF
-            PDDocument document = new PDDocument();
+        final String dataRelatorio = conversor.dataAtualString();
+        final String titulo = "Relatório de Contas a Pagar";
+        
+        float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
+        float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
+        float margemEsquerda;
+        float margemSuperior;
+        
+        PDFont hevelticaBold =  new PDType1Font(FontName.HELVETICA_BOLD); //Definindo a fonte
+        PDFont heveltica =  new PDType1Font(FontName.HELVETICA); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);            
+            
+            //Data da emissão do relatório
+            margemEsquerda = larguraPagina - 130; // 100 pixels da borda direita
+            margemSuperior = alturaPagina - 20; // 20 pixels da borda superior
+            fluxoConteudo.beginText(); //Inicinado o texto
+            fluxoConteudo.setFont(hevelticaBold, 8); //Fonte e tamanho
+            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior); // Posição do texto
+            fluxoConteudo.showText("Data Emissão: "); //Texto
+            fluxoConteudo.setFont(heveltica, 8); //Fonte e tamanho
+            fluxoConteudo.showText(dataRelatorio); //Texto
+            fluxoConteudo.endText(); //Finaliza o texto
+            
+            //Título relatório
+            float larguraTitulo = hevelticaBold.getStringWidth(titulo)/1000 * 14; // Ajuste o tamanho da fonte         
+            margemEsquerda = (larguraPagina - larguraTitulo) / 2;// Centraliza o texto
+            margemSuperior = 760;
+            fluxoConteudo.beginText(); //Iniciando a escrita
+            fluxoConteudo.setFont(hevelticaBold, 14); //Definindo a fonte
+            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior);  // Posição do texto
+            fluxoConteudo.showText(titulo);
+            fluxoConteudo.endText();
+            
+            
+            // Definir a posição dos títulos das colunas
+            float yPosition = 720; // Posição vertical inicial para os títulos
+            float marginLeft = 50;  // Margem à esquerda
+            float columnWidth = 50; // Largura de cada coluna
+            float spacing = 10;  // Espaçamento entre as colunas
+            float xPosition = 50;
 
-            // Adicionar uma nova página ao documento
-            PDPage page = new PDPage(PDRectangle.A4);
-            document.addPage(page);
+            // Definir os títulos das colunas
+            String[] columnTitles = {"Cód", "Fornecedor", "Nota", "Parcela", "Valor", "Valor Pago", "Dt Vencimento", "Dt Pagto"};
 
-            // Criar o conteúdo para a página
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            // Desenhar os títulos das colunas na página
+            for (int i = 0; i < columnTitles.length; i++) {
+                if(i != 0){
+                    xPosition += (hevelticaBold.getStringWidth(columnTitles[i-1])/1000 * 11) + 10; // Calcula a posição horizontal para cada título
+                }
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(hevelticaBold, 11);
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                fluxoConteudo.showText(columnTitles[i]); // Texto do título
+                fluxoConteudo.endText();
+            }
 
-            // Começar a escrever texto no documento
-            contentStream.beginText();
-            contentStream.setFont(,12);
-            contentStream.newLineAtOffset(100, 750);  // Posição do texto
-            contentStream.showText("Relatório de Funcionários");
-            contentStream.endText();
-
+            // Adicionar bordas ou linhas (opcional)
+            /*fluxoConteudo.setLineWidth(1);
+            fluxoConteudo.moveTo(marginLeft, yPosition - 2);  // Linha logo abaixo dos títulos
+            fluxoConteudo.lineTo(marginLeft + (columnTitles.length * (columnWidth + spacing) - spacing), yPosition - 2);
+            fluxoConteudo.stroke();*/
+            
+           /* //Titulos colunas
+            fluxoConteudo.beginText(); //Inicinado o texto
+            fluxoConteudo.setFont(hevelticaBold, 11); //Fonte e tamanho
+            fluxoConteudo.newLineAtOffset(50, 720); // Posição do texto
+            fluxoConteudo.showText("Cod"); //Texto
+            fluxoConteudo.newLineAtOffset(40, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Fornecedor"); //Texto
+            fluxoConteudo.newLineAtOffset(200, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Nota"); //Texto
+            fluxoConteudo.newLineAtOffset(40, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Parcela"); //Texto
+            fluxoConteudo.newLineAtOffset(60, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Valor"); //Texto
+            fluxoConteudo.newLineAtOffset(60, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Valor"); //Texto
+            fluxoConteudo.newLineAtOffset(60, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Valor"); //Texto
+            fluxoConteudo.newLineAtOffset(60, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Valor"); //Texto
+            fluxoConteudo.newLineAtOffset(60, 0); // Posição do texto referente ao outro texto
+            fluxoConteudo.showText("Valor"); //Texto
+            fluxoConteudo.endText(); //Finaliza o texto*/
+            
             // Adicionar mais texto
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA, 12);
-            contentStream.newLineAtOffset(100, 720);  // Posição do texto
-            contentStream.showText("Nome: João Silva");
-            contentStream.newLineAtOffset(0, -15);
-            contentStream.showText("Salário: R$ 3.500,00");
-            contentStream.endText();
+            /*fluxoConteudo.beginText();
+            fluxoConteudo.setFont(hevelticaBold, 12);
+            fluxoConteudo.newLineAtOffset(100, 720);  // Posição do texto
+            fluxoConteudo.showText("Nome: João Silva");
+            fluxoConteudo.newLineAtOffset(0, -15);
+            fluxoConteudo.showText("Salário: R$ 3.500,00");
+            fluxoConteudo.endText();*/
 
-            // Adicionar mais texto ou outras informações conforme necessário
-            // Criar tabelas manualmente ou adicionar gráficos/imagens
-
-            // Fechar o fluxo de conteúdo
-            contentStream.close();
-
-            // Salvar o documento em um arquivo
-            document.save("relatorio.pdf");
-
-            // Fechar o documento
-            document.close();
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            // Fechar corretamente os fluxos
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    // Salvar o documento em um arquivo
+                    documentoPDF.save("ContasPagar.pdf");
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
         }
+    }
+    
+    private void layoutFornecedor(){
+        
     }
     
     @Override

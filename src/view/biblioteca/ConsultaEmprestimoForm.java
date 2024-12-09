@@ -6,18 +6,26 @@ import dao.EmprestimoLivroDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
+import ferramentas.PaletaCores;
 import ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
@@ -34,6 +42,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
     private final Utilitarios conversor = new Utilitarios();
+    private final PaletaCores paletaCores = new PaletaCores();
     private List<EmprestimoLivro> listaEmpLivros = new ArrayList<>();
     private List<Pessoa> listaPessoa = null;
     
@@ -84,6 +93,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         dataDevolucao = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
+        statusEmprestimo = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -236,14 +246,14 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
 
             },
             new String [] {
-                "Cod Emp", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Status", "Biblioteca"
+                "", "Cod Emp", "Cod Livro", "Livro", "Pessoa", "Empréstimo", "Devolução", "Status", "Biblioteca"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -257,20 +267,22 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         jScrollPane1.setViewportView(tabelaEmprestimos);
         if (tabelaEmprestimos.getColumnModel().getColumnCount() > 0) {
             tabelaEmprestimos.getColumnModel().getColumn(0).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tabelaEmprestimos.getColumnModel().getColumn(0).setPreferredWidth(10);
             tabelaEmprestimos.getColumnModel().getColumn(1).setResizable(false);
             tabelaEmprestimos.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaEmprestimos.getColumnModel().getColumn(2).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(2).setPreferredWidth(200);
+            tabelaEmprestimos.getColumnModel().getColumn(2).setPreferredWidth(50);
             tabelaEmprestimos.getColumnModel().getColumn(3).setResizable(false);
             tabelaEmprestimos.getColumnModel().getColumn(3).setPreferredWidth(200);
             tabelaEmprestimos.getColumnModel().getColumn(4).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(4).setPreferredWidth(60);
+            tabelaEmprestimos.getColumnModel().getColumn(4).setPreferredWidth(200);
             tabelaEmprestimos.getColumnModel().getColumn(5).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(5).setPreferredWidth(50);
+            tabelaEmprestimos.getColumnModel().getColumn(5).setPreferredWidth(60);
             tabelaEmprestimos.getColumnModel().getColumn(6).setResizable(false);
+            tabelaEmprestimos.getColumnModel().getColumn(6).setPreferredWidth(50);
             tabelaEmprestimos.getColumnModel().getColumn(7).setResizable(false);
-            tabelaEmprestimos.getColumnModel().getColumn(7).setPreferredWidth(150);
+            tabelaEmprestimos.getColumnModel().getColumn(8).setResizable(false);
+            tabelaEmprestimos.getColumnModel().getColumn(8).setPreferredWidth(150);
         }
 
         btnFiltrar.setBackground(new java.awt.Color(255, 153, 0));
@@ -328,6 +340,13 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             }
         });
 
+        statusEmprestimo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-cardápio-16.png"))); // NOI18N
+        statusEmprestimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statusEmprestimoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -362,9 +381,10 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
                                 .addComponent(btnBuscar)))
                         .addGap(0, 42, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusEmprestimo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnFiltrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDevolver))
@@ -400,14 +420,15 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
                                 .addComponent(livros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnDevolver)
                         .addComponent(btnFiltrar))
-                    .addComponent(btnLimpar))
-                .addContainerGap(32, Short.MAX_VALUE))
+                    .addComponent(btnLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(statusEmprestimo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
         );
 
         pack();
@@ -472,6 +493,12 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         consultarTodosEmprestimos();
         atualizarTabela();
     }//GEN-LAST:event_btnDevolverActionPerformed
+
+    private void statusEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusEmprestimoActionPerformed
+        StatusCores statusCores = new StatusCores((Frame) SwingUtilities.getWindowAncestor(this), true);
+        statusCores.setLocationRelativeTo(this);
+        statusCores.setVisible(true);
+    }//GEN-LAST:event_statusEmprestimoActionPerformed
 
     private void formInicial(){
         this.rbDataEmprestimo.setSelected(true);
@@ -581,9 +608,11 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             String dataEmprestimo = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataEmprestimo());
             String dataDevolucao = this.conversor.convertendoDataStringSql((java.sql.Date) empLivro.getDataDevolucao());
             for(Livro livro : empLivro.getListaLivro()){
-                model.addRow(new Object[]{empLivro.getCodigoEmprestimo(),livro.getCodLivro(),livro, empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getDescricaoStatus(), empLivro.getBiblioteca()});
+                model.addRow(new Object[]{" ",empLivro.getCodigoEmprestimo(),livro.getCodLivro(),livro, empLivro.getPessoa(), dataEmprestimo, dataDevolucao, empLivro.getDescricaoStatus(), empLivro.getBiblioteca()});
             }        
         }
+        
+        statusEmprestimo();
     }
     
     private void limparTabela(){
@@ -646,6 +675,51 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         this.listaEmpLivros = this.empLivroDao.consultarEmprestimosStatusEmprestado();
     }
     
+    private void statusEmprestimo(){
+        // Definindo a cor conforme a data de vencimento
+        this.tabelaEmprestimos.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+
+                // Criar um JLabel para a célula
+                JLabel label = new JLabel(value.toString()) {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g); // Chama o método para garantir a renderização padrão da célula
+
+                        // Definir o tamanho do círculo (ajuste de acordo com o tamanho da célula)
+                        int diameter = Math.min(getWidth(), getHeight()) - 4; // Aumente o valor (-5, 0 ou outro valor) para maior bolinha
+
+                        // Determinar a cor do círculo com base no vencimento
+                        Color corFundo = Color.GRAY; // Cor padrão
+                        String status = (String) tabelaEmprestimos.getValueAt(row, 7);
+                        
+                        if(status.equalsIgnoreCase("emprestado")){
+                            corFundo = paletaCores.verdeLimao(); 
+                        }else if(status.equalsIgnoreCase("devolvido")){                             
+                            corFundo = paletaCores.azul();    
+                        }else if(status.equalsIgnoreCase("perdido")){
+                            corFundo = paletaCores.vermelhoEscuro();  
+                        }
+
+                        // Definir a cor de preenchimento do círculo
+                        g.setColor(corFundo);
+                        
+                        // Desenhar o círculo (elipse preenchida)
+                        g.fillOval((getWidth() - diameter) / 2, (getHeight() - diameter) / 2, diameter, diameter); 
+                    }
+                };
+
+                // Garantir que o JLabel não tenha borda ou fundo
+                //label.setOpaque(false); // Deixar o fundo transparente para desenharmos o círculo
+                label.setHorizontalAlignment(SwingConstants.CENTER); // Alinhar o texto ao centro (opcional)
+                label.setVerticalAlignment(SwingConstants.CENTER); // Alinhar o texto ao centro (opcional)
+
+                return label; // Retorna o JLabel modificado
+            }
+        });
+    }
+    
     @Override
     public void pessoaSelecionada(Pessoa pessoaSelecionada) {
         carregarPessoaEscolhido(pessoaSelecionada);
@@ -679,6 +753,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     private javax.swing.ButtonGroup rbGrupoStatus;
     private javax.swing.JRadioButton rbPerdidos;
     private javax.swing.JRadioButton rbTodos;
+    private javax.swing.JButton statusEmprestimo;
     private javax.swing.JTable tabelaEmprestimos;
     private javax.swing.JLabel txData;
     // End of variables declaration//GEN-END:variables

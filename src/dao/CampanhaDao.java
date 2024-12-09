@@ -453,7 +453,7 @@ public class CampanhaDao {
         List<ContasReceberCampanha> listaCrCampanha = new ArrayList<>();
 
         String sql = "SELECT (SELECT DescricaoCampanha FROM Campanhas As C WHERE CRC.Campanha = C.Codigo) As DescricaoCampanha,CRC.* FROM ContasReceberCampanhas As CRC "
-        + "WHERE CRC.ValorPendente > 0 AND CRC.DataPagamento Is Null AND (CRC.DescricaoStatus = 'Aberto' OR CRC.DescricaoStatus = 'Pendente') AND MONTH(CRC.DataVencimento) = MONTH(?)";
+        + "WHERE CRC.ValorPendente > 0 AND (CRC.DescricaoStatus = 'Aberto' OR CRC.DescricaoStatus = 'Pendente') AND MONTH(CRC.DataVencimento) = MONTH(?)";
 
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -509,6 +509,7 @@ public class CampanhaDao {
         String sql = "SELECT " +
         "PC.CodPessoa AS CodPessoa, " +
         "PC.NomePessoa AS NomePessoa, " +
+        "PC.Status As Status, " +
         "CASE PC.Status " +
         "    WHEN 1 THEN 'Ativo' " +
         "    ELSE 'Inativo' " +
@@ -536,6 +537,7 @@ public class CampanhaDao {
                 ParticipanteCampanha participante = new ParticipanteCampanha();
                 participante.setCodigo(this.rs.getInt("CodPessoa"));
                 participante.setNome(this.rs.getString("NomePessoa"));
+                participante.setStatus(this.rs.getInt("Status"));
                 participante.setDescricaoStatus(this.rs.getString("StatusPessoa"));
                 participante.setQtdParcelasPagas(this.rs.getInt("TotalParcelasPagas"));
                 participante.setValorTotalPago(this.rs.getDouble("TotalValorPago"));
@@ -545,7 +547,6 @@ public class CampanhaDao {
             }         
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os participantes e os valores", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{

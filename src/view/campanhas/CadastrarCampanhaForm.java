@@ -515,7 +515,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
         final Integer qtdParcelas = (Integer) this.duracaoCampanha.getValue();
         final SubContaResultado contaResultado = (SubContaResultado) this.contaResultado.getSelectedItem();
         final double valorParcela = (valorTotal/qtdParcelas)/qtdPessoas;
-        final double valorParelaFormatada = Math.round(valorParcela * 100.0) / 100.0;
+        //final double valorParcelaFormatada = Math.round(valorParcela * 100.0) / 100.0;
         final String dataInicio = this.dataInicioCampanha.getText();
         final Igreja igreja = (Igreja) this.igrejaCampanha.getSelectedItem();
         final Integer statusPagamento = 0;
@@ -529,8 +529,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
             crCampanha.setDataVencimento(this.conversor.convertendoStringDateSql(dataVencimento));
             crCampanha.setParticipante(participante);
             crCampanha.setParcela(j);
-            crCampanha.setValorParcela(valorParelaFormatada);
-            crCampanha.setValorPendente(valorParelaFormatada);
+            crCampanha.setValorParcela(valorParcela);
+            crCampanha.setValorPendente(valorParcela);
             crCampanha.setStatusPagamento(statusPagamento);
             crCampanha.setDescricaoStatus(descricaoStatus);
             crCampanha.setIgreja(igreja);
