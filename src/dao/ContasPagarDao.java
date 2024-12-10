@@ -103,7 +103,8 @@ public class ContasPagarDao {
             "AND (? IS NULL OR CP.Status = ?) " +
             "AND (? IS NULL OR CP.SubContaResultado = ?) " +
             "AND (? IS NULL OR CP.FormaPagto = ?) " +
-            "AND (? IS NULL OR CP.Igreja = ?)";
+            "AND (? IS NULL OR CP.Igreja = ?) " +
+            "ORDER BY P.Codigo";
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -143,7 +144,7 @@ public class ContasPagarDao {
             }
             
             // Parâmetro para Cliente
-            if (cpFiltros.getFornecedor().getCodigo() != null) {
+            if (cpFiltros.getFornecedor() != null) {
                 this.stmSelect.setInt(10, cpFiltros.getFornecedor().getCodigo());
                 this.stmSelect.setInt(11, cpFiltros.getFornecedor().getCodigo());
             } else {
