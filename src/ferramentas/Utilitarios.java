@@ -37,6 +37,10 @@ public class Utilitarios{
         return Integer.valueOf(numeroFormatado);
     }
     
+    public String formatarDoubleString(double valor){
+         return String.format("%.2f", valor);
+    }
+    
     public String convertendoDataStringSql(java.sql.Date data){
         
         try{

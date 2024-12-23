@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.ContaResultado;
 import model.ContasPagar;
+import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
@@ -103,8 +104,7 @@ public class ContasPagarDao {
             "AND (? IS NULL OR CP.Status = ?) " +
             "AND (? IS NULL OR CP.SubContaResultado = ?) " +
             "AND (? IS NULL OR CP.FormaPagto = ?) " +
-            "AND (? IS NULL OR CP.Igreja = ?) " +
-            "ORDER BY P.Codigo";
+            "AND (? IS NULL OR CP.Igreja = ?) ";
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -205,15 +205,19 @@ public class ContasPagarDao {
                 this.stmSelect.setNull(22, java.sql.Types.INTEGER);
                 this.stmSelect.setNull(23, java.sql.Types.INTEGER);
             }
+               
             rs = this.stmSelect.executeQuery();
 
             // Iterando sobre os resultados
             while (rs.next()) {
                 Pessoa fornecedor = new Pessoa();
+                FormaPagto formaPagto = new FormaPagto();
                 ContasPagar contaPagar=  new ContasPagar();
                 Igreja igreja = new Igreja();
                 SubContaResultado subContaResult = new SubContaResultado();
                 ContaResultado contaResultado = new ContaResultado();
+                formaPagto.setCodigo(this.rs.getInt("CodFormaPagto"));
+                formaPagto.setNome(this.rs.getString("DescricaoFormaPagto"));
                 fornecedor.setCodigo(this.rs.getInt("CodFornecedor"));
                 fornecedor.setNome(this.rs.getString("NomeFornecedor"));
                 fornecedor.setCpfCnpj(this.rs.getString("CPFCNPJ"));
@@ -237,6 +241,7 @@ public class ContasPagarDao {
                 contaPagar.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
                 contaPagar.setFornecedor(fornecedor);
                 contaPagar.setIgreja(igreja);
+                contaPagar.setFormaPagto(formaPagto);
                 subContaResult.setContaResultado(contaResultado);
                 contaPagar.setSubContaResultado(subContaResult);
 
@@ -245,6 +250,174 @@ public class ContasPagarDao {
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+e.getMessage());
+        } finally {
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return listaContasPagar;       
+    }
+    
+    public List<ContasPagar> consultarContasPagarRelatorio(FormaPagto filtroFormaPagto, Pessoa filtroPessoa, Igreja filtroIgreja, Integer filtroStatus, SubContaResultado filtroSubContaResultado, String ordemDados, Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataCadastroInicial, Date dataCadastroFinal, Date dataPagamentoInicial, Date dataPagamentoFinal){
+
+        List<ContasPagar> listaContasPagar = new ArrayList<>();
+
+        // Montando a query SQL com placeholders
+        String sql = "SELECT P.Codigo AS CodFornecedor, P.Nome AS NomeFornecedor, P.CPF AS CPFCNPJ, " +
+            "I.Codigo AS CodIgreja, I.NomeIgreja AS NomeIgreja, " +
+            "FP.Codigo As CodFormaPagto, FP.Descricao As DescricaoFormaPagto, " +
+            "SCR.Codigo As CodSubContaResultado, SCR.Descricao As DescricaoSubContaResultado, " +
+            "CR.Codigo As CodContaResultado, CR.Descricao As DescricaoContaResultado, " +
+            "CP.* " +
+            "FROM ContasPagar CP " +
+            "INNER JOIN Pessoas As P ON CP.Fornecedor = P.Codigo " +
+            "INNER JOIN Igrejas As I ON I.Codigo = CP.Igreja " +
+            "INNER JOIN FormasPagamento As FP ON FP.Codigo = CP.FormaPagto " +
+            "INNER JOIN SubContasResultado As SCR ON SCR.Codigo = CP.SubContaResultado " +
+            "INNER JOIN ContasResultado As CR ON CR.Codigo = SCR.ContaResultado " +
+            "WHERE (? IS NULL OR CP.DataPagamento BETWEEN ? AND ?) " +
+            "AND (? IS NULL OR CP.DataVencimento BETWEEN ? AND ?) " +
+            "AND (? IS NULL OR CP.DataCadastro BETWEEN ? AND ?)" +
+            "AND (? IS NULL OR CP.Fornecedor = ?) " +
+            "AND (? IS NULL OR CP.Status = ?) " +
+            "AND (? IS NULL OR CP.SubContaResultado = ?) " +
+            "AND (? IS NULL OR CP.FormaPagto = ?) " +
+            "AND (? IS NULL OR CP.Igreja = ?) " +
+            "ORDER BY CP."+ordemDados;
+        
+        try {
+            this.conexao = Conexao.getDataSource().getConnection();         
+            this.stmSelect = this.conexao.prepareStatement(sql);  
+            
+            // Datas Pagamento
+            if (dataPagamentoInicial != null && dataPagamentoFinal != null) {
+                this.stmSelect.setDate(1, new java.sql.Date(dataPagamentoInicial.getTime()));
+                this.stmSelect.setDate(2, new java.sql.Date(dataPagamentoInicial.getTime()));
+                this.stmSelect.setDate(3, new java.sql.Date(dataPagamentoFinal.getTime()));
+            } else {
+                this.stmSelect.setNull(1, java.sql.Types.DATE);
+                this.stmSelect.setNull(2, java.sql.Types.DATE);
+                this.stmSelect.setNull(3, java.sql.Types.DATE);
+            }
+            
+            //Datas Vencimento
+            if (dataVencimentoInicial != null && dataVencimentoFinal != null) {
+                this.stmSelect.setDate(4, new java.sql.Date(dataVencimentoInicial.getTime()));
+                this.stmSelect.setDate(5, new java.sql.Date(dataVencimentoInicial.getTime()));
+                this.stmSelect.setDate(6, new java.sql.Date(dataVencimentoFinal.getTime()));
+            } else {
+                this.stmSelect.setNull(4, java.sql.Types.DATE);
+                this.stmSelect.setNull(5, java.sql.Types.DATE);
+                this.stmSelect.setNull(6, java.sql.Types.DATE);
+            }
+            
+            //DatasCadastro
+            if (dataCadastroInicial != null && dataCadastroFinal != null) {
+                this.stmSelect.setDate(7, new java.sql.Date(dataCadastroInicial.getTime()));
+                this.stmSelect.setDate(8, new java.sql.Date(dataCadastroInicial.getTime()));
+                this.stmSelect.setDate(9, new java.sql.Date(dataCadastroFinal.getTime()));
+            } else {
+                this.stmSelect.setNull(7, java.sql.Types.DATE);
+                this.stmSelect.setNull(8, java.sql.Types.DATE);
+                this.stmSelect.setNull(9, java.sql.Types.DATE);
+            }
+            
+            // Parâmetro para Cliente
+            if (filtroPessoa != null) {
+                this.stmSelect.setInt(10, filtroPessoa.getCodigo());
+                this.stmSelect.setInt(11, filtroPessoa.getCodigo());
+            } else {
+                this.stmSelect.setNull(10, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(11, java.sql.Types.INTEGER);
+            }
+
+
+            // Parâmetro para Status (Baixada)
+            if (filtroStatus != null) {
+                this.stmSelect.setInt(12, filtroStatus);
+                this.stmSelect.setInt(13, filtroStatus);
+            } else {
+                this.stmSelect.setNull(12, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(13, java.sql.Types.INTEGER);
+            }
+
+            // Parâmetro para ContaResultado
+            if (filtroSubContaResultado != null) {
+                this.stmSelect.setInt(14, filtroSubContaResultado.getCodigo());
+                this.stmSelect.setInt(15, filtroSubContaResultado.getCodigo());
+            } else {
+                this.stmSelect.setNull(14, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(15, java.sql.Types.INTEGER);
+            }
+            
+            // Parâmetro para forma de pagamento
+            if (filtroFormaPagto != null) {
+                this.stmSelect.setInt(16, filtroFormaPagto.getCodigo());
+                this.stmSelect.setInt(17, filtroFormaPagto.getCodigo());
+            } else {
+                this.stmSelect.setNull(16, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(17, java.sql.Types.INTEGER);
+            }
+            
+            // Parâmetro para igreja
+            if (filtroIgreja != null) {
+                this.stmSelect.setInt(18, filtroIgreja.getCodigo());
+                this.stmSelect.setInt(19, filtroIgreja.getCodigo());
+            } else {
+                this.stmSelect.setNull(18, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(19, java.sql.Types.INTEGER);
+            }
+               
+            rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (rs.next()) {
+                Pessoa fornecedor = new Pessoa();
+                FormaPagto formaPagto = new FormaPagto();
+                ContasPagar contaPagar=  new ContasPagar();
+                Igreja igreja = new Igreja();
+                SubContaResultado subContaResult = new SubContaResultado();
+                ContaResultado contaResultado = new ContaResultado();
+                formaPagto.setCodigo(this.rs.getInt("CodFormaPagto"));
+                formaPagto.setNome(this.rs.getString("DescricaoFormaPagto"));
+                fornecedor.setCodigo(this.rs.getInt("CodFornecedor"));
+                fornecedor.setNome(this.rs.getString("NomeFornecedor"));
+                fornecedor.setCpfCnpj(this.rs.getString("CPFCNPJ"));
+                igreja.setCodigo(this.rs.getInt("CodIgreja"));
+                igreja.setNome(this.rs.getString("NomeIgreja"));
+                subContaResult.setCodigo(this.rs.getInt("CodSubContaResultado"));
+                subContaResult.setDescricao(this.rs.getString("DescricaoSubContaResultado"));
+                contaResultado.setCodigo(this.rs.getInt("CodContaResultado"));
+                contaResultado.setNome(this.rs.getString("DescricaoContaResultado"));              
+                contaPagar.setCodigo(this.rs.getInt("Codigo"));     
+                contaPagar.setDescricaoConta(this.rs.getString("Descricao"));
+                contaPagar.setValor(this.rs.getDouble("Valor"));
+                contaPagar.setValorPago(this.rs.getDouble("ValorPago"));
+                contaPagar.setValorPendente(this.rs.getDouble("ValorPendente"));
+                contaPagar.setNumNota(this.rs.getInt("NumNota"));
+                contaPagar.setParcela(this.rs.getInt("Parcela"));
+                contaPagar.setDataVencimento(this.rs.getDate("DataVencimento"));
+                contaPagar.setDataPagamento(this.rs.getDate("DataPagamento"));
+                contaPagar.setDataCadastro(this.rs.getDate("DataCadastro"));
+                contaPagar.setStatus(this.rs.getInt("Status"));
+                contaPagar.setDescricaoStatus(this.rs.getString("DescricaoStatus"));
+                contaPagar.setFornecedor(fornecedor);
+                contaPagar.setIgreja(igreja);
+                contaPagar.setFormaPagto(formaPagto);
+                subContaResult.setContaResultado(contaResultado);
+                contaPagar.setSubContaResultado(subContaResult);
+
+                listaContasPagar.add(contaPagar);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Erro: "+e.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -320,7 +493,6 @@ public class ContasPagarDao {
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar em aberto no mês atual", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+e.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();

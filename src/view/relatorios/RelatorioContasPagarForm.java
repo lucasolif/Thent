@@ -5,6 +5,7 @@ import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
+import dao.SubContaResultadoDao;
 import ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
@@ -24,11 +25,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import model.SubContaResultado;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -39,6 +38,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private final Utilitarios conversor = new Utilitarios();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
+    private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final ContasPagarDao contasPagarDao = new ContasPagarDao();
     private List<Pessoa> listaPessoa = null;
@@ -85,8 +85,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         rbFormaPagto = new javax.swing.JRadioButton();
         rbStatusPagamento = new javax.swing.JRadioButton();
         rbIgreja = new javax.swing.JRadioButton();
+        rbPadrão = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         btnGerar = new javax.swing.JButton();
+        contaResultado = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -243,22 +246,28 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         layoutRelatorio.add(rbIgreja);
         rbIgreja.setText("Igreja");
 
+        layoutRelatorio.add(rbPadrão);
+        rbPadrão.setText("Padrão");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(rbIgreja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rbStatusPagamento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rbFormaPagto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rbContaResultado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rbFornecedor, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(127, 127, 127))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rbIgreja, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbStatusPagamento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbFormaPagto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbContaResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbPadrão, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(rbPadrão)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(rbFornecedor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbContaResultado)
@@ -267,7 +276,8 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbStatusPagamento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbIgreja))
+                .addComponent(rbIgreja)
+                .addContainerGap())
         );
 
         jLabel3.setText("Forma Pagto");
@@ -281,6 +291,19 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             }
         });
 
+        contaResultado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                contaResultadoMousePressed(evt);
+            }
+        });
+        contaResultado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                contaResultadoKeyPressed(evt);
+            }
+        });
+
+        jLabel5.setText("Conta Resultado");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -288,28 +311,33 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(codFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nomeFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(igreja, 0, 175, Short.MAX_VALUE)
-                                    .addComponent(formaPagto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGerar)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jLabel2)
+                                                .addComponent(jLabel3)
+                                                .addComponent(igreja, 0, 175, Short.MAX_VALUE)
+                                                .addComponent(formaPagto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(jLabel5))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(contaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGerar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -335,11 +363,15 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5))
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(btnGerar)
-                .addGap(36, 36, 36))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGerar)
+                    .addComponent(contaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -351,15 +383,15 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
 
     private void formaPagtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formaPagtoKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            DefaultComboBoxModel campanha = (DefaultComboBoxModel)this.formaPagto.getModel();
-            campanha.removeAllElements();
+            DefaultComboBoxModel formaPagto = (DefaultComboBoxModel)this.formaPagto.getModel();
+            formaPagto.removeAllElements();
         }
     }//GEN-LAST:event_formaPagtoKeyPressed
 
     private void igrejaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_igrejaKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            DefaultComboBoxModel campanha = (DefaultComboBoxModel)this.igreja.getModel();
-            campanha.removeAllElements();
+            DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
+            igreja.removeAllElements();
         }
     }//GEN-LAST:event_igrejaKeyPressed
 
@@ -378,9 +410,19 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     }//GEN-LAST:event_nomeFornecedorKeyPressed
 
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
-        List<ContasPagar> contasPagar = consultarContasPagar();
-        layoutPadrao(contasPagar);
+        gerarRelatorio();
     }//GEN-LAST:event_btnGerarActionPerformed
+
+    private void contaResultadoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contaResultadoKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            DefaultComboBoxModel subContaResultado = (DefaultComboBoxModel)this.contaResultado.getModel();
+            subContaResultado.removeAllElements();
+        }
+    }//GEN-LAST:event_contaResultadoKeyPressed
+
+    private void contaResultadoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contaResultadoMousePressed
+        carregarSubContaResultado();
+    }//GEN-LAST:event_contaResultadoMousePressed
 
     private void formInicial(){
         this.codFornecedor.setText("");
@@ -412,6 +454,15 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         }
     }
     
+    private void carregarSubContaResultado(){
+        List<SubContaResultado> listaSubContResult = this.subContResultDao.consultarSubContaResultado();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaResultado.getModel();
+        modelo.removeAllElements();
+        for(SubContaResultado subCont : listaSubContResult){
+            modelo.addElement(subCont);
+        }
+    }
+    
     private void consultarPessoas(){
         String textoBusca = this.nomeFornecedor.getText();
         this.listaPessoa = this.pessoaDao.consultarPessoa(textoBusca);          
@@ -430,7 +481,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         this.pessoaSelec = pessoa;
     }
     
-    private List<ContasPagar> consultarContasPagar(){         
+    private List<ContasPagar> consultarContasPagar(String ordemDados){         
         List<ContasPagar> listaContasPagar = null;
         ContasPagar contasPagar = new ContasPagar();
         Date dataVencimentoInicial = null;
@@ -442,6 +493,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         Integer status = null;
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         FormaPagto formaPagto = (FormaPagto) this.formaPagto.getSelectedItem();
+        SubContaResultado subContaResultado = (SubContaResultado) this.contaResultado.getSelectedItem();
         Pessoa pessoa = this.pessoaSelec;
         
         //Verifica qual data foi excluída, e atribui o valor da data inserida
@@ -466,11 +518,37 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         contasPagar.setFormaPagto(formaPagto);
         contasPagar.setFornecedor(pessoa);
         contasPagar.setIgreja(igreja);
-        contasPagar.getStatus();
+        contasPagar.setStatus(status);
         
-        listaContasPagar = this.contasPagarDao.consultarContasPagar(contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
+        listaContasPagar = this.contasPagarDao.consultarContasPagarRelatorio(formaPagto, pessoa, igreja, status, subContaResultado, ordemDados, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
     
         return listaContasPagar;
+    }
+    
+    private void gerarRelatorio(){
+        
+        List<ContasPagar> contasPagar = null;
+        
+        if(this.rbPadrão.isSelected()){
+            contasPagar = consultarContasPagar("Fornecedor");
+            layoutPadrao(contasPagar);
+        }else if(this.rbFornecedor.isSelected()){
+            contasPagar = consultarContasPagar("Fornecedor");
+            layoutFornecedor(contasPagar);
+        }else if(this.rbContaResultado.isSelected()){
+            contasPagar = consultarContasPagar("SubContaResultado");
+            layoutContaResultado(contasPagar);
+        }else if(this.rbFormaPagto.isSelected()){
+            contasPagar = consultarContasPagar("FormaPagto");
+            layoutFormaPagto(contasPagar);
+        }else if(this.rbStatusPagamento.isSelected()){
+            contasPagar = consultarContasPagar("DescricaoStatus");
+            layoutStatusPagamento(contasPagar);
+        }else if(this.rbIgreja.isSelected()){
+            contasPagar = consultarContasPagar("Igreja");
+            layoutIgreja(contasPagar);
+        }
+        
     }
     
     private void layoutPadrao(List<ContasPagar> listaContasPagar){
@@ -502,7 +580,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             tituloColunaRelatorio(yPosition, xPosition, titulosTabela, fluxoConteudo);
             
             yPosition -= 20; // Pular para a linha abaixo após o título
-            //dadosRelatorio(listaContasPagar, fluxoConteudo, documentoPDF, yPosition, xPosition, titulosTabela);
 
             for(int i = 0; i < listaContasPagar.size(); i++) {              
                 if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
@@ -524,10 +601,10 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 }
                 String numNota = String.valueOf(listaContasPagar.get(i).getNumNota());
                 String parcela = String.valueOf(listaContasPagar.get(i).getParcela());
-                String valorDuplicata = String.valueOf(listaContasPagar.get(i).getValor()).replace(".", ",");
-                String valorPago = String.valueOf(listaContasPagar.get(i).getValorPago()).replace(".", ",");
-                String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) listaContasPagar.get(i).getDataVencimento());
-                String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) listaContasPagar.get(i).getDataPagamento());
+                String valorDuplicata = this.conversor.formatarDoubleString(listaContasPagar.get(i).getValor()).replace(".", ",");
+                String valorPago = this.conversor.formatarDoubleString(listaContasPagar.get(i).getValorPago()).replace(".", ",");
+                String dataVencimento = this.conversor.convertendoDataStringSql((java.sql.Date) listaContasPagar.get(i).getDataVencimento());
+                String dataPagamento = this.conversor.convertendoDataStringSql((java.sql.Date) listaContasPagar.get(i).getDataPagamento());
 
                 // Desenhar os dados da linha na tabela
                 fluxoConteudo.beginText();
@@ -572,10 +649,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
 
             fluxoConteudo.close();
             salvarRelatorioPDF(documentoPDF);
-            //documentoPDF.save("ContasPagar.pdf");
-            
-            JOptionPane.showMessageDialog(null, "Relatório gerado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-     
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
         } finally {
@@ -591,6 +664,671 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             }
         }
         
+    }
+    
+    private void layoutFornecedor(List<ContasPagar> listaContasPagar){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        final String titulo = "Relatório de Contas a Pagar (Fornecedor)";    
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        Pessoa fornecedorAtual = null;
+        
+        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+     
+            // Definir os títulos das colunas
+            String[] titulosTabela = {"Nota", "Parcela","Descrição","Valor", "Val.Pago", "Vencimento", "Pagamento"};
+            tituloColunaRelatorio(yPosition, xPosition, titulosTabela, fluxoConteudo);     
+                
+            // Iterar sobre as contas a pagar
+            for (ContasPagar cp : listaContasPagar) {              
+                if(fornecedorAtual == null || fornecedorAtual.getCodigo() != cp.getFornecedor().getCodigo()){ 
+
+                    if(fornecedorAtual == null){
+                        yPosition -= 30; // Pular para a linha abaixo após o título
+                    }else{                 
+                        xPosition = 50;
+                        yPosition -= 15; // Pular para a linha abaixo após o título
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 10);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(cp.getFornecedor().getCodigo()+ " - "+ cp.getFornecedor().getNome());
+                    fluxoConteudo.endText();    
+                    
+                    fornecedorAtual = cp.getFornecedor();  
+                    yPosition -= 20;
+                }           
+
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
+                             
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                String numNota = String.valueOf(cp.getNumNota());
+                String parcela = String.valueOf(cp.getParcela());
+                String descricaoCp = cp.getDescricaoConta();
+                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+                if (descricaoCp.length() > limiteCaracteres) {
+                    descricaoCp = descricaoCp.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
+                String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
+                String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
+                String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+
+                // Desenhar os dados da linha na tabela
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, 10);
+
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(numNota);
+                xPosition += (timesBold.getStringWidth(titulosTabela[2]) / 1000 * 11) - 50; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(parcela);
+                xPosition += (timesBold.getStringWidth(titulosTabela[3]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(descricaoCp);
+                xPosition += (timesBold.getStringWidth(titulosTabela[4]) / 1000 * 11) + 90; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorDuplicata);
+                xPosition += (timesBold.getStringWidth(titulosTabela[5]) / 1000 * 11) - 180; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorPago);
+                xPosition += (timesBold.getStringWidth(titulosTabela[6]) / 1000 * 11) - 30; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataVencimento);
+                xPosition += (timesBold.getStringWidth(titulosTabela[6]) / 1000 * 11) - 50; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataPagamento);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                
+            }
+
+            fluxoConteudo.close();
+            salvarRelatorioPDF(documentoPDF);        
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    private void layoutContaResultado(List<ContasPagar> listaContasPagar){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        final String titulo = "Relatório de Contas a Pagar (Conta Resultado)";    
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        SubContaResultado contaResultado = null;
+        
+        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+     
+            // Definir os títulos das colunas
+            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+            tituloColunaRelatorio(yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                
+            // Iterar sobre as contas a pagar
+            for (ContasPagar cp : listaContasPagar) {              
+                if(contaResultado == null || contaResultado.getCodigo() != cp.getSubContaResultado().getCodigo()){ 
+
+                    if(contaResultado == null){
+                        yPosition -= 30; // Pular para a linha abaixo após o título
+                    }else{                 
+                        xPosition = 50;
+                        yPosition -= 15; // Pular para a linha abaixo após o título
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 10);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(cp.getSubContaResultado().getDescricao());
+                    fluxoConteudo.endText();    
+                    
+                    contaResultado = cp.getSubContaResultado();  
+                    yPosition -= 20;
+                }           
+
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
+                
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
+                String nomeFornecedor = cp.getFornecedor().getNome();
+                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String numNota = String.valueOf(cp.getNumNota());
+                String parcela = String.valueOf(cp.getParcela());
+                String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
+                String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
+                String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
+                String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+
+                // Desenhar os dados da linha na tabela
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, 10);
+
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(codFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[0]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(nomeFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[1]) / 1000 * 11) + 90; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(numNota);
+                xPosition += (timesBold.getStringWidth(titulosTabela[2]) / 1000 * 11) - 165; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(parcela);
+                xPosition += (timesBold.getStringWidth(titulosTabela[3]) / 1000 * 11) - 25; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorDuplicata);
+                xPosition += (timesBold.getStringWidth(titulosTabela[4]) / 1000 * 11) - 5; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorPago);
+                xPosition += (timesBold.getStringWidth(titulosTabela[5]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataVencimento);
+                xPosition += (timesBold.getStringWidth(titulosTabela[6]) / 1000 * 11) - 55; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataPagamento);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                
+            }
+
+            fluxoConteudo.close();
+            salvarRelatorioPDF(documentoPDF);        
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    private void layoutFormaPagto(List<ContasPagar> listaContasPagar){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";    
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        FormaPagto formaPagto = null;
+        
+        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+     
+            // Definir os títulos das colunas
+            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+            tituloColunaRelatorio(yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                
+            // Iterar sobre as contas a pagar
+            for (ContasPagar cp : listaContasPagar) {              
+                if(formaPagto == null || formaPagto.getCodigo() != cp.getFormaPagto().getCodigo()){ 
+
+                    if(formaPagto == null){
+                        yPosition -= 30; // Pular para a linha abaixo após o título
+                    }else{                 
+                        xPosition = 50;
+                        yPosition -= 15; // Pular para a linha abaixo após o título
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 10);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(cp.getFormaPagto().getNome());
+                    fluxoConteudo.endText();    
+                    
+                    formaPagto = cp.getFormaPagto();  
+                    yPosition -= 20;
+                }           
+
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
+                
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
+                String nomeFornecedor = cp.getFornecedor().getNome();
+                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String numNota = String.valueOf(cp.getNumNota());
+                String parcela = String.valueOf(cp.getParcela());
+                String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
+                String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
+                String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
+                String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+
+                // Desenhar os dados da linha na tabela
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, 10);
+
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(codFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[0]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(nomeFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[1]) / 1000 * 11) + 90; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(numNota);
+                xPosition += (timesBold.getStringWidth(titulosTabela[2]) / 1000 * 11) - 165; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(parcela);
+                xPosition += (timesBold.getStringWidth(titulosTabela[3]) / 1000 * 11) - 25; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorDuplicata);
+                xPosition += (timesBold.getStringWidth(titulosTabela[4]) / 1000 * 11) - 5; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorPago);
+                xPosition += (timesBold.getStringWidth(titulosTabela[5]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataVencimento);
+                xPosition += (timesBold.getStringWidth(titulosTabela[6]) / 1000 * 11) - 55; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataPagamento);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                
+            }
+
+            fluxoConteudo.close();
+            salvarRelatorioPDF(documentoPDF);        
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o relatório, layout por forma de pagamento", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    private void layoutStatusPagamento(List<ContasPagar> listaContasPagar){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";    
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        String statusCp = null;
+        
+        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+     
+            // Definir os títulos das colunas
+            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+            tituloColunaRelatorio(yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                
+            // Iterar sobre as contas a pagar
+            for (ContasPagar cp : listaContasPagar) {              
+                if(statusCp == null || !statusCp.equalsIgnoreCase(cp.getDescricaoStatus())){ 
+
+                    if(statusCp == null){
+                        yPosition -= 30; // Pular para a linha abaixo após o título
+                    }else{                 
+                        xPosition = 50;
+                        yPosition -= 15; // Pular para a linha abaixo após o título
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 10);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(cp.getDescricaoStatus());
+                    fluxoConteudo.endText();    
+                    
+                    statusCp = cp.getDescricaoStatus();  
+                    yPosition -= 20;
+                }           
+
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
+                
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
+                String nomeFornecedor = cp.getFornecedor().getNome();
+                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String numNota = String.valueOf(cp.getNumNota());
+                String parcela = String.valueOf(cp.getParcela());
+                String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
+                String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
+                String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
+                String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+
+                // Desenhar os dados da linha na tabela
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, 10);
+
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(codFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[0]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(nomeFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[1]) / 1000 * 11) + 90; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(numNota);
+                xPosition += (timesBold.getStringWidth(titulosTabela[2]) / 1000 * 11) - 165; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(parcela);
+                xPosition += (timesBold.getStringWidth(titulosTabela[3]) / 1000 * 11) - 25; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorDuplicata);
+                xPosition += (timesBold.getStringWidth(titulosTabela[4]) / 1000 * 11) - 5; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorPago);
+                xPosition += (timesBold.getStringWidth(titulosTabela[5]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataVencimento);
+                xPosition += (timesBold.getStringWidth(titulosTabela[6]) / 1000 * 11) - 55; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataPagamento);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                
+            }
+
+            fluxoConteudo.close();
+            salvarRelatorioPDF(documentoPDF);        
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o relatório, layout por forma de pagamento", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    private void layoutIgreja(List<ContasPagar> listaContasPagar){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";    
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        Igreja igreja = null;
+        
+        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+     
+            // Definir os títulos das colunas
+            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+            tituloColunaRelatorio(yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                
+            // Iterar sobre as contas a pagar
+            for (ContasPagar cp : listaContasPagar) {      
+                //Divisão pelo layout
+                if(igreja == null || igreja.getCodigo() != cp.getIgreja().getCodigo()){ 
+
+                    if(igreja == null){
+                        yPosition -= 30; // Pular para a linha abaixo após o título
+                    }else{                 
+                        xPosition = 50;
+                        yPosition -= 15; // Pular para a linha abaixo após o título
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 10);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(cp.getIgreja().getNome());
+                    fluxoConteudo.endText();    
+                    
+                    igreja = cp.getIgreja();  
+                    yPosition -= 20;
+                }           
+
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
+                
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
+                String nomeFornecedor = cp.getFornecedor().getNome();
+                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String numNota = String.valueOf(cp.getNumNota());
+                String parcela = String.valueOf(cp.getParcela());
+                String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
+                String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
+                String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
+                String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+
+                // Desenhar os dados da linha na tabela
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, 10);
+
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(codFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[0]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(nomeFornecedor);
+                xPosition += (timesBold.getStringWidth(titulosTabela[1]) / 1000 * 11) + 90; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(numNota);
+                xPosition += (timesBold.getStringWidth(titulosTabela[2]) / 1000 * 11) - 165; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(parcela);
+                xPosition += (timesBold.getStringWidth(titulosTabela[3]) / 1000 * 11) - 25; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorDuplicata);
+                xPosition += (timesBold.getStringWidth(titulosTabela[4]) / 1000 * 11) - 5; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(valorPago);
+                xPosition += (timesBold.getStringWidth(titulosTabela[5]) / 1000 * 11) - 35; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataVencimento);
+                xPosition += (timesBold.getStringWidth(titulosTabela[6]) / 1000 * 11) - 55; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(dataPagamento);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                
+            }
+
+            fluxoConteudo.close();
+            salvarRelatorioPDF(documentoPDF);        
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o relatório, layout por forma de pagamento", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
     
     private void tituloRelatorio(String titulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
@@ -635,22 +1373,41 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
         
         try{
-            // Desenhar os títulos das colunas na página
-            for (int i = 0; i < titulosTabela.length; i++) {
-                if(i != 0){
-                    switch (i) {
-                        case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 125; // Calcula a posição horizontal para cada título
-                        case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 25; // Calcula a posição horizontal para cada título
-                        case 6 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 20; // Calcula a posição horizontal para cada título
-                        default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+            if(this.rbPadrão.isSelected() || this.rbContaResultado.isSelected() || this.rbFormaPagto.isSelected() || this.rbStatusPagamento.isSelected() || this.rbIgreja.isSelected()){
+                // Desenhar os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 125; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 25; // Calcula a posição horizontal para cada título
+                            case 6 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 20; // Calcula a posição horizontal para cada título
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                        }
                     }
-                }
-                fluxoConteudo.beginText();
-                fluxoConteudo.setFont(timesBold, 11);
-                fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
-                fluxoConteudo.showText(titulosTabela[i]); // Texto do título
-                fluxoConteudo.endText();
-            }   
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                } 
+            }else if(this.rbFornecedor.isSelected()){
+                // Desenhar os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 3 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 125; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 25; // Calcula a posição horizontal para cada título
+                            case 6 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 20; // Calcula a posição horizontal para cada título
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                        }
+                    }
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                }  
+            }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar os títulos da coluna", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
@@ -739,7 +1496,10 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Aqui é onde você pedirá ao usuário o local para salvar o PDF
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Salvar Relatório PDF");
-            fileChooser.setSelectedFile(new File("RelatorioContasPagar.pdf")); // Nome padrão do arquivo
+            
+            String dataAtual = this.conversor.dataAtualString().replace("/", "-");
+            String nomeArquivo = "RelatorioContasPagar-"+dataAtual+".pdf";
+            fileChooser.setSelectedFile(new File(nomeArquivo)); // Nome padrão do arquivo
 
             // Abre a caixa de diálogo para salvar
             int userSelection = fileChooser.showSaveDialog(null);
@@ -753,12 +1513,26 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 if (!caminhoArquivo.toLowerCase().endsWith(".pdf")) {
                     caminhoArquivo += ".pdf";
                 }
-
-                // Salvar o documento no local escolhido
-                documentoPDF.save(caminhoArquivo);
-                JOptionPane.showMessageDialog(null, "Relatório gerado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Verificar se o arquivo já existe
+                File arquivoExistente = new File(caminhoArquivo);
+                if (arquivoExistente.exists()) {
+                    // Exibe uma mensagem perguntando se o usuário deseja substituir o arquivo
+                    int resposta = JOptionPane.showConfirmDialog(null, "O arquivo já existe. Deseja substituir?", "Arquivo já existe", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (resposta == JOptionPane.NO_OPTION) {
+                        JOptionPane.showMessageDialog(null, "Arquivo não salvo Operação finalizada.", "Atenção", JOptionPane.WARNING_MESSAGE);
+                    }else{
+                        // Salvar o documento no local escolhido
+                        documentoPDF.save(caminhoArquivo);
+                        JOptionPane.showMessageDialog(null, "Relatório gerado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }else{
+                    // Salvar o documento no local escolhido
+                    documentoPDF.save(caminhoArquivo);
+                    JOptionPane.showMessageDialog(null, "Relatório gerado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Arquivo não selecionado.", "Atenção", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Caminho não selecionado.", "Atenção", JOptionPane.WARNING_MESSAGE);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
@@ -774,6 +1548,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGerar;
     private javax.swing.JTextField codFornecedor;
+    private javax.swing.JComboBox<String> contaResultado;
     private javax.swing.JFormattedTextField dataFinal;
     private javax.swing.JFormattedTextField dataInicial;
     private javax.swing.ButtonGroup filtrosData;
@@ -783,6 +1558,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -797,6 +1573,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private javax.swing.JRadioButton rbFormaPagto;
     private javax.swing.JRadioButton rbFornecedor;
     private javax.swing.JRadioButton rbIgreja;
+    private javax.swing.JRadioButton rbPadrão;
     private javax.swing.JRadioButton rbPago;
     private javax.swing.JRadioButton rbStatusPagamento;
     private javax.swing.ButtonGroup statusPagamento;
