@@ -5,7 +5,7 @@ import dao.CampanhaDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import ferramentas.Utilitarios;
+import Services.Utilitarios;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;

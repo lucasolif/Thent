@@ -4,7 +4,7 @@ package view.financeiro;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.TransferenciaDepositoDao;
-import ferramentas.Utilitarios;
+import Services.Utilitarios;
 import java.awt.Dimension;
 import java.util.Date;
 import java.util.List;

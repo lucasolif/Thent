@@ -1,15 +1,15 @@
 
 package view.contasPagar;
 
-import ferramentas.StatusCoresContaPagarReceber;
+import Services.StatusCoresContaPagarReceber;
 import dao.ContaCaixaDao;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import ferramentas.PaletaCores;
-import ferramentas.Utilitarios;
+import Services.PaletaCores;
+import Services.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;

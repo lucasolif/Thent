@@ -6,7 +6,7 @@ import dao.EmprestimoLivroDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
-import ferramentas.Utilitarios;
+import Services.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;

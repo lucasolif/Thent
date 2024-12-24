@@ -8,7 +8,7 @@ import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.SubContaResultadoDao;
 import dao.TipoOfertaDao;
-import ferramentas.Utilitarios;
+import Services.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;

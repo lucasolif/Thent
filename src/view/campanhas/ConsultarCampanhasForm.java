@@ -2,8 +2,8 @@
 package view.campanhas;
 
 import dao.CampanhaDao;
-import ferramentas.PaletaCores;
-import ferramentas.Utilitarios;
+import Services.PaletaCores;
+import Services.Utilitarios;
 import interfaces.ConsultaCampanhas;
 import java.awt.Color;
 import java.awt.Component;

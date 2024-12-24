@@ -2,10 +2,10 @@
 package view;
 
 import dao.LoginDao;
-import ferramentas.Utilitarios;
+import Services.Utilitarios;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import ferramentas.CriptografarSenhas;
+import Services.CriptografarSenhas;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;

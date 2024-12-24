@@ -291,9 +291,13 @@ public class Home extends javax.swing.JFrame {
         relatorioFinanceiro.setText("Financeiro");
 
         relatorioExtratoCaixa.setText("Extrato Caixa");
+        relatorioExtratoCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                relatorioExtratoCaixaActionPerformed(evt);
+            }
+        });
         relatorioFinanceiro.add(relatorioExtratoCaixa);
 
-        relatorioContasPagar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         relatorioContasPagar.setText("Contas a Pagar");
         relatorioContasPagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -724,6 +728,10 @@ public class Home extends javax.swing.JFrame {
         relatorioContasPagar.setVisible(true);
         relatorioContasPagar.setPosicao();
     }//GEN-LAST:event_relatorioContasPagarActionPerformed
+
+    private void relatorioExtratoCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioExtratoCaixaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_relatorioExtratoCaixaActionPerformed
   
    
     
