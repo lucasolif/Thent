@@ -33,6 +33,7 @@ import view.dizimosOfertas.ConsultaRegistroDizimoOferta;
 import view.financeiro.MovimentoFinanceiroForm;
 import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.TransferenciaContaForm;
+import view.relatorios.ExtratoCaixa;
 import view.relatorios.RelatorioContasPagarForm;
 
 
@@ -290,6 +291,7 @@ public class Home extends javax.swing.JFrame {
 
         relatorioFinanceiro.setText("Financeiro");
 
+        relatorioExtratoCaixa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         relatorioExtratoCaixa.setText("Extrato Caixa");
         relatorioExtratoCaixa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -730,7 +732,10 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_relatorioContasPagarActionPerformed
 
     private void relatorioExtratoCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioExtratoCaixaActionPerformed
-        // TODO add your handling code here:
+        ExtratoCaixa extratoCaixa = new ExtratoCaixa();
+        this.painelHome.add(extratoCaixa);
+        extratoCaixa.setVisible(true);
+        extratoCaixa.setPosicao();
     }//GEN-LAST:event_relatorioExtratoCaixaActionPerformed
   
    

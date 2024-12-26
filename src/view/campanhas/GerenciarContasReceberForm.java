@@ -795,7 +795,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarCaixa();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixaPagamento.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

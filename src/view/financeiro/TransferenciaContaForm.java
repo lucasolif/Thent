@@ -286,7 +286,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
         DefaultComboBoxModel modelo1 = (DefaultComboBoxModel)contaCaixaEntrada.getModel();
         DefaultComboBoxModel modelo2 = (DefaultComboBoxModel)contaCaixaSaida.getModel();
         

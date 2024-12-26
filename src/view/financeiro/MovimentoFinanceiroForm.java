@@ -767,7 +767,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -778,7 +778,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixaSaldo(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixaSaldoBanco.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

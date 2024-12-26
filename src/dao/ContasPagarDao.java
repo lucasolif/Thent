@@ -144,7 +144,7 @@ public class ContasPagarDao {
             }
             
             // Parâmetro para Cliente
-            if (cpFiltros.getFornecedor() != null) {
+            if (cpFiltros.getFornecedor().getCodigo() != null) {
                 this.stmSelect.setInt(10, cpFiltros.getFornecedor().getCodigo());
                 this.stmSelect.setInt(11, cpFiltros.getFornecedor().getCodigo());
             } else {

@@ -763,7 +763,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarCaixa();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

@@ -12,7 +12,6 @@ import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -26,7 +25,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import java.io.IOException;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import model.SubContaResultado;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -529,26 +527,26 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     
     private void gerarRelatorio(){
         
-        List<ContasPagar> contasPagar = null;
+        List<ContasPagar> listaContasPagar = null;
         
         if(this.rbPadrão.isSelected()){
-            contasPagar = consultarContasPagar("Fornecedor");
-            layoutPadrao(contasPagar);
+            listaContasPagar = consultarContasPagar("Fornecedor");
+            layoutPadrao(listaContasPagar);
         }else if(this.rbFornecedor.isSelected()){
-            contasPagar = consultarContasPagar("Fornecedor");
-            layoutFornecedor(contasPagar);
+            listaContasPagar = consultarContasPagar("Fornecedor");
+            layoutFornecedor(listaContasPagar);
         }else if(this.rbContaResultado.isSelected()){
-            contasPagar = consultarContasPagar("SubContaResultado");
-            layoutContaResultado(contasPagar);
+            listaContasPagar = consultarContasPagar("SubContaResultado");
+            layoutContaResultado(listaContasPagar);
         }else if(this.rbFormaPagto.isSelected()){
-            contasPagar = consultarContasPagar("FormaPagto");
-            layoutFormaPagto(contasPagar);
+            listaContasPagar = consultarContasPagar("FormaPagto");
+            layoutFormaPagto(listaContasPagar);
         }else if(this.rbStatusPagamento.isSelected()){
-            contasPagar = consultarContasPagar("DescricaoStatus");
-            layoutStatusPagamento(contasPagar);
+            listaContasPagar = consultarContasPagar("DescricaoStatus");
+            layoutStatusPagamento(listaContasPagar);
         }else if(this.rbIgreja.isSelected()){
-            contasPagar = consultarContasPagar("Igreja");
-            layoutIgreja(contasPagar);
+            listaContasPagar = consultarContasPagar("Igreja");
+            layoutIgreja(listaContasPagar);
         }
         
     }

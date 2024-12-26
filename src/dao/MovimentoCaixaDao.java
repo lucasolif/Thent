@@ -11,7 +11,9 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.ContaCaixa;
 import model.ContasPagar;
+import model.ContasReceberCampanha;
 import model.FormaPagto;
+import model.Igreja;
 import model.MovimentoCaixa;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
@@ -201,6 +203,115 @@ public class MovimentoCaixaDao {
                 mvCaixa.setRgOferta(rgDizimoOferta);
                 mvCaixa.setTransferecia(transfDepos);
                 mvCaixa.setContaPagar(contaPagar);
+                
+                listaMovimento.add(mvCaixa);            
+            }
+        } catch (SQLException e) {
+            //JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as movimentações financeira", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao consultar as movimentações financeiras: " + e.getMessage(), "Erro SQL", JOptionPane.ERROR_MESSAGE);
+
+        } finally {
+            // Fechando recursos
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return listaMovimento;
+    }
+
+    public List<MovimentoCaixa> consultarMovimentacaoRelatorio(Igreja filtroIgreja, ContaCaixa filtroContaCaixa, Date filtroDataInicial, Date filtroDataFinal, String ordemConsulta, Integer tpMovimento){
+              
+        List<MovimentoCaixa> listaMovimento = new ArrayList<>();
+        
+        String sql = "SELECT "
+            + "(SELECT Nome FROM Pessoas As P WHERE P.Codigo = MC.Pessoa) As NomePessoa, "
+            + "(SELECT Descricao FROM ContasCaixa As CX WHERE CX.Codigo = MC.ContaCaixa) As DescricaoContaCaixa, "
+            + "(SELECT NomeIgreja FROM Igrejas As I WHERE I.Codigo = MC.Igreja) As NomeIgreja, "
+            + "MC.* "
+            + "FROM MovimentoCaixa As MC "
+            + "WHERE (MC.DataMovimento BETWEEN ? AND ?) "
+            + "AND (MC.ContaCaixa = ?) "
+            + "AND (? IS NULL OR MC.Igreja = ?) "
+            + "AND (? IS NULL OR MC.ValorEntrada > ?) "
+            + "AND (? IS NULL OR MC.ValorSaida > ?) "
+            + "ORDER BY MC."+ordemConsulta;  
+        
+        try {    
+             
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.stmSelect = this.conexao.prepareStatement(sql);          
+    
+            this.stmSelect.setDate(1, new java.sql.Date(filtroDataInicial.getTime()));
+            this.stmSelect.setDate(2, new java.sql.Date(filtroDataFinal.getTime()));
+            this.stmSelect.setInt(3, filtroContaCaixa.getCodigo());
+
+            //Parametro da Igreja
+            if (filtroIgreja != null) {
+                this.stmSelect.setInt(4, filtroIgreja.getCodigo());
+                this.stmSelect.setInt(5, filtroIgreja.getCodigo());
+            } else {
+                this.stmSelect.setNull(4, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(5, java.sql.Types.INTEGER);
+            }
+  
+            //Parametro do valor de entrada e saída
+            if (tpMovimento != null) {
+                if(tpMovimento == 1){
+                    this.stmSelect.setDouble(6, 0);
+                    this.stmSelect.setDouble(7, 0);
+                    this.stmSelect.setNull(8, java.sql.Types.DOUBLE);
+                    this.stmSelect.setNull(9, java.sql.Types.DOUBLE);
+                }else if(tpMovimento == 2){
+                    this.stmSelect.setNull(6, java.sql.Types.DOUBLE);
+                    this.stmSelect.setNull(7, java.sql.Types.DOUBLE);
+                    this.stmSelect.setDouble(8, 0);
+                    this.stmSelect.setDouble(9, 0);
+                }
+            } else {
+                this.stmSelect.setNull(6, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(7, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(8, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(9, java.sql.Types.INTEGER);
+            }
+                
+            // Executando a consultarMovimentacao
+            this.rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (this.rs.next()) {               
+                ContaCaixa contaCaixa = new ContaCaixa();
+                MovimentoCaixa mvCaixa = new MovimentoCaixa();
+                Igreja igreja = new Igreja();
+                RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
+                TransferenciaConta transfDepos = new TransferenciaConta();
+                ContasReceberCampanha crCampanha = new ContasReceberCampanha();
+                ContasPagar contaPagar = new ContasPagar();
+                
+                contaCaixa.setNome(this.rs.getString("DescricaoContaCaixa"));
+                contaCaixa.setCodigo(this.rs.getInt("ContaCaixa"));
+                igreja.setNome(this.rs.getString("NomeIgreja"));
+                igreja.setCodigo(this.rs.getInt("Igreja"));
+                rgDizimoOferta.setCodRegistro(this.rs.getInt("RegistroOferta"));
+                transfDepos.setCodigo(this.rs.getInt("TransferenciaDeposito"));
+                contaPagar.setCodigo(this.rs.getInt("RegistroContaPagar"));     
+                crCampanha.setCodigo(this.rs.getInt("RegistroContaReceberCampanha"));   
+                mvCaixa.setValorEntrada(this.rs.getDouble("ValorEntrada"));
+                mvCaixa.setValorSaida(this.rs.getDouble("ValorSaida"));
+                mvCaixa.setComplemento(this.rs.getString("Complemento"));
+                mvCaixa.setCodigo(this.rs.getInt("Codigo"));
+                mvCaixa.setDataMovimento(this.rs.getDate("DataMovimento"));
+                mvCaixa.setDataPagamentoRecebimento(this.rs.getDate("DataPagamentoRecebimento"));
+                mvCaixa.setContaCaixa(contaCaixa);
+                mvCaixa.setRgOferta(rgDizimoOferta);
+                mvCaixa.setTransferecia(transfDepos);
+                mvCaixa.setContaPagar(contaPagar);
+                mvCaixa.setCrCampanha(crCampanha);
+                mvCaixa.setIgreja(igreja);
                 
                 listaMovimento.add(mvCaixa);            
             }

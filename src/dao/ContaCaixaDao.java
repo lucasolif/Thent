@@ -73,7 +73,7 @@ public class ContaCaixaDao {
     }
     
     //Consulta para popular o JComboBox
-    public List<ContaCaixa> consultarCaixa(){
+    public List<ContaCaixa> consultarContaCaixa(){
         String sql = "SELECT * FROM ContasCaixa WHERE Status = 1 ORDER BY Descricao ";  
         List<ContaCaixa> listaCaixas = new ArrayList<>();
  

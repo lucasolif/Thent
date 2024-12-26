@@ -23,6 +23,8 @@ public class Relatorios {
         float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
         float margemEsquerda;
         float margemSuperior;
+        float tamanhoFonteData = 8;
+        float tamanhoFonteTitulo = 18;
         final String dataRelatorio = conversor.dataAtualString();    
         final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
         final PDFont hevelticaBold =  new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD); //Definindo a fonte
@@ -33,25 +35,52 @@ public class Relatorios {
             margemEsquerda = larguraPagina - 130; // 100 pixels da borda direita
             margemSuperior = alturaPagina - 20; // 20 pixels da borda superior
             fluxoConteudo.beginText(); //Inicinado o texto
-            fluxoConteudo.setFont(hevelticaBold, 8); //Fonte e tamanho
+            fluxoConteudo.setFont(hevelticaBold, tamanhoFonteData); //Fonte e tamanho
             fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior); // Posição do texto
             fluxoConteudo.showText("Data Emissão: "); //Texto
-            fluxoConteudo.setFont(heveltica, 8); //Fonte e tamanho
+            fluxoConteudo.setFont(heveltica, tamanhoFonteData); //Fonte e tamanho
             fluxoConteudo.showText(dataRelatorio); //Texto
             fluxoConteudo.endText(); //Finaliza o texto
             
             //Título relatório
-            float larguraTitulo = timesBold.getStringWidth(titulo)/1000 * 14; // Ajuste o tamanho da fonte         
+            float larguraTitulo = timesBold.getStringWidth(titulo)/1000 * tamanhoFonteTitulo; // Ajuste o tamanho da fonte         
             margemEsquerda = (larguraPagina - larguraTitulo) / 2;// Centraliza o texto
             margemSuperior = 760;
             fluxoConteudo.beginText(); //Iniciando a escrita
-            fluxoConteudo.setFont(timesBold, 14); //Definindo a fonte
+            fluxoConteudo.setFont(timesBold, tamanhoFonteTitulo); //Definindo a fonte
             fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior);  // Posição do texto
             fluxoConteudo.showText(titulo);
             fluxoConteudo.endText();                 
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar título", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } 
+    }
+    
+    public void subTituloRelatorio(String SubTitulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
+        
+        float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
+        float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
+        float margemEsquerda;
+        float margemSuperior;
+        float tamanhoFonte = 10;
+        final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont hevelticaBold =  new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD); //Definindo a fonte
+        final PDFont heveltica =  new PDType1Font(Standard14Fonts.FontName.HELVETICA); //Definindo a fonte
+        
+        try {                                 
+            //Título relatório
+            float larguraSubTitulo = timesBold.getStringWidth(SubTitulo)/1000 * tamanhoFonte; // Ajuste o tamanho da fonte         
+            margemEsquerda = (larguraPagina - larguraSubTitulo) / 2;// Centraliza o texto
+            margemSuperior = 740;
+            fluxoConteudo.beginText(); //Iniciando a escrita
+            fluxoConteudo.setFont(timesBold, tamanhoFonte); //Definindo a fonte
+            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior);  // Posição do texto
+            fluxoConteudo.showText(SubTitulo);
+            fluxoConteudo.endText();                 
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o Sub Título", "Atenção", JOptionPane.WARNING_MESSAGE);
         } 
     }
     
@@ -150,4 +179,48 @@ public class Relatorios {
         }
     }
     
+    public void tituloColunaRelatorioContaCaixa (int layout, float yPosition, float xPosition, String[] titulosTabela, PDPageContentStream fluxoConteudo){       
+        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        
+        try{
+            if(layout == 1){
+                // Definir os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 35; // Calcula a posição horizontal para cada título
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 170; // Calcula a posição horizontal para cada título
+                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 50; // Calcula a posição horizontal para cada título
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                        }
+                    }
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                } 
+            }else if(layout == 2){
+                // Desenhar os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 3 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 125; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 25; // Calcula a posição horizontal para cada título
+                            case 6 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 20; // Calcula a posição horizontal para cada título
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                        }
+                    }
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                }  
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar os títulos da coluna", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+    }
 }
