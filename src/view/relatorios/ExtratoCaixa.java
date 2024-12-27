@@ -6,6 +6,7 @@ import Services.Utilitarios;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.ContaCaixa;
+import model.ContasPagar;
 import model.Igreja;
 import model.MovimentoCaixa;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -205,7 +207,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(dataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 0, 0))
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -234,13 +236,11 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                             .addComponent(jLabel4)
                             .addComponent(txData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGerar)
-                        .addGap(0, 0, 0))))
+                        .addComponent(btnGerar))))
         );
 
         pack();
@@ -267,7 +267,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         Integer tpMovimento =  null;
         Date dataInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-        Date dataFinal = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
+        Date dataFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
   
         //Verifica qual o status foi escolhido
         if(this.rbEntrada.isSelected()){
@@ -290,10 +290,10 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
             layoutPadrao(listaMovimentoCaixa);
         }else if(this.rbDataMovimento.isSelected()){
             listaMovimentoCaixa = consultarMovimentoCaixa("DataMovimento");
-            //layoutFornecedor(listaMovimentoCaixa);
+            layoutDataMovimento(listaMovimentoCaixa);
         }else if(this.rbIgreja.isSelected()){
             listaMovimentoCaixa = consultarMovimentoCaixa("Igreja");
-            //layoutContaResultado(listaMovimentoCaixa);
+            layoutIgreja(listaMovimentoCaixa);
         }
         
     }
@@ -321,14 +321,16 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
             nomeIgreja = igrejaSelec.getNome();
         }
         final String subTitulo = "Período de "+dataInicial+" até "+dataFinal+" - CONTA: "+nomeCx+" - "+nomeIgreja; 
+        double totalEntrada = 0;
+        double totalSaida = 0;
+        double saldoAtual = 0;
         
         float yPosition = 700; // Posição vertical inicial para os títulos
         float xPosition = 40; // Posição horizontal inicial para os títulos
         int layout = 1;
         float tamanhaFonte = 10;
-        int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
-        
-        PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)    
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         
         try {         
             // Criar o conteúdo para a página      
@@ -400,13 +402,19 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(igreja);
+                xPosition += 11; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.endText();
 
                 // Descer para a próxima linha
-                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário              
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário  
+                totalEntrada += mv.getValorEntrada();
+                totalSaida += mv.getValorSaida();
             }
-
+            
+            this.funcoesRelatorio.descricaoTotalizadores(totalEntrada,totalSaida,yPosition,xPosition,fluxoConteudo);
+            this.funcoesRelatorio.valoresTotalizadores(totalEntrada,totalSaida,yPosition,xPosition,fluxoConteudo);
+            
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa",documentoPDF);
         } catch (IOException e) {
@@ -425,6 +433,295 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         }
         
     }
+    
+    private void layoutDataMovimento(List<MovimentoCaixa> listaMovimentoCaixa){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        String dataInicial = this.dataInicial.getText();
+        String dataFinal = this.dataFinal.getText();
+        ContaCaixa contaCaixaSelec = (ContaCaixa) this.contaCaixa.getSelectedItem();
+        Date dataMovimento = null;
+        String nomeCx = contaCaixaSelec.getNome();
+        final String titulo = "Extrato de Caixa(Data Movimento)";   
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal+" - CONTA: "+nomeCx; 
+        
+        float yPosition = 700; // Posição vertical inicial para os títulos
+        float xPosition = 40; // Posição horizontal inicial para os títulos
+        int layout = 2;
+        float tamanhaFonteDados = 10;
+        float tamanhaFonteSubTitulo = 12;
+        int limiteCaracteres = 45; // Limite de caracteres (ajuste conforme necessário)
+        
+        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);    
+            
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
+                
+            // Iterar sobre as contas a pagar
+            for (MovimentoCaixa mv : listaMovimentoCaixa) {      
+                //Divisão pelo layout
+                if(dataMovimento == null || dataMovimento.compareTo(mv.getDataMovimento()) != 0){ 
+                    if(dataMovimento == null){
+                        yPosition -= 15; // Pular para a linha abaixo após o título, na primeira listagem
+                    }else{                 
+                        xPosition = 40;
+                        yPosition -= 15; // Pular para a linha abaixo após o título, nas demais listagem
+                    }
+
+                    String data = this.conversor.convertendoDataStringSql((java.sql.Date) mv.getDataMovimento());
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, tamanhaFonteSubTitulo);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText("Data Movimento: "+data);
+                    fluxoConteudo.endText();    
+                    
+                    dataMovimento = mv.getDataMovimento();  
+                    yPosition -= 20;
+                                         
+                    // Definir os títulos das colunas
+                    String[] titulosTabela = {"Descrição", "Entrada", "Saída", "Tipo", "Igreja"};
+                    this.funcoesRelatorio.tituloColunaRelatorioContaCaixa(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
+                    yPosition -= 20; // Pular para a linha abaixo após o título
+
+                }           
+
+                xPosition = 40; // Resetar a posição horizontal a cada nova linha
+                
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                String descricao = mv.getComplemento();
+                if (descricao.length() > limiteCaracteres) {
+                    descricao = descricao.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String entrada = this.conversor.formatarDoubleString(mv.getValorEntrada()).replace(".", ",");
+                String saida = this.conversor.formatarDoubleString(mv.getValorSaida()).replace(".", ",");
+                String igreja = mv.getIgreja().getNome();
+                String tipo = null;
+                if(mv.getCrCampanha().getCodigo() != 0){
+                    tipo = "Campanha";
+                }else if(mv.getContaPagar().getCodigo() != 0){
+                    tipo = "Conta Pagar";
+                }else if(mv.getRgOferta().getCodRegistro() != 0){
+                    tipo = "Oferta/Dízimo";
+                }else{
+                    tipo = "Op Bancária";
+                }
+
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, tamanhaFonteDados);
+                
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(descricao);
+                xPosition += 210; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(entrada);
+                xPosition -= 185; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(saida);
+                xPosition -= 5; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(tipo);
+                xPosition += 20; // Ajusta a posição da próxima coluna
+                
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(igreja);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário                          
+            }
+
+            fluxoConteudo.close();
+            this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa(DataMovimento)",documentoPDF);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        
+    }
+    
+    private void layoutIgreja(List<MovimentoCaixa> listaMovimentoCaixa){
+        
+        // Criar um novo documento PDF
+        final PDDocument documentoPDF = new PDDocument();
+        PDPageContentStream fluxoConteudo = null;
+
+        // Adicionar uma nova página ao documento
+        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+        documentoPDF.addPage(paginaPDF);
+        
+        String dataInicial = this.dataInicial.getText();
+        String dataFinal = this.dataFinal.getText();
+        ContaCaixa contaCaixaSelec = (ContaCaixa) this.contaCaixa.getSelectedItem();
+        Igreja igreja = null;
+        String nomeCx = contaCaixaSelec.getNome();
+        final String titulo = "Extrato de Caixa(Igreja)";   
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal+" - CONTA: "+nomeCx; 
+        
+        float yPosition = 700; // Posição vertical inicial para os títulos
+        float xPosition = 40; // Posição horizontal inicial para os títulos
+        int layout = 3;
+        float tamanhaFonteDados = 10;
+        float tamanhaFonteSubTitulo = 12;
+        int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+        
+        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {         
+            // Criar o conteúdo para a página      
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
+            
+            //Gerando o título do relatório
+            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);    
+            
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
+                
+            // Iterar sobre as contas a pagar
+            for (MovimentoCaixa mv : listaMovimentoCaixa) {      
+                //Divisão pelo layout
+                if(igreja == null || igreja.getCodigo() != mv.getIgreja().getCodigo()){ 
+                    if(igreja == null){
+                        yPosition -= 15; // Pular para a linha abaixo após o título, na primeira listagem
+                    }else{                 
+                        xPosition = 40;
+                        yPosition -= 15; // Pular para a linha abaixo após o título, nas demais listagem
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, tamanhaFonteSubTitulo);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(mv.getIgreja().getNome());
+                    fluxoConteudo.endText();    
+                    
+                    igreja = mv.getIgreja();  
+                    yPosition -= 20;
+                                         
+                    // Definir os títulos das colunas
+                    String[] titulosTabela = {"Pessoa","Data", "Descrição", "Entrada", "Saída", "Tipo"};
+                    this.funcoesRelatorio.tituloColunaRelatorioContaCaixa(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
+                    yPosition -= 20; // Pular para a linha abaixo após o título
+
+                }           
+
+                xPosition = 40; // Resetar a posição horizontal a cada nova linha
+                
+                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                    fluxoConteudo.close();
+                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                    documentoPDF.addPage(novaPagina);
+                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                    yPosition = 750; // Resetar a posição Y para o topo da nova página
+                }
+
+                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                String pessoa = String.valueOf(mv.getPessoa().getCodigo());
+                String data = conversor.convertendoDataStringSql((java.sql.Date) mv.getDataMovimento());
+                String descricao = mv.getComplemento();
+                if (descricao.length() > limiteCaracteres) {
+                    descricao = descricao.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                String entrada = this.conversor.formatarDoubleString(mv.getValorEntrada()).replace(".", ",");
+                String saida = this.conversor.formatarDoubleString(mv.getValorSaida()).replace(".", ",");
+                String tipo = null;
+                if(mv.getCrCampanha().getCodigo() != 0){
+                    tipo = "Campanha";
+                }else if(mv.getContaPagar().getCodigo() != 0){
+                    tipo = "Conta Pagar";
+                }else if(mv.getRgOferta().getCodRegistro() != 0){
+                    tipo = "Oferta/Dízimo";
+                }else{
+                    tipo = "Op Bancária";
+                }
+
+                // Desenhar os dados da linha na tabela
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(times, tamanhaFonteDados);
+                
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(pessoa);
+                xPosition += 5; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(data);
+                xPosition += 10; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(descricao);
+                xPosition += 160; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(entrada);
+                xPosition -= 160; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(saida);
+                xPosition += 3; // Ajusta a posição da próxima coluna
+
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(tipo);
+
+                fluxoConteudo.endText();
+
+                // Descer para a próxima linha
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                
+            }
+
+            fluxoConteudo.close();
+            this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa(Igreja)",documentoPDF);        
+        }catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o relatório, layout por igreja", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } finally {
+            try {
+                if (fluxoConteudo != null) {
+                    fluxoConteudo.close();
+                }
+                if (documentoPDF != null) {
+                    documentoPDF.close();
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    } 
     
     private void carregarIgreja(){
         List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();

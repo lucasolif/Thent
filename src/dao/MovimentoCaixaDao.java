@@ -291,11 +291,13 @@ public class MovimentoCaixaDao {
                 TransferenciaConta transfDepos = new TransferenciaConta();
                 ContasReceberCampanha crCampanha = new ContasReceberCampanha();
                 ContasPagar contaPagar = new ContasPagar();
+                Pessoa pessoa = new Pessoa();
                 
                 contaCaixa.setNome(this.rs.getString("DescricaoContaCaixa"));
                 contaCaixa.setCodigo(this.rs.getInt("ContaCaixa"));
                 igreja.setNome(this.rs.getString("NomeIgreja"));
                 igreja.setCodigo(this.rs.getInt("Igreja"));
+                pessoa.setCodigo(this.rs.getInt("Pessoa"));
                 rgDizimoOferta.setCodRegistro(this.rs.getInt("RegistroOferta"));
                 transfDepos.setCodigo(this.rs.getInt("TransferenciaDeposito"));
                 contaPagar.setCodigo(this.rs.getInt("RegistroContaPagar"));     
@@ -312,6 +314,7 @@ public class MovimentoCaixaDao {
                 mvCaixa.setContaPagar(contaPagar);
                 mvCaixa.setCrCampanha(crCampanha);
                 mvCaixa.setIgreja(igreja);
+                mvCaixa.setPessoa(pessoa);
                 
                 listaMovimento.add(mvCaixa);            
             }

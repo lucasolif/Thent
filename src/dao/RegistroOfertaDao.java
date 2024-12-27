@@ -49,7 +49,7 @@ public class RegistroOfertaDao {
                 psRegistro.setDate(6, (java.sql.Date) rg.getDataOferta());
                 psRegistro.setInt(7, 1);
                 psRegistro.setInt(8, rg.getIgreja().getCodigo());
-                psRegistro.setInt(9, 2);
+                psRegistro.setInt(9, 1);
                 psRegistro.setInt(10, rg.getContaCaixa().getCodigo());
                 psRegistro.executeUpdate();
 
@@ -61,6 +61,7 @@ public class RegistroOfertaDao {
 
                     // Inserir dados na segunda tabela usando a chave primária da primeira tabela
                     String sql2 = "INSERT INTO MovimentoCaixa (Pessoa,RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
+                    String complemento = rg.getOfertante().getNome().toUpperCase()+" | "+rg.getTpOferta().getNome().toUpperCase();
                     psMovimento = conexao.prepareStatement(sql2);
                     
                     psMovimento.setInt(1, rg.getOfertante().getCodigo());
@@ -68,10 +69,10 @@ public class RegistroOfertaDao {
                     psMovimento.setDouble(3, rg.getValorOferta());
                     psMovimento.setDouble(4, 0);
                     psMovimento.setInt(5, rg.getContaCaixa().getCodigo());
-                    psMovimento.setString(6, rg.getTpOferta().getNome().toUpperCase());
+                    psMovimento.setString(6, complemento);
                     psMovimento.setInt(7, rg.getFormaPagto().getCodigo());
                     psMovimento.setInt(8, rg.getIgreja().getCodigo());
-                    psMovimento.setInt(9, 2);
+                    psMovimento.setInt(9, 1);
                     psMovimento.setDate(10, (java.sql.Date) rg.getDataOferta());
                     
                     psMovimento.execute();
@@ -90,7 +91,7 @@ public class RegistroOfertaDao {
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
-            JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar os registros de dízimos e ofertas", "Erro 007", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar os registros de dízimos e ofertas - "+ex.getMessage(), "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             //Fechar os recursos abertos
             try{

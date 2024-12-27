@@ -66,7 +66,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         jPanel2 = new javax.swing.JPanel();
         codOfertante = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        btnBuscar = new javax.swing.JButton();
         dataOferta = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -101,15 +100,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
 
         jLabel2.setText("Ofertante");
 
-        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
-        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
-
         try {
             dataOferta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -140,6 +130,12 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         valorOferta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
 
         jLabel8.setText("Conta Resultado*");
+
+        nomeOfertante.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeOfertanteKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -178,17 +174,16 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(codOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nomeOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar)))
-                        .addGap(18, 18, 18)
+                                .addComponent(nomeOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -200,7 +195,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                         .addGap(4, 4, 4)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(codOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscar)
                             .addComponent(nomeOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -352,11 +346,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        buscarOfertante();
-        carregarResultadoConsultaFornecedor();
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         inserirRegistroTabela();
         codOfertante.setText("");
@@ -375,6 +364,16 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     private void iconLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconLimparActionPerformed
         limparFormulario();
     }//GEN-LAST:event_iconLimparActionPerformed
+
+    private void nomeOfertanteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeOfertanteKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            buscarOfertante();
+            abrirTelaEscolhaOfertante();
+        }else if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codOfertante.setText("");
+            this.nomeOfertante.setText("");
+        }
+    }//GEN-LAST:event_nomeOfertanteKeyPressed
 
     private void limparFormulario(){
         codOfertante.setText("");
@@ -446,7 +445,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         this.listaOfertante = this.pessoaDao.consultarCadastroAtivoPessoa(textoBusca); //Lista recebe a busca retornada do banco
     }
         
-    private void carregarResultadoConsultaFornecedor(){
+    private void abrirTelaEscolhaOfertante(){
         TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaOfertante);
         resultConsultParticipante.setPessoaSelecionada(this);
         resultConsultParticipante.setLocationRelativeTo(this);
@@ -551,7 +550,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JTextField codOfertante;
     private javax.swing.JComboBox<String> contaCaixa;

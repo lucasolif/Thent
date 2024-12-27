@@ -23,7 +23,7 @@ public class Relatorios {
         float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
         float margemEsquerda;
         float margemSuperior;
-        float tamanhoFonteData = 8;
+        float tamanhoFonteData = 10;
         float tamanhoFonteTitulo = 18;
         final String dataRelatorio = conversor.dataAtualString();    
         final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
@@ -202,14 +202,14 @@ public class Relatorios {
                     fluxoConteudo.endText();
                 } 
             }else if(layout == 2){
-                // Desenhar os títulos das colunas na página
+                // Definir os títulos das colunas na página
                 for (int i = 0; i < titulosTabela.length; i++) {
                     if(i != 0){
                         switch (i) {
-                            case 3 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 125; // Calcula a posição horizontal para cada título
-                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 25; // Calcula a posição horizontal para cada título
-                            case 6 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 20; // Calcula a posição horizontal para cada título
-                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 200; // Calcula a posição horizontal para cada título
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título
+                            case 3 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título                         
+                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 60; // Calcula a posição horizontal para cada título
                         }
                     }
                     fluxoConteudo.beginText();
@@ -217,10 +217,80 @@ public class Relatorios {
                     fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
                     fluxoConteudo.showText(titulosTabela[i]); // Texto do título
                     fluxoConteudo.endText();
-                }  
+                } 
+            }else if(layout == 3){
+                // Definir os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 35; // Calcula a posição horizontal para cada título
+                            case 3 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 165; // Calcula a posição horizontal para cada título
+                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 20; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título
+                        }
+                    }
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                } 
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar os títulos da coluna", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
     }
+
+    public void descricaoTotalizadores (double totalEntrada, double totalSaida, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        float tamanhoFonte = 10;
+
+        fluxoConteudo.beginText();
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);
+
+        //Total de entrada
+        fluxoConteudo.newLineAtOffset(xPosition+320, yPosition-30);
+        fluxoConteudo.showText("TOTAL DE ENTRADA:");
+        yPosition -= 555; // Ajusta a posição da próxima linha
+
+        //Total de Saída
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.showText("TOTAL DE SAÍDA:");
+
+        //Saldo da conta caixa
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.showText("SALDO ATUAL:");
+
+        fluxoConteudo.endText();
+        
+    }
+    
+    public void valoresTotalizadores (double totalEntrada, double totalSaida, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        float tamanhoFonte = 11;
+
+        fluxoConteudo.beginText();
+        fluxoConteudo.setFont(times, tamanhoFonte);
+
+        //Total de entrada
+        fluxoConteudo.newLineAtOffset(xPosition+440, yPosition-30);
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalEntrada).replace(".", ","));
+        yPosition -= 555; // Ajusta a posição da próxima linha
+
+        //Total de Saída
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalSaida).replace(".", ","));
+
+        //Saldo da conta caixa
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalEntrada-totalSaida).replace(".", ","));
+
+        fluxoConteudo.endText();
+        
+    }
+    
+    
 }
