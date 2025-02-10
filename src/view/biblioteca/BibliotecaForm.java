@@ -20,6 +20,7 @@ import model.Biblioteca;
 import model.Editora;
 import model.Livro;
 import model.RegistroBiblioteca;
+import model.UsuarioLogado;
 
 
 public class BibliotecaForm extends javax.swing.JInternalFrame {
@@ -32,7 +33,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private List<RegistroBiblioteca> listaRgBilioteca = new ArrayList();
 
-    public BibliotecaForm() {
+    public BibliotecaForm(UsuarioLogado usuarioLogado) {
         initComponents();
     }
     

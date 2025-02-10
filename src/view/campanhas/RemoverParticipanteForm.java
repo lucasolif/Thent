@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import model.Campanha;
 import model.ParticipanteCampanha;
 import model.Pessoa;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -25,7 +26,7 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
     private ParticipanteCampanha participanteSelec = null;
     private Pessoa pessoaSelec = null;
 
-    public RemoverParticipanteForm() {
+    public RemoverParticipanteForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }

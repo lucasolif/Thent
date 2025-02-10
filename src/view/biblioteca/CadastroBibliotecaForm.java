@@ -12,6 +12,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.SwingUtilities;
 import model.Biblioteca;
 import model.Igreja;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasBibliotecas;
 
 public class CadastroBibliotecaForm extends javax.swing.JInternalFrame implements ConsultaBibliotecas{
@@ -21,7 +22,7 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame implement
     private List<Biblioteca> listaBiblioteca = null;
     private Biblioteca bibliotecaSelec = null;
  
-    public CadastroBibliotecaForm() {
+    public CadastroBibliotecaForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
         carregarIgrejas();

@@ -135,7 +135,7 @@ public class LoginThent extends javax.swing.JFrame {
             loginSelec = loginDao.consultarLogin(loginInformado);
             
             if(loginSelec.getUsuario() != null && verificarSenha()){
-                Home telaInicial = new Home();
+                Home telaInicial = new Home(loginSelec);
                 telaInicial.setVisible(true); //Abrindo a tela do sistema
                 dispose();
                 loginDao.adicionarLogin(loginSelec.getCodUsuario()); //Adicionando o login na tabela de Login

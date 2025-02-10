@@ -10,6 +10,7 @@ public class Entidades {
     private Date dataCadastro;
     private Integer codigo;
     private Integer status;
+    private Igreja igreja;
 
     public Entidades(String descricao, Date dataCadastro) {
         this.nome = descricao;
@@ -63,6 +64,15 @@ public class Entidades {
     public void setCodigo(Integer codigo) {
         this.codigo = codigo;
     }
+
+    public Igreja getIgreja() {
+        return igreja;
+    }
+
+    public void setIgreja(Igreja igreja) {
+        this.igreja = igreja;
+    }
+    
 
     @Override
     public int hashCode() {

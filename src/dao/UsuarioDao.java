@@ -15,6 +15,7 @@ import model.Usuario;
 
 public class UsuarioDao {
     
+    private final LogsDao logsDao = new LogsDao();
     Connection conexao = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -39,6 +40,7 @@ public class UsuarioDao {
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE
                 JOptionPane.showMessageDialog(null, "Já existe um usuário com esse Login", "Erro 001", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -49,7 +51,8 @@ public class UsuarioDao {
             try{
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
-            } catch (SQLException ex) {;
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -73,6 +76,7 @@ public class UsuarioDao {
             JOptionPane.showMessageDialog(null, "Usuário "+usuario.getLogin()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o usuário "+usuario.getLogin(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -80,10 +84,40 @@ public class UsuarioDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
     } 
+    
+    public void alterarSenha(Usuario usuario){
+             
+        try{            
+            conexao = Conexao.getDataSource().getConnection();
+            
+            String sql= "UPDATE Usuarios SET HashSenha = ?, SaltSenha = ?" + " WHERE Codigo=?";
+            ps = conexao.prepareStatement(sql);
+            ps.setString(1,usuario.getHashSenha());
+            ps.setString(2,usuario.getSaltSenha());
+            ps.setInt(3,usuario.getCodigo());
+            ps.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Senha alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a senha "+usuario.getLogin(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }   
+    }
     
     public List<Usuario> consultar(String usuario){
         List<Usuario> listaUsuarios = new ArrayList<>();
@@ -134,6 +168,7 @@ public class UsuarioDao {
                 listaUsuarios.add(user);
             }          
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -142,6 +177,7 @@ public class UsuarioDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -162,6 +198,7 @@ public class UsuarioDao {
             JOptionPane.showMessageDialog(null, "Usuário excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -169,10 +206,9 @@ public class UsuarioDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }
-
 }

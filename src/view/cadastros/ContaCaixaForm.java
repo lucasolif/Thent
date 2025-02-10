@@ -2,6 +2,7 @@
 package view.cadastros;
 
 import dao.ContaCaixaDao;
+import dao.IgrejaDao;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -11,6 +12,9 @@ import javax.swing.SwingUtilities;
 import model.ContaCaixa;
 import view.carregamentoConsultas.TelaConsultaContaCaixa;
 import interfaces.ConsultaContaCaixa;
+import javax.swing.DefaultComboBoxModel;
+import model.Igreja;
+import model.UsuarioLogado;
 
 
 public class ContaCaixaForm extends javax.swing.JInternalFrame implements ConsultaContaCaixa{
@@ -18,8 +22,9 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private ContaCaixa contaCaixaSelec;
     private List<ContaCaixa> listaContaCaixa = null;
+    private final IgrejaDao igrejaDao = new IgrejaDao();
 
-    public ContaCaixaForm() {
+    public ContaCaixaForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }
@@ -40,6 +45,8 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
         btnBuscar = new javax.swing.JButton();
         descricaoContaCaixa = new javax.swing.JTextField();
         cbAtivo = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        igreja = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setIconifiable(true);
@@ -101,6 +108,8 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
 
         cbAtivo.setText("Ativo");
 
+        jLabel3.setText("Igreja");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,20 +130,24 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                                 .addComponent(descricaoContaCaixa)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbAtivo))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(campoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar)
-                        .addGap(0, 31, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(iconExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvar)))
+                        .addComponent(btnSalvar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(campoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBuscar))
+                            .addComponent(jLabel3))
+                        .addGap(0, 31, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -145,7 +158,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                     .addComponent(campoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar)
                     .addComponent(jLabel2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
@@ -157,12 +170,15 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(descricaoContaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbAtivo))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(iconExcluir, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLimpar)
+                    .addComponent(iconExcluir)
+                    .addComponent(btnSalvar)
+                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,21 +218,33 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     
     private void formInicial(){
         this.campoBusca.setText("");
+        this.igreja.setEnabled(true);
         this.descricaoContaCaixa.setText("");
         this.descricaoContaCaixa.requestFocusInWindow();
         this.codContaCaixa.setText("");
         this.cbAtivo.setSelected(true);
         this.cbAtivo.setEnabled(false);
         this.contaCaixaSelec = null;
+        carregarIgreja();    
     }
     
     private void formAlteracao(){
         this.cbAtivo.setEnabled(true);
+        this.igreja.setEnabled(false);
     }
     
     private void consultarContaCaixa(){        
         String textoBusca = this.campoBusca.getText(); // Texto digitado na busca       
         this.listaContaCaixa = this.contaCaixaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+    }
+    
+    private void carregarIgreja(){
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
+        igreja.removeAllElements();
+        for(Igreja igre : listaIgrejas){
+            igreja.addElement(igre);
+        }
     }
     
     private void carregarResultadoConsultaContaCaixa(){
@@ -229,6 +257,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     private void carregarContaCaixaEscolhida(ContaCaixa contaCaixa){
         this.codContaCaixa.setText(String.valueOf(contaCaixa.getCodigo()));
         this.descricaoContaCaixa.setText(contaCaixa.getNome());  
+        this.igreja.setSelectedItem(contaCaixa.getIgreja());
         if(contaCaixa.getStatus() == 1){
             this.cbAtivo.setSelected(true);
         }else{
@@ -244,9 +273,11 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
             if(this.descricaoContaCaixa.getText().isEmpty()){
                 JOptionPane.showMessageDialog(null, "Para cadastrar uma conta caixa, informe a descrição", "Atenção", JOptionPane.WARNING_MESSAGE);
             }else{
-                ContaCaixa contaCaixa = new ContaCaixa();
+                Igreja igreja = (Igreja) this.igreja.getSelectedItem();
+                ContaCaixa contaCaixa = new ContaCaixa();             
                 contaCaixa.setNome(this.descricaoContaCaixa.getText());
                 contaCaixa.setStatus(1);
+                contaCaixa.setIgreja(igreja);         
 
                 this.contaCaixaDao.adicionar(contaCaixa);  
                 formInicial();
@@ -294,8 +325,10 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     private javax.swing.JTextField codContaCaixa;
     private javax.swing.JTextField descricaoContaCaixa;
     private javax.swing.JButton iconExcluir;
+    private javax.swing.JComboBox<String> igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     // End of variables declaration//GEN-END:variables
 

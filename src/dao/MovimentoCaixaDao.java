@@ -19,14 +19,14 @@ import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
 import model.TransferenciaConta;
-
+import model.UsuarioLogado;
 
 
 public class MovimentoCaixaDao {
     
-
     private final ContasPagarDao cpDao = new ContasPagarDao();
     private final CampanhaDao campanhaDao = new CampanhaDao();
+    private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement stmInsert = null;
     private PreparedStatement stmSelect = null;
@@ -206,9 +206,9 @@ public class MovimentoCaixaDao {
                 
                 listaMovimento.add(mvCaixa);            
             }
-        } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as movimentações financeira", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(null, "Erro ao consultar as movimentações financeiras: " + e.getMessage(), "Erro SQL", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao consultar as movimentações financeiras: " + ex.getMessage(), "Erro SQL", JOptionPane.ERROR_MESSAGE);
 
         } finally {
             // Fechando recursos
@@ -216,7 +216,8 @@ public class MovimentoCaixaDao {
                 if (this.rs != null) this.rs.close();
                 if (this.stmSelect != null) this.stmSelect.close();
                 if (this.conexao != null) this.conexao.close();
-            } catch (SQLException e) {
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -318,17 +319,17 @@ public class MovimentoCaixaDao {
                 
                 listaMovimento.add(mvCaixa);            
             }
-        } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as movimentações financeira", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(null, "Erro ao consultar as movimentações financeiras: " + e.getMessage(), "Erro SQL", JOptionPane.ERROR_MESSAGE);
-
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao consultar as movimentações financeiras: ", "Erro SQL", JOptionPane.ERROR_MESSAGE);
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             // Fechando recursos
             try {
                 if (this.rs != null) this.rs.close();
                 if (this.stmSelect != null) this.stmSelect.close();
                 if (this.conexao != null) this.conexao.close();
-            } catch (SQLException e) {
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -336,7 +337,7 @@ public class MovimentoCaixaDao {
         return listaMovimento;
     }
 
-    public void movimentarContasPagar (List<MovimentoCaixa> mvContaPagar){
+    public void movimentarContasPagar (List<MovimentoCaixa> mvContaPagar, UsuarioLogado usuarioLogado){
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -354,12 +355,13 @@ public class MovimentoCaixaDao {
                 this.stmInsert.setString(6, mv.getComplemento());
                 this.stmInsert.setInt(7, mv.getFormaPagto().getCodigo());
                 this.stmInsert.setInt(8, mv.getContaPagar().getIgreja().getCodigo());
-                this.stmInsert.setInt(9, 1);
+                this.stmInsert.setInt(9, usuarioLogado.getCodUsuario());
                 this.stmInsert.setDate(10, (java.sql.Date) mv.getDataPagamentoRecebimento());               
                 this.stmInsert.executeUpdate();
                 
                 this.rs = this.stmInsert.getGeneratedKeys();
                 
+                //Se os dados foram inseridos na tabela MovimentoCaixa, o contas a pagar é atualizado
                 if(this.rs.next()){
                     this.cpDao.alterarStatusContaPagar(mv.getContaPagar(), mv.getDataPagamentoRecebimento());
                 }else{
@@ -369,11 +371,13 @@ public class MovimentoCaixaDao {
             this.conexao.commit();
             JOptionPane.showMessageDialog(null, "Conta(s) efetivada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             //Se ocorrer um erro, fazer rollback da transação
             if(this.conexao != null){
                 try{
                     this.conexao.rollback();
                 }catch(SQLException e){
+                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -385,12 +389,13 @@ public class MovimentoCaixaDao {
                 if(this.stmInsert != null) this.stmInsert.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
     
-    public void movimentarContasReceberCampanha (MovimentoCaixa CrCampanha){
+    public void movimentarContasReceberCampanha (MovimentoCaixa CrCampanha, UsuarioLogado usuarioLogado){
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -407,7 +412,7 @@ public class MovimentoCaixaDao {
             this.stmInsert.setString(6, CrCampanha.getComplemento());
             this.stmInsert.setInt(7, CrCampanha.getCrCampanha().getFormaPagto().getCodigo());
             this.stmInsert.setInt(8, CrCampanha.getCrCampanha().getIgreja().getCodigo());
-            this.stmInsert.setInt(9, CrCampanha.getUsuarioCadastro().getCodigo());
+            this.stmInsert.setInt(9, usuarioLogado.getCodUsuario());
             this.stmInsert.setDate(10, (java.sql.Date) CrCampanha.getDataPagamentoRecebimento());
             this.stmInsert.executeUpdate();
             
@@ -421,11 +426,13 @@ public class MovimentoCaixaDao {
             this.conexao.commit();
             JOptionPane.showMessageDialog(null, "Conta(s) baixada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             //Se ocorrer um erro, fazer rollback da transação
             if(this.conexao != null){
                 try{
                     this.conexao.rollback();
                 }catch(SQLException e){
+                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -436,6 +443,7 @@ public class MovimentoCaixaDao {
                 if(this.stmInsert != null) this.stmInsert.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -465,9 +473,9 @@ public class MovimentoCaixaDao {
                 mvCaixa.setValorEntrada(this.rs.getDouble("ValorEntrada"));
                 mvCaixa.setValorSaida(this.rs.getDouble("ValorSaida"));
             }
-        } catch (SQLException e) {
-            //JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as movimentações financeira", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            JOptionPane.showMessageDialog(null, "Erro ao consultar o saldo dos caixas: " + e.getMessage(), "Erro SQL", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao consultar o saldo dos caixas: ", "Erro SQL", JOptionPane.ERROR_MESSAGE);
 
         } finally {
             // Fechando recursos
@@ -475,7 +483,8 @@ public class MovimentoCaixaDao {
                 if (this.rs != null) this.rs.close();
                 if (this.stmSelect != null) this.stmSelect.close();
                 if (this.conexao != null) this.conexao.close();
-            } catch (SQLException e) {
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -498,15 +507,119 @@ public class MovimentoCaixaDao {
             JOptionPane.showMessageDialog(null, "Movimentação excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);           
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a movimentação. Verifique se a movimentação é referente ao contas a pagar. ", "Erro 014", JOptionPane.ERROR_MESSAGE);
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
         }finally{
             // Fechar recursos
             try{
                 if (this.stmDelete != null) this.stmDelete.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    //Busca o saldo do mês informado. Desde o primeiro dia até o último dia do mês
+    public double consultarSaldoMesInformado(Integer mesFiltro, Integer anoFiltro, ContaCaixa contaCaixa){
+        
+        double saldoAnterior = 0;
+        
+        String sql = "SELECT (SUM(ValorEntrada) - SUM(ValorSaida)) AS SaldoAnterior " +
+             "FROM MovimentoCaixa " +
+             "WHERE MONTH(DataPagamentoRecebimento) = ? " +
+             "AND YEAR(DataPagamentoRecebimento) = ? " +
+             "AND ContaCaixa = ?";
+          
+        try {                
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.stmSelect = this.conexao.prepareStatement(sql);  
+              
+            this.stmSelect.setInt(1, mesFiltro);
+            this.stmSelect.setInt(2, anoFiltro);
+            this.stmSelect.setInt(3, contaCaixa.getCodigo());
+    
+            // Executando a consultarMovimentacao
+            this.rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (this.rs.next()) {               
+                saldoAnterior = this.rs.getDouble("SaldoAnterior");
+            }
+        } catch (SQLException ex) {  
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao consultar o saldo anterior.", "Erro SQL", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Fechando recursos
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return saldoAnterior;
+    }
+    
+    //Consulta que será utilizada no relatório
+    public List<MovimentoCaixa> consultarMovimentacaoContasPagar(Integer mesFiltro, Integer anoFiltro, ContaCaixa contaCaixa){
+        
+        List<MovimentoCaixa> listaMovimento = new ArrayList<>();
+        
+        String sql = "SELECT " +
+            "CP.Descricao AS DescricaoContaPagar, " +           
+            "SUM(MC.ValorSaida) AS ValorSaida " +
+            "FROM MovimentoCaixa AS MC " +
+            "INNER JOIN ContasPagar CP ON CP.Codigo = MC.RegistroContaPagar " +
+            "WHERE MONTH(MC.DataPagamentoRecebimento) = ? " +
+            "AND YEAR(MC.DataPagamentoRecebimento) = ? " +
+            "AND MC.ContaCaixa = ? " +
+            "AND MC.RegistroContaPagar IS NOT NULL "+
+            "AND MC.ValorSaida > 0 " +
+            "GROUP BY CP.Descricao";
+         
+        try {                
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.stmSelect = this.conexao.prepareStatement(sql);  
+              
+            this.stmSelect.setInt(1, mesFiltro);
+            this.stmSelect.setInt(2, anoFiltro);
+            this.stmSelect.setInt(3, contaCaixa.getCodigo());
+    
+            // Executando a consultarMovimentacao
+            this.rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (this.rs.next()) {   
+                MovimentoCaixa mvCaixa = new MovimentoCaixa();
+                ContasPagar contasPagar = new ContasPagar();
+                contasPagar.setDescricaoConta(this.rs.getString("DescricaoContaPagar"));
+                mvCaixa.setValorSaida(this.rs.getDouble("ValorSaida"));
+                mvCaixa.setContaPagar(contasPagar);
+                
+                listaMovimento.add(mvCaixa);
+            }
+        } catch (SQLException ex) {       
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao as saidas do caixa.", "Erro SQL", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Fechando recursos
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return listaMovimento;
+
     }
 
 }

@@ -10,7 +10,7 @@ public class TransferenciaConta {
     private ContaCaixa cxSaida, cxEntrada,cxSaidaEntrada;
     private double valorEntradaSaida;
     private Pessoa pessoa;
-
+    private Integer dpTesourariaGeral;
 
     public TransferenciaConta() {
     }
@@ -31,8 +31,15 @@ public class TransferenciaConta {
         this.pessoa = pessoa;
 
     }
-    
 
+    public Integer getDpTesourariaGeral() {
+        return dpTesourariaGeral;
+    }
+
+    public void setDpTesourariaGeral(Integer dpTesourariaGeral) {
+        this.dpTesourariaGeral = dpTesourariaGeral;
+    }
+    
     public Integer getCodigo() {
         return codigo;
     }

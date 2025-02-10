@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import model.Campanha;
 import model.ParticipanteCampanha;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasCampanhas;
 
 
@@ -32,7 +33,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
     private List<Campanha> listaCampanhas = null;
     private Campanha campanhaSelec = null;
 
-    public ConsultarCampanhasForm() {
+    public ConsultarCampanhasForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }

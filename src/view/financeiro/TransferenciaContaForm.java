@@ -6,6 +6,8 @@ import dao.IgrejaDao;
 import dao.TransferenciaDepositoDao;
 import Services.Utilitarios;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -16,10 +18,12 @@ import model.MovimentoCaixa;
 import model.Pessoa;
 import model.TransferenciaConta;
 import model.Usuario;
+import model.UsuarioLogado;
 
 
 public class TransferenciaContaForm extends javax.swing.JInternalFrame {
 
+    private UsuarioLogado usuarioLogado;
     Pessoa pessoa = new Pessoa();
     Usuario usuario = new Usuario();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
@@ -27,11 +31,10 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     private final TransferenciaDepositoDao transfDepositoDao = new TransferenciaDepositoDao();
     private final Utilitarios conversor = new Utilitarios();
     
-    public TransferenciaContaForm() {
+    public TransferenciaContaForm(UsuarioLogado usuarioLogado) {
         initComponents();
-        carregarContaCaixa();
-        carregarIgrejas();
-        dataOperacao.setText(conversor.dataAtualString());
+        formInicial();
+        this.usuarioLogado = usuarioLogado;
     }
     
     public void setPosicao() {
@@ -44,46 +47,33 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         tipoTransferencia = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        contaCaixaEntrada = new javax.swing.JComboBox<>();
-        contaCaixaSaida = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        rbTransferencia = new javax.swing.JRadioButton();
-        rbDeposito = new javax.swing.JRadioButton();
-        jLabel1 = new javax.swing.JLabel();
+        tipoDepositoTesouraria = new javax.swing.ButtonGroup();
         btnConfirmar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         valor = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
         igreja = new javax.swing.JComboBox<>();
+        contaCaixaEntrada = new javax.swing.JComboBox<>();
         rbSaida = new javax.swing.JRadioButton();
+        contaCaixaSaida = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         dataOperacao = new javax.swing.JFormattedTextField();
+        rbTransferencia = new javax.swing.JRadioButton();
+        rbDeposito = new javax.swing.JRadioButton();
+        dpTesourariaGeral = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        complemento = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        rbDepositoDizimo = new javax.swing.JRadioButton();
+        rbDepositoOferta = new javax.swing.JRadioButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Transferência de Contas");
-        setPreferredSize(new java.awt.Dimension(500, 214));
-
-        jLabel2.setText("Conta Caixa Entrada");
-
-        tipoTransferencia.add(rbTransferencia);
-        rbTransferencia.setText("Transferência");
-        rbTransferencia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbTransferenciaActionPerformed(evt);
-            }
-        });
-
-        tipoTransferencia.add(rbDeposito);
-        rbDeposito.setText("Depósito");
-        rbDeposito.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDepositoActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Conta Caixa Saída");
+        setPreferredSize(new java.awt.Dimension(510, 260));
 
         btnConfirmar.setBackground(new java.awt.Color(0, 204, 0));
         btnConfirmar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -101,7 +91,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         jLabel4.setText("Igreja/Campo");
 
         tipoTransferencia.add(rbSaida);
-        rbSaida.setText("Saída");
+        rbSaida.setText("Saque");
         rbSaida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbSaidaActionPerformed(evt);
@@ -110,102 +100,174 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Data Operação");
 
+        jLabel2.setText("Conta Caixa Entrada");
+
         try {
             dataOperacao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(contaCaixaSaida, 0, 181, Short.MAX_VALUE)
-                            .addComponent(igreja, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(contaCaixaEntrada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(dataOperacao, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(12, 12, 12))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(120, 120, 120)
-                                .addComponent(jLabel5))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(valor, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(rbTransferencia)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rbDeposito)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rbSaida))
-                            .addComponent(jLabel1))
-                        .addContainerGap(110, Short.MAX_VALUE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rbTransferencia)
-                    .addComponent(rbDeposito)
-                    .addComponent(valor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rbSaida))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(contaCaixaSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contaCaixaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConfirmar)
-                    .addComponent(dataOperacao))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
+        tipoTransferencia.add(rbTransferencia);
+        rbTransferencia.setText("Transferência");
+        rbTransferencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbTransferenciaActionPerformed(evt);
+            }
+        });
+
+        tipoTransferencia.add(rbDeposito);
+        rbDeposito.setText("Depósito");
+        rbDeposito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbDepositoActionPerformed(evt);
+            }
+        });
+
+        dpTesourariaGeral.setText("Deposito Tesouraria Geral");
+        dpTesourariaGeral.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                dpTesourariaGeralMousePressed(evt);
+            }
+        });
+
+        jLabel1.setText("Conta Caixa Saída");
+
+        jLabel6.setText("Complemento");
+
+        jLabel7.setText("Tipo Operação");
+
+        tipoDepositoTesouraria.add(rbDepositoDizimo);
+        rbDepositoDizimo.setForeground(new java.awt.Color(204, 0, 0));
+        rbDepositoDizimo.setText("Deposito Dizimo");
+
+        tipoDepositoTesouraria.add(rbDepositoOferta);
+        rbDepositoOferta.setForeground(new java.awt.Color(204, 0, 0));
+        rbDepositoOferta.setText("Deposito Oferta");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setText("Tipo Deposito Tesouraria");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(contaCaixaSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(valor)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataOperacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rbTransferencia)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rbDeposito)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rbSaida))
+                            .addComponent(jLabel7))))
+                .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(contaCaixaEntrada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rbDepositoDizimo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rbDepositoOferta))
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dpTesourariaGeral)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(complemento)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(valor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dataOperacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rbTransferencia)
+                            .addComponent(rbDeposito)
+                            .addComponent(rbSaida))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(contaCaixaSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(contaCaixaEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(complemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dpTesourariaGeral))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConfirmar)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rbDepositoDizimo)
+                            .addComponent(rbDepositoOferta))
+                        .addGap(15, 15, 15))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        efetuarTransferencia();
-        limparFormulario();
+        efetuarOperacaoBancaria();
+        formInicial();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void rbDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDepositoActionPerformed
@@ -229,8 +291,14 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
        }
     }//GEN-LAST:event_rbTransferenciaActionPerformed
 
-    private void efetuarTransferencia(){
-        String complemento = null;
+    private void dpTesourariaGeralMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dpTesourariaGeralMousePressed
+        gerenciarCheckBoxRadioButtons();
+    }//GEN-LAST:event_dpTesourariaGeralMousePressed
+
+    private void efetuarOperacaoBancaria(){
+        
+        Integer dpTesouraria = 0;
+        String complemento = this.complemento.getText();
         ContaCaixa cxSaida = (ContaCaixa) contaCaixaSaida.getSelectedItem();
         ContaCaixa cxEntrada = (ContaCaixa) contaCaixaEntrada.getSelectedItem();
         double valor = Double.parseDouble(this.valor.getText().replace(",", "."));
@@ -238,42 +306,50 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         this.pessoa.setCodigo(1);
         this.usuario.setCodigo(1);
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
+
+       //Verifica se a movimentação é referente ao deposito da tesouraria geral
+        if(this.dpTesourariaGeral.isSelected()){
+            dpTesouraria = 1;
+        }    
         
-        
-        TransferenciaConta transf = new TransferenciaConta(cxSaida, cxEntrada, valor, pessoa);
         MovimentoCaixa mvCaixa = new MovimentoCaixa();
+        TransferenciaConta transf = new TransferenciaConta();
+        transf.setCxSaida(cxSaida);
+        transf.setCxEntrada(cxEntrada);
+        transf.setValorEntradaSaida(valor);
+        transf.setPessoa(pessoa);
+        transf.setDpTesourariaGeral(dpTesouraria);    
         mvCaixa.setComplemento(complemento);
         mvCaixa.setDataPagamentoRecebimento(dataOp);
         mvCaixa.setUsuarioCadastro(usuario);
         mvCaixa.setIgreja(igreja);
         mvCaixa.setTransferecia(transf);
-        
+        mvCaixa.setComplemento(complemento); 
             
-        if(!rbTransferencia.isSelected() && !rbDeposito.isSelected() && !rbSaida.isSelected() || valor <= 0){
-            JOptionPane.showMessageDialog(null, "Selecione a operação", "Atenção", JOptionPane.WARNING_MESSAGE);
-        }else if(rbTransferencia.isSelected()){          
-            complemento = "TRANSFERÊNCIA | "+cxSaida.getNome().toUpperCase()+" -  "+cxEntrada.getNome().toUpperCase();
-            mvCaixa.setComplemento(complemento);       
-            transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 1);
-            
-        }else if(rbDeposito.isSelected()){   
-            
-            complemento = "DEPÓSITO | "+cxEntrada.getNome().toUpperCase();
-            mvCaixa.setComplemento(complemento);          
-            transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 2);
-            
-        }else{
-            
-            complemento = "SAQUE | "+cxSaida.getNome().toUpperCase();
-            mvCaixa.setComplemento(complemento);
-            transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 3);
-            
+        if(!rbTransferencia.isSelected() && !rbDeposito.isSelected() && !rbSaida.isSelected() || valor <= 0 || this.complemento.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Preecha os campos corretamente", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }else if(rbTransferencia.isSelected()){                     
+            transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 1, this.usuarioLogado);     
+        }else if(rbDeposito.isSelected()){             
+            transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 2, this.usuarioLogado);          
+        }else{         
+            transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 3, this.usuarioLogado);         
         }
     }
     
-    private void limparFormulario(){
-        valor.setText("");
-        tipoTransferencia.clearSelection();   
+    private void formInicial(){
+        this.valor.setText("");
+        this.rbTransferencia.setSelected(true);  
+        this.dpTesourariaGeral.setSelected(false);
+        this.complemento.setText("");
+        this.dataOperacao.setText(conversor.dataAtualString());
+        this.tipoDepositoTesouraria.clearSelection();
+        this.rbDepositoDizimo.setEnabled(false);
+        this.rbDepositoOferta.setEnabled(false);
+        this.complemento.setEditable(true);
+        carregarContaCaixa();
+        carregarIgrejas();
+        
     }
     
     private void carregarIgrejas(){
@@ -299,22 +375,77 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         }
         
     }
+    
+    private void gerenciarCheckBoxRadioButtons(){
+        // Adicionando listener para o JCheckBox
+        this.dpTesourariaGeral.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                boolean isSelected = e.getStateChange() == ItemEvent.SELECTED; 
+                
+                // Habilita ou desabilita os RadioButtons dependendo do estado do CheckBox            
+                rbDepositoDizimo.setEnabled(isSelected);
+                rbDepositoOferta.setEnabled(isSelected);
+                rbDepositoDizimo.setFocusable(isSelected);
+                rbDepositoOferta.setFocusable(isSelected);
+                
+                // Se o CheckBox for desmarcado, limpa o JTextField
+                if (!isSelected) {
+                    complemento.setText("");
+                    tipoDepositoTesouraria.clearSelection(); //Limpa os RadioButtons selecionados, ao demarcar o CheckBox
+                    complemento.setEditable(true);
+                }
+                       
+            }
+        });
+        
+        // Verifiquei se o Radio Button foi selecionado
+        rbDepositoDizimo.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (rbDepositoDizimo.isSelected()) {
+                    complemento.setText("Dizimo - Deposito Tesouraria Geral");
+                    complemento.setEditable(false);
+                }
+            }
+        });
+        
+        // Verifiquei se o Radio Button foi selecionado
+        rbDepositoOferta.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (rbDepositoOferta.isSelected()) {
+                    complemento.setText("Oferta - Deposito Tesouraria Geral");
+                    complemento.setEditable(false);
+                }
+            }
+        });
+    }
+    
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmar;
+    private javax.swing.JTextField complemento;
     private javax.swing.JComboBox<String> contaCaixaEntrada;
     private javax.swing.JComboBox<String> contaCaixaSaida;
     private javax.swing.JFormattedTextField dataOperacao;
+    private javax.swing.JCheckBox dpTesourariaGeral;
     private javax.swing.JComboBox<String> igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JRadioButton rbDeposito;
+    private javax.swing.JRadioButton rbDepositoDizimo;
+    private javax.swing.JRadioButton rbDepositoOferta;
     private javax.swing.JRadioButton rbSaida;
     private javax.swing.JRadioButton rbTransferencia;
+    private javax.swing.ButtonGroup tipoDepositoTesouraria;
     private javax.swing.ButtonGroup tipoTransferencia;
     private javax.swing.JFormattedTextField valor;
     // End of variables declaration//GEN-END:variables

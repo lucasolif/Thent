@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.FormaPagto;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultaFormaPagto;
 
 public class FormaPagtoForm extends javax.swing.JInternalFrame implements ConsultaFormaPagto{
@@ -17,7 +18,7 @@ public class FormaPagtoForm extends javax.swing.JInternalFrame implements Consul
     private FormaPagto formaPagtoSelec;
     private List<FormaPagto> listaFormaPagto;
 
-    public FormaPagtoForm() {
+    public FormaPagtoForm(UsuarioLogado usuarioLogado) {
         initComponents();
     }
 

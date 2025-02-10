@@ -20,6 +20,7 @@ import model.Pessoa;
 
 public class CampanhaDao {
     
+    private final LogsDao logsDao = new LogsDao();
     private final Utilitarios converteData = new Utilitarios();
     private Connection conexao = null;
     private PreparedStatement insertStmt = null;
@@ -63,15 +64,17 @@ public class CampanhaDao {
 
                 }
                 JOptionPane.showMessageDialog(null, "Campanha cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);             
-            }else{
+            }else{        
                 JOptionPane.showMessageDialog(null, "Erro ao tentar recuperar a chave da campanha", "Erro 007", JOptionPane.ERROR_MESSAGE);
             }
             this.conexao.commit();
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             if(this.conexao != null){
                 try{
                     this.conexao.rollback();
                 }catch(SQLException e){
+                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -82,6 +85,7 @@ public class CampanhaDao {
                 if(this.insertStmt != null) this.insertStmt.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -101,11 +105,13 @@ public class CampanhaDao {
                 this.insertStmt.execute();
             }         
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar os participantes", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if(this.insertStmt != null) this.insertStmt.close();
             }catch(SQLException ex){
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -130,12 +136,16 @@ public class CampanhaDao {
                 gerarContasReceberAvulsaCampanha(participantes, codCampanha);
             }
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar os participantes", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if(this.insertStmt != null) this.insertStmt.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -165,11 +175,15 @@ public class CampanhaDao {
             }
             JOptionPane.showMessageDialog(null, "Contas a receber gerada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao gerar as contas a receber", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if(this.insertStmt != null) this.insertStmt.close();
             }catch(SQLException ex){
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -200,12 +214,16 @@ public class CampanhaDao {
             
             JOptionPane.showMessageDialog(null, "Contas a receber gerada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());            
             JOptionPane.showMessageDialog(null, "Erro ao gerar as contas a receber", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if(this.insertStmt != null) this.insertStmt.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -229,13 +247,16 @@ public class CampanhaDao {
             }   
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar verficar a existencia do participante na campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ex.getMessage());
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
         }finally{
             try{
                 if (this.rs != null) this.rs.close();
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }       
@@ -261,12 +282,16 @@ public class CampanhaDao {
                 JOptionPane.showMessageDialog(null, "Não foi encontrado o participante na campanha selecionada", "Erro", JOptionPane.ERROR_MESSAGE);
             }   
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
             if(this.conexao != null){
                 try{
                     if(!this.conexao.isClosed()){
                         this.conexao.rollback();
                     }              
                 }catch(SQLException e){
+                    //Grava o log de erro na tabela de LogsErro
+                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());  
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -277,6 +302,8 @@ public class CampanhaDao {
                 if (this.updateStmt != null) this.updateStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }      
@@ -433,15 +460,18 @@ public class CampanhaDao {
                 listaCrCampanha.add(contaReceber);
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a receber da campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ e.getMessage());
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
                 if (this.selectStmt  != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
-            } catch (SQLException e) {
+            } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -487,15 +517,18 @@ public class CampanhaDao {
                 listaCrCampanha.add(contaReceber);
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a receber da campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ e.getMessage());
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
                 if (this.selectStmt  != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
-            } catch (SQLException e) {
+            } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -546,6 +579,8 @@ public class CampanhaDao {
                 listaParticipanteCampanha.add(participante);
             }         
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os participantes e os valores", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -554,6 +589,8 @@ public class CampanhaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -595,13 +632,16 @@ public class CampanhaDao {
             
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar atualizar o contas a receber", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("erro: "+ex.getMessage());
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
         }finally{
             try{
                 if (this.rs != null) this.rs.close();
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -635,6 +675,8 @@ public class CampanhaDao {
                 listaValores.add(qtdParcelasPaga);  
             }         
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar valores totais da campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -643,6 +685,8 @@ public class CampanhaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -702,7 +746,8 @@ public class CampanhaDao {
             }         
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ex.getMessage());
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
         }finally{
             // Fechar recursos
             try{
@@ -710,6 +755,8 @@ public class CampanhaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -748,6 +795,8 @@ public class CampanhaDao {
             }
           
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as campanhas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -756,6 +805,8 @@ public class CampanhaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -809,6 +860,8 @@ public class CampanhaDao {
             this.selectStmt.execute();
           
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro consultar Campanha", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -817,6 +870,8 @@ public class CampanhaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -854,6 +909,8 @@ public class CampanhaDao {
             }
           
         }catch(SQLException ex){
+            //Grava o log de erro na tabela de LogsErro
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as campanhas ativas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -862,6 +919,8 @@ public class CampanhaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                //Grava o log de erro na tabela de LogsErro
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

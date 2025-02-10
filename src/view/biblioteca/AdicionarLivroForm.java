@@ -9,10 +9,12 @@ import javax.swing.DefaultComboBoxModel;
 import model.Biblioteca;
 import model.Livro;
 import model.RegistroBiblioteca;
+import model.UsuarioLogado;
 
 
 public class AdicionarLivroForm extends javax.swing.JDialog {
 
+    private UsuarioLogado usuarioLogado;
     private final LivroDao livroDao = new LivroDao();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
@@ -22,6 +24,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
         initComponents();
         carregarLivros();
         carregarBibliotecas();
+        this.usuarioLogado = usuarioLogado;
     }
 
 
@@ -143,7 +146,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
         rgBiblioteca.setBiblioteca(biblioteca);
         rgBiblioteca.setQtdLivro(qtd);
         
-        this.rgBibliotecaDao.adicionarLivroBiblioteca(rgBiblioteca);
+        this.rgBibliotecaDao.adicionarLivroBiblioteca(rgBiblioteca, this.usuarioLogado);
     }
 
 

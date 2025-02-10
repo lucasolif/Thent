@@ -91,6 +91,11 @@
                     </MenuItem>
                   </SubComponents>
                 </Menu>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Fun&#xe7;&#xf5;es Usu&#xe1;rio"/>
+                  </Properties>
+                </MenuItem>
               </SubComponents>
             </Menu>
           </SubComponents>
@@ -199,9 +204,6 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="relatorioExtratoCaixa">
                   <Properties>
-                    <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                      <KeyStroke key="F1"/>
-                    </Property>
                     <Property name="text" type="java.lang.String" value="Extrato Caixa"/>
                   </Properties>
                   <Events>
@@ -221,11 +223,6 @@
                     <Property name="text" type="java.lang.String" value="Contas a Receber"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="relatorioCaixaContaResultado">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Caixa Conta Resultado"/>
-                  </Properties>
-                </MenuItem>
               </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="relatorioDizimoOferta">
@@ -237,13 +234,26 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Movimento Dizimo/Oferta"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="relatorioMovimentoDizimoOfertaActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="relatorioEspecifico">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Espec&#xed;fico"/>
+                <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o de Contas"/>
               </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="relatorioPrestacaoContaMensal">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o Conta Mensal"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="relatorioPrestacaoContaMensalActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
             </Menu>
           </SubComponents>
         </Menu>
@@ -401,9 +411,6 @@
             </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="consultarCampanhas">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="F12"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Consultar Campanhas"/>
               </Properties>
               <Events>
@@ -428,6 +435,14 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="alterarSenhaActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="acessosUsuarios">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Acessos Usu&#xe1;rio"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="acessosUsuariosActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>

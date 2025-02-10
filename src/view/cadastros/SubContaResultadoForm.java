@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.ContaResultado;
 import model.SubContaResultado;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultaSubContaResultado;
 
 
@@ -23,7 +24,7 @@ public class SubContaResultadoForm extends javax.swing.JInternalFrame implements
     private SubContaResultado subContaResultadoSelec = null;
     private List<SubContaResultado> listaSubContaResultado = null;
 
-    public SubContaResultadoForm() {
+    public SubContaResultadoForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }

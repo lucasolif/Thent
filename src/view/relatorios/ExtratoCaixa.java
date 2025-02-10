@@ -6,7 +6,6 @@ import Services.Utilitarios;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -15,9 +14,9 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import model.ContaCaixa;
-import model.ContasPagar;
 import model.Igreja;
 import model.MovimentoCaixa;
+import model.UsuarioLogado;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -34,7 +33,8 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();
 
-    public ExtratoCaixa() {
+
+    public ExtratoCaixa(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }
@@ -194,20 +194,17 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(142, 142, 142)
-                                        .addComponent(jLabel2))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txData)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(dataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(dataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, 0))
+                                .addComponent(jLabel1)
+                                .addGap(142, 142, 142)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txData)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -308,6 +305,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
         documentoPDF.addPage(paginaPDF);
         
+        //Definição das variáveis
         String dataInicial = this.dataInicial.getText();
         String dataFinal = this.dataFinal.getText();
         ContaCaixa contaCaixaSelec = (ContaCaixa) this.contaCaixa.getSelectedItem();
@@ -323,22 +321,21 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         final String subTitulo = "Período de "+dataInicial+" até "+dataFinal+" - CONTA: "+nomeCx+" - "+nomeIgreja; 
         double totalEntrada = 0;
         double totalSaida = 0;
-        double saldoAtual = 0;
+        double saldo = 0;
         
         float yPosition = 700; // Posição vertical inicial para os títulos
         float xPosition = 40; // Posição horizontal inicial para os títulos
         int layout = 1;
         float tamanhaFonte = 10;
+        float tamanhoFonteTitulo = 18;
         int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)    
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);   
-            
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);             
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
             
@@ -412,8 +409,10 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 totalSaida += mv.getValorSaida();
             }
             
-            this.funcoesRelatorio.descricaoTotalizadores(totalEntrada,totalSaida,yPosition,xPosition,fluxoConteudo);
-            this.funcoesRelatorio.valoresTotalizadores(totalEntrada,totalSaida,yPosition,xPosition,fluxoConteudo);
+            yPosition -= 50;
+            xPosition += 330;
+            saldo = totalEntrada - totalSaida;
+            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo,yPosition,xPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa",documentoPDF);
@@ -451,44 +450,49 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         String nomeCx = contaCaixaSelec.getNome();
         final String titulo = "Extrato de Caixa(Data Movimento)";   
         final String subTitulo = "Período de "+dataInicial+" até "+dataFinal+" - CONTA: "+nomeCx; 
+        double entrada = 0;
+        double saida = 0;
+        double totalEntrada = 0;
+        double totalSaida = 0;
+        double saldo = 0;
         
         float yPosition = 700; // Posição vertical inicial para os títulos
         float xPosition = 40; // Posição horizontal inicial para os títulos
         int layout = 2;
-        float tamanhaFonteDados = 10;
-        float tamanhaFonteSubTitulo = 12;
+        float tamanhaFonteDados = 12;
+        float tamanhoFonteTitulo = 18;
         int limiteCaracteres = 45; // Limite de caracteres (ajuste conforme necessário)
         
-        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
         PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);              
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);    
-            
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);               
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
                 
             // Iterar sobre as contas a pagar
             for (MovimentoCaixa mv : listaMovimentoCaixa) {      
                 //Divisão pelo layout
-                if(dataMovimento == null || dataMovimento.compareTo(mv.getDataMovimento()) != 0){ 
+                if(dataMovimento == null || dataMovimento.compareTo(mv.getDataMovimento()) != 0){               
                     if(dataMovimento == null){
                         yPosition -= 15; // Pular para a linha abaixo após o título, na primeira listagem
-                    }else{                 
+                    }else{   
+                        //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 360;
+                        yPosition -= 10;
+                        //funcoesRelatorio.descricaoDoisTotalizadores("Entrada", "Saída", yPosition,xPosition,fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ", entrada,saida,yPosition,xPosition,fluxoConteudo);
                         xPosition = 40;
-                        yPosition -= 15; // Pular para a linha abaixo após o título, nas demais listagem
+                        yPosition -= 40; // Pular para a linha abaixo após o título, nas demais listagem
                     }
 
+                    //Definir titulos dos agrupameto do layout
                     String data = this.conversor.convertendoDataStringSql((java.sql.Date) mv.getDataMovimento());
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, tamanhaFonteSubTitulo);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText("Data Movimento: "+data);
-                    fluxoConteudo.endText();    
+                    String tituloLayout = "Data Movimento: "+data;
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo);
                     
                     dataMovimento = mv.getDataMovimento();  
                     yPosition -= 20;
@@ -497,7 +501,10 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                     String[] titulosTabela = {"Descrição", "Entrada", "Saída", "Tipo", "Igreja"};
                     this.funcoesRelatorio.tituloColunaRelatorioContaCaixa(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
                     yPosition -= 20; // Pular para a linha abaixo após o título
-
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de data
+                    entrada = 0;
+                    saida = 0;
                 }           
 
                 xPosition = 40; // Resetar a posição horizontal a cada nova linha
@@ -515,10 +522,11 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 if (descricao.length() > limiteCaracteres) {
                     descricao = descricao.substring(0, limiteCaracteres); // Truncar e adicionar "..."
                 }
-                String entrada = this.conversor.formatarDoubleString(mv.getValorEntrada()).replace(".", ",");
-                String saida = this.conversor.formatarDoubleString(mv.getValorSaida()).replace(".", ",");
+                String valorEntrada = this.conversor.formatarDoubleString(mv.getValorEntrada()).replace(".", ",");
+                String valorSaida = this.conversor.formatarDoubleString(mv.getValorSaida()).replace(".", ",");
                 String igreja = mv.getIgreja().getNome();
                 String tipo = null;
+                //Definindo o tipo de movimentação que será mostrado no relatório
                 if(mv.getCrCampanha().getCodigo() != 0){
                     tipo = "Campanha";
                 }else if(mv.getContaPagar().getCodigo() != 0){
@@ -537,11 +545,11 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 xPosition += 210; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(entrada);
+                fluxoConteudo.showText(valorEntrada);
                 xPosition -= 185; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(saida);
+                fluxoConteudo.showText(valorSaida);
                 xPosition -= 5; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
@@ -554,8 +562,19 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 fluxoConteudo.endText();
 
                 // Descer para a próxima linha
-                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário                          
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário     
+                entrada += mv.getValorEntrada();
+                saida += mv.getValorSaida();
+                totalEntrada += mv.getValorEntrada();
+                totalSaida += mv.getValorSaida();
             }
+            saldo = totalEntrada - totalSaida;
+            xPosition += 360;
+            yPosition -= 10;
+            funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida, yPosition, xPosition, fluxoConteudo);
+            xPosition -= 30;
+            yPosition -= 50;
+            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo, yPosition, xPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa(DataMovimento)",documentoPDF);
@@ -572,8 +591,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
             }
-        }
-        
+        }       
     }
     
     private void layoutIgreja(List<MovimentoCaixa> listaMovimentoCaixa){
@@ -593,15 +611,19 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         String nomeCx = contaCaixaSelec.getNome();
         final String titulo = "Extrato de Caixa(Igreja)";   
         final String subTitulo = "Período de "+dataInicial+" até "+dataFinal+" - CONTA: "+nomeCx; 
+        double entrada = 0;
+        double saida = 0;
+        double totalEntrada = 0;
+        double totalSaida = 0;
+        double saldo = 0;
         
         float yPosition = 700; // Posição vertical inicial para os títulos
         float xPosition = 40; // Posição horizontal inicial para os títulos
         int layout = 3;
+        float tamanhoFonteTitulo = 18;
         float tamanhaFonteDados = 10;
-        float tamanhaFonteSubTitulo = 12;
         int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
         
-        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
         PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         
         try {         
@@ -609,7 +631,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);    
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);    
             
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
@@ -620,16 +642,19 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 if(igreja == null || igreja.getCodigo() != mv.getIgreja().getCodigo()){ 
                     if(igreja == null){
                         yPosition -= 15; // Pular para a linha abaixo após o título, na primeira listagem
-                    }else{                 
+                    }else{          
+                        //Define o posicinamento vertical e horizontal do próximo conteúdo com nase na posição anterior
+                        xPosition += 360;
+                        yPosition -= 10;
+                        
+                        funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida,yPosition,xPosition,fluxoConteudo);
                         xPosition = 40;
-                        yPosition -= 15; // Pular para a linha abaixo após o título, nas demais listagem
+                        yPosition -= 40; // Pular para a linha abaixo após o título, nas demais listagem
                     }
-
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, tamanhaFonteSubTitulo);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText(mv.getIgreja().getNome());
-                    fluxoConteudo.endText();    
+                    
+                    //Titulo das divisões do layout
+                    String tituloLayout = mv.getIgreja().getNome();
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo);
                     
                     igreja = mv.getIgreja();  
                     yPosition -= 20;
@@ -638,7 +663,10 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                     String[] titulosTabela = {"Pessoa","Data", "Descrição", "Entrada", "Saída", "Tipo"};
                     this.funcoesRelatorio.tituloColunaRelatorioContaCaixa(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
                     yPosition -= 20; // Pular para a linha abaixo após o título
-
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de data
+                    entrada = 0;
+                    saida = 0;
                 }           
 
                 xPosition = 40; // Resetar a posição horizontal a cada nova linha
@@ -658,8 +686,8 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 if (descricao.length() > limiteCaracteres) {
                     descricao = descricao.substring(0, limiteCaracteres); // Truncar e adicionar "..."
                 }
-                String entrada = this.conversor.formatarDoubleString(mv.getValorEntrada()).replace(".", ",");
-                String saida = this.conversor.formatarDoubleString(mv.getValorSaida()).replace(".", ",");
+                String valorEntrada = this.conversor.formatarDoubleString(mv.getValorEntrada()).replace(".", ",");
+                String valorSaida = this.conversor.formatarDoubleString(mv.getValorSaida()).replace(".", ",");
                 String tipo = null;
                 if(mv.getCrCampanha().getCodigo() != 0){
                     tipo = "Campanha";
@@ -688,11 +716,11 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 xPosition += 160; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(entrada);
+                fluxoConteudo.showText(valorEntrada);
                 xPosition -= 160; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(saida);
+                fluxoConteudo.showText(valorSaida);
                 xPosition += 3; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
@@ -701,9 +729,23 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 fluxoConteudo.endText();
 
                 // Descer para a próxima linha
-                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
-                
+                yPosition -= 20;//Defini a posição vertical da próxima informação, com base na posição da informação anterior   
+                entrada += mv.getValorEntrada();
+                saida += mv.getValorSaida();
+                totalEntrada += mv.getValorEntrada();
+                totalSaida += mv.getValorSaida();
             }
+            saldo = totalEntrada - totalSaida;
+            //Defini a posição vertical e horizonta da próxima informação, com base na posição da informação anterior
+            xPosition += 360;
+            yPosition -= 10;
+            
+            funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida,yPosition,xPosition,fluxoConteudo);            //funcoesRelatorio.descricaoTresTotalizadores(textoTotalEntrada, textoTotalSaida, textoSaldoAtual, yPosition,xPosition,fluxoConteudo);
+            //Defini a posição vertical e horizonta da próxima informação, com base na posição da informação anterior
+            xPosition -= 30;
+            yPosition -= 50;
+            
+            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo,yPosition,xPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa(Igreja)",documentoPDF);        

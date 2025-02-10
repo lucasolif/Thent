@@ -15,6 +15,7 @@ import model.Igreja;
 
 public class BibliotecaDao {
     
+    private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement selectStmt = null;
     private PreparedStatement insertStmt = null;
@@ -34,6 +35,7 @@ public class BibliotecaDao {
             
             JOptionPane.showMessageDialog(null, "Biblioteca cadastrada com sucesso", "Erro 001", JOptionPane.INFORMATION_MESSAGE);
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -41,6 +43,7 @@ public class BibliotecaDao {
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -89,6 +92,7 @@ public class BibliotecaDao {
             this.selectStmt.execute();
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar a biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -97,6 +101,7 @@ public class BibliotecaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -119,6 +124,7 @@ public class BibliotecaDao {
             
             JOptionPane.showMessageDialog(null, "Biblioteca alterada com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a biblioteca", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }finally{
             //Fechar os recursos abertos
@@ -127,6 +133,7 @@ public class BibliotecaDao {
                 if(this.updateStmt != null) this.updateStmt.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -151,6 +158,7 @@ public class BibliotecaDao {
                 listaBiblioteca.add(biblioteca);
             }
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro a(s) biblioteca(s)", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{
@@ -160,6 +168,7 @@ public class BibliotecaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

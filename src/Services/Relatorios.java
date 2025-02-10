@@ -17,38 +17,37 @@ public class Relatorios {
     
     private final Utilitarios conversor = new Utilitarios();
     
-    public void tituloRelatorio(String titulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
+    //Função para gerar o título do relatório
+    public void tituloRelatorio(float tmnFonte, String titulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
         
         float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
         float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
-        float margemEsquerda;
-        float margemSuperior;
-        float tamanhoFonteData = 10;
-        float tamanhoFonteTitulo = 18;
+        float xPosition;
+        float yPosition;
+        float tamanhoFonteData = 11;
         final String dataRelatorio = conversor.dataAtualString();    
         final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
-        final PDFont hevelticaBold =  new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD); //Definindo a fonte
-        final PDFont heveltica =  new PDType1Font(Standard14Fonts.FontName.HELVETICA); //Definindo a fonte
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         
         try {                     
             //Data da emissão do relatório
-            margemEsquerda = larguraPagina - 130; // 100 pixels da borda direita
-            margemSuperior = alturaPagina - 20; // 20 pixels da borda superior
+            xPosition = larguraPagina - 150; // 100 pixels da borda direita
+            yPosition = alturaPagina - 20; // 20 pixels da borda superior
             fluxoConteudo.beginText(); //Inicinado o texto
-            fluxoConteudo.setFont(hevelticaBold, tamanhoFonteData); //Fonte e tamanho
-            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior); // Posição do texto
+            fluxoConteudo.setFont(timesBold, tamanhoFonteData); //Fonte e tamanho
+            fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do texto
             fluxoConteudo.showText("Data Emissão: "); //Texto
-            fluxoConteudo.setFont(heveltica, tamanhoFonteData); //Fonte e tamanho
+            fluxoConteudo.setFont(times, tamanhoFonteData); //Fonte e tamanho
             fluxoConteudo.showText(dataRelatorio); //Texto
             fluxoConteudo.endText(); //Finaliza o texto
             
             //Título relatório
-            float larguraTitulo = timesBold.getStringWidth(titulo)/1000 * tamanhoFonteTitulo; // Ajuste o tamanho da fonte         
-            margemEsquerda = (larguraPagina - larguraTitulo) / 2;// Centraliza o texto
-            margemSuperior = 760;
+            float larguraTitulo = timesBold.getStringWidth(titulo)/1000 * tmnFonte; // Ajuste o tamanho da fonte         
+            xPosition = (larguraPagina - larguraTitulo) / 2;// Centraliza o texto
+            yPosition = 760;
             fluxoConteudo.beginText(); //Iniciando a escrita
-            fluxoConteudo.setFont(timesBold, tamanhoFonteTitulo); //Definindo a fonte
-            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior);  // Posição do texto
+            fluxoConteudo.setFont(timesBold, tmnFonte); //Definindo a fonte
+            fluxoConteudo.newLineAtOffset(xPosition, yPosition);  // Posição do texto
             fluxoConteudo.showText(titulo);
             fluxoConteudo.endText();                 
 
@@ -57,13 +56,14 @@ public class Relatorios {
         } 
     }
     
+    //Função para gerar o subtitulo do relatório
     public void subTituloRelatorio(String SubTitulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
         
         float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
         float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
-        float margemEsquerda;
-        float margemSuperior;
-        float tamanhoFonte = 10;
+        float xPosition;
+        float yPosition;
+        float tamanhoFonte = 11;
         final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
         final PDFont hevelticaBold =  new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD); //Definindo a fonte
         final PDFont heveltica =  new PDType1Font(Standard14Fonts.FontName.HELVETICA); //Definindo a fonte
@@ -71,11 +71,11 @@ public class Relatorios {
         try {                                 
             //Título relatório
             float larguraSubTitulo = timesBold.getStringWidth(SubTitulo)/1000 * tamanhoFonte; // Ajuste o tamanho da fonte         
-            margemEsquerda = (larguraPagina - larguraSubTitulo) / 2;// Centraliza o texto
-            margemSuperior = 740;
+            xPosition = (larguraPagina - larguraSubTitulo) / 2;// Centraliza o texto
+            yPosition = 740;
             fluxoConteudo.beginText(); //Iniciando a escrita
             fluxoConteudo.setFont(timesBold, tamanhoFonte); //Definindo a fonte
-            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior);  // Posição do texto
+            fluxoConteudo.newLineAtOffset(xPosition, yPosition);  // Posição do texto
             fluxoConteudo.showText(SubTitulo);
             fluxoConteudo.endText();                 
 
@@ -84,6 +84,7 @@ public class Relatorios {
         } 
     }
     
+    //Função para abrir a tela do local de salvamento do relatório
     public void salvarRelatorioPDF(String nome, PDDocument documentoPDF){
 
         // Configuração do conteúdo
@@ -93,7 +94,7 @@ public class Relatorios {
             fileChooser.setDialogTitle("Salvar Relatório PDF");
             
             String dataAtual = this.conversor.dataAtualString().replace("/", "-");
-            String nomeArquivo = nome+"-"+dataAtual+".pdf";
+            String nomeArquivo = nome+" "+dataAtual+".pdf";
             fileChooser.setSelectedFile(new File(nomeArquivo)); // Nome padrão do arquivo
 
             // Abre a caixa de diálogo para salvar
@@ -181,6 +182,7 @@ public class Relatorios {
     
     public void tituloColunaRelatorioContaCaixa (int layout, float yPosition, float xPosition, String[] titulosTabela, PDPageContentStream fluxoConteudo){       
         PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        final float tamanhoFonte = 12;
         
         try{
             if(layout == 1){
@@ -196,7 +198,7 @@ public class Relatorios {
                         }
                     }
                     fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.setFont(timesBold, tamanhoFonte);
                     fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
                     fluxoConteudo.showText(titulosTabela[i]); // Texto do título
                     fluxoConteudo.endText();
@@ -213,7 +215,7 @@ public class Relatorios {
                         }
                     }
                     fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.setFont(timesBold, tamanhoFonte);
                     fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
                     fluxoConteudo.showText(titulosTabela[i]); // Texto do título
                     fluxoConteudo.endText();
@@ -231,7 +233,37 @@ public class Relatorios {
                         }
                     }
                     fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 11);
+                    fluxoConteudo.setFont(timesBold, tamanhoFonte);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                } 
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar os títulos da coluna", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void tituloColunaRelatorioRgDizimoOferta (int layout, float yPosition, float xPosition, String[] titulosTabela, PDPageContentStream fluxoConteudo){       
+        final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        final float tamanhoFonte = 11;
+        
+        try{
+            if(layout == 1 || layout == 2 || layout == 3){
+                // Definir os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 70; // Calcula a posição horizontal para cada título
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 15; // Calcula a posição horizontal para cada título
+                            case 3 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 15; // Calcula a posição horizontal para cada título
+                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 100; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 25; // Calcula a posição horizontal para cada título
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                        }
+                    }
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, tamanhoFonte);
                     fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
                     fluxoConteudo.showText(titulosTabela[i]); // Texto do título
                     fluxoConteudo.endText();
@@ -242,55 +274,160 @@ public class Relatorios {
         }
     }
 
-    public void descricaoTotalizadores (double totalEntrada, double totalSaida, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
-        
+    public void tituloColunaRelatorioPrestacaoContaMensal (float yPosition, float xPosition, String[] titulosTabela, PDPageContentStream fluxoConteudo){       
         PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
-        float tamanhoFonte = 10;
-
-        fluxoConteudo.beginText();
-        fluxoConteudo.setFont(timesBold, tamanhoFonte);
-
-        //Total de entrada
-        fluxoConteudo.newLineAtOffset(xPosition+320, yPosition-30);
-        fluxoConteudo.showText("TOTAL DE ENTRADA:");
-        yPosition -= 555; // Ajusta a posição da próxima linha
-
-        //Total de Saída
-        fluxoConteudo.newLineAtOffset(0, yPosition);
-        fluxoConteudo.showText("TOTAL DE SAÍDA:");
-
-        //Saldo da conta caixa
-        fluxoConteudo.newLineAtOffset(0, yPosition);
-        fluxoConteudo.showText("SALDO ATUAL:");
-
-        fluxoConteudo.endText();
         
+        try{
+            // Definir os títulos das colunas na página
+            for (int i = 0; i < titulosTabela.length; i++) {
+                if(i != 0){
+                    xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 340; // Calcula a posição horizontal para cada título
+                }
+                
+                fluxoConteudo.beginText();
+                fluxoConteudo.setFont(timesBold, 12);
+                fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                fluxoConteudo.endText();
+            }
+             
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar os títulos da coluna", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
     }
     
-    public void valoresTotalizadores (double totalEntrada, double totalSaida, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    //Titulo layout centralizado
+    public void tituloLayoutCentralizado(String SubTitulo, float yPosition, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
         
-        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
-        float tamanhoFonte = 11;
+        float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
+        float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
+        float margemEsquerda;
+        float margemSuperior = yPosition;
+        float tamanhoFonte = 12;
+        final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont hevelticaBold =  new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD); //Definindo a fonte
+        final PDFont heveltica =  new PDType1Font(Standard14Fonts.FontName.HELVETICA); //Definindo a fonte
+        
+        try {                                 
+            //Título relatório
+            float larguraSubTitulo = timesBold.getStringWidth(SubTitulo)/1000 * tamanhoFonte; // Ajuste o tamanho da fonte         
+            margemEsquerda = (larguraPagina - larguraSubTitulo) / 2;// Centraliza o texto
+            //margemSuperior = 700;
+            fluxoConteudo.beginText(); //Iniciando a escrita
+            fluxoConteudo.setFont(timesBold, tamanhoFonte); //Definindo a fonte
+            fluxoConteudo.newLineAtOffset(margemEsquerda, margemSuperior);  // Posição do texto
+            fluxoConteudo.showText(SubTitulo);
+            fluxoConteudo.endText();                 
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o Sub Título", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } 
+    }
+    
+    //Titulos das separações das informações do relatório
+    public void tituloLayoutEsquerda(String titulo, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        
+        fluxoConteudo.beginText();
+        fluxoConteudo.setFont(timesBold, 12);
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        fluxoConteudo.showText(titulo);
+        fluxoConteudo.endText();    
+    }
+    
+    //Função para gerar apenas um totalizador
+    public void umTotalizador(String descricao, double total, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        // Definindo a fonte normal e negrito
+        final PDFont times = new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); // Fonte normal
+        final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
+        final float tamanhoFonte = 12;
 
         fluxoConteudo.beginText();
         fluxoConteudo.setFont(times, tamanhoFonte);
 
-        //Total de entrada
-        fluxoConteudo.newLineAtOffset(xPosition+440, yPosition-30);
-        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalEntrada).replace(".", ","));
-        yPosition -= 555; // Ajusta a posição da próxima linha
+        // Total de entrada com a descrição em negrito
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        
+        // Aplicando a fonte negrito para a descrição
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);
+        fluxoConteudo.showText(descricao); 
 
-        //Total de Saída
-        fluxoConteudo.newLineAtOffset(0, yPosition);
-        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalSaida).replace(".", ","));
-
-        //Saldo da conta caixa
-        fluxoConteudo.newLineAtOffset(0, yPosition);
-        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalEntrada-totalSaida).replace(".", ","));
+        // Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.setFont(times, tamanhoFonte);
+        fluxoConteudo.showText(" R$ " + this.conversor.formatarDoubleString(total).replace(".", ","));
 
         fluxoConteudo.endText();
         
     }
     
+    //Função para gerar os totalizados para o relatório de caixa
+    public void valoresDoisTotalizadores(String descricao1, String descricao2, double totalEntradaPagto, double totalSaidaPendente, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
+        float tamanhoFonte = 12;
+
+        fluxoConteudo.beginText();
+        //fluxoConteudo.setFont(times, tamanhoFonte);
+
+        //Total de entrada
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao1); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText(" R$ "+this.conversor.formatarDoubleString(totalEntradaPagto).replace(".", ","));
+        yPosition =-12;
+
+        //Total de Saída
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao2); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText(" R$ "+this.conversor.formatarDoubleString(totalSaidaPendente).replace(".", ","));
+
+        fluxoConteudo.endText();
+        
+    }
     
+    //Função para gerar os totalizados para o relatório de caixa
+    public void valoresTresTotalizadores(String descricao1, String descricao2, String descricao3, double totalEntradaPagto, double totalSaidaPendente, double totalSaldo, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
+        float tamanhoFonte = 12;
+
+        fluxoConteudo.beginText();
+        //fluxoConteudo.setFont(times, tamanhoFonte);
+
+        //Total de entrada
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao1); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalEntradaPagto).replace(".", ","));
+        yPosition =-12; // Ajusta a posição da próxima linha
+
+        //Total de Saída
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao2); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalSaidaPendente).replace(".", ","));
+
+        //Saldo da conta caixa
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao3); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalSaldo).replace(".", ","));
+
+        fluxoConteudo.endText();
+        
+    }
+    
+
+    
+   
 }

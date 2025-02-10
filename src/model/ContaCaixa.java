@@ -20,5 +20,4 @@ public class ContaCaixa extends Entidades{
 
     public ContaCaixa() {
     }
-
 }

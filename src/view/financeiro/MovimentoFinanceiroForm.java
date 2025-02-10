@@ -30,6 +30,7 @@ import model.MovimentoCaixa;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -49,12 +50,14 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private MovimentoCaixa movimentoCaixa = new MovimentoCaixa();
     private List<MovimentoCaixa> listaMovimentacao = new ArrayList<>();
     private List<Pessoa> listaOfertante = null;
+    private UsuarioLogado usuarioLogado;
 
-    public MovimentoFinanceiroForm() {
+    public MovimentoFinanceiroForm(UsuarioLogado usuarioLogado) {
         initComponents();
         configInicial();
         carregarContaCaixaSaldo();
         atualizarSaldoBancos();
+        this.usuarioLogado = usuarioLogado;
     }
     
     public void setPosicao() {
@@ -555,7 +558,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(codFornecedorOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nomeFornecedorOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()

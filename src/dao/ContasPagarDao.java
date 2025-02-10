@@ -10,30 +10,36 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
+import model.ContaCaixa;
 import model.ContaResultado;
 import model.ContasPagar;
 import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
+import model.UsuarioLogado;
 
 public class ContasPagarDao {
    
     private Connection conexao = null;
     private PreparedStatement ps = null;
+    private PreparedStatement stmInsert = null;
     private PreparedStatement stmSelect = null;
     private ResultSet rs = null;
+    private final LogsDao logsDao = new LogsDao();
     
     //Adiciona o contas a pagar dentro do banco de dados
-    public void adicionarContasPagar(List<ContasPagar> contasPagar){
+    public void adicionarContasPagar(List<ContasPagar> contasPagar, UsuarioLogado usuarioLogado, boolean efetivar, ContaCaixa contaCaixa){
 
+        ResultSet generatedKeys = null;
+        
         try{
             conexao = Conexao.getDataSource().getConnection(); 
             conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             for(ContasPagar cp : contasPagar){ 
-                String sql = "INSERT INTO ContasPagar (Fornecedor,FormaPagto,Descricao,Valor,ValorPago,ValorPendente,NumNota,Parcela,DataVencimento,SubContaResultado,Status,DescricaoStatus,DataCadastro,Observacao,Boleto,Igreja) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,GETDATE(),?,?,?)";
-                ps = conexao.prepareStatement(sql); 
+                String sql = "INSERT INTO ContasPagar (Fornecedor,FormaPagto,Descricao,Valor,ValorPago,ValorPendente,NumNota,Parcela,DataVencimento,SubContaResultado,Status,DescricaoStatus,DataCadastro,Observacao,Boleto,Igreja,UsuarioLancamento) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,GETDATE(),?,?,?,?)";
+                ps = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); 
 
                 ps.setInt(1, cp.getFornecedor().getCodigo());
                 ps.setInt(2, cp.getFormaPagto().getCodigo());
@@ -50,14 +56,41 @@ public class ContasPagarDao {
                 ps.setString(13, cp.getObservacao());
                 ps.setString(14, cp.getBoleto());
                 ps.setInt(15, cp.getIgreja().getCodigo());
-                
+                ps.setInt(16, usuarioLogado.getCodUsuario());            
                 ps.executeUpdate();
+                
+                // Recuperar a chave primária gerada
+                generatedKeys = ps.getGeneratedKeys();
+                
+                if(generatedKeys.next() && efetivar){
+                    int idRegistro = generatedKeys.getInt(1);
+                    
+                    for(ContasPagar cpEft : contasPagar){ 
+                        // Inserir dados na segunda tabela usando a chave primária da primeira tabela
+                        String sql2 = "INSERT INTO MovimentoCaixa (Pessoa,RegistroContaPagar,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
+                        String complemento = "CP "+cpEft.getNumNota()+"-"+cpEft.getParcela()+" | "+cpEft.getDescricaoConta();
+                        stmInsert = conexao.prepareStatement(sql2);
+
+                        this.stmInsert.setInt(1, cpEft.getFornecedor().getCodigo());
+                        this.stmInsert.setInt(2, idRegistro);
+                        this.stmInsert.setDouble(3, 0);
+                        this.stmInsert.setDouble(4, cpEft.getValorPago());
+                        this.stmInsert.setInt(5, contaCaixa.getCodigo());
+                        this.stmInsert.setString(6, complemento);
+                        this.stmInsert.setInt(7, cpEft.getFormaPagto().getCodigo());
+                        this.stmInsert.setInt(8, cpEft.getIgreja().getCodigo());
+                        this.stmInsert.setInt(9, usuarioLogado.getCodUsuario());
+                        this.stmInsert.setDate(10, (java.sql.Date) cpEft.getDataPagamento());               
+                        this.stmInsert.executeUpdate();
+                    }
+                }
             }
             //Confimar a transação, ou seja, a inserção dos dados
             conexao.commit();
             JOptionPane.showMessageDialog(null, "Contas a pagar cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-        }catch(SQLException ex){
-            //Se ocorrer um erro, fazer rollback da transação
+        }catch(SQLException ex){      
+            //Salvar o log do erro no banco de dados
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             if(conexao != null){
                 try{
                     conexao.rollback();
@@ -248,9 +281,9 @@ public class ContasPagarDao {
                 listaContasPagar.add(contaPagar);
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+e.getMessage());
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -415,9 +448,9 @@ public class ContasPagarDao {
                 listaContasPagar.add(contaPagar);
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+e.getMessage());
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -491,8 +524,9 @@ public class ContasPagarDao {
                 listaContasPagar.add(contaPagar);
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar em aberto no mês atual", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -524,6 +558,7 @@ public class ContasPagarDao {
             
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o contas a pagar ", "Erro 014", JOptionPane.ERROR_MESSAGE);
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
@@ -553,8 +588,8 @@ public class ContasPagarDao {
             if(rs.next()){
                 cpExiste = true;
             }
-        } catch (SQLException e) {
-            
+        } catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             // Fechando recursos
             try {
@@ -584,6 +619,7 @@ public class ContasPagarDao {
             ps.executeUpdate();           
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o status a(s) conta(s) a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             try{
                 if (ps != null) ps.close();

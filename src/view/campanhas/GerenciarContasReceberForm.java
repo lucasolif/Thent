@@ -35,11 +35,13 @@ import model.MovimentoCaixa;
 import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.Usuario;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class GerenciarContasReceberForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
+   private UsuarioLogado usuarioLogado = new UsuarioLogado();
    private final Utilitarios conversor = new Utilitarios();
    private final IgrejaDao igrejaDao = new IgrejaDao();
    private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -53,10 +55,11 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
    private Pessoa pessoaSelec = null;
    private ParticipanteCampanha participanteSelec = null;
     
-    public GerenciarContasReceberForm() {
+    public GerenciarContasReceberForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
         tabelaInicial();
+        this.usuarioLogado = usuarioLogado;
     }
 
     public void setPosicao() {
@@ -906,7 +909,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         mvCaixa.setCrCampanha(crCampanha);
         mvCaixa.setUsuarioCadastro(usuario);
            
-        this.mvCaixaDao.movimentarContasReceberCampanha(mvCaixa);
+        this.mvCaixaDao.movimentarContasReceberCampanha(mvCaixa, this.usuarioLogado);
     }
     
     private void duplicataSelecionada(){    
@@ -944,17 +947,17 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                         
                         if(status.equalsIgnoreCase("pago")){
                             corFundo = paletaCores.azul(); 
-                        }else if(conversor.compararDatas(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
                             corFundo = paletaCores.vermelhoEscuro(); 
-                        }else if(conversor.compararDatas(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
                             corFundo = paletaCores.vermelhoClaro(); 
-                        }else if(conversor.compararDatas(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
                             corFundo = paletaCores.amareloEscuro(); 
-                        }else if(conversor.compararDatas(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
                             corFundo = paletaCores.amareloClaro(); 
-                        }else if(conversor.compararDatas(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
                             corFundo = paletaCores.verdeLimao(); 
-                        }else if(conversor.compararDatas(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
                             corFundo = paletaCores.verdeEscuro(); 
                         }
                         

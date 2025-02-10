@@ -27,6 +27,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import model.SubContaResultado;
+import model.UsuarioLogado;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -44,7 +45,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private List<Pessoa> listaPessoa = null;
     private Pessoa pessoaSelec = null;
 
-    public RelatorioContasPagarForm() {
+    public RelatorioContasPagarForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }
@@ -431,7 +432,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         this.dataInicial.setText(this.conversor.dataAtualString());
         this.dataFinal.setText(this.conversor.dataAtualString());
         this.rbAberto.setSelected(true);
-        this.rbFornecedor.setSelected(true);
+        this.rbPadrão.setSelected(true);
         this.formaPagto.setSelectedItem("");
         this.igreja.setSelectedItem("");
     }
@@ -481,50 +482,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         this.pessoaSelec = pessoa;
     }
     
-    private List<ContasPagar> consultarContasPagar(String ordemDados){         
-        List<ContasPagar> listaContasPagar = null;
-        ContasPagar contasPagar = new ContasPagar();
-        Date dataVencimentoInicial = null;
-        Date dataVencimentoFinal = null;
-        Date dataPagtoInicial = null;
-        Date dataPagtoFinal = null;
-        Date dataCadastroInicial = null;
-        Date dataCadastroFinal = null;
-        Integer status = null;
-        Igreja igreja = (Igreja) this.igreja.getSelectedItem();
-        FormaPagto formaPagto = (FormaPagto) this.formaPagto.getSelectedItem();
-        SubContaResultado subContaResultado = (SubContaResultado) this.contaResultado.getSelectedItem();
-        Pessoa pessoa = this.pessoaSelec;
-        
-        //Verifica qual data foi excluída, e atribui o valor da data inserida
-        if(this.rbDataVencimento.isSelected()){
-            dataVencimentoInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-            dataVencimentoFinal = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-        }else if(this.rbDataPagamento.isSelected()){
-            dataPagtoInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-            dataPagtoFinal = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-        }else if(this.rbDataCadastro.isSelected()){
-            dataCadastroInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-            dataCadastroFinal = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-        }
-        
-        //Verifica qual o status foi escolhido
-        if(rbAberto.isSelected()){
-            status = 0;
-        }else if(rbPago.isSelected()){
-            status = 1;
-        } 
-        
-        contasPagar.setFormaPagto(formaPagto);
-        contasPagar.setFornecedor(pessoa);
-        contasPagar.setIgreja(igreja);
-        contasPagar.setStatus(status);
-        
-        listaContasPagar = this.contasPagarDao.consultarContasPagarRelatorio(formaPagto, pessoa, igreja, status, subContaResultado, ordemDados, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
-    
-        return listaContasPagar;
-    }
-    
     private void gerarRelatorio(){
         
         List<ContasPagar> listaContasPagar = null;
@@ -551,8 +508,70 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         
     }
     
+    private List<ContasPagar> consultarContasPagar(String ordemDados){         
+        List<ContasPagar> listaContasPagar = null;
+        ContasPagar contasPagar = new ContasPagar();
+        Date dataVencimentoInicial = null;
+        Date dataVencimentoFinal = null;
+        Date dataPagtoInicial = null;
+        Date dataPagtoFinal = null;
+        Date dataCadastroInicial = null;
+        Date dataCadastroFinal = null;
+        Integer status = null;
+        Igreja igreja = (Igreja) this.igreja.getSelectedItem();
+        FormaPagto formaPagto = (FormaPagto) this.formaPagto.getSelectedItem();
+        SubContaResultado subContaResultado = (SubContaResultado) this.contaResultado.getSelectedItem();
+        Pessoa pessoa = this.pessoaSelec;
+        
+        //Verifica qual data foi escolhida, e atribui o valor da data inserida
+        if(this.rbDataVencimento.isSelected()){
+            dataVencimentoInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
+            dataVencimentoFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
+        }else if(this.rbDataPagamento.isSelected()){
+            dataPagtoInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
+            dataPagtoFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
+        }else if(this.rbDataCadastro.isSelected()){
+            dataCadastroInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
+            dataCadastroFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
+        }
+        
+        //Verifica qual o status foi escolhido
+        if(rbAberto.isSelected()){
+            status = 0;
+        }else if(rbPago.isSelected()){
+            status = 1;
+        } 
+        
+        contasPagar.setFormaPagto(formaPagto);
+        contasPagar.setFornecedor(pessoa);
+        contasPagar.setIgreja(igreja);
+        contasPagar.setStatus(status);
+        
+        listaContasPagar = this.contasPagarDao.consultarContasPagarRelatorio(formaPagto, pessoa, igreja, status, subContaResultado, ordemDados, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
+    
+        return listaContasPagar;
+    }
+    
     private void layoutPadrao(List<ContasPagar> listaContasPagar){
         
+        //Variáveis do layout
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        final  int layout = 1;
+        final float tamanhoFonteTitulo = 18;
+        final PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        //Variáveis referente aos dados do relatório
+        final String dataInicial = this.dataInicial.getText();
+        final String dataFinal = this.dataFinal.getText();
+        final String titulo = "Relatório de Contas a Pagar";   
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal;
+        final String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+        double totalValorPago = 0;
+        double totalValorPendente = 0;
+        double totalValorCp = 0;
+           
         // Criar um novo documento PDF
         final PDDocument documentoPDF = new PDDocument();
         PDPageContentStream fluxoConteudo = null;
@@ -560,24 +579,17 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         // Adicionar uma nova página ao documento
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
         documentoPDF.addPage(paginaPDF);
-        
-        final String titulo = "Relatório de Contas a Pagar";    
-        float yPosition = 720; // Posição vertical inicial para os títulos
-        float xPosition = 50; // Posição horizontal inicial para os títulos
-        int layout = 1;
-        
-        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
-        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
-        
+  
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);     
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
+            yPosition -= 30;
      
-            // Definir os títulos das colunas
-            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+            // Definir os títulos das colunas 
             this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
             yPosition -= 20; // Pular para a linha abaixo após o título
 
@@ -644,8 +656,16 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 fluxoConteudo.endText();
 
                 // Descer para a próxima linha
-                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário              
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário 
+                totalValorPago += listaContasPagar.get(i).getValorPago();
+                totalValorPendente += (listaContasPagar.get(i).getValor() - listaContasPagar.get(i).getValorPago());
+                totalValorCp += listaContasPagar.get(i).getValor();
             }
+            //Define o posicionamento horizontal e vertical da próxima informação, com base no posicionamento da informação anterior
+            yPosition -= 40;
+            xPosition += 350;  
+            
+            funcoesRelatorio.valoresTresTotalizadores("TotalPago:         ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);
@@ -668,58 +688,76 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     
     private void layoutFornecedor(List<ContasPagar> listaContasPagar){
         
+        double totalPago = 0;
+        double totalPendente = 0;
+        double totalValorPago = 0;
+        double totalValorPendente = 0;
+        double totalValorCp = 0;
+        final String dataInicial = this.dataInicial.getText();
+        final String dataFinal = this.dataFinal.getText();
+        final String titulo = "Relatório de Contas a Pagar (Fornecedor)";
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal;
+        Pessoa fornecedorAtual = null;
+        final int layout = 2;
+        final String [] titulosTabela = {"Nota", "Parcela","Descrição","Valor", "Val.Pago", "Vencimento", "Pagamento"};
+        
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos     
+        final int limiteCaracteres = 25; // Limite de caracteres (ajuste conforme necessário)
+        final float tamanhoFonteTitulo = 18;  
+        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte      
+                
         // Criar um novo documento PDF
         final PDDocument documentoPDF = new PDDocument();
         PDPageContentStream fluxoConteudo = null;
 
         // Adicionar uma nova página ao documento
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
-        documentoPDF.addPage(paginaPDF);
-        
-        final String titulo = "Relatório de Contas a Pagar (Fornecedor)";    
-        float yPosition = 720; // Posição vertical inicial para os títulos
-        float xPosition = 50; // Posição horizontal inicial para os títulos
-        Pessoa fornecedorAtual = null;
-        int layout = 2;
-        
-        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
-        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        documentoPDF.addPage(paginaPDF);       
         
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);           
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
-     
-            // Definir os títulos das colunas
-            String[] titulosTabela = {"Nota", "Parcela","Descrição","Valor", "Val.Pago", "Vencimento", "Pagamento"};
-            this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo);     
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);  
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
                 
             // Iterar sobre as contas a pagar
             for (ContasPagar cp : listaContasPagar) {              
                 if(fornecedorAtual == null || fornecedorAtual.getCodigo() != cp.getFornecedor().getCodigo()){ 
-
                     if(fornecedorAtual == null){
                         yPosition -= 30; // Pular para a linha abaixo após o título
-                    }else{                 
+                    }else{
+                        //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 320;
+                        yPosition -= 10;
+                        
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
                         xPosition = 50;
-                        yPosition -= 15; // Pular para a linha abaixo após o título
+                        yPosition -= 50; // Pular para a linha abaixo após o título
                     }
 
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 10);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText(cp.getFornecedor().getCodigo()+ " - "+ cp.getFornecedor().getNome());
-                    fluxoConteudo.endText();    
+                    //Definir titulos dos agrupameto do layout
+                    String tituloLayout = cp.getFornecedor().getCodigo()+ " - "+ cp.getFornecedor().getNome();
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo);
                     
                     fornecedorAtual = cp.getFornecedor();  
                     yPosition -= 20;
+                    
+                    // Definir os títulos das colunas                   
+                    this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo);                       
+                    yPosition -= 20; // Pular para a linha abaixo após o título
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de dados
+                    totalPago = 0;
+                    totalPendente = 0;
                 }           
 
                 xPosition = 50; // Resetar a posição horizontal a cada nova linha
                              
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                if (yPosition < 70) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
                     fluxoConteudo.close();
                     PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
                     documentoPDF.addPage(novaPagina);
@@ -730,7 +768,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 String numNota = String.valueOf(cp.getNumNota());
                 String parcela = String.valueOf(cp.getParcela());
                 String descricaoCp = cp.getDescricaoConta();
-                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
                 if (descricaoCp.length() > limiteCaracteres) {
                     descricaoCp = descricaoCp.substring(0, limiteCaracteres); // Truncar e adicionar "..."
                 }
@@ -773,12 +810,27 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 fluxoConteudo.endText();
 
                 // Descer para a próxima linha
-                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário 
                 
+                totalPago += cp.getValorPago();
+                totalPendente += (cp.getValor() - cp.getValorPago());
+                totalValorPago += cp.getValorPago();
+                totalValorPendente += (cp.getValor() - cp.getValorPago());
+                totalValorCp += cp.getValor();            
             }
-
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            xPosition += 320;
+            yPosition -= 10;
+                              
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            yPosition -= 50;
+ 
+            funcoesRelatorio.valoresTresTotalizadores("Total Pago:        ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);       
+            
         }catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
         } finally {
@@ -797,34 +849,42 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     
     private void layoutContaResultado(List<ContasPagar> listaContasPagar){
         
+        double totalPago = 0;
+        double totalPendente = 0;
+        double totalValorPago = 0;
+        double totalValorPendente = 0;
+        double totalValorCp = 0;
+        final String dataInicial = this.dataInicial.getText();
+        final String dataFinal = this.dataFinal.getText();
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal;
+        final String titulo = "Relatório de Contas a Pagar (Conta Resultado)";  
+        SubContaResultado contaResultado = null;
+        final String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+        
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        final float tamanhoFonteTitulo = 18;
+        final int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+        final int layout = 3;
+        final PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
         // Criar um novo documento PDF
         final PDDocument documentoPDF = new PDDocument();
         PDPageContentStream fluxoConteudo = null;
 
         // Adicionar uma nova página ao documento
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
-        documentoPDF.addPage(paginaPDF);
-        
-        final String titulo = "Relatório de Contas a Pagar (Conta Resultado)";    
-        float yPosition = 720; // Posição vertical inicial para os títulos
-        float xPosition = 50; // Posição horizontal inicial para os títulos
-        SubContaResultado contaResultado = null;
-        int layout = 3;
-        
-        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
-        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        documentoPDF.addPage(paginaPDF);     
         
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
-     
-            // Definir os títulos das colunas
-            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
-            this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
-                
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF); 
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
+                   
             // Iterar sobre as contas a pagar
             for (ContasPagar cp : listaContasPagar) {              
                 if(contaResultado == null || contaResultado.getCodigo() != cp.getSubContaResultado().getCodigo()){ 
@@ -832,23 +892,33 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                     if(contaResultado == null){
                         yPosition -= 30; // Pular para a linha abaixo após o título
                     }else{                 
+                        //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 350;
+                        yPosition -= 10;
+                        
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
                         xPosition = 50;
-                        yPosition -= 15; // Pular para a linha abaixo após o título
+                        yPosition -= 60; // Pular para a linha abaixo após o título
                     }
-
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 10);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText(cp.getSubContaResultado().getDescricao());
-                    fluxoConteudo.endText();    
+               
+                    String tituloLayout = cp.getSubContaResultado().getDescricao();
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo); 
                     
                     contaResultado = cp.getSubContaResultado();  
                     yPosition -= 20;
+                    
+                    // Definir os títulos das colunas
+                    this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                    yPosition -= 20;
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de dados
+                    totalPago = 0;
+                    totalPendente = 0;
                 }           
 
                 xPosition = 50; // Resetar a posição horizontal a cada nova linha
                 
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                if (yPosition < 80) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
                     fluxoConteudo.close();
                     PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
                     documentoPDF.addPage(novaPagina);
@@ -859,17 +929,17 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
-                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
-                if (nomeFornecedor.length() > limiteCaracteres) {
-                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
-                }
                 String numNota = String.valueOf(cp.getNumNota());
                 String parcela = String.valueOf(cp.getParcela());
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
                 String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
-
+                
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                
                 // Desenhar os dados da linha na tabela
                 fluxoConteudo.beginText();
                 fluxoConteudo.setFont(times, 10);
@@ -910,7 +980,21 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 // Descer para a próxima linha
                 yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
                 
+                totalPago += cp.getValorPago();
+                totalPendente += (cp.getValor() - cp.getValorPago());
+                totalValorPago += cp.getValorPago();
+                totalValorPendente += (cp.getValor() - cp.getValorPago());
+                totalValorCp += cp.getValor();   
             }
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            xPosition += 350;
+            yPosition -= 10;
+                              
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            yPosition -= 50;
+ 
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);           
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);       
@@ -931,6 +1015,28 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     }
     
     private void layoutFormaPagto(List<ContasPagar> listaContasPagar){
+
+        //Variáveis referente aos dados do relatório
+        double totalPago = 0;
+        double totalPendente = 0;
+        double totalValorPago = 0;
+        double totalValorPendente = 0;
+        double totalValorCp = 0;         
+        FormaPagto formaPagto = null;
+        final String dataInicial = this.dataInicial.getText();
+        final String dataFinal = this.dataFinal.getText();
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal;
+        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";  
+        final String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+        
+        //Variáveis referente ao layout do relatório
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        int limiteCaracteres = 35; // Limite de caracteres 
+        final int layout = 4;
+        final float tamanhoFonteTitulo = 18;   
+        final PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
         
         // Criar um novo documento PDF
         final PDDocument documentoPDF = new PDDocument();
@@ -940,50 +1046,48 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
         documentoPDF.addPage(paginaPDF);
         
-        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";    
-        float yPosition = 720; // Posição vertical inicial para os títulos
-        float xPosition = 50; // Posição horizontal inicial para os títulos
-        FormaPagto formaPagto = null;
-        int layout = 4;
-        
-        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
-        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
-        
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF); 
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
      
-            // Definir os títulos das colunas
-            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
-            this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
-                
             // Iterar sobre as contas a pagar
             for (ContasPagar cp : listaContasPagar) {              
                 if(formaPagto == null || formaPagto.getCodigo() != cp.getFormaPagto().getCodigo()){ 
 
                     if(formaPagto == null){
                         yPosition -= 30; // Pular para a linha abaixo após o título
-                    }else{                 
+                    }else{           
+                       //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 350;
+                        yPosition -= 10;
+                        
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
                         xPosition = 50;
-                        yPosition -= 15; // Pular para a linha abaixo após o título
+                        yPosition -= 50; // Pular para a linha abaixo após o título
                     }
 
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 10);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText(cp.getFormaPagto().getNome());
-                    fluxoConteudo.endText();    
+                    String tituloLayout = cp.getFormaPagto().getNome();
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo); 
                     
                     formaPagto = cp.getFormaPagto();  
                     yPosition -= 20;
+                    
+                    // Definir os títulos das colunas
+                    this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                    yPosition -= 20;
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de dados
+                    totalPago = 0;
+                    totalPendente = 0;
                 }           
 
                 xPosition = 50; // Resetar a posição horizontal a cada nova linha
                 
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                if (yPosition < 70) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
                     fluxoConteudo.close();
                     PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
                     documentoPDF.addPage(novaPagina);
@@ -994,16 +1098,16 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
-                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
-                if (nomeFornecedor.length() > limiteCaracteres) {
-                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
-                }
                 String numNota = String.valueOf(cp.getNumNota());
                 String parcela = String.valueOf(cp.getParcela());
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
                 String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+                
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
 
                 // Desenhar os dados da linha na tabela
                 fluxoConteudo.beginText();
@@ -1045,8 +1149,22 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 // Descer para a próxima linha
                 yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
                 
+                totalPago += cp.getValorPago();
+                totalPendente += (cp.getValor() - cp.getValorPago());
+                totalValorPago += cp.getValorPago();
+                totalValorPendente += (cp.getValor() - cp.getValorPago());
+                totalValorCp += cp.getValor();   
             }
-
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            xPosition += 350;
+            yPosition -= 10;
+                              
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            yPosition -= 50;
+ 
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);        
         }catch (IOException e) {
@@ -1067,58 +1185,77 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     
     private void layoutStatusPagamento(List<ContasPagar> listaContasPagar){
         
+        //Variável referente aos dados do relatório
+        double totalPago = 0;
+        double totalPendente = 0;
+        double totalValorPago = 0;
+        double totalValorPendente = 0;
+        double totalValorCp = 0;  
+        String statusCp = null;
+        final String dataInicial = this.dataInicial.getText();
+        final String dataFinal = this.dataFinal.getText();
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal;
+        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";  
+        final String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+        
+        //Variáveis referente ao layout do relatório
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos   
+        final int layout = 5;
+        final float tamanhoFonteTitulo = 18; 
+        final int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
+        final PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
         // Criar um novo documento PDF
         final PDDocument documentoPDF = new PDDocument();
         PDPageContentStream fluxoConteudo = null;
 
         // Adicionar uma nova página ao documento
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
-        documentoPDF.addPage(paginaPDF);
-        
-        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";    
-        float yPosition = 720; // Posição vertical inicial para os títulos
-        float xPosition = 50; // Posição horizontal inicial para os títulos
-        String statusCp = null;
-        int layout = 5;
-        
-        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
-        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        documentoPDF.addPage(paginaPDF);  
         
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);          
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
-     
-            // Definir os títulos das colunas
-            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
-            this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
-                
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);            
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
+            
             // Iterar sobre as contas a pagar
             for (ContasPagar cp : listaContasPagar) {              
                 if(statusCp == null || !statusCp.equalsIgnoreCase(cp.getDescricaoStatus())){ 
-
                     if(statusCp == null){
                         yPosition -= 30; // Pular para a linha abaixo após o título
-                    }else{                 
+                    }else{             
+                       //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 350;
+                        yPosition -= 10;
+                        
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
                         xPosition = 50;
-                        yPosition -= 15; // Pular para a linha abaixo após o título
+                        yPosition -= 50; // Pular para a linha abaixo após o título
                     }
 
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 10);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText(cp.getDescricaoStatus());
-                    fluxoConteudo.endText();    
+                    String tituloLayout = cp.getDescricaoStatus();
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo); 
                     
                     statusCp = cp.getDescricaoStatus();  
                     yPosition -= 20;
+                    
+                    // Definir os títulos das colunas
+                    this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                    yPosition -= 20;
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de dados
+                    totalPago = 0;
+                    totalPendente = 0;
                 }           
 
                 xPosition = 50; // Resetar a posição horizontal a cada nova linha
                 
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                if (yPosition < 70) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
                     fluxoConteudo.close();
                     PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
                     documentoPDF.addPage(novaPagina);
@@ -1126,19 +1263,20 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                     yPosition = 750; // Resetar a posição Y para o topo da nova página
                 }
 
-                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                // Obter os dados da lista
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
-                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
-                if (nomeFornecedor.length() > limiteCaracteres) {
-                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
-                }
                 String numNota = String.valueOf(cp.getNumNota());
                 String parcela = String.valueOf(cp.getParcela());
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
                 String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+                
+                //Verifica o tamanho do nome do forncedor, e altera para caber na página.
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
 
                 // Desenhar os dados da linha na tabela
                 fluxoConteudo.beginText();
@@ -1178,10 +1316,25 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 fluxoConteudo.endText();
 
                 // Descer para a próxima linha
-                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
+                yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário 
+                
+                totalPago += cp.getValorPago();
+                totalPendente += (cp.getValor() - cp.getValorPago());
+                totalValorPago += cp.getValorPago();
+                totalValorPendente += (cp.getValor() - cp.getValorPago());
+                totalValorCp += cp.getValor(); 
                 
             }
-
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            xPosition += 350;
+            yPosition -= 10;
+                              
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            yPosition -= 50;
+ 
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);       
         }catch (IOException e) {
@@ -1202,6 +1355,28 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     
     private void layoutIgreja(List<ContasPagar> listaContasPagar){
         
+        //Variáveis referente aos dados do relatório
+        double totalPago = 0;
+        double totalPendente = 0;
+        double totalValorPago = 0;
+        double totalValorPendente = 0;
+        double totalValorCp = 0;    
+        final String dataInicial = this.dataInicial.getText();
+        final String dataFinal = this.dataFinal.getText();
+        final String subTitulo = "Período de "+dataInicial+" até "+dataFinal;
+        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)"; 
+        final String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
+        Igreja igreja = null;
+        
+        //Variáveis referente ao layout do relatório
+        float yPosition = 720; // Posição vertical inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
+        final int layout = 6;
+        final int limiteCaracteres = 35; // Limite de caracteres
+        final float tamanhoFonteTitulo = 18; 
+        final PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
+        
         // Criar um novo documento PDF
         final PDDocument documentoPDF = new PDDocument();
         PDPageContentStream fluxoConteudo = null;
@@ -1210,51 +1385,48 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
         documentoPDF.addPage(paginaPDF);
         
-        final String titulo = "Relatório de Contas a Pagar (Forma Pagamento)";    
-        float yPosition = 720; // Posição vertical inicial para os títulos
-        float xPosition = 50; // Posição horizontal inicial para os títulos
-        Igreja igreja = null;
-        int layout = 6;
-        
-        PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
-        PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
-        
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(titulo, fluxoConteudo, paginaPDF);            
-     
-            // Definir os títulos das colunas
-            String[] titulosTabela = {"Cód", "Fornecedor", "Nota", "Parc", "Valor", "Val.Pago", "Vencimento", "Pagamento"};
-            this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
-                
+            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);            
+            //Gerando o sub título do relatório
+            this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
+               
             // Iterar sobre as contas a pagar
             for (ContasPagar cp : listaContasPagar) {      
                 //Divisão pelo layout
                 if(igreja == null || igreja.getCodigo() != cp.getIgreja().getCodigo()){ 
-
                     if(igreja == null){
                         yPosition -= 30; // Pular para a linha abaixo após o título
-                    }else{                 
+                    }else{             
+                       //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 350;
+                        yPosition -= 10;
+                        
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
                         xPosition = 50;
-                        yPosition -= 15; // Pular para a linha abaixo após o título
+                        yPosition -= 50; // Pular para a linha abaixo após o título
                     }
-
-                    fluxoConteudo.beginText();
-                    fluxoConteudo.setFont(timesBold, 10);
-                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                    fluxoConteudo.showText(cp.getIgreja().getNome());
-                    fluxoConteudo.endText();    
+                
+                    String tituloLayout = cp.getIgreja().getNome();
+                    this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo); 
                     
                     igreja = cp.getIgreja();  
                     yPosition -= 20;
+                    
+                    // Definir os títulos das colunas
+                    this.funcoesRelatorio.tituloColunaRelatorioContasPagarReceber(layout, yPosition, xPosition, titulosTabela, fluxoConteudo); 
+                    yPosition -= 20;
+                    
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de dados
+                    totalPago = 0;
+                    totalPendente = 0;
                 }           
 
                 xPosition = 50; // Resetar a posição horizontal a cada nova linha
                 
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                if (yPosition < 70) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
                     fluxoConteudo.close();
                     PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
                     documentoPDF.addPage(novaPagina);
@@ -1262,19 +1434,20 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                     yPosition = 750; // Resetar a posição Y para o topo da nova página
                 }
 
-                // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
+                // Obter os dados da lista
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
-                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
-                if (nomeFornecedor.length() > limiteCaracteres) {
-                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
-                }
                 String numNota = String.valueOf(cp.getNumNota());
                 String parcela = String.valueOf(cp.getParcela());
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
                 String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
+                
+                //Verifica o tamanho do nome do forencedor e reduz, caso necessário
+                if (nomeFornecedor.length() > limiteCaracteres) {
+                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
 
                 // Desenhar os dados da linha na tabela
                 fluxoConteudo.beginText();
@@ -1316,8 +1489,22 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 // Descer para a próxima linha
                 yPosition -= 20; // Ajuste o espaçamento vertical conforme necessário   
                 
+                totalPago += cp.getValorPago();
+                totalPendente += (cp.getValor() - cp.getValorPago());
+                totalValorPago += cp.getValorPago();
+                totalValorPendente += (cp.getValor() - cp.getValorPago());
+                totalValorCp += cp.getValor();     
             }
-
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            xPosition += 350;
+            yPosition -= 10;
+                              
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            //Define o posicinamento vertical e orizontal do próximo conteúdo
+            yPosition -= 50;
+ 
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);        
         }catch (IOException e) {

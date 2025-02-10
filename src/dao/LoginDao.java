@@ -12,6 +12,7 @@ import model.Login;
 
 public class LoginDao {
     
+    private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
@@ -22,13 +23,13 @@ public class LoginDao {
         try{  
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql= "INSERT INTO Login (Usuario,DataCadastro)VALUES (?,GETDATE())";
+            String sql= "INSERT INTO LogsLogin (Usuario,DataCadastro)VALUES (?,GETDATE())";
             ps = conexao.prepareStatement(sql);
             ps.setInt(1,codUsuario);
             ps.execute();
              
         }catch(SQLException ex){
-            ex.printStackTrace();
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o login", "Erro 005", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -36,7 +37,7 @@ public class LoginDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -59,7 +60,7 @@ public class LoginDao {
             JOptionPane.showMessageDialog(null, "Senha alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            ex.printStackTrace();
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a senha ", "Erro 006", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -67,7 +68,7 @@ public class LoginDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -76,7 +77,7 @@ public class LoginDao {
     //Consultar para validar os dados do login
     public Login consultarLogin(String usuario){
 
-        String sql = "SELECT Codigo, Usuario, HashSenha, SaltSenha FROM Usuarios WHERE Usuario=?";
+        String sql = "SELECT Codigo, Usuario, HashSenha, SaltSenha FROM Usuarios WHERE Usuario=? AND Ativo = 1";
         Login login = new Login();
               
         try{           
@@ -93,7 +94,7 @@ public class LoginDao {
                 login.setSaltSenha(rs.getString("SaltSenha"));
             }
         }catch (SQLException ex) {
-            ex.printStackTrace();
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar validar os dados do login", "Erro 004", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -102,15 +103,13 @@ public class LoginDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-
         return login;
     } 
-    
-    
+
 }
 
 

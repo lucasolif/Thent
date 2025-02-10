@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 public class Utilitarios{
@@ -58,6 +60,49 @@ public class Utilitarios{
             // Lançando uma exceção se a string estiver em um formato inválido
             throw new IllegalArgumentException("Erro ao tentar converte Date em String", e);
         }
+    }
+    
+    public String anoAtual(){
+        int ano = LocalDate.now().getYear();
+        String anoAtual = String.valueOf(ano);
+        
+        return anoAtual;
+    }
+    
+    public String mesAnterior(){
+        // Obter o mês anterior
+        LocalDate dataAnterior = LocalDate.now().minusMonths(1);
+        
+        // Definir o formato para o nome do mês
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM");
+        
+        // Obter o nome do mês anterior como String
+        String nomeMesAnterior = dataAnterior.format(formatter);
+          
+        return nomeMesAnterior;
+    }
+    
+    public Integer obterNumMes(String nomeMes){
+        
+        // Criar o mapa de meses
+        Map<String, Integer> meses = new HashMap<>();
+        meses.put("Janeiro", 1);
+        meses.put("Fevereiro", 2);
+        meses.put("Março", 3);
+        meses.put("Abril", 4);
+        meses.put("Maio", 5);
+        meses.put("Junho", 6);
+        meses.put("Julho", 7);
+        meses.put("Agosto", 8);
+        meses.put("Setembro", 9);
+        meses.put("Outubro", 10);
+        meses.put("Novembro", 11);
+        meses.put("Dezembro", 12);
+        
+        Integer numMes = meses.get(nomeMes);
+        
+        return numMes;
+        
     }
     
     public Date convertendoStringDateSql(String data) {
@@ -143,7 +188,7 @@ public class Utilitarios{
         return meses;
     }
     
-    public Integer compararDatas(String vencimento){
+    public Integer compararDataComDataAtual(String vencimento){
         
         Integer valor = null;
         

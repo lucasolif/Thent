@@ -8,11 +8,9 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
-import model.Autor;
 import model.Editora;
 import view.carregamentoConsultas.TelaConsultaEditoras;
-import view.carregamentoConsultas.TelaConsultasAutores;
+
 
 
 public class EditoraForm extends javax.swing.JDialog implements ConsultaEditoras{

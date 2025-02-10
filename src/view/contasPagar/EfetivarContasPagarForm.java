@@ -34,10 +34,12 @@ import model.FormaPagto;
 import model.MovimentoCaixa;
 import model.Pessoa;
 import model.SubContaResultado;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
+    private UsuarioLogado usuarioLogado = new UsuarioLogado();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -51,9 +53,10 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private List<ContasPagar> listaContasPagar = null;
     private List<Pessoa> listaFornecedor = null;
 
-    public EfetivarContasPagarForm() {
+    public EfetivarContasPagarForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
+        this.usuarioLogado = usuarioLogado;
     }
     
     public void setPosicao() {
@@ -305,20 +308,22 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         if (tabelaParcelas.getColumnModel().getColumnCount() > 0) {
             tabelaParcelas.getColumnModel().getColumn(0).setResizable(false);
             tabelaParcelas.getColumnModel().getColumn(0).setPreferredWidth(1);
-            tabelaParcelas.getColumnModel().getColumn(1).setResizable(false);
             tabelaParcelas.getColumnModel().getColumn(1).setPreferredWidth(200);
-            tabelaParcelas.getColumnModel().getColumn(2).setResizable(false);
             tabelaParcelas.getColumnModel().getColumn(2).setPreferredWidth(200);
             tabelaParcelas.getColumnModel().getColumn(3).setResizable(false);
-            tabelaParcelas.getColumnModel().getColumn(3).setPreferredWidth(5);
+            tabelaParcelas.getColumnModel().getColumn(3).setPreferredWidth(30);
             tabelaParcelas.getColumnModel().getColumn(4).setResizable(false);
-            tabelaParcelas.getColumnModel().getColumn(4).setPreferredWidth(20);
+            tabelaParcelas.getColumnModel().getColumn(4).setPreferredWidth(25);
             tabelaParcelas.getColumnModel().getColumn(5).setResizable(false);
             tabelaParcelas.getColumnModel().getColumn(5).setPreferredWidth(50);
             tabelaParcelas.getColumnModel().getColumn(6).setResizable(false);
+            tabelaParcelas.getColumnModel().getColumn(6).setPreferredWidth(50);
             tabelaParcelas.getColumnModel().getColumn(7).setResizable(false);
+            tabelaParcelas.getColumnModel().getColumn(7).setPreferredWidth(50);
             tabelaParcelas.getColumnModel().getColumn(8).setResizable(false);
+            tabelaParcelas.getColumnModel().getColumn(8).setPreferredWidth(50);
             tabelaParcelas.getColumnModel().getColumn(9).setResizable(false);
+            tabelaParcelas.getColumnModel().getColumn(9).setPreferredWidth(50);
         }
 
         iconLimpar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -822,7 +827,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 int confirm = JOptionPane.showConfirmDialog(null,"Efetivar as contas selecionadas?", "Confirmar", JOptionPane.YES_NO_OPTION);     
                 //Verifica qual a opção escolhida
                 if(confirm == JOptionPane.YES_OPTION){
-                    movimentoCaixaDao.movimentarContasPagar(listaCpEfetivada);
+                    movimentoCaixaDao.movimentarContasPagar(listaCpEfetivada, this.usuarioLogado);
                     consultarContas();
                     atualizarTabela();
                 }else if(confirm == JOptionPane.NO_OPTION){
@@ -839,9 +844,10 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         int linhaSelecionada = this.tabelaParcelas.getSelectedRow();
         Integer nota = (Integer) this.tabelaParcelas.getValueAt(linhaSelecionada, 3);
         Integer parcela = (Integer) this.tabelaParcelas.getValueAt(linhaSelecionada, 4);
-        double valor = (double) this.tabelaParcelas.getValueAt(linhaSelecionada, 5);
+        double valorConta = (double) this.tabelaParcelas.getValueAt(linhaSelecionada, 5);
+        double valorPago = (double) this.tabelaParcelas.getValueAt(linhaSelecionada, 6);
         
-        this.valorPagamento.setText(String.valueOf(valor));
+        this.valorPagamento.setText(String.valueOf(valorConta - valorPago));
         this.numNotaPagar.setText(String.valueOf(nota));
         this.numParcelaPagar.setText(String.valueOf(parcela));
     }
@@ -935,17 +941,17 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                         
                         if(status.equalsIgnoreCase("pago")){
                             corFundo = paletaCores.azul(); 
-                        }else if(conversor.compararDatas(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
                             corFundo = paletaCores.vermelhoEscuro(); 
-                        }else if(conversor.compararDatas(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
                             corFundo = paletaCores.vermelhoClaro(); 
-                        }else if(conversor.compararDatas(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
                             corFundo = paletaCores.amareloEscuro(); 
-                        }else if(conversor.compararDatas(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
                             corFundo = paletaCores.amareloClaro(); 
-                        }else if(conversor.compararDatas(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
                             corFundo = paletaCores.verdeLimao(); 
-                        }else if(conversor.compararDatas(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
+                        }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
                             corFundo = paletaCores.verdeEscuro(); 
                         }
                         

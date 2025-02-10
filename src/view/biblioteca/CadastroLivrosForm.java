@@ -16,6 +16,7 @@ import model.Editora;
 import model.Livro;
 import view.carregamentoConsultas.TelaConsultasLivros;
 import interfaces.ConsultaLivros;
+import model.UsuarioLogado;
 
 
 public class CadastroLivrosForm extends javax.swing.JInternalFrame implements ConsultaLivros {
@@ -26,7 +27,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
     private final EditoraDao publicadoraDao = new EditoraDao();
     private final AutorDao autorDao = new AutorDao();
 
-    public CadastroLivrosForm() {
+    public CadastroLivrosForm(UsuarioLogado usuarioLogado) {
         initComponents();
         carregarAutores();
         carregarPublicadoras();

@@ -21,6 +21,7 @@ import model.ContasReceberCampanha;
 import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -36,7 +37,7 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
     private List<Pessoa> listaParticipantes = null;
         
 
-    public GerarContasReceberAvulsaForm() {
+    public GerarContasReceberAvulsaForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }

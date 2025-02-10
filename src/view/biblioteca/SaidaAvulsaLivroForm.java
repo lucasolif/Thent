@@ -12,19 +12,22 @@ import javax.swing.JOptionPane;
 import model.Biblioteca;
 import model.Livro;
 import model.RegistroBiblioteca;
+import model.UsuarioLogado;
 
 
-public class SaidaAvulsaForm extends javax.swing.JInternalFrame {
+public class SaidaAvulsaLivroForm extends javax.swing.JInternalFrame {
     
+    private UsuarioLogado usuarioLogado;
     private final Biblioteca biblioteca = new Biblioteca();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private final LivroDao livroDao = new LivroDao();
 
-    public SaidaAvulsaForm() {
+    public SaidaAvulsaLivroForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
+        this.usuarioLogado = usuarioLogado;
     }
     
     public void setPosicao() {
@@ -149,7 +152,7 @@ public class SaidaAvulsaForm extends javax.swing.JInternalFrame {
         rgBiblioteca.setQtdLivro(qtdLivro);
         
         if(this.rgBibliotecaDao.verificarExistenciaLivroBiblioteca(rgBiblioteca)){
-            this.rgBibliotecaDao.removerLivroBiblioteca(rgBiblioteca);
+            this.rgBibliotecaDao.removerLivroBiblioteca(rgBiblioteca, this.usuarioLogado);
         }else{
             JOptionPane.showMessageDialog(null, "Livro não existe na biblioteca escolhida", "Atenção", JOptionPane.WARNING_MESSAGE);
         }

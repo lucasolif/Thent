@@ -17,6 +17,7 @@ public class AutorDao {
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
+    private final LogsDao logsDao = new LogsDao();
     
     public void cadastrarAutor(Autor autor){
         
@@ -36,7 +37,8 @@ public class AutorDao {
                 JOptionPane.showMessageDialog(null, "O autor "+autor.getNome().toUpperCase()+" já está cadastrado", "Erro 001", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o novo autor", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            }           
+            }   
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
         }
         finally{
             // Fechar recursos
@@ -66,6 +68,7 @@ public class AutorDao {
             JOptionPane.showMessageDialog(null, "Autor "+autor.getNome().toUpperCase()+" alterado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o(a) autor(a) "+autor.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -113,6 +116,7 @@ public class AutorDao {
             ps.execute();
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o autor "+buscaAutor.toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -141,6 +145,7 @@ public class AutorDao {
             JOptionPane.showMessageDialog(null, "Autor "+autor.getNome().toUpperCase()+" excluído com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o autor "+autor.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -177,6 +182,7 @@ public class AutorDao {
                 listaAutores.add(autor);
             }
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar os autores", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{

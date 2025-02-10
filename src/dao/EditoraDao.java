@@ -13,6 +13,7 @@ import model.Editora;
 
 public class EditoraDao {
     
+    private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
@@ -32,8 +33,10 @@ public class EditoraDao {
             
         }catch (SQLException ex) {
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "A editora "+editora.getNome().toUpperCase()+" já está cadastrada", "Erro 001", JOptionPane.ERROR_MESSAGE);
             } else {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a nova publicadora", "Erro 001", JOptionPane.ERROR_MESSAGE);
             }    
         }
@@ -44,6 +47,7 @@ public class EditoraDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -65,6 +69,7 @@ public class EditoraDao {
             JOptionPane.showMessageDialog(null, "Editora "+editora.getNome().toUpperCase()+" alterado(a) com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a editora "+editora.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -72,6 +77,7 @@ public class EditoraDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
@@ -112,6 +118,7 @@ public class EditoraDao {
             ps.execute();
             
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a editora "+buscaEditora.toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -120,6 +127,7 @@ public class EditoraDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -139,6 +147,7 @@ public class EditoraDao {
             
             JOptionPane.showMessageDialog(null, "Editora "+editora.getNome().toUpperCase()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);           
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a editora "+editora.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -146,6 +155,7 @@ public class EditoraDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -174,6 +184,7 @@ public class EditoraDao {
                 listaEditoras.add(publicadora);
             }
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as editoras", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{
@@ -183,6 +194,7 @@ public class EditoraDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

@@ -14,6 +14,7 @@ import model.Igreja;
 
 public class IgrejaDao {
     
+    private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private PreparedStatement insertStmt = null;
@@ -43,12 +44,14 @@ public class IgrejaDao {
             
             JOptionPane.showMessageDialog(null, "Igreja cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);       
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a igreja", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -76,12 +79,14 @@ public class IgrejaDao {
             
             JOptionPane.showMessageDialog(null, "Igreja "+igreja.getNome().toUpperCase()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);         
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a igreja "+igreja.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.updateStmt != null) this.updateStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -122,6 +127,7 @@ public class IgrejaDao {
                 listaIgreja.add(igreja);
             }
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as igrejas cadastradas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -130,6 +136,7 @@ public class IgrejaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -160,6 +167,7 @@ public class IgrejaDao {
                 todasIgrejas.add(igreja);
             }       
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as Contas Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -167,6 +175,7 @@ public class IgrejaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -195,6 +204,7 @@ public class IgrejaDao {
             conexao.close();
           
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as Contas Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -203,6 +213,7 @@ public class IgrejaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -223,12 +234,14 @@ public class IgrejaDao {
             
             JOptionPane.showMessageDialog(null, "Igreja "+igreja.getNome().toUpperCase()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);            
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o cadastro da igreja "+igreja.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.deleteStmt != null) this.deleteStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

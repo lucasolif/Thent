@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.JFrame;
 import jdbc.Conexao;
+import model.Login;
+import model.UsuarioLogado;
 import view.biblioteca.AdicionarLivroForm;
 import view.biblioteca.AutorForm;
 import view.biblioteca.BibliotecaForm;
@@ -10,7 +12,7 @@ import view.biblioteca.ConsultaEmprestimoForm;
 import view.biblioteca.EditoraForm;
 import view.biblioteca.EmprestimoLivroForm;
 import view.biblioteca.CadastroLivrosForm;
-import view.biblioteca.SaidaAvulsaForm;
+import view.biblioteca.SaidaAvulsaLivroForm;
 import view.cadastros.ContaCaixaForm;
 import view.cadastros.ContaResultadoForm;
 import view.cadastros.FormaPagtoForm;
@@ -25,6 +27,7 @@ import view.campanhas.ConsultarCampanhasForm;
 import view.campanhas.GerarContasReceberAvulsaForm;
 import view.campanhas.GerenciarContasReceberForm;
 import view.campanhas.RemoverParticipanteForm;
+import view.configuracoes.AcessosUsuarioForm;
 import view.configuracoes.AlterarSenhaForm;
 import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
@@ -35,15 +38,23 @@ import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.TransferenciaContaForm;
 import view.relatorios.ExtratoCaixa;
 import view.relatorios.RelatorioContasPagarForm;
-
+import view.relatorios.RelatorioMovimentoDizimoOferta;
+import view.relatorios.RelatorioPrestacaoContaMensal;
 
 
 public class Home extends javax.swing.JFrame {
     
-    public Home() {
+    UsuarioLogado userLogado = new UsuarioLogado();
+    
+    public Home(Login usuarioLogado) {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
+       
+        //seta o codigo e nome do usuário para o objeto UsuerioLogado, que será utilizado nos processos do sistema
+        userLogado.setCodUsuario(usuarioLogado.getCodUsuario());
+        userLogado.setNomeUsuario(usuarioLogado.getUsuario());
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -62,6 +73,7 @@ public class Home extends javax.swing.JFrame {
         cadastroPlanoContas = new javax.swing.JMenu();
         cadastroContaResultado = new javax.swing.JMenuItem();
         cadastroSubContaResultado = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         financeiro = new javax.swing.JMenu();
         financeiroDizimoOfertas = new javax.swing.JMenu();
         registrarOfertasDizimo = new javax.swing.JMenuItem();
@@ -79,10 +91,10 @@ public class Home extends javax.swing.JFrame {
         relatorioExtratoCaixa = new javax.swing.JMenuItem();
         relatorioContasPagar = new javax.swing.JMenuItem();
         relatorioContasReceber = new javax.swing.JMenuItem();
-        relatorioCaixaContaResultado = new javax.swing.JMenuItem();
         relatorioDizimoOferta = new javax.swing.JMenu();
         relatorioMovimentoDizimoOferta = new javax.swing.JMenuItem();
         relatorioEspecifico = new javax.swing.JMenu();
+        relatorioPrestacaoContaMensal = new javax.swing.JMenuItem();
         biblioteca = new javax.swing.JMenu();
         menuCadastros = new javax.swing.JMenu();
         cadastroLivros = new javax.swing.JMenuItem();
@@ -107,6 +119,7 @@ public class Home extends javax.swing.JFrame {
         configuracoes = new javax.swing.JMenu();
         menuUsuario = new javax.swing.JMenu();
         alterarSenha = new javax.swing.JMenuItem();
+        acessosUsuarios = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1366, 768));
@@ -207,6 +220,9 @@ public class Home extends javax.swing.JFrame {
 
         cadastroEntidades.add(cadastroPlanoContas);
 
+        jMenuItem2.setText("Funções Usuário");
+        cadastroEntidades.add(jMenuItem2);
+
         cadastros.add(cadastroEntidades);
 
         menuBarra.add(cadastros);
@@ -291,7 +307,6 @@ public class Home extends javax.swing.JFrame {
 
         relatorioFinanceiro.setText("Financeiro");
 
-        relatorioExtratoCaixa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         relatorioExtratoCaixa.setText("Extrato Caixa");
         relatorioExtratoCaixa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -311,19 +326,30 @@ public class Home extends javax.swing.JFrame {
         relatorioContasReceber.setText("Contas a Receber");
         relatorioFinanceiro.add(relatorioContasReceber);
 
-        relatorioCaixaContaResultado.setText("Caixa Conta Resultado");
-        relatorioFinanceiro.add(relatorioCaixaContaResultado);
-
         relatorios.add(relatorioFinanceiro);
 
         relatorioDizimoOferta.setText("Dizimo/Oferta");
 
         relatorioMovimentoDizimoOferta.setText("Movimento Dizimo/Oferta");
+        relatorioMovimentoDizimoOferta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                relatorioMovimentoDizimoOfertaActionPerformed(evt);
+            }
+        });
         relatorioDizimoOferta.add(relatorioMovimentoDizimoOferta);
 
         relatorios.add(relatorioDizimoOferta);
 
-        relatorioEspecifico.setText("Específico");
+        relatorioEspecifico.setText("Prestação de Contas");
+
+        relatorioPrestacaoContaMensal.setText("Prestação Conta Mensal");
+        relatorioPrestacaoContaMensal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                relatorioPrestacaoContaMensalActionPerformed(evt);
+            }
+        });
+        relatorioEspecifico.add(relatorioPrestacaoContaMensal);
+
         relatorios.add(relatorioEspecifico);
 
         menuBarra.add(relatorios);
@@ -462,7 +488,6 @@ public class Home extends javax.swing.JFrame {
 
         campanha.add(processosAvulsos);
 
-        consultarCampanhas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F12, 0));
         consultarCampanhas.setText("Consultar Campanhas");
         consultarCampanhas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -485,6 +510,14 @@ public class Home extends javax.swing.JFrame {
         });
         menuUsuario.add(alterarSenha);
 
+        acessosUsuarios.setText("Acessos Usuário");
+        acessosUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                acessosUsuariosActionPerformed(evt);
+            }
+        });
+        menuUsuario.add(acessosUsuarios);
+
         configuracoes.add(menuUsuario);
 
         menuBarra.add(configuracoes);
@@ -506,98 +539,99 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cadastroPessoasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroPessoasActionPerformed
-        PessoasForm cadastroPessoas = new PessoasForm();
+        PessoasForm cadastroPessoas = new PessoasForm(this.userLogado);
         this.painelHome.add(cadastroPessoas);
         cadastroPessoas.setVisible(true);
         cadastroPessoas.setPosicao();
     }//GEN-LAST:event_cadastroPessoasActionPerformed
 
     private void cadastroIgrejaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroIgrejaActionPerformed
-        IgrejaForm cadastroIgreja = new IgrejaForm();
+        IgrejaForm cadastroIgreja = new IgrejaForm(this.userLogado);
         this.painelHome.add(cadastroIgreja);
         cadastroIgreja.setVisible(true);
         cadastroIgreja.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroIgrejaActionPerformed
 
     private void cadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroUsuarioActionPerformed
-        UsuarioForm cadastroUsuario = new UsuarioForm();
+        UsuarioForm cadastroUsuario = new UsuarioForm(this.userLogado);
         this.painelHome.add(cadastroUsuario);
         cadastroUsuario.setVisible(true);
         cadastroUsuario.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroUsuarioActionPerformed
 
     private void cadastroFormaPagtoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroFormaPagtoActionPerformed
-        FormaPagtoForm cadastroFormaPagto = new FormaPagtoForm();
+        FormaPagtoForm cadastroFormaPagto = new FormaPagtoForm(this.userLogado);
         this.painelHome.add(cadastroFormaPagto);
         cadastroFormaPagto.setVisible(true);
         cadastroFormaPagto.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroFormaPagtoActionPerformed
 
     private void cadastroContaCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaCaixaActionPerformed
-        ContaCaixaForm cadastroContaCaixa = new ContaCaixaForm();
+        ContaCaixaForm cadastroContaCaixa = new ContaCaixaForm(this.userLogado);
         this.painelHome.add(cadastroContaCaixa);
         cadastroContaCaixa.setVisible(true);
         cadastroContaCaixa.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroContaCaixaActionPerformed
 
     private void cadastroTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroTipoOfertaActionPerformed
-        TipoOfertaForm cadastroTipoOferta = new TipoOfertaForm();
+        TipoOfertaForm cadastroTipoOferta = new TipoOfertaForm(this.userLogado);
         this.painelHome.add(cadastroTipoOferta);
         cadastroTipoOferta.setVisible(true);
         cadastroTipoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_cadastroTipoOfertaActionPerformed
 
     private void lancarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasPagarActionPerformed
-        ContasPagarForm contasPagar = new ContasPagarForm();
+        ContasPagarForm contasPagar = new ContasPagarForm(this.userLogado);
         this.painelHome.add(contasPagar);
         contasPagar.setVisible(true);
         contasPagar.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_lancarContasPagarActionPerformed
 
     private void efetivarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_efetivarContasPagarActionPerformed
-        EfetivarContasPagarForm efetivarContas = new EfetivarContasPagarForm();
+        EfetivarContasPagarForm efetivarContas = new EfetivarContasPagarForm(this.userLogado);
         this.painelHome.add(efetivarContas);
         efetivarContas.setVisible(true);
         efetivarContas.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_efetivarContasPagarActionPerformed
 
     private void registrarOfertasDizimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarOfertasDizimoActionPerformed
-        RegistroDizimoOfertaForm rgDizimoOferta = new RegistroDizimoOfertaForm();
+        RegistroDizimoOfertaForm rgDizimoOferta = new RegistroDizimoOfertaForm(this.userLogado);
         this.painelHome.add(rgDizimoOferta);
         rgDizimoOferta.setVisible(true);
         rgDizimoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
     }//GEN-LAST:event_registrarOfertasDizimoActionPerformed
 
     private void transferenciasBancariasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferenciasBancariasActionPerformed
-        TransferenciaContaForm trasnfConta = new TransferenciaContaForm();
+        TransferenciaContaForm trasnfConta = new TransferenciaContaForm(this.userLogado);
         this.painelHome.add(trasnfConta);
         trasnfConta.setVisible(true);
         trasnfConta.setPosicao();
     }//GEN-LAST:event_transferenciasBancariasActionPerformed
 
     private void alterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarSenhaActionPerformed
-       /* AlterarSenhaForm alterarSenha = new AlterarSenhaForm();
+        AlterarSenhaForm alterarSenha = new AlterarSenhaForm(this.userLogado);
         this.painelHome.add(alterarSenha);
         alterarSenha.setVisible(true);
-        alterarSenha.setPosicao();*/
+        alterarSenha.setPosicao();
+
     }//GEN-LAST:event_alterarSenhaActionPerformed
 
     private void cadastroContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaResultadoActionPerformed
-        ContaResultadoForm contaResultado = new ContaResultadoForm();
+        ContaResultadoForm contaResultado = new ContaResultadoForm(this.userLogado);
         this.painelHome.add(contaResultado);
         contaResultado.setVisible(true);
         contaResultado.setPosicao();
     }//GEN-LAST:event_cadastroContaResultadoActionPerformed
 
     private void efetivacaoDizimoOfertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_efetivacaoDizimoOfertasActionPerformed
-        ConsultaRegistroDizimoOferta efetivacao = new ConsultaRegistroDizimoOferta();
+        ConsultaRegistroDizimoOferta efetivacao = new ConsultaRegistroDizimoOferta(this.userLogado);
         this.painelHome.add(efetivacao);
         efetivacao.setVisible(true);
         efetivacao.setPosicao();
     }//GEN-LAST:event_efetivacaoDizimoOfertasActionPerformed
 
     private void movimentoFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movimentoFinanceiroActionPerformed
-        MovimentoFinanceiroForm movimentoFinanceiro = new MovimentoFinanceiroForm();
+        MovimentoFinanceiroForm movimentoFinanceiro = new MovimentoFinanceiroForm(userLogado);
         this.painelHome.add(movimentoFinanceiro);
         movimentoFinanceiro.setVisible(true);
         movimentoFinanceiro.setPosicao();
@@ -609,42 +643,42 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void cancelarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarContasPagarActionPerformed
-        CancelarContasPagarForm cancelarCp = new CancelarContasPagarForm();
+        CancelarContasPagarForm cancelarCp = new CancelarContasPagarForm(this.userLogado);
         this.painelHome.add(cancelarCp);
         cancelarCp.setVisible(true);
         cancelarCp.setPosicao();
     }//GEN-LAST:event_cancelarContasPagarActionPerformed
 
     private void cadastroLivrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroLivrosActionPerformed
-        CadastroLivrosForm cadastrarLivros = new CadastroLivrosForm();
+        CadastroLivrosForm cadastrarLivros = new CadastroLivrosForm(this.userLogado);
         this.painelHome.add(cadastrarLivros);
         cadastrarLivros.setVisible(true);
         cadastrarLivros.setPosicao();
     }//GEN-LAST:event_cadastroLivrosActionPerformed
 
     private void cadastroBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecaActionPerformed
-        BibliotecaForm biblioteca = new BibliotecaForm();
+        BibliotecaForm biblioteca = new BibliotecaForm(this.userLogado);
         this.painelHome.add(biblioteca);
         biblioteca.setVisible(true);
         biblioteca.setPosicao();
     }//GEN-LAST:event_cadastroBibliotecaActionPerformed
 
     private void operacaoEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoEmprestimoActionPerformed
-        EmprestimoLivroForm emprestimo = new EmprestimoLivroForm();
+        EmprestimoLivroForm emprestimo = new EmprestimoLivroForm(this.userLogado);
         this.painelHome.add(emprestimo);
         emprestimo.setVisible(true);
         emprestimo.setPosicao();
     }//GEN-LAST:event_operacaoEmprestimoActionPerformed
 
     private void operacaoConsultaEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoConsultaEmprestimoActionPerformed
-        ConsultaEmprestimoForm consultaEmprestimo = new ConsultaEmprestimoForm();
+        ConsultaEmprestimoForm consultaEmprestimo = new ConsultaEmprestimoForm(this.userLogado);
         this.painelHome.add(consultaEmprestimo);
         consultaEmprestimo.setVisible(true);
         consultaEmprestimo.setPosicao();
     }//GEN-LAST:event_operacaoConsultaEmprestimoActionPerformed
 
     private void cadastroSubContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroSubContaResultadoActionPerformed
-        SubContaResultadoForm subContaResult = new SubContaResultadoForm();
+        SubContaResultadoForm subContaResult = new SubContaResultadoForm(this.userLogado);
         this.painelHome.add(subContaResult);
         subContaResult.setVisible(true);
         subContaResult.setPosicao();
@@ -669,79 +703,101 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_addLivroBibliotecaActionPerformed
 
     private void saidaAvulsaLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saidaAvulsaLivroActionPerformed
-        SaidaAvulsaForm saidaAvulsaLivro = new SaidaAvulsaForm();
+        SaidaAvulsaLivroForm saidaAvulsaLivro = new SaidaAvulsaLivroForm(this.userLogado);
         this.painelHome.add(saidaAvulsaLivro);
         saidaAvulsaLivro.setVisible(true);
         saidaAvulsaLivro.setPosicao();
     }//GEN-LAST:event_saidaAvulsaLivroActionPerformed
 
     private void cadastroBibliotecasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecasActionPerformed
-        CadastroBibliotecaForm cadastroBiblioteca = new CadastroBibliotecaForm();
+        CadastroBibliotecaForm cadastroBiblioteca = new CadastroBibliotecaForm(this.userLogado);
         this.painelHome.add(cadastroBiblioteca);
         cadastroBiblioteca.setVisible(true);
         cadastroBiblioteca.setPosicao();
     }//GEN-LAST:event_cadastroBibliotecasActionPerformed
 
     private void criarCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarCampanhaActionPerformed
-        CadastrarCampanhaForm cadastrarCampanha = new CadastrarCampanhaForm();
+        CadastrarCampanhaForm cadastrarCampanha = new CadastrarCampanhaForm(this.userLogado);
         this.painelHome.add(cadastrarCampanha);
         cadastrarCampanha.setVisible(true);
         cadastrarCampanha.setPosicao();
     }//GEN-LAST:event_criarCampanhaActionPerformed
 
     private void adicionarParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarParticipanteActionPerformed
-        CadastrarParticipanteAvulsoForm cadastrarParticipanteAvulso = new CadastrarParticipanteAvulsoForm();
+        CadastrarParticipanteAvulsoForm cadastrarParticipanteAvulso = new CadastrarParticipanteAvulsoForm(this.userLogado);
         this.painelHome.add(cadastrarParticipanteAvulso);
         cadastrarParticipanteAvulso.setVisible(true);
         cadastrarParticipanteAvulso.setPosicao();
     }//GEN-LAST:event_adicionarParticipanteActionPerformed
 
     private void lancarContasReceberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasReceberActionPerformed
-        GerarContasReceberAvulsaForm gerarCrAvulsa = new GerarContasReceberAvulsaForm();
+        GerarContasReceberAvulsaForm gerarCrAvulsa = new GerarContasReceberAvulsaForm(this.userLogado);
         this.painelHome.add(gerarCrAvulsa);
         gerarCrAvulsa.setVisible(true);
         gerarCrAvulsa.setPosicao();
     }//GEN-LAST:event_lancarContasReceberActionPerformed
 
     private void removerParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerParticipanteActionPerformed
-        RemoverParticipanteForm removerParticipante = new RemoverParticipanteForm();
+        RemoverParticipanteForm removerParticipante = new RemoverParticipanteForm(this.userLogado);
         this.painelHome.add(removerParticipante);
         removerParticipante.setVisible(true);
         removerParticipante.setPosicao();
     }//GEN-LAST:event_removerParticipanteActionPerformed
 
     private void consultarCampanhasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarCampanhasActionPerformed
-        ConsultarCampanhasForm consultarCampanhas = new ConsultarCampanhasForm();
+        ConsultarCampanhasForm consultarCampanhas = new ConsultarCampanhasForm(this.userLogado);
         this.painelHome.add(consultarCampanhas);
         consultarCampanhas.setVisible(true);
         consultarCampanhas.setPosicao();
     }//GEN-LAST:event_consultarCampanhasActionPerformed
 
     private void gerenciarContaReceberCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerenciarContaReceberCampanhaActionPerformed
-        GerenciarContasReceberForm gerenciarContasReceber = new GerenciarContasReceberForm();
+        GerenciarContasReceberForm gerenciarContasReceber = new GerenciarContasReceberForm(this.userLogado);
         this.painelHome.add(gerenciarContasReceber);
         gerenciarContasReceber.setVisible(true);
         gerenciarContasReceber.setPosicao();
     }//GEN-LAST:event_gerenciarContaReceberCampanhaActionPerformed
 
     private void relatorioContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioContasPagarActionPerformed
-        RelatorioContasPagarForm relatorioContasPagar = new RelatorioContasPagarForm();
+        RelatorioContasPagarForm relatorioContasPagar = new RelatorioContasPagarForm(this.userLogado);
         this.painelHome.add(relatorioContasPagar);
         relatorioContasPagar.setVisible(true);
         relatorioContasPagar.setPosicao();
     }//GEN-LAST:event_relatorioContasPagarActionPerformed
 
     private void relatorioExtratoCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioExtratoCaixaActionPerformed
-        ExtratoCaixa extratoCaixa = new ExtratoCaixa();
+        ExtratoCaixa extratoCaixa = new ExtratoCaixa(this.userLogado);
         this.painelHome.add(extratoCaixa);
         extratoCaixa.setVisible(true);
         extratoCaixa.setPosicao();
     }//GEN-LAST:event_relatorioExtratoCaixaActionPerformed
+
+    private void relatorioMovimentoDizimoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioMovimentoDizimoOfertaActionPerformed
+        RelatorioMovimentoDizimoOferta movimentoDizimoOferta = new RelatorioMovimentoDizimoOferta(this.userLogado);
+        this.painelHome.add(movimentoDizimoOferta);
+        movimentoDizimoOferta.setVisible(true);
+        movimentoDizimoOferta.setPosicao();
+    }//GEN-LAST:event_relatorioMovimentoDizimoOfertaActionPerformed
+
+    private void relatorioPrestacaoContaMensalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioPrestacaoContaMensalActionPerformed
+        RelatorioPrestacaoContaMensal prestacaoMensal = new RelatorioPrestacaoContaMensal(this.userLogado);
+        this.painelHome.add(prestacaoMensal);
+        prestacaoMensal.setVisible(true);
+        prestacaoMensal.setPosicao();
+    }//GEN-LAST:event_relatorioPrestacaoContaMensalActionPerformed
+
+    private void acessosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acessosUsuariosActionPerformed
+        AcessosUsuarioForm acessos = new AcessosUsuarioForm();
+        this.painelHome.add(acessos);
+        acessos.setVisible(true);
+        acessos.setPosicao();
+    }//GEN-LAST:event_acessosUsuariosActionPerformed
   
-   
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem acessosUsuarios;
     private javax.swing.JMenuItem addLivroBiblioteca;
     private javax.swing.JMenuItem adicionarParticipante;
     private javax.swing.JMenuItem alterarSenha;
@@ -775,6 +831,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu financeiroDizimoOfertas;
     private javax.swing.JMenuItem gerenciarContaReceberCampanha;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem lancarContasPagar;
     private javax.swing.JMenuItem lancarContasReceber;
     private javax.swing.JMenuBar menuBarra;
@@ -788,7 +845,6 @@ public class Home extends javax.swing.JFrame {
     public javax.swing.JDesktopPane painelHome;
     private javax.swing.JMenu processosAvulsos;
     private javax.swing.JMenuItem registrarOfertasDizimo;
-    private javax.swing.JMenuItem relatorioCaixaContaResultado;
     private javax.swing.JMenuItem relatorioContasPagar;
     private javax.swing.JMenuItem relatorioContasReceber;
     private javax.swing.JMenu relatorioDizimoOferta;
@@ -796,6 +852,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem relatorioExtratoCaixa;
     private javax.swing.JMenu relatorioFinanceiro;
     private javax.swing.JMenuItem relatorioMovimentoDizimoOferta;
+    private javax.swing.JMenuItem relatorioPrestacaoContaMensal;
     private javax.swing.JMenu relatorios;
     private javax.swing.JMenuItem removerParticipante;
     private javax.swing.JMenuItem saidaAvulsaLivro;

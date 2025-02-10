@@ -15,6 +15,7 @@ import model.Livro;
 
 public class LivroDao {
     
+    private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private PreparedStatement insertStmt = null;
@@ -43,6 +44,7 @@ public class LivroDao {
             JOptionPane.showMessageDialog(null, "Livro Cadastrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE
                 JOptionPane.showMessageDialog(null, "Já existe um livro cadastrado com esse código", "Erro 001", JOptionPane.ERROR_MESSAGE);
             }else {
@@ -54,6 +56,7 @@ public class LivroDao {
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -81,6 +84,7 @@ public class LivroDao {
             
             JOptionPane.showMessageDialog(null, "Livro alterado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);           
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o livro", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -88,6 +92,7 @@ public class LivroDao {
                 if (this.updateStmt != null) this.updateStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -146,8 +151,8 @@ public class LivroDao {
             this.selectStmt.execute();
           
         }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao consultar o livro", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            System.out.println("Erro: "+ ex.getMessage());
         }finally{
             // Fechar recursos
             try{
@@ -155,6 +160,7 @@ public class LivroDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -190,6 +196,7 @@ public class LivroDao {
                 listaLivros.add(livro);
             }
         }catch (SQLException ex) {
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar livros", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{
@@ -199,6 +206,7 @@ public class LivroDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

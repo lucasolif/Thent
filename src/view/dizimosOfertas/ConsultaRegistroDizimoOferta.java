@@ -27,6 +27,7 @@ import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.SubContaResultado;
 import model.TipoOferta;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -46,7 +47,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     private Pessoa ofertanteSelec;
     private List<Pessoa> listaOfertante = null;
     
-    public ConsultaRegistroDizimoOferta() {
+    public ConsultaRegistroDizimoOferta(UsuarioLogado usuarioLogado) {
         initComponents();
         rbDataLancamento.setSelected(true);
         dataInicial.setText(conversor.dataAtualString());

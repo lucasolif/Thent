@@ -23,6 +23,7 @@ import model.ContasReceberCampanha;
 import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
+import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -38,7 +39,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     private Pessoa participanteSelec = null;
     private boolean geraContasReceber = false;
     
-    public CadastrarCampanhaForm() {
+    public CadastrarCampanhaForm(UsuarioLogado usuarioLogado) {
         initComponents();
         formInicial();
     }
