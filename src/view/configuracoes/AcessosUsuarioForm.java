@@ -25,7 +25,6 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
         cbx7 = new javax.swing.JCheckBox();
         cbx6 = new javax.swing.JCheckBox();
         cbx4 = new javax.swing.JCheckBox();
-        cbx54 = new javax.swing.JCheckBox();
         cbx3 = new javax.swing.JCheckBox();
         cbx1 = new javax.swing.JCheckBox();
         cbx2 = new javax.swing.JCheckBox();
@@ -58,6 +57,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
         cbx31 = new javax.swing.JCheckBox();
         cbx25 = new javax.swing.JCheckBox();
         cbx29 = new javax.swing.JCheckBox();
+        cbx56 = new javax.swing.JCheckBox();
+        cbx24 = new javax.swing.JCheckBox();
         acessosMenu1 = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
         cbx40 = new javax.swing.JCheckBox();
@@ -83,7 +84,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
         cbx49 = new javax.swing.JCheckBox();
         cbx48 = new javax.swing.JCheckBox();
         jSeparator6 = new javax.swing.JSeparator();
-        cbx56 = new javax.swing.JCheckBox();
+        cbx54 = new javax.swing.JCheckBox();
         permissoes = new javax.swing.JPanel();
         cbx57 = new javax.swing.JCheckBox();
         btnSalvar = new javax.swing.JButton();
@@ -99,8 +100,6 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
         cbx6.setText("Cadastro Forma Pagto");
 
         cbx4.setText("Cadastro de Usuário");
-
-        cbx54.setText("Funções Usuários");
 
         cbx3.setText("Cadastro de Igrejas/Campos");
 
@@ -169,86 +168,88 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
 
         cbx29.setText("Contas a Receber");
 
+        cbx56.setText("Aplicação Financeira");
+
+        cbx24.setText("Retirar Aplicação");
+
         javax.swing.GroupLayout acessosMenusLayout = new javax.swing.GroupLayout(acessosMenus);
         acessosMenus.setLayout(acessosMenusLayout);
         acessosMenusLayout.setHorizontalGroup(
             acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator2)
             .addComponent(jSeparator3)
+            .addComponent(jSeparator1)
             .addGroup(acessosMenusLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
                     .addGroup(acessosMenusLayout.createSequentialGroup()
-                        .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx23)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx22)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx21))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx20)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx15))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx19)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx16)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx13))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx8))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx54))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx4))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx25)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx27)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx26)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx28)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx29)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx32))
-                            .addGroup(acessosMenusLayout.createSequentialGroup()
-                                .addComponent(cbx31)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx30)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx33)))
-                        .addGap(0, 58, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(cbx17)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx23)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx22)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx21))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx20)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx56))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx13))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx8))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx11))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx4))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx25)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx26)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx28)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx29)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx32))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx33))
+                    .addComponent(cbx24))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         acessosMenusLayout.setVerticalGroup(
             acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,8 +271,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                 .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbx9)
                     .addComponent(cbx5)
-                    .addComponent(cbx11)
-                    .addComponent(cbx54))
+                    .addComponent(cbx11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -291,8 +291,11 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                     .addComponent(cbx18)
                     .addComponent(cbx14)
                     .addComponent(cbx20)
-                    .addComponent(cbx15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cbx15)
+                    .addComponent(cbx56))
+                .addGap(5, 5, 5)
+                .addComponent(cbx24)
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -307,7 +310,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                     .addComponent(cbx31)
                     .addComponent(cbx30)
                     .addComponent(cbx33))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         acessoMenus1.addTab("Acesso Menus", acessosMenus);
@@ -360,7 +363,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
 
         jSeparator6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menu Configurações", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
-        cbx56.setText("Acesso de Usuários");
+        cbx54.setText("Acesso de Usuários");
 
         javax.swing.GroupLayout acessosMenu1Layout = new javax.swing.GroupLayout(acessosMenu1);
         acessosMenu1.setLayout(acessosMenu1Layout);
@@ -414,7 +417,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                         .addComponent(cbx50)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbx55))
-                    .addComponent(cbx56))
+                    .addComponent(cbx54))
                 .addContainerGap(77, Short.MAX_VALUE))
         );
         acessosMenu1Layout.setVerticalGroup(
@@ -457,8 +460,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbx56)
-                .addGap(0, 59, Short.MAX_VALUE))
+                .addComponent(cbx54)
+                .addGap(0, 143, Short.MAX_VALUE))
         );
 
         acessoMenus1.addTab("Acesso Menus 1", acessosMenu1);
@@ -479,7 +482,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
             .addGroup(permissoesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cbx57)
-                .addContainerGap(261, Short.MAX_VALUE))
+                .addContainerGap(345, Short.MAX_VALUE))
         );
 
         acessoMenus1.addTab("Permissões", permissoes);
@@ -501,10 +504,10 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(acessoMenus1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(acessoMenus1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnSalvar)
-                .addGap(32, 32, 32))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -532,6 +535,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox cbx21;
     private javax.swing.JCheckBox cbx22;
     private javax.swing.JCheckBox cbx23;
+    private javax.swing.JCheckBox cbx24;
     private javax.swing.JCheckBox cbx25;
     private javax.swing.JCheckBox cbx26;
     private javax.swing.JCheckBox cbx27;

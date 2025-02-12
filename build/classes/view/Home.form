@@ -91,11 +91,6 @@
                     </MenuItem>
                   </SubComponents>
                 </Menu>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Fun&#xe7;&#xf5;es Usu&#xe1;rio"/>
-                  </Properties>
-                </MenuItem>
               </SubComponents>
             </Menu>
           </SubComponents>
@@ -186,6 +181,22 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="movimentoFinanceiroActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="aplicacaoFinanceira">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Realizar Aplica&#xe7;&#xe3;o"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="aplicacaoFinanceiraActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="retiradaAplicacao">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Retirada Aplica&#xe7;&#xe3;o"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="retiradaAplicacaoActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>

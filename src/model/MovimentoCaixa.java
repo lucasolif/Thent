@@ -7,6 +7,7 @@ import java.util.Objects;
 public class MovimentoCaixa {
     private Integer codigo, excluido;
     private RegistroDizimoOferta rgOferta;
+    private Aplicacao aplicacao;
     private ContasPagar contaPagar;
     private String complemento;
     private Date dataMovimento;
@@ -34,6 +35,14 @@ public class MovimentoCaixa {
         this.formaPagto = formaPagto;
         this.igreja = igreja;
         this.usuarioCadastro = usuarioCadastro;
+    }
+
+    public Aplicacao getAplicacao() {
+        return aplicacao;
+    }
+
+    public void setAplicacao(Aplicacao aplicacao) {
+        this.aplicacao = aplicacao;
     }
 
     public ContasReceberCampanha getCrCampanha() {

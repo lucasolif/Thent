@@ -35,6 +35,8 @@ import view.contasPagar.EfetivarContasPagarForm;
 import view.dizimosOfertas.ConsultaRegistroDizimoOferta;
 import view.financeiro.MovimentoFinanceiroForm;
 import view.dizimosOfertas.RegistroDizimoOfertaForm;
+import view.financeiro.AplicacaoFinanceiraForm;
+import view.financeiro.RetiradaValorAplicacaoForm;
 import view.financeiro.TransferenciaContaForm;
 import view.relatorios.ExtratoCaixa;
 import view.relatorios.RelatorioContasPagarForm;
@@ -73,7 +75,6 @@ public class Home extends javax.swing.JFrame {
         cadastroPlanoContas = new javax.swing.JMenu();
         cadastroContaResultado = new javax.swing.JMenuItem();
         cadastroSubContaResultado = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         financeiro = new javax.swing.JMenu();
         financeiroDizimoOfertas = new javax.swing.JMenu();
         registrarOfertasDizimo = new javax.swing.JMenuItem();
@@ -86,6 +87,8 @@ public class Home extends javax.swing.JFrame {
         financeiroCaixa = new javax.swing.JMenu();
         transferenciasBancarias = new javax.swing.JMenuItem();
         movimentoFinanceiro = new javax.swing.JMenuItem();
+        aplicacaoFinanceira = new javax.swing.JMenuItem();
+        retiradaAplicacao = new javax.swing.JMenuItem();
         relatorios = new javax.swing.JMenu();
         relatorioFinanceiro = new javax.swing.JMenu();
         relatorioExtratoCaixa = new javax.swing.JMenuItem();
@@ -220,9 +223,6 @@ public class Home extends javax.swing.JFrame {
 
         cadastroEntidades.add(cadastroPlanoContas);
 
-        jMenuItem2.setText("Funções Usuário");
-        cadastroEntidades.add(jMenuItem2);
-
         cadastros.add(cadastroEntidades);
 
         menuBarra.add(cadastros);
@@ -298,6 +298,22 @@ public class Home extends javax.swing.JFrame {
             }
         });
         financeiroCaixa.add(movimentoFinanceiro);
+
+        aplicacaoFinanceira.setText("Realizar Aplicação");
+        aplicacaoFinanceira.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aplicacaoFinanceiraActionPerformed(evt);
+            }
+        });
+        financeiroCaixa.add(aplicacaoFinanceira);
+
+        retiradaAplicacao.setText("Retirada Aplicação");
+        retiradaAplicacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                retiradaAplicacaoActionPerformed(evt);
+            }
+        });
+        financeiroCaixa.add(retiradaAplicacao);
 
         financeiro.add(financeiroCaixa);
 
@@ -792,6 +808,20 @@ public class Home extends javax.swing.JFrame {
         acessos.setVisible(true);
         acessos.setPosicao();
     }//GEN-LAST:event_acessosUsuariosActionPerformed
+
+    private void aplicacaoFinanceiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicacaoFinanceiraActionPerformed
+        AplicacaoFinanceiraForm aplicaFinanceira = new AplicacaoFinanceiraForm(this.userLogado);
+        this.painelHome.add(aplicaFinanceira);
+        aplicaFinanceira.setVisible(true);
+        aplicaFinanceira.setPosicao();
+    }//GEN-LAST:event_aplicacaoFinanceiraActionPerformed
+
+    private void retiradaAplicacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retiradaAplicacaoActionPerformed
+        RetiradaValorAplicacaoForm retirada = new RetiradaValorAplicacaoForm();
+        this.painelHome.add(retirada);
+        retirada.setVisible(true);
+        retirada.setPosicao();
+    }//GEN-LAST:event_retiradaAplicacaoActionPerformed
   
 
     
@@ -801,6 +831,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem addLivroBiblioteca;
     private javax.swing.JMenuItem adicionarParticipante;
     private javax.swing.JMenuItem alterarSenha;
+    private javax.swing.JMenuItem aplicacaoFinanceira;
     private javax.swing.JMenu biblioteca;
     private javax.swing.JMenuItem cadastroAutor;
     private javax.swing.JMenuItem cadastroBiblioteca;
@@ -831,7 +862,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenu financeiroDizimoOfertas;
     private javax.swing.JMenuItem gerenciarContaReceberCampanha;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem lancarContasPagar;
     private javax.swing.JMenuItem lancarContasReceber;
     private javax.swing.JMenuBar menuBarra;
@@ -855,6 +885,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem relatorioPrestacaoContaMensal;
     private javax.swing.JMenu relatorios;
     private javax.swing.JMenuItem removerParticipante;
+    private javax.swing.JMenuItem retiradaAplicacao;
     private javax.swing.JMenuItem saidaAvulsaLivro;
     private javax.swing.JMenuItem transferenciasBancarias;
     // End of variables declaration//GEN-END:variables
