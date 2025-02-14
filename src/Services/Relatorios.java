@@ -362,8 +362,8 @@ public class Relatorios {
         
     }
     
-    //Função para gerar os totalizados para o relatório de caixa
-    public void valoresDoisTotalizadores(String descricao1, String descricao2, double totalEntradaPagto, double totalSaidaPendente, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    //Função para gerar dois totalizados para o relatório 
+    public void valoresDoisTotalizadores(String descricao1, String descricao2, double totalizador1, double totalizador2, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
@@ -377,7 +377,7 @@ public class Relatorios {
         fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
         fluxoConteudo.showText(descricao1); 
         fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
-        fluxoConteudo.showText(" R$ "+this.conversor.formatarDoubleString(totalEntradaPagto).replace(".", ","));
+        fluxoConteudo.showText(" R$ "+this.conversor.formatarDoubleString(totalizador1).replace(".", ","));
         yPosition =-12;
 
         //Total de Saída
@@ -385,14 +385,14 @@ public class Relatorios {
         fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
         fluxoConteudo.showText(descricao2); 
         fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
-        fluxoConteudo.showText(" R$ "+this.conversor.formatarDoubleString(totalSaidaPendente).replace(".", ","));
+        fluxoConteudo.showText(" R$ "+this.conversor.formatarDoubleString(totalizador2).replace(".", ","));
 
         fluxoConteudo.endText();
         
     }
     
-    //Função para gerar os totalizados para o relatório de caixa
-    public void valoresTresTotalizadores(String descricao1, String descricao2, String descricao3, double totalEntradaPagto, double totalSaidaPendente, double totalSaldo, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    //Função para gerar três totalizados para o relatório
+    public void valoresTresTotalizadores(String descricao1, String descricao2, String descricao3, double totalizador1, double totalizador2, double totalizador3, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
@@ -406,7 +406,7 @@ public class Relatorios {
         fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
         fluxoConteudo.showText(descricao1); 
         fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
-        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalEntradaPagto).replace(".", ","));
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador1).replace(".", ","));
         yPosition =-12; // Ajusta a posição da próxima linha
 
         //Total de Saída
@@ -414,20 +414,68 @@ public class Relatorios {
         fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
         fluxoConteudo.showText(descricao2); 
         fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
-        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalSaidaPendente).replace(".", ","));
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador2).replace(".", ","));
 
         //Saldo da conta caixa
         fluxoConteudo.newLineAtOffset(0, yPosition);
         fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
         fluxoConteudo.showText(descricao3); 
         fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
-        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalSaldo).replace(".", ","));
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador3).replace(".", ","));
 
         fluxoConteudo.endText();
         
     }
     
+    //Função para gerar quatro totalizados para o relatório
+    public void valoresCincoTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, String descricao5, double totalizador1, double totalizador2, double totalizador3, double totalizador4, double totalizador5, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
+        float tamanhoFonte = 12;
 
+        fluxoConteudo.beginText();
+
+        //Totalizador 1
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao1); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador1).replace(".", ","));
+        yPosition =-12; // Ajusta a posição da próxima linha
+
+        //Totalizador 2
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao2); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador2).replace(".", ","));
+
+        //Totalizador 3
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao3); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador3).replace(".", ","));
+
+        //Totalizafor 4
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao4); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador4).replace(".", ","));
+
+        //Totalizafor 5
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao5); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador5).replace(".", ","));
+
+        
+        fluxoConteudo.endText();
+        
+    }
     
    
 }

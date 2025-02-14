@@ -1,5 +1,6 @@
 package view;
 
+import Services.AgendadorTarefas;
 import javax.swing.JFrame;
 import jdbc.Conexao;
 import model.Login;
@@ -55,6 +56,11 @@ public class Home extends javax.swing.JFrame {
         //seta o codigo e nome do usuário para o objeto UsuerioLogado, que será utilizado nos processos do sistema
         userLogado.setCodUsuario(usuarioLogado.getCodUsuario());
         userLogado.setNomeUsuario(usuarioLogado.getUsuario());
+        
+        //Executar tarefas automaticamente
+        AgendadorTarefas exeTaregas = new AgendadorTarefas();
+        exeTaregas.executarTarefasDiarias();
+
     }
 
 
@@ -64,65 +70,66 @@ public class Home extends javax.swing.JFrame {
 
         painelHome = new javax.swing.JDesktopPane();
         menuBarra = new javax.swing.JMenuBar();
-        cadastros = new javax.swing.JMenu();
-        cadastroPessoas = new javax.swing.JMenuItem();
-        cadastroIgreja = new javax.swing.JMenuItem();
-        cadastroUsuario = new javax.swing.JMenuItem();
-        cadastroEntidades = new javax.swing.JMenu();
-        cadastroFormaPagto = new javax.swing.JMenuItem();
-        cadastroContaCaixa = new javax.swing.JMenuItem();
-        cadastroTipoOferta = new javax.swing.JMenuItem();
-        cadastroPlanoContas = new javax.swing.JMenu();
-        cadastroContaResultado = new javax.swing.JMenuItem();
-        cadastroSubContaResultado = new javax.swing.JMenuItem();
-        financeiro = new javax.swing.JMenu();
-        financeiroDizimoOfertas = new javax.swing.JMenu();
-        registrarOfertasDizimo = new javax.swing.JMenuItem();
-        efetivacaoDizimoOfertas = new javax.swing.JMenuItem();
-        financeiroContasPagar = new javax.swing.JMenu();
-        lancarContasPagar = new javax.swing.JMenuItem();
-        efetivarContasPagar = new javax.swing.JMenuItem();
-        cancelarContasPagar = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        financeiroCaixa = new javax.swing.JMenu();
-        transferenciasBancarias = new javax.swing.JMenuItem();
-        movimentoFinanceiro = new javax.swing.JMenuItem();
-        aplicacaoFinanceira = new javax.swing.JMenuItem();
-        retiradaAplicacao = new javax.swing.JMenuItem();
-        relatorios = new javax.swing.JMenu();
-        relatorioFinanceiro = new javax.swing.JMenu();
-        relatorioExtratoCaixa = new javax.swing.JMenuItem();
-        relatorioContasPagar = new javax.swing.JMenuItem();
-        relatorioContasReceber = new javax.swing.JMenuItem();
-        relatorioDizimoOferta = new javax.swing.JMenu();
-        relatorioMovimentoDizimoOferta = new javax.swing.JMenuItem();
-        relatorioEspecifico = new javax.swing.JMenu();
-        relatorioPrestacaoContaMensal = new javax.swing.JMenuItem();
-        biblioteca = new javax.swing.JMenu();
         menuCadastros = new javax.swing.JMenu();
-        cadastroLivros = new javax.swing.JMenuItem();
-        cadastroAutor = new javax.swing.JMenuItem();
-        cadastroEditora = new javax.swing.JMenuItem();
-        cadastroBibliotecas = new javax.swing.JMenuItem();
+        formCadastroPessoas = new javax.swing.JMenuItem();
+        formCadastroIgreja = new javax.swing.JMenuItem();
+        formCadastroUsuario = new javax.swing.JMenuItem();
+        subMenuCadastroEntidades = new javax.swing.JMenu();
+        formCadastroFormaPagto = new javax.swing.JMenuItem();
+        formCadastroContaCaixa = new javax.swing.JMenuItem();
+        formCadastroTipoOferta = new javax.swing.JMenuItem();
+        subMenuCadastroPlanoContas = new javax.swing.JMenu();
+        formCadastroContaResultado = new javax.swing.JMenuItem();
+        formCadastroSubContaResultado = new javax.swing.JMenuItem();
+        menuFinanceiro = new javax.swing.JMenu();
+        subMenuFinanceiroDizimoOfertas = new javax.swing.JMenu();
+        formRegistrarOfertasDizimo = new javax.swing.JMenuItem();
+        formConsultarDizimoOfertas = new javax.swing.JMenuItem();
+        subMenuFinanceiroContasPagar = new javax.swing.JMenu();
+        formLancarContasPagar = new javax.swing.JMenuItem();
+        formEfetivarContasPagar = new javax.swing.JMenuItem();
+        formCancelarContasPagar = new javax.swing.JMenuItem();
+        formAlterarContasPagar = new javax.swing.JMenuItem();
+        subMenuFinanceiroCaixa = new javax.swing.JMenu();
+        formTransferenciasBancarias = new javax.swing.JMenuItem();
+        formMovimentoFinanceiro = new javax.swing.JMenuItem();
+        formAplicacaoFinanceira = new javax.swing.JMenuItem();
+        formRetiradaAplicacao = new javax.swing.JMenuItem();
+        menuRelatorios = new javax.swing.JMenu();
+        subMenuRelatorioFinanceiro = new javax.swing.JMenu();
+        formRelatorioExtratoCaixa = new javax.swing.JMenuItem();
+        formRelatorioContasPagar = new javax.swing.JMenuItem();
+        formRelatorioContasReceber = new javax.swing.JMenuItem();
+        subMenuRelatorioDizimoOferta = new javax.swing.JMenu();
+        formRelatorioMovimentoDizimoOferta = new javax.swing.JMenuItem();
+        subMenuRelatorioPrestacaoConta = new javax.swing.JMenu();
+        formRelatorioPrestacaoContaMensal = new javax.swing.JMenuItem();
         menuBiblioteca = new javax.swing.JMenu();
-        cadastroBiblioteca = new javax.swing.JMenuItem();
-        addLivroBiblioteca = new javax.swing.JMenuItem();
-        saidaAvulsaLivro = new javax.swing.JMenuItem();
-        menuEmprestimoLivros = new javax.swing.JMenu();
-        operacaoEmprestimo = new javax.swing.JMenuItem();
-        operacaoConsultaEmprestimo = new javax.swing.JMenuItem();
-        campanha = new javax.swing.JMenu();
-        criarCampanha = new javax.swing.JMenuItem();
-        gerenciarContaReceberCampanha = new javax.swing.JMenuItem();
-        processosAvulsos = new javax.swing.JMenu();
-        adicionarParticipante = new javax.swing.JMenuItem();
-        removerParticipante = new javax.swing.JMenuItem();
-        lancarContasReceber = new javax.swing.JMenuItem();
-        consultarCampanhas = new javax.swing.JMenuItem();
-        configuracoes = new javax.swing.JMenu();
-        menuUsuario = new javax.swing.JMenu();
-        alterarSenha = new javax.swing.JMenuItem();
-        acessosUsuarios = new javax.swing.JMenuItem();
+        subMenuCadastros = new javax.swing.JMenu();
+        formCadastroLivros = new javax.swing.JMenuItem();
+        formCadastroAutor = new javax.swing.JMenuItem();
+        formCadastroEditora = new javax.swing.JMenuItem();
+        formCadastroBibliotecas = new javax.swing.JMenuItem();
+        subMenuOpercaoBiblioteca = new javax.swing.JMenu();
+        formConsultarAcervoBiblioteca = new javax.swing.JMenuItem();
+        formAdicionarLivroBiblioteca = new javax.swing.JMenuItem();
+        formSaidaAvulsaLivro = new javax.swing.JMenuItem();
+        subMenuEmprestimoLivros = new javax.swing.JMenu();
+        formEmprestimoLivros = new javax.swing.JMenuItem();
+        formGerenciarConsultarEmprestimo = new javax.swing.JMenuItem();
+        menuCampanha = new javax.swing.JMenu();
+        formCriarCampanha = new javax.swing.JMenuItem();
+        formGerenciarContaReceberCampanha = new javax.swing.JMenuItem();
+        subMenuProcessosAvulsosCampanha = new javax.swing.JMenu();
+        formAdicionarParticipante = new javax.swing.JMenuItem();
+        formRemoverParticipante = new javax.swing.JMenuItem();
+        formLancarContasReceberCampanha = new javax.swing.JMenuItem();
+        formConsultarCampanhas = new javax.swing.JMenuItem();
+        menuConfiguracoes = new javax.swing.JMenu();
+        subMenuUsuario = new javax.swing.JMenu();
+        formAcessosUsuarios = new javax.swing.JMenuItem();
+        menuAlterarSenha = new javax.swing.JMenu();
+        formAlterarSenha = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1366, 768));
@@ -151,392 +158,398 @@ public class Home extends javax.swing.JFrame {
         menuBarra.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         menuBarra.setName(""); // NOI18N
 
-        cadastros.setText("Cadastros");
-
-        cadastroPessoas.setText("Membros/Pessoa");
-        cadastroPessoas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroPessoasActionPerformed(evt);
-            }
-        });
-        cadastros.add(cadastroPessoas);
-
-        cadastroIgreja.setText("Campo/Igreja");
-        cadastroIgreja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroIgrejaActionPerformed(evt);
-            }
-        });
-        cadastros.add(cadastroIgreja);
-
-        cadastroUsuario.setText("Usuários");
-        cadastroUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroUsuarioActionPerformed(evt);
-            }
-        });
-        cadastros.add(cadastroUsuario);
-
-        cadastroEntidades.setText("Entidades");
-
-        cadastroFormaPagto.setText("Forma de Pagamento");
-        cadastroFormaPagto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroFormaPagtoActionPerformed(evt);
-            }
-        });
-        cadastroEntidades.add(cadastroFormaPagto);
-
-        cadastroContaCaixa.setText("Conta Caixa");
-        cadastroContaCaixa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroContaCaixaActionPerformed(evt);
-            }
-        });
-        cadastroEntidades.add(cadastroContaCaixa);
-
-        cadastroTipoOferta.setText("Tipo De Oferta");
-        cadastroTipoOferta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroTipoOfertaActionPerformed(evt);
-            }
-        });
-        cadastroEntidades.add(cadastroTipoOferta);
-
-        cadastroPlanoContas.setText("Plano de Contas");
-
-        cadastroContaResultado.setText("Conta de Resultado");
-        cadastroContaResultado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroContaResultadoActionPerformed(evt);
-            }
-        });
-        cadastroPlanoContas.add(cadastroContaResultado);
-
-        cadastroSubContaResultado.setText("SubConta de Resultado");
-        cadastroSubContaResultado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroSubContaResultadoActionPerformed(evt);
-            }
-        });
-        cadastroPlanoContas.add(cadastroSubContaResultado);
-
-        cadastroEntidades.add(cadastroPlanoContas);
-
-        cadastros.add(cadastroEntidades);
-
-        menuBarra.add(cadastros);
-
-        financeiro.setText("Financeiro");
-        financeiro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        financeiroDizimoOfertas.setText("Operações Dízimo/Ofertas");
-
-        registrarOfertasDizimo.setText("Registrar Dizimo/Ofertas");
-        registrarOfertasDizimo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registrarOfertasDizimoActionPerformed(evt);
-            }
-        });
-        financeiroDizimoOfertas.add(registrarOfertasDizimo);
-
-        efetivacaoDizimoOfertas.setText("Consulta de Dizimo/Oferta");
-        efetivacaoDizimoOfertas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                efetivacaoDizimoOfertasActionPerformed(evt);
-            }
-        });
-        financeiroDizimoOfertas.add(efetivacaoDizimoOfertas);
-
-        financeiro.add(financeiroDizimoOfertas);
-
-        financeiroContasPagar.setText("Contas a Pagar");
-
-        lancarContasPagar.setText("Lançar Contas a Pagar");
-        lancarContasPagar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lancarContasPagarActionPerformed(evt);
-            }
-        });
-        financeiroContasPagar.add(lancarContasPagar);
-
-        efetivarContasPagar.setText("Efetivar/Consultar Contas a Pagar");
-        efetivarContasPagar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                efetivarContasPagarActionPerformed(evt);
-            }
-        });
-        financeiroContasPagar.add(efetivarContasPagar);
-
-        cancelarContasPagar.setText("Cancelar Contas a Pagar");
-        cancelarContasPagar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelarContasPagarActionPerformed(evt);
-            }
-        });
-        financeiroContasPagar.add(cancelarContasPagar);
-
-        jMenuItem1.setText("Alterar Contas a Pagar");
-        financeiroContasPagar.add(jMenuItem1);
-
-        financeiro.add(financeiroContasPagar);
-
-        financeiroCaixa.setText("Operações Caixa");
-
-        transferenciasBancarias.setText("Transferências Bancárias");
-        transferenciasBancarias.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                transferenciasBancariasActionPerformed(evt);
-            }
-        });
-        financeiroCaixa.add(transferenciasBancarias);
-
-        movimentoFinanceiro.setText("Movimento Financeiro");
-        movimentoFinanceiro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                movimentoFinanceiroActionPerformed(evt);
-            }
-        });
-        financeiroCaixa.add(movimentoFinanceiro);
-
-        aplicacaoFinanceira.setText("Realizar Aplicação");
-        aplicacaoFinanceira.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aplicacaoFinanceiraActionPerformed(evt);
-            }
-        });
-        financeiroCaixa.add(aplicacaoFinanceira);
-
-        retiradaAplicacao.setText("Retirada Aplicação");
-        retiradaAplicacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                retiradaAplicacaoActionPerformed(evt);
-            }
-        });
-        financeiroCaixa.add(retiradaAplicacao);
-
-        financeiro.add(financeiroCaixa);
-
-        menuBarra.add(financeiro);
-
-        relatorios.setText("Relatórios");
-
-        relatorioFinanceiro.setText("Financeiro");
-
-        relatorioExtratoCaixa.setText("Extrato Caixa");
-        relatorioExtratoCaixa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                relatorioExtratoCaixaActionPerformed(evt);
-            }
-        });
-        relatorioFinanceiro.add(relatorioExtratoCaixa);
-
-        relatorioContasPagar.setText("Contas a Pagar");
-        relatorioContasPagar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                relatorioContasPagarActionPerformed(evt);
-            }
-        });
-        relatorioFinanceiro.add(relatorioContasPagar);
-
-        relatorioContasReceber.setText("Contas a Receber");
-        relatorioFinanceiro.add(relatorioContasReceber);
-
-        relatorios.add(relatorioFinanceiro);
-
-        relatorioDizimoOferta.setText("Dizimo/Oferta");
-
-        relatorioMovimentoDizimoOferta.setText("Movimento Dizimo/Oferta");
-        relatorioMovimentoDizimoOferta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                relatorioMovimentoDizimoOfertaActionPerformed(evt);
-            }
-        });
-        relatorioDizimoOferta.add(relatorioMovimentoDizimoOferta);
-
-        relatorios.add(relatorioDizimoOferta);
-
-        relatorioEspecifico.setText("Prestação de Contas");
-
-        relatorioPrestacaoContaMensal.setText("Prestação Conta Mensal");
-        relatorioPrestacaoContaMensal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                relatorioPrestacaoContaMensalActionPerformed(evt);
-            }
-        });
-        relatorioEspecifico.add(relatorioPrestacaoContaMensal);
-
-        relatorios.add(relatorioEspecifico);
-
-        menuBarra.add(relatorios);
-
-        biblioteca.setText("Biblioteca");
-
         menuCadastros.setText("Cadastros");
 
-        cadastroLivros.setText("Livros");
-        cadastroLivros.addActionListener(new java.awt.event.ActionListener() {
+        formCadastroPessoas.setText("Membros/Pessoa");
+        formCadastroPessoas.setName(""); // NOI18N
+        formCadastroPessoas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroLivrosActionPerformed(evt);
+                formCadastroPessoasActionPerformed(evt);
             }
         });
-        menuCadastros.add(cadastroLivros);
+        menuCadastros.add(formCadastroPessoas);
 
-        cadastroAutor.setText("Autor(a)");
-        cadastroAutor.addActionListener(new java.awt.event.ActionListener() {
+        formCadastroIgreja.setText("Campo/Igreja");
+        formCadastroIgreja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroAutorActionPerformed(evt);
+                formCadastroIgrejaActionPerformed(evt);
             }
         });
-        menuCadastros.add(cadastroAutor);
+        menuCadastros.add(formCadastroIgreja);
 
-        cadastroEditora.setText("Editora/Publicadora");
-        cadastroEditora.addActionListener(new java.awt.event.ActionListener() {
+        formCadastroUsuario.setText("Usuários");
+        formCadastroUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroEditoraActionPerformed(evt);
+                formCadastroUsuarioActionPerformed(evt);
             }
         });
-        menuCadastros.add(cadastroEditora);
+        menuCadastros.add(formCadastroUsuario);
 
-        cadastroBibliotecas.setText("Biblioteca");
-        cadastroBibliotecas.addActionListener(new java.awt.event.ActionListener() {
+        subMenuCadastroEntidades.setText("Entidades");
+
+        formCadastroFormaPagto.setText("Forma de Pagamento");
+        formCadastroFormaPagto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroBibliotecasActionPerformed(evt);
+                formCadastroFormaPagtoActionPerformed(evt);
             }
         });
-        menuCadastros.add(cadastroBibliotecas);
+        subMenuCadastroEntidades.add(formCadastroFormaPagto);
 
-        biblioteca.add(menuCadastros);
+        formCadastroContaCaixa.setText("Conta Caixa");
+        formCadastroContaCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formCadastroContaCaixaActionPerformed(evt);
+            }
+        });
+        subMenuCadastroEntidades.add(formCadastroContaCaixa);
+
+        formCadastroTipoOferta.setText("Tipo De Oferta");
+        formCadastroTipoOferta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formCadastroTipoOfertaActionPerformed(evt);
+            }
+        });
+        subMenuCadastroEntidades.add(formCadastroTipoOferta);
+
+        subMenuCadastroPlanoContas.setText("Plano de Contas");
+
+        formCadastroContaResultado.setText("Conta de Resultado");
+        formCadastroContaResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formCadastroContaResultadoActionPerformed(evt);
+            }
+        });
+        subMenuCadastroPlanoContas.add(formCadastroContaResultado);
+
+        formCadastroSubContaResultado.setText("SubConta de Resultado");
+        formCadastroSubContaResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formCadastroSubContaResultadoActionPerformed(evt);
+            }
+        });
+        subMenuCadastroPlanoContas.add(formCadastroSubContaResultado);
+
+        subMenuCadastroEntidades.add(subMenuCadastroPlanoContas);
+
+        menuCadastros.add(subMenuCadastroEntidades);
+
+        menuBarra.add(menuCadastros);
+
+        menuFinanceiro.setText("Financeiro");
+        menuFinanceiro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menuFinanceiro.setName(""); // NOI18N
+
+        subMenuFinanceiroDizimoOfertas.setText("Operações Dízimo/Ofertas");
+
+        formRegistrarOfertasDizimo.setText("Registrar Dizimo/Ofertas");
+        formRegistrarOfertasDizimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRegistrarOfertasDizimoActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroDizimoOfertas.add(formRegistrarOfertasDizimo);
+
+        formConsultarDizimoOfertas.setText("Consulta de Dizimo/Oferta");
+        formConsultarDizimoOfertas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formConsultarDizimoOfertasActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroDizimoOfertas.add(formConsultarDizimoOfertas);
+
+        menuFinanceiro.add(subMenuFinanceiroDizimoOfertas);
+
+        subMenuFinanceiroContasPagar.setText("Contas a Pagar");
+
+        formLancarContasPagar.setText("Lançar Contas a Pagar");
+        formLancarContasPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formLancarContasPagarActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroContasPagar.add(formLancarContasPagar);
+
+        formEfetivarContasPagar.setText("Efetivar/Consultar Contas a Pagar");
+        formEfetivarContasPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formEfetivarContasPagarActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroContasPagar.add(formEfetivarContasPagar);
+
+        formCancelarContasPagar.setText("Cancelar Contas a Pagar");
+        formCancelarContasPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formCancelarContasPagarActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroContasPagar.add(formCancelarContasPagar);
+
+        formAlterarContasPagar.setText("Alterar Contas a Pagar");
+        subMenuFinanceiroContasPagar.add(formAlterarContasPagar);
+
+        menuFinanceiro.add(subMenuFinanceiroContasPagar);
+
+        subMenuFinanceiroCaixa.setText("Operações Caixa");
+
+        formTransferenciasBancarias.setText("Transferências Bancárias");
+        formTransferenciasBancarias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formTransferenciasBancariasActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroCaixa.add(formTransferenciasBancarias);
+
+        formMovimentoFinanceiro.setText("Movimento Financeiro");
+        formMovimentoFinanceiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formMovimentoFinanceiroActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroCaixa.add(formMovimentoFinanceiro);
+
+        formAplicacaoFinanceira.setText("Realizar Aplicação");
+        formAplicacaoFinanceira.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formAplicacaoFinanceiraActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroCaixa.add(formAplicacaoFinanceira);
+
+        formRetiradaAplicacao.setText("Retirada Aplicação");
+        formRetiradaAplicacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRetiradaAplicacaoActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroCaixa.add(formRetiradaAplicacao);
+
+        menuFinanceiro.add(subMenuFinanceiroCaixa);
+
+        menuBarra.add(menuFinanceiro);
+
+        menuRelatorios.setText("Relatórios");
+
+        subMenuRelatorioFinanceiro.setText("Financeiro");
+
+        formRelatorioExtratoCaixa.setText("Extrato Caixa");
+        formRelatorioExtratoCaixa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRelatorioExtratoCaixaActionPerformed(evt);
+            }
+        });
+        subMenuRelatorioFinanceiro.add(formRelatorioExtratoCaixa);
+
+        formRelatorioContasPagar.setText("Contas a Pagar");
+        formRelatorioContasPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRelatorioContasPagarActionPerformed(evt);
+            }
+        });
+        subMenuRelatorioFinanceiro.add(formRelatorioContasPagar);
+
+        formRelatorioContasReceber.setText("Contas a Receber");
+        subMenuRelatorioFinanceiro.add(formRelatorioContasReceber);
+
+        menuRelatorios.add(subMenuRelatorioFinanceiro);
+
+        subMenuRelatorioDizimoOferta.setText("Dizimo/Oferta");
+
+        formRelatorioMovimentoDizimoOferta.setText("Movimento Dizimo/Oferta");
+        formRelatorioMovimentoDizimoOferta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRelatorioMovimentoDizimoOfertaActionPerformed(evt);
+            }
+        });
+        subMenuRelatorioDizimoOferta.add(formRelatorioMovimentoDizimoOferta);
+
+        menuRelatorios.add(subMenuRelatorioDizimoOferta);
+
+        subMenuRelatorioPrestacaoConta.setText("Prestação de Contas");
+
+        formRelatorioPrestacaoContaMensal.setText("Prestação Conta Mensal");
+        formRelatorioPrestacaoContaMensal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRelatorioPrestacaoContaMensalActionPerformed(evt);
+            }
+        });
+        subMenuRelatorioPrestacaoConta.add(formRelatorioPrestacaoContaMensal);
+
+        menuRelatorios.add(subMenuRelatorioPrestacaoConta);
+
+        menuBarra.add(menuRelatorios);
 
         menuBiblioteca.setText("Biblioteca");
 
-        cadastroBiblioteca.setText("Consultar Biblioteca");
-        cadastroBiblioteca.addActionListener(new java.awt.event.ActionListener() {
+        subMenuCadastros.setText("Cadastros");
+
+        formCadastroLivros.setText("Livros");
+        formCadastroLivros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cadastroBibliotecaActionPerformed(evt);
+                formCadastroLivrosActionPerformed(evt);
             }
         });
-        menuBiblioteca.add(cadastroBiblioteca);
+        subMenuCadastros.add(formCadastroLivros);
 
-        addLivroBiblioteca.setText("Adicionar Livro Biblioteca");
-        addLivroBiblioteca.addActionListener(new java.awt.event.ActionListener() {
+        formCadastroAutor.setText("Autor(a)");
+        formCadastroAutor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addLivroBibliotecaActionPerformed(evt);
+                formCadastroAutorActionPerformed(evt);
             }
         });
-        menuBiblioteca.add(addLivroBiblioteca);
+        subMenuCadastros.add(formCadastroAutor);
 
-        saidaAvulsaLivro.setText("Saída Avulsa de Livros");
-        saidaAvulsaLivro.addActionListener(new java.awt.event.ActionListener() {
+        formCadastroEditora.setText("Editora/Publicadora");
+        formCadastroEditora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saidaAvulsaLivroActionPerformed(evt);
+                formCadastroEditoraActionPerformed(evt);
             }
         });
-        menuBiblioteca.add(saidaAvulsaLivro);
+        subMenuCadastros.add(formCadastroEditora);
 
-        biblioteca.add(menuBiblioteca);
-
-        menuEmprestimoLivros.setText("Empréstimo Livros");
-
-        operacaoEmprestimo.setText("Empréstimo Livros");
-        operacaoEmprestimo.addActionListener(new java.awt.event.ActionListener() {
+        formCadastroBibliotecas.setText("Biblioteca");
+        formCadastroBibliotecas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                operacaoEmprestimoActionPerformed(evt);
+                formCadastroBibliotecasActionPerformed(evt);
             }
         });
-        menuEmprestimoLivros.add(operacaoEmprestimo);
+        subMenuCadastros.add(formCadastroBibliotecas);
 
-        operacaoConsultaEmprestimo.setText("Gerenciar Empréstimo");
-        operacaoConsultaEmprestimo.addActionListener(new java.awt.event.ActionListener() {
+        menuBiblioteca.add(subMenuCadastros);
+
+        subMenuOpercaoBiblioteca.setText("Operações Biblioteca");
+
+        formConsultarAcervoBiblioteca.setText("Consultar Acervo Biblioteca");
+        formConsultarAcervoBiblioteca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                operacaoConsultaEmprestimoActionPerformed(evt);
+                formConsultarAcervoBibliotecaActionPerformed(evt);
             }
         });
-        menuEmprestimoLivros.add(operacaoConsultaEmprestimo);
+        subMenuOpercaoBiblioteca.add(formConsultarAcervoBiblioteca);
 
-        biblioteca.add(menuEmprestimoLivros);
-
-        menuBarra.add(biblioteca);
-
-        campanha.setText("Campanha");
-
-        criarCampanha.setText("Criar Campanha");
-        criarCampanha.addActionListener(new java.awt.event.ActionListener() {
+        formAdicionarLivroBiblioteca.setText("Adicionar Livro Biblioteca");
+        formAdicionarLivroBiblioteca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                criarCampanhaActionPerformed(evt);
+                formAdicionarLivroBibliotecaActionPerformed(evt);
             }
         });
-        campanha.add(criarCampanha);
+        subMenuOpercaoBiblioteca.add(formAdicionarLivroBiblioteca);
 
-        gerenciarContaReceberCampanha.setText("Gerenciar Contas Receber");
-        gerenciarContaReceberCampanha.addActionListener(new java.awt.event.ActionListener() {
+        formSaidaAvulsaLivro.setText("Saída Avulsa de Livros");
+        formSaidaAvulsaLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gerenciarContaReceberCampanhaActionPerformed(evt);
+                formSaidaAvulsaLivroActionPerformed(evt);
             }
         });
-        campanha.add(gerenciarContaReceberCampanha);
+        subMenuOpercaoBiblioteca.add(formSaidaAvulsaLivro);
 
-        processosAvulsos.setText("Processos Avulsos");
+        menuBiblioteca.add(subMenuOpercaoBiblioteca);
 
-        adicionarParticipante.setText("Adicionar Participante");
-        adicionarParticipante.addActionListener(new java.awt.event.ActionListener() {
+        subMenuEmprestimoLivros.setText("Empréstimo Livros");
+
+        formEmprestimoLivros.setText("Empréstimo Livros");
+        formEmprestimoLivros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adicionarParticipanteActionPerformed(evt);
+                formEmprestimoLivrosActionPerformed(evt);
             }
         });
-        processosAvulsos.add(adicionarParticipante);
+        subMenuEmprestimoLivros.add(formEmprestimoLivros);
 
-        removerParticipante.setText("Remover Participante");
-        removerParticipante.addActionListener(new java.awt.event.ActionListener() {
+        formGerenciarConsultarEmprestimo.setText("Gerenciar/Consultar Empréstimo");
+        formGerenciarConsultarEmprestimo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removerParticipanteActionPerformed(evt);
+                formGerenciarConsultarEmprestimoActionPerformed(evt);
             }
         });
-        processosAvulsos.add(removerParticipante);
+        subMenuEmprestimoLivros.add(formGerenciarConsultarEmprestimo);
 
-        lancarContasReceber.setText("Lançar Contas Receber ");
-        lancarContasReceber.addActionListener(new java.awt.event.ActionListener() {
+        menuBiblioteca.add(subMenuEmprestimoLivros);
+
+        menuBarra.add(menuBiblioteca);
+
+        menuCampanha.setText("Campanha");
+
+        formCriarCampanha.setText("Criar Campanha");
+        formCriarCampanha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lancarContasReceberActionPerformed(evt);
+                formCriarCampanhaActionPerformed(evt);
             }
         });
-        processosAvulsos.add(lancarContasReceber);
+        menuCampanha.add(formCriarCampanha);
 
-        campanha.add(processosAvulsos);
-
-        consultarCampanhas.setText("Consultar Campanhas");
-        consultarCampanhas.addActionListener(new java.awt.event.ActionListener() {
+        formGerenciarContaReceberCampanha.setText("Gerenciar Contas Receber");
+        formGerenciarContaReceberCampanha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                consultarCampanhasActionPerformed(evt);
+                formGerenciarContaReceberCampanhaActionPerformed(evt);
             }
         });
-        campanha.add(consultarCampanhas);
+        menuCampanha.add(formGerenciarContaReceberCampanha);
 
-        menuBarra.add(campanha);
+        subMenuProcessosAvulsosCampanha.setText("Processos Avulsos");
 
-        configuracoes.setText("Configurações");
-
-        menuUsuario.setText("Usuário");
-
-        alterarSenha.setText("Alterar Senha");
-        alterarSenha.addActionListener(new java.awt.event.ActionListener() {
+        formAdicionarParticipante.setText("Adicionar Participante");
+        formAdicionarParticipante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                alterarSenhaActionPerformed(evt);
+                formAdicionarParticipanteActionPerformed(evt);
             }
         });
-        menuUsuario.add(alterarSenha);
+        subMenuProcessosAvulsosCampanha.add(formAdicionarParticipante);
 
-        acessosUsuarios.setText("Acessos Usuário");
-        acessosUsuarios.addActionListener(new java.awt.event.ActionListener() {
+        formRemoverParticipante.setText("Remover Participante");
+        formRemoverParticipante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                acessosUsuariosActionPerformed(evt);
+                formRemoverParticipanteActionPerformed(evt);
             }
         });
-        menuUsuario.add(acessosUsuarios);
+        subMenuProcessosAvulsosCampanha.add(formRemoverParticipante);
 
-        configuracoes.add(menuUsuario);
+        formLancarContasReceberCampanha.setText("Lançar Contas Receber ");
+        formLancarContasReceberCampanha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formLancarContasReceberCampanhaActionPerformed(evt);
+            }
+        });
+        subMenuProcessosAvulsosCampanha.add(formLancarContasReceberCampanha);
 
-        menuBarra.add(configuracoes);
+        menuCampanha.add(subMenuProcessosAvulsosCampanha);
+
+        formConsultarCampanhas.setText("Consultar Campanhas");
+        formConsultarCampanhas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formConsultarCampanhasActionPerformed(evt);
+            }
+        });
+        menuCampanha.add(formConsultarCampanhas);
+
+        menuBarra.add(menuCampanha);
+
+        menuConfiguracoes.setText("Configurações");
+
+        subMenuUsuario.setText("Usuário");
+
+        formAcessosUsuarios.setText("Acessos Usuário");
+        formAcessosUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formAcessosUsuariosActionPerformed(evt);
+            }
+        });
+        subMenuUsuario.add(formAcessosUsuarios);
+
+        menuConfiguracoes.add(subMenuUsuario);
+
+        menuBarra.add(menuConfiguracoes);
+
+        menuAlterarSenha.setText("Alterar Senha");
+
+        formAlterarSenha.setText("Alterar Senha");
+        formAlterarSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formAlterarSenhaActionPerformed(evt);
+            }
+        });
+        menuAlterarSenha.add(formAlterarSenha);
+
+        menuBarra.add(menuAlterarSenha);
 
         setJMenuBar(menuBarra);
 
@@ -554,339 +567,409 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cadastroPessoasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroPessoasActionPerformed
+    private void formCadastroPessoasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroPessoasActionPerformed
         PessoasForm cadastroPessoas = new PessoasForm(this.userLogado);
         this.painelHome.add(cadastroPessoas);
         cadastroPessoas.setVisible(true);
         cadastroPessoas.setPosicao();
-    }//GEN-LAST:event_cadastroPessoasActionPerformed
+    }//GEN-LAST:event_formCadastroPessoasActionPerformed
 
-    private void cadastroIgrejaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroIgrejaActionPerformed
+    private void formCadastroIgrejaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroIgrejaActionPerformed
         IgrejaForm cadastroIgreja = new IgrejaForm(this.userLogado);
         this.painelHome.add(cadastroIgreja);
         cadastroIgreja.setVisible(true);
         cadastroIgreja.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_cadastroIgrejaActionPerformed
+    }//GEN-LAST:event_formCadastroIgrejaActionPerformed
 
-    private void cadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroUsuarioActionPerformed
+    private void formCadastroUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroUsuarioActionPerformed
         UsuarioForm cadastroUsuario = new UsuarioForm(this.userLogado);
         this.painelHome.add(cadastroUsuario);
         cadastroUsuario.setVisible(true);
         cadastroUsuario.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_cadastroUsuarioActionPerformed
+    }//GEN-LAST:event_formCadastroUsuarioActionPerformed
 
-    private void cadastroFormaPagtoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroFormaPagtoActionPerformed
+    private void formCadastroFormaPagtoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroFormaPagtoActionPerformed
         FormaPagtoForm cadastroFormaPagto = new FormaPagtoForm(this.userLogado);
         this.painelHome.add(cadastroFormaPagto);
         cadastroFormaPagto.setVisible(true);
         cadastroFormaPagto.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_cadastroFormaPagtoActionPerformed
+    }//GEN-LAST:event_formCadastroFormaPagtoActionPerformed
 
-    private void cadastroContaCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaCaixaActionPerformed
+    private void formCadastroContaCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroContaCaixaActionPerformed
         ContaCaixaForm cadastroContaCaixa = new ContaCaixaForm(this.userLogado);
         this.painelHome.add(cadastroContaCaixa);
         cadastroContaCaixa.setVisible(true);
         cadastroContaCaixa.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_cadastroContaCaixaActionPerformed
+    }//GEN-LAST:event_formCadastroContaCaixaActionPerformed
 
-    private void cadastroTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroTipoOfertaActionPerformed
+    private void formCadastroTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroTipoOfertaActionPerformed
         TipoOfertaForm cadastroTipoOferta = new TipoOfertaForm(this.userLogado);
         this.painelHome.add(cadastroTipoOferta);
         cadastroTipoOferta.setVisible(true);
         cadastroTipoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_cadastroTipoOfertaActionPerformed
+    }//GEN-LAST:event_formCadastroTipoOfertaActionPerformed
 
-    private void lancarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasPagarActionPerformed
+    private void formLancarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formLancarContasPagarActionPerformed
         ContasPagarForm contasPagar = new ContasPagarForm(this.userLogado);
         this.painelHome.add(contasPagar);
         contasPagar.setVisible(true);
         contasPagar.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_lancarContasPagarActionPerformed
+    }//GEN-LAST:event_formLancarContasPagarActionPerformed
 
-    private void efetivarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_efetivarContasPagarActionPerformed
+    private void formEfetivarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formEfetivarContasPagarActionPerformed
         EfetivarContasPagarForm efetivarContas = new EfetivarContasPagarForm(this.userLogado);
         this.painelHome.add(efetivarContas);
         efetivarContas.setVisible(true);
         efetivarContas.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_efetivarContasPagarActionPerformed
+    }//GEN-LAST:event_formEfetivarContasPagarActionPerformed
 
-    private void registrarOfertasDizimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarOfertasDizimoActionPerformed
+    private void formRegistrarOfertasDizimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRegistrarOfertasDizimoActionPerformed
         RegistroDizimoOfertaForm rgDizimoOferta = new RegistroDizimoOfertaForm(this.userLogado);
         this.painelHome.add(rgDizimoOferta);
         rgDizimoOferta.setVisible(true);
         rgDizimoOferta.setPosicao(); //Chama função para centraliza a tela, quando ela for aberta
-    }//GEN-LAST:event_registrarOfertasDizimoActionPerformed
+    }//GEN-LAST:event_formRegistrarOfertasDizimoActionPerformed
 
-    private void transferenciasBancariasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferenciasBancariasActionPerformed
+    private void formTransferenciasBancariasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formTransferenciasBancariasActionPerformed
         TransferenciaContaForm trasnfConta = new TransferenciaContaForm(this.userLogado);
         this.painelHome.add(trasnfConta);
         trasnfConta.setVisible(true);
         trasnfConta.setPosicao();
-    }//GEN-LAST:event_transferenciasBancariasActionPerformed
+    }//GEN-LAST:event_formTransferenciasBancariasActionPerformed
 
-    private void alterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alterarSenhaActionPerformed
+    private void formAlterarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formAlterarSenhaActionPerformed
         AlterarSenhaForm alterarSenha = new AlterarSenhaForm(this.userLogado);
         this.painelHome.add(alterarSenha);
         alterarSenha.setVisible(true);
         alterarSenha.setPosicao();
 
-    }//GEN-LAST:event_alterarSenhaActionPerformed
+    }//GEN-LAST:event_formAlterarSenhaActionPerformed
 
-    private void cadastroContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroContaResultadoActionPerformed
+    private void formCadastroContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroContaResultadoActionPerformed
         ContaResultadoForm contaResultado = new ContaResultadoForm(this.userLogado);
         this.painelHome.add(contaResultado);
         contaResultado.setVisible(true);
         contaResultado.setPosicao();
-    }//GEN-LAST:event_cadastroContaResultadoActionPerformed
+    }//GEN-LAST:event_formCadastroContaResultadoActionPerformed
 
-    private void efetivacaoDizimoOfertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_efetivacaoDizimoOfertasActionPerformed
+    private void formConsultarDizimoOfertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultarDizimoOfertasActionPerformed
         ConsultaRegistroDizimoOferta efetivacao = new ConsultaRegistroDizimoOferta(this.userLogado);
         this.painelHome.add(efetivacao);
         efetivacao.setVisible(true);
         efetivacao.setPosicao();
-    }//GEN-LAST:event_efetivacaoDizimoOfertasActionPerformed
+    }//GEN-LAST:event_formConsultarDizimoOfertasActionPerformed
 
-    private void movimentoFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movimentoFinanceiroActionPerformed
+    private void formMovimentoFinanceiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formMovimentoFinanceiroActionPerformed
         MovimentoFinanceiroForm movimentoFinanceiro = new MovimentoFinanceiroForm(userLogado);
         this.painelHome.add(movimentoFinanceiro);
         movimentoFinanceiro.setVisible(true);
         movimentoFinanceiro.setPosicao();
-    }//GEN-LAST:event_movimentoFinanceiroActionPerformed
+    }//GEN-LAST:event_formMovimentoFinanceiroActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         Conexao conexao = new Conexao();
         conexao.closeDataSource();
     }//GEN-LAST:event_formWindowClosed
 
-    private void cancelarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarContasPagarActionPerformed
+    private void formCancelarContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCancelarContasPagarActionPerformed
         CancelarContasPagarForm cancelarCp = new CancelarContasPagarForm(this.userLogado);
         this.painelHome.add(cancelarCp);
         cancelarCp.setVisible(true);
         cancelarCp.setPosicao();
-    }//GEN-LAST:event_cancelarContasPagarActionPerformed
+    }//GEN-LAST:event_formCancelarContasPagarActionPerformed
 
-    private void cadastroLivrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroLivrosActionPerformed
+    private void formCadastroLivrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroLivrosActionPerformed
         CadastroLivrosForm cadastrarLivros = new CadastroLivrosForm(this.userLogado);
         this.painelHome.add(cadastrarLivros);
         cadastrarLivros.setVisible(true);
         cadastrarLivros.setPosicao();
-    }//GEN-LAST:event_cadastroLivrosActionPerformed
+    }//GEN-LAST:event_formCadastroLivrosActionPerformed
 
-    private void cadastroBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecaActionPerformed
+    private void formConsultarAcervoBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultarAcervoBibliotecaActionPerformed
         BibliotecaForm biblioteca = new BibliotecaForm(this.userLogado);
         this.painelHome.add(biblioteca);
         biblioteca.setVisible(true);
         biblioteca.setPosicao();
-    }//GEN-LAST:event_cadastroBibliotecaActionPerformed
+    }//GEN-LAST:event_formConsultarAcervoBibliotecaActionPerformed
 
-    private void operacaoEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoEmprestimoActionPerformed
+    private void formEmprestimoLivrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formEmprestimoLivrosActionPerformed
         EmprestimoLivroForm emprestimo = new EmprestimoLivroForm(this.userLogado);
         this.painelHome.add(emprestimo);
         emprestimo.setVisible(true);
         emprestimo.setPosicao();
-    }//GEN-LAST:event_operacaoEmprestimoActionPerformed
+    }//GEN-LAST:event_formEmprestimoLivrosActionPerformed
 
-    private void operacaoConsultaEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_operacaoConsultaEmprestimoActionPerformed
+    private void formGerenciarConsultarEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formGerenciarConsultarEmprestimoActionPerformed
         ConsultaEmprestimoForm consultaEmprestimo = new ConsultaEmprestimoForm(this.userLogado);
         this.painelHome.add(consultaEmprestimo);
         consultaEmprestimo.setVisible(true);
         consultaEmprestimo.setPosicao();
-    }//GEN-LAST:event_operacaoConsultaEmprestimoActionPerformed
+    }//GEN-LAST:event_formGerenciarConsultarEmprestimoActionPerformed
 
-    private void cadastroSubContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroSubContaResultadoActionPerformed
+    private void formCadastroSubContaResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroSubContaResultadoActionPerformed
         SubContaResultadoForm subContaResult = new SubContaResultadoForm(this.userLogado);
         this.painelHome.add(subContaResult);
         subContaResult.setVisible(true);
         subContaResult.setPosicao();
-    }//GEN-LAST:event_cadastroSubContaResultadoActionPerformed
+    }//GEN-LAST:event_formCadastroSubContaResultadoActionPerformed
 
-    private void cadastroAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroAutorActionPerformed
+    private void formCadastroAutorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroAutorActionPerformed
         AutorForm dialogAutor = new AutorForm(this, true);
         dialogAutor.setLocationRelativeTo(this);
         dialogAutor.setVisible(true);
-    }//GEN-LAST:event_cadastroAutorActionPerformed
+    }//GEN-LAST:event_formCadastroAutorActionPerformed
 
-    private void cadastroEditoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroEditoraActionPerformed
+    private void formCadastroEditoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroEditoraActionPerformed
         EditoraForm dialogEditora = new EditoraForm(this, true);
         dialogEditora.setLocationRelativeTo(this);
         dialogEditora.setVisible(true);
-    }//GEN-LAST:event_cadastroEditoraActionPerformed
+    }//GEN-LAST:event_formCadastroEditoraActionPerformed
 
-    private void addLivroBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLivroBibliotecaActionPerformed
+    private void formAdicionarLivroBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formAdicionarLivroBibliotecaActionPerformed
         AdicionarLivroForm dialogAddLivroBibli = new AdicionarLivroForm(this, true);
         dialogAddLivroBibli.setLocationRelativeTo(this);
         dialogAddLivroBibli.setVisible(true);
-    }//GEN-LAST:event_addLivroBibliotecaActionPerformed
+    }//GEN-LAST:event_formAdicionarLivroBibliotecaActionPerformed
 
-    private void saidaAvulsaLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saidaAvulsaLivroActionPerformed
+    private void formSaidaAvulsaLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formSaidaAvulsaLivroActionPerformed
         SaidaAvulsaLivroForm saidaAvulsaLivro = new SaidaAvulsaLivroForm(this.userLogado);
         this.painelHome.add(saidaAvulsaLivro);
         saidaAvulsaLivro.setVisible(true);
         saidaAvulsaLivro.setPosicao();
-    }//GEN-LAST:event_saidaAvulsaLivroActionPerformed
+    }//GEN-LAST:event_formSaidaAvulsaLivroActionPerformed
 
-    private void cadastroBibliotecasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroBibliotecasActionPerformed
+    private void formCadastroBibliotecasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroBibliotecasActionPerformed
         CadastroBibliotecaForm cadastroBiblioteca = new CadastroBibliotecaForm(this.userLogado);
         this.painelHome.add(cadastroBiblioteca);
         cadastroBiblioteca.setVisible(true);
         cadastroBiblioteca.setPosicao();
-    }//GEN-LAST:event_cadastroBibliotecasActionPerformed
+    }//GEN-LAST:event_formCadastroBibliotecasActionPerformed
 
-    private void criarCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criarCampanhaActionPerformed
+    private void formCriarCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCriarCampanhaActionPerformed
         CadastrarCampanhaForm cadastrarCampanha = new CadastrarCampanhaForm(this.userLogado);
         this.painelHome.add(cadastrarCampanha);
         cadastrarCampanha.setVisible(true);
         cadastrarCampanha.setPosicao();
-    }//GEN-LAST:event_criarCampanhaActionPerformed
+    }//GEN-LAST:event_formCriarCampanhaActionPerformed
 
-    private void adicionarParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarParticipanteActionPerformed
+    private void formAdicionarParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formAdicionarParticipanteActionPerformed
         CadastrarParticipanteAvulsoForm cadastrarParticipanteAvulso = new CadastrarParticipanteAvulsoForm(this.userLogado);
         this.painelHome.add(cadastrarParticipanteAvulso);
         cadastrarParticipanteAvulso.setVisible(true);
         cadastrarParticipanteAvulso.setPosicao();
-    }//GEN-LAST:event_adicionarParticipanteActionPerformed
+    }//GEN-LAST:event_formAdicionarParticipanteActionPerformed
 
-    private void lancarContasReceberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lancarContasReceberActionPerformed
+    private void formLancarContasReceberCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formLancarContasReceberCampanhaActionPerformed
         GerarContasReceberAvulsaForm gerarCrAvulsa = new GerarContasReceberAvulsaForm(this.userLogado);
         this.painelHome.add(gerarCrAvulsa);
         gerarCrAvulsa.setVisible(true);
         gerarCrAvulsa.setPosicao();
-    }//GEN-LAST:event_lancarContasReceberActionPerformed
+    }//GEN-LAST:event_formLancarContasReceberCampanhaActionPerformed
 
-    private void removerParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerParticipanteActionPerformed
+    private void formRemoverParticipanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRemoverParticipanteActionPerformed
         RemoverParticipanteForm removerParticipante = new RemoverParticipanteForm(this.userLogado);
         this.painelHome.add(removerParticipante);
         removerParticipante.setVisible(true);
         removerParticipante.setPosicao();
-    }//GEN-LAST:event_removerParticipanteActionPerformed
+    }//GEN-LAST:event_formRemoverParticipanteActionPerformed
 
-    private void consultarCampanhasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarCampanhasActionPerformed
+    private void formConsultarCampanhasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultarCampanhasActionPerformed
         ConsultarCampanhasForm consultarCampanhas = new ConsultarCampanhasForm(this.userLogado);
         this.painelHome.add(consultarCampanhas);
         consultarCampanhas.setVisible(true);
         consultarCampanhas.setPosicao();
-    }//GEN-LAST:event_consultarCampanhasActionPerformed
+    }//GEN-LAST:event_formConsultarCampanhasActionPerformed
 
-    private void gerenciarContaReceberCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerenciarContaReceberCampanhaActionPerformed
+    private void formGerenciarContaReceberCampanhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formGerenciarContaReceberCampanhaActionPerformed
         GerenciarContasReceberForm gerenciarContasReceber = new GerenciarContasReceberForm(this.userLogado);
         this.painelHome.add(gerenciarContasReceber);
         gerenciarContasReceber.setVisible(true);
         gerenciarContasReceber.setPosicao();
-    }//GEN-LAST:event_gerenciarContaReceberCampanhaActionPerformed
+    }//GEN-LAST:event_formGerenciarContaReceberCampanhaActionPerformed
 
-    private void relatorioContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioContasPagarActionPerformed
+    private void formRelatorioContasPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioContasPagarActionPerformed
         RelatorioContasPagarForm relatorioContasPagar = new RelatorioContasPagarForm(this.userLogado);
         this.painelHome.add(relatorioContasPagar);
         relatorioContasPagar.setVisible(true);
         relatorioContasPagar.setPosicao();
-    }//GEN-LAST:event_relatorioContasPagarActionPerformed
+    }//GEN-LAST:event_formRelatorioContasPagarActionPerformed
 
-    private void relatorioExtratoCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioExtratoCaixaActionPerformed
+    private void formRelatorioExtratoCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioExtratoCaixaActionPerformed
         ExtratoCaixa extratoCaixa = new ExtratoCaixa(this.userLogado);
         this.painelHome.add(extratoCaixa);
         extratoCaixa.setVisible(true);
         extratoCaixa.setPosicao();
-    }//GEN-LAST:event_relatorioExtratoCaixaActionPerformed
+    }//GEN-LAST:event_formRelatorioExtratoCaixaActionPerformed
 
-    private void relatorioMovimentoDizimoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioMovimentoDizimoOfertaActionPerformed
+    private void formRelatorioMovimentoDizimoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioMovimentoDizimoOfertaActionPerformed
         RelatorioMovimentoDizimoOferta movimentoDizimoOferta = new RelatorioMovimentoDizimoOferta(this.userLogado);
         this.painelHome.add(movimentoDizimoOferta);
         movimentoDizimoOferta.setVisible(true);
         movimentoDizimoOferta.setPosicao();
-    }//GEN-LAST:event_relatorioMovimentoDizimoOfertaActionPerformed
+    }//GEN-LAST:event_formRelatorioMovimentoDizimoOfertaActionPerformed
 
-    private void relatorioPrestacaoContaMensalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatorioPrestacaoContaMensalActionPerformed
+    private void formRelatorioPrestacaoContaMensalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioPrestacaoContaMensalActionPerformed
         RelatorioPrestacaoContaMensal prestacaoMensal = new RelatorioPrestacaoContaMensal(this.userLogado);
         this.painelHome.add(prestacaoMensal);
         prestacaoMensal.setVisible(true);
         prestacaoMensal.setPosicao();
-    }//GEN-LAST:event_relatorioPrestacaoContaMensalActionPerformed
+    }//GEN-LAST:event_formRelatorioPrestacaoContaMensalActionPerformed
 
-    private void acessosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acessosUsuariosActionPerformed
+    private void formAcessosUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formAcessosUsuariosActionPerformed
         AcessosUsuarioForm acessos = new AcessosUsuarioForm();
         this.painelHome.add(acessos);
         acessos.setVisible(true);
         acessos.setPosicao();
-    }//GEN-LAST:event_acessosUsuariosActionPerformed
+    }//GEN-LAST:event_formAcessosUsuariosActionPerformed
 
-    private void aplicacaoFinanceiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicacaoFinanceiraActionPerformed
+    private void formAplicacaoFinanceiraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formAplicacaoFinanceiraActionPerformed
         AplicacaoFinanceiraForm aplicaFinanceira = new AplicacaoFinanceiraForm(this.userLogado);
         this.painelHome.add(aplicaFinanceira);
         aplicaFinanceira.setVisible(true);
         aplicaFinanceira.setPosicao();
-    }//GEN-LAST:event_aplicacaoFinanceiraActionPerformed
+    }//GEN-LAST:event_formAplicacaoFinanceiraActionPerformed
 
-    private void retiradaAplicacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retiradaAplicacaoActionPerformed
+    private void formRetiradaAplicacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRetiradaAplicacaoActionPerformed
         RetiradaValorAplicacaoForm retirada = new RetiradaValorAplicacaoForm();
         this.painelHome.add(retirada);
         retirada.setVisible(true);
         retirada.setPosicao();
-    }//GEN-LAST:event_retiradaAplicacaoActionPerformed
+    }//GEN-LAST:event_formRetiradaAplicacaoActionPerformed
   
-
+    private void nomearMenus(){
+        
+        this.menuCadastros.setName("1");
+        this.formCadastroPessoas.setName("2");
+        this.formCadastroIgreja.setName("3");
+        this.formCadastroUsuario.setName("4");
+        this.subMenuCadastroEntidades.setName("5");
+        this.formCadastroFormaPagto.setName("6");
+        this.formCadastroContaCaixa.setName("7");
+        this.formCadastroTipoOferta.setName("8");
+        this.subMenuCadastroPlanoContas.setName("9");
+        this.formCadastroContaResultado.setName("10");
+        this.formCadastroSubContaResultado.setName("11");
+        
+        this.menuFinanceiro.setName("12");
+        this.subMenuFinanceiroDizimoOfertas.setName("13");
+        this.formRegistrarOfertasDizimo.setName("14");
+        this.formConsultarDizimoOfertas.setName("15");
+        this.subMenuFinanceiroContasPagar.setName("16");
+        this.formLancarContasPagar.setName("17");
+        this.formEfetivarContasPagar.setName("18");
+        this.formCancelarContasPagar.setName("19");
+        this.formAlterarContasPagar.setName("20");
+        
+        this.subMenuFinanceiroCaixa.setName("21");
+        this.formTransferenciasBancarias.setName("22");
+        this.formMovimentoFinanceiro.setName("23");
+        this.formAplicacaoFinanceira.setName("24");
+        this.formRetiradaAplicacao.setName("25");
+        
+        this.menuRelatorios.setName("26");
+        this.subMenuRelatorioFinanceiro.setName("27");
+        this.formRelatorioExtratoCaixa.setName("28");
+        this.formRelatorioContasPagar.setName("29");
+        this.formRelatorioContasReceber.setName("30");
+        this.subMenuRelatorioDizimoOferta.setName("31");
+        this.formRelatorioMovimentoDizimoOferta.setName("32");
+        this.subMenuRelatorioPrestacaoConta.setName("33");
+        this.formRelatorioPrestacaoContaMensal.setName("34");
+        
+        this.menuBiblioteca.setName("35");
+        this.subMenuCadastros.setName("36");
+        this.formCadastroLivros.setName("37");
+        this.formCadastroAutor.setName("38");
+        this.formCadastroEditora.setName("39");
+        this.formCadastroBibliotecas.setName("40");
+        this.subMenuOpercaoBiblioteca.setName("41");
+        this.formConsultarAcervoBiblioteca.setName("42");
+        this.formAdicionarLivroBiblioteca.setName("43");
+        this.formSaidaAvulsaLivro.setName("44");
+        this.subMenuEmprestimoLivros.setName("45");
+        this.formEmprestimoLivros.setName("46");
+        this.formGerenciarConsultarEmprestimo.setName("47");
+        
+        this.menuCampanha.setName("48");
+        this.formCriarCampanha.setName("49");
+        this.formGerenciarContaReceberCampanha.setName("50");
+        this.subMenuProcessosAvulsosCampanha.setName("51");
+        this.formAdicionarParticipante.setName("52");
+        this.formRemoverParticipante.setName("53");
+        this.formLancarContasReceberCampanha.setName("54");
+        this.formConsultarCampanhas.setName("55");
+        
+        this.menuConfiguracoes.setName("56");
+        this.subMenuUsuario.setName("57");
+        this.formAcessosUsuarios.setName("58");
+        this.menuAlterarSenha.setName("59");
+        this.formAlterarSenha.setName("60");
+        
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem acessosUsuarios;
-    private javax.swing.JMenuItem addLivroBiblioteca;
-    private javax.swing.JMenuItem adicionarParticipante;
-    private javax.swing.JMenuItem alterarSenha;
-    private javax.swing.JMenuItem aplicacaoFinanceira;
-    private javax.swing.JMenu biblioteca;
-    private javax.swing.JMenuItem cadastroAutor;
-    private javax.swing.JMenuItem cadastroBiblioteca;
-    private javax.swing.JMenuItem cadastroBibliotecas;
-    private javax.swing.JMenuItem cadastroContaCaixa;
-    private javax.swing.JMenuItem cadastroContaResultado;
-    private javax.swing.JMenuItem cadastroEditora;
-    private javax.swing.JMenu cadastroEntidades;
-    private javax.swing.JMenuItem cadastroFormaPagto;
-    private javax.swing.JMenuItem cadastroIgreja;
-    private javax.swing.JMenuItem cadastroLivros;
-    private javax.swing.JMenuItem cadastroPessoas;
-    private javax.swing.JMenu cadastroPlanoContas;
-    private javax.swing.JMenuItem cadastroSubContaResultado;
-    private javax.swing.JMenuItem cadastroTipoOferta;
-    private javax.swing.JMenuItem cadastroUsuario;
-    private javax.swing.JMenu cadastros;
-    private javax.swing.JMenu campanha;
-    private javax.swing.JMenuItem cancelarContasPagar;
-    private javax.swing.JMenu configuracoes;
-    private javax.swing.JMenuItem consultarCampanhas;
-    private javax.swing.JMenuItem criarCampanha;
-    private javax.swing.JMenuItem efetivacaoDizimoOfertas;
-    private javax.swing.JMenuItem efetivarContasPagar;
-    private javax.swing.JMenu financeiro;
-    private javax.swing.JMenu financeiroCaixa;
-    private javax.swing.JMenu financeiroContasPagar;
-    private javax.swing.JMenu financeiroDizimoOfertas;
-    private javax.swing.JMenuItem gerenciarContaReceberCampanha;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem lancarContasPagar;
-    private javax.swing.JMenuItem lancarContasReceber;
+    private javax.swing.JMenuItem formAcessosUsuarios;
+    private javax.swing.JMenuItem formAdicionarLivroBiblioteca;
+    private javax.swing.JMenuItem formAdicionarParticipante;
+    private javax.swing.JMenuItem formAlterarContasPagar;
+    private javax.swing.JMenuItem formAlterarSenha;
+    private javax.swing.JMenuItem formAplicacaoFinanceira;
+    private javax.swing.JMenuItem formCadastroAutor;
+    private javax.swing.JMenuItem formCadastroBibliotecas;
+    private javax.swing.JMenuItem formCadastroContaCaixa;
+    private javax.swing.JMenuItem formCadastroContaResultado;
+    private javax.swing.JMenuItem formCadastroEditora;
+    private javax.swing.JMenuItem formCadastroFormaPagto;
+    private javax.swing.JMenuItem formCadastroIgreja;
+    private javax.swing.JMenuItem formCadastroLivros;
+    private javax.swing.JMenuItem formCadastroPessoas;
+    private javax.swing.JMenuItem formCadastroSubContaResultado;
+    private javax.swing.JMenuItem formCadastroTipoOferta;
+    private javax.swing.JMenuItem formCadastroUsuario;
+    private javax.swing.JMenuItem formCancelarContasPagar;
+    private javax.swing.JMenuItem formConsultarAcervoBiblioteca;
+    private javax.swing.JMenuItem formConsultarCampanhas;
+    private javax.swing.JMenuItem formConsultarDizimoOfertas;
+    private javax.swing.JMenuItem formCriarCampanha;
+    private javax.swing.JMenuItem formEfetivarContasPagar;
+    private javax.swing.JMenuItem formEmprestimoLivros;
+    private javax.swing.JMenuItem formGerenciarConsultarEmprestimo;
+    private javax.swing.JMenuItem formGerenciarContaReceberCampanha;
+    private javax.swing.JMenuItem formLancarContasPagar;
+    private javax.swing.JMenuItem formLancarContasReceberCampanha;
+    private javax.swing.JMenuItem formMovimentoFinanceiro;
+    private javax.swing.JMenuItem formRegistrarOfertasDizimo;
+    private javax.swing.JMenuItem formRelatorioContasPagar;
+    private javax.swing.JMenuItem formRelatorioContasReceber;
+    private javax.swing.JMenuItem formRelatorioExtratoCaixa;
+    private javax.swing.JMenuItem formRelatorioMovimentoDizimoOferta;
+    private javax.swing.JMenuItem formRelatorioPrestacaoContaMensal;
+    private javax.swing.JMenuItem formRemoverParticipante;
+    private javax.swing.JMenuItem formRetiradaAplicacao;
+    private javax.swing.JMenuItem formSaidaAvulsaLivro;
+    private javax.swing.JMenuItem formTransferenciasBancarias;
+    private javax.swing.JMenu menuAlterarSenha;
     private javax.swing.JMenuBar menuBarra;
     private javax.swing.JMenu menuBiblioteca;
     private javax.swing.JMenu menuCadastros;
-    private javax.swing.JMenu menuEmprestimoLivros;
-    private javax.swing.JMenu menuUsuario;
-    private javax.swing.JMenuItem movimentoFinanceiro;
-    private javax.swing.JMenuItem operacaoConsultaEmprestimo;
-    private javax.swing.JMenuItem operacaoEmprestimo;
+    private javax.swing.JMenu menuCampanha;
+    private javax.swing.JMenu menuConfiguracoes;
+    private javax.swing.JMenu menuFinanceiro;
+    private javax.swing.JMenu menuRelatorios;
     public javax.swing.JDesktopPane painelHome;
-    private javax.swing.JMenu processosAvulsos;
-    private javax.swing.JMenuItem registrarOfertasDizimo;
-    private javax.swing.JMenuItem relatorioContasPagar;
-    private javax.swing.JMenuItem relatorioContasReceber;
-    private javax.swing.JMenu relatorioDizimoOferta;
-    private javax.swing.JMenu relatorioEspecifico;
-    private javax.swing.JMenuItem relatorioExtratoCaixa;
-    private javax.swing.JMenu relatorioFinanceiro;
-    private javax.swing.JMenuItem relatorioMovimentoDizimoOferta;
-    private javax.swing.JMenuItem relatorioPrestacaoContaMensal;
-    private javax.swing.JMenu relatorios;
-    private javax.swing.JMenuItem removerParticipante;
-    private javax.swing.JMenuItem retiradaAplicacao;
-    private javax.swing.JMenuItem saidaAvulsaLivro;
-    private javax.swing.JMenuItem transferenciasBancarias;
+    private javax.swing.JMenu subMenuCadastroEntidades;
+    private javax.swing.JMenu subMenuCadastroPlanoContas;
+    private javax.swing.JMenu subMenuCadastros;
+    private javax.swing.JMenu subMenuEmprestimoLivros;
+    private javax.swing.JMenu subMenuFinanceiroCaixa;
+    private javax.swing.JMenu subMenuFinanceiroContasPagar;
+    private javax.swing.JMenu subMenuFinanceiroDizimoOfertas;
+    private javax.swing.JMenu subMenuOpercaoBiblioteca;
+    private javax.swing.JMenu subMenuProcessosAvulsosCampanha;
+    private javax.swing.JMenu subMenuRelatorioDizimoOferta;
+    private javax.swing.JMenu subMenuRelatorioFinanceiro;
+    private javax.swing.JMenu subMenuRelatorioPrestacaoConta;
+    private javax.swing.JMenu subMenuUsuario;
     // End of variables declaration//GEN-END:variables
 }

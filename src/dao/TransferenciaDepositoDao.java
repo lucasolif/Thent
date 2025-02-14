@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.ContaCaixa;
+import model.Igreja;
 import model.MovimentoCaixa;
 import model.TransferenciaConta;
 import model.UsuarioLogado;
@@ -136,7 +137,7 @@ public class TransferenciaDepositoDao {
         }
     }
     
-    public List<MovimentoCaixa> consultarDepositoTerourariaGeral(Integer mes, Integer ano, ContaCaixa contaCaixa){
+    public List<MovimentoCaixa> consultarDepositoTerourariaGeral(Integer mes, Integer ano, Igreja igreja){
               
         List<MovimentoCaixa> listaMovimentoCaixa = new ArrayList<>();
 
@@ -144,7 +145,7 @@ public class TransferenciaDepositoDao {
         String sql = "SELECT MC.Complemento AS Complemento, " +
             "SUM(MC.ValorSaida) AS ValorSaida " +
             "FROM MovimentoCaixa AS MC " +
-            "WHERE MC.ContaCaixa = ? " +
+            "WHERE MC.Igreja = ? " +
             "AND MONTH((SELECT DataOperacao FROM TransferenciaDeposito AS TD WHERE MC.TransferenciaDeposito = TD.Codigo)) = ? " +
             "AND YEAR((SELECT DataOperacao FROM TransferenciaDeposito AS TD WHERE MC.TransferenciaDeposito = TD.Codigo)) = ? " +
             "AND (SELECT DepositoTesourariaGeral FROM TransferenciaDeposito AS TD WHERE MC.TransferenciaDeposito = TD.Codigo) = 1 " +
@@ -157,7 +158,7 @@ public class TransferenciaDepositoDao {
             this.stmSelect = this.conexao.prepareStatement(sql);  
             
             //Paramentro para o mes e ano
-            this.stmSelect.setInt(1, contaCaixa.getCodigo());
+            this.stmSelect.setInt(1, igreja.getCodigo());
             this.stmSelect.setInt(2, mes);
             this.stmSelect.setInt(3, ano);
     

@@ -116,6 +116,7 @@ public class LoginThent extends javax.swing.JFrame {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         validandoUsuario();
+        
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void campoSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoSenhaKeyPressed

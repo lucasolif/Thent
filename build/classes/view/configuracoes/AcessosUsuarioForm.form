@@ -35,10 +35,10 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="acessoMenus1" min="-2" pref="406" max="-2" attributes="0"/>
+              <Component id="acessoMenus1" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnSalvar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -72,36 +72,32 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx17" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx15" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx23" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx22" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx21" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx20" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx18" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx17" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx14" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx16" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx20" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx19" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx15" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx56" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx21" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="cbx12" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx19" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx18" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx16" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx13" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx14" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx10" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx11" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -114,7 +110,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx5" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx11" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx10" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="cbx1" min="-2" max="-2" attributes="0"/>
@@ -126,28 +122,33 @@
                               <Component id="cbx4" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx25" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx27" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx26" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx28" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbx27" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx29" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx32" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx30" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
+                              <Component id="cbx32" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx31" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx30" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx33" min="-2" max="-2" attributes="0"/>
+                              <Component id="cbx34" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="cbx24" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="cbx25" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbx13" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cbx24" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="cbx33" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="47" max="32767" attributes="0"/>
+                      <EmptySpace pref="67" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -164,7 +165,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx10" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx11" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx6" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx7" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx8" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -173,51 +174,54 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cbx9" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx5" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx11" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx10" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="18" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx19" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx16" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx13" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx18" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx14" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx12" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx17" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx15" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx23" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx22" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx21" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx20" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx18" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx14" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx20" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx15" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx56" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx17" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx16" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx19" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx21" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="cbx24" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbx25" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx13" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx24" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jSeparator3" min="-2" pref="18" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx25" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx27" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx26" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx28" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx27" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx29" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx32" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx30" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbx32" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx31" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx30" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx33" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx34" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="cbx33" min="-2" max="-2" attributes="0"/>
                       <EmptySpace pref="60" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -246,7 +250,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cadastros"/>
+                <Property name="text" type="java.lang.String" value="Menu Cadastros"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx2">
@@ -256,20 +260,20 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx9">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Plano De Contas"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Plano De Contas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx5">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Entidades"/>
+                <Property name="text" type="java.lang.String" value="Sub Menu Entidades"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx10">
+            <Component class="javax.swing.JCheckBox" name="cbx11">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro Sub Conta de Resultado"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx11">
+            <Component class="javax.swing.JCheckBox" name="cbx10">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro Conta de Resultado"/>
               </Properties>
@@ -281,47 +285,47 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx13">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Opera&#xe7;&#xe3;o Dizimos/Ofertas"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx21">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Alterar Contas a Pagar"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Opera&#xe7;&#xe3;o Dizimos/Ofertas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx20">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cancelar Contas a Pagar"/>
+                <Property name="text" type="java.lang.String" value="Alterar Contas a Pagar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx19">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Efetivar/Consutar Contas a Pagar"/>
+                <Property name="text" type="java.lang.String" value="Cancelar Contas a Pagar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx18">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas a Pagar"/>
+                <Property name="text" type="java.lang.String" value="Efetivar/Consutar Contas a Pagar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx17">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas a Pagar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx15">
+              <Properties>
                 <Property name="text" type="java.lang.String" value="Consultar D&#xed;zimos ou Ofertas"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx16">
+            <Component class="javax.swing.JCheckBox" name="cbx14">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Registrar Dizimo ou Ofertas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx12">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Financeiro"/>
+                <Property name="text" type="java.lang.String" value="Menu Financeiro"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx15">
+            <Component class="javax.swing.JCheckBox" name="cbx21">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Opera&#xe7;&#xf5;es Caixa"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Opera&#xe7;&#xf5;es Caixa"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx23">
@@ -329,9 +333,9 @@
                 <Property name="text" type="java.lang.String" value="Movimento Financeiro"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx14">
+            <Component class="javax.swing.JCheckBox" name="cbx16">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Contas a Pagar"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Contas a Pagar"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx22">
@@ -375,57 +379,57 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx28">
+            <Component class="javax.swing.JCheckBox" name="cbx29">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Contas a Pagar"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx27">
+            <Component class="javax.swing.JCheckBox" name="cbx28">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Extrato de Caixa"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx32">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o de Contas"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx30">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="D&#xed;zimo/Oferta"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx26">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Financeiro"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JCheckBox" name="cbx33">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o de Contas Mensal"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Relat&#xf3;rio Presta&#xe7;&#xe3;o de Contas"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx31">
               <Properties>
+                <Property name="text" type="java.lang.String" value="SubMenu Relat&#xf3;rio D&#xed;zimo/Oferta"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx27">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="SubMenu Relat&#xf3;rio Financeiro"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx34">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o de Contas Mensal"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx32">
+              <Properties>
                 <Property name="text" type="java.lang.String" value="Movimento Dizimo e Oferta"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx25">
+            <Component class="javax.swing.JCheckBox" name="cbx26">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Relat&#xf3;rios"/>
+                <Property name="text" type="java.lang.String" value="Menu Relat&#xf3;rios"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx29">
+            <Component class="javax.swing.JCheckBox" name="cbx30">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Contas a Receber"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx56">
+            <Component class="javax.swing.JCheckBox" name="cbx24">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Aplica&#xe7;&#xe3;o Financeira"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx24">
+            <Component class="javax.swing.JCheckBox" name="cbx25">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Retirar Aplica&#xe7;&#xe3;o"/>
               </Properties>
@@ -444,62 +448,84 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jSeparator4" alignment="0" max="32767" attributes="0"/>
                   <Component id="jSeparator5" alignment="1" max="32767" attributes="0"/>
+                  <Component id="jSeparator4" alignment="0" max="32767" attributes="0"/>
                   <Component id="jSeparator6" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator7" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx36" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx37" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx40" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx44" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx41" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx46" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx39" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx44" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx35" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx37" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx40" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx38" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx43" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx42" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx47" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx48" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx49" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx50" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx53" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx54" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx52" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx51" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx55" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="26" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx34" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx35" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx38" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx41" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx39" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx36" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx45" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx56" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx57" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx58" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cbx59" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cbx60" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx43" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx42" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx46" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx45" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx47" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx48" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx49" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx52" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbx53" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx51" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx50" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cbx55" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="cbx54" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="77" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -509,47 +535,61 @@
                       <Component id="jSeparator5" min="-2" pref="16" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx34" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx35" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx37" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx40" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx38" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx41" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx39" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx36" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx37" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx40" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx41" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx46" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx39" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx44" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cbx43" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx42" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx46" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx47" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbx36" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx45" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Component id="jSeparator4" min="-2" pref="16" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx47" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx48" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx49" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx52" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx50" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx53" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cbx53" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx54" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx52" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx51" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx50" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx55" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Component id="jSeparator6" min="-2" pref="16" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbx54" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="143" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbx56" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx57" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx58" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                      <Component id="jSeparator7" min="-2" pref="16" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbx59" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx60" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="42" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -566,44 +606,44 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx40">
+            <Component class="javax.swing.JCheckBox" name="cbx39">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro de Editora/Publicadoras"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx39">
+            <Component class="javax.swing.JCheckBox" name="cbx38">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro de Autores"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx38">
+            <Component class="javax.swing.JCheckBox" name="cbx37">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro de Livros"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx37">
+            <Component class="javax.swing.JCheckBox" name="cbx46">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Empr&#xe9;stimos Livros"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx46">
+            <Component class="javax.swing.JCheckBox" name="cbx47">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Gerenciar Empr&#xe9;stimos"/>
+                <Property name="text" type="java.lang.String" value="Gerenciar/Consultar Empr&#xe9;stimos"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx45">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Empr&#xe9;stimos de Livros"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Empr&#xe9;stimos de Livros"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx41">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="SubMenu Opera&#xe7;&#xf5;es Biblioteca"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx36">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Opera&#xe7;&#xf5;es Biblioteca"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx35">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Cadastros"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Cadastros Biblioteca"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx44">
@@ -621,12 +661,12 @@
                 <Property name="text" type="java.lang.String" value="Consultar Bibliotecas"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx41">
+            <Component class="javax.swing.JCheckBox" name="cbx40">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cadastro de Bibliotecas"/>
+                <Property name="text" type="java.lang.String" value="Cadastro de Tipos Bibliotecas"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx34">
+            <Component class="javax.swing.JCheckBox" name="cbx35">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Menu Biblioteca"/>
               </Properties>
@@ -642,12 +682,12 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx47">
+            <Component class="javax.swing.JCheckBox" name="cbx48">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Campanha"/>
+                <Property name="text" type="java.lang.String" value="Menu Campanha"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx53">
+            <Component class="javax.swing.JCheckBox" name="cbx54">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Lan&#xe7;ar Contas a Receber Campanha"/>
               </Properties>
@@ -657,27 +697,27 @@
                 <Property name="text" type="java.lang.String" value="Consultar Campanha"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx52">
+            <Component class="javax.swing.JCheckBox" name="cbx53">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Remover Participantes"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx51">
+            <Component class="javax.swing.JCheckBox" name="cbx52">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Adicionar Participantes"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx50">
+            <Component class="javax.swing.JCheckBox" name="cbx51">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Processos Avulsos"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Processos Avulsos"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx49">
+            <Component class="javax.swing.JCheckBox" name="cbx50">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Gerenciar Contas Receber Campanha"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx48">
+            <Component class="javax.swing.JCheckBox" name="cbx49">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Criar/Cadastrar Campanhas"/>
               </Properties>
@@ -693,9 +733,40 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="cbx54">
+            <Component class="javax.swing.JCheckBox" name="cbx58">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Acesso de Usu&#xe1;rios"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx56">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Menu Configura&#xe7;&#xe3;o"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx57">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="SubMenu Usu&#xe1;rios"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator7">
+              <Properties>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                    <TitledBorder justification="2" position="1" title="Alterar Senha">
+                      <Font PropertyName="font" name="Segoe UI" size="12" style="1"/>
+                    </TitledBorder>
+                  </Border>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx59">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Menu Alterar Senha"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx60">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Alterar Senha"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -714,8 +785,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbx57" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="446" max="32767" attributes="0"/>
+                      <Component id="cbx61" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="449" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -723,14 +794,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbx57" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="345" max="32767" attributes="0"/>
+                      <Component id="cbx61" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="371" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JCheckBox" name="cbx57">
+            <Component class="javax.swing.JCheckBox" name="cbx61">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Acessar os dados de todos os campo/igrejas?"/>
               </Properties>

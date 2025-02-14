@@ -8,6 +8,7 @@ import dao.IgrejaDao;
 import interfaces.ConsultaAplicacoes;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -76,6 +77,12 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
         setIconifiable(true);
         setTitle("Aplicação Financeira");
 
+        buscarAplicacao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                buscarAplicacaoKeyPressed(evt);
+            }
+        });
+
         jLabel1.setText("Buscar Aplicação");
 
         btnOk.setBackground(new java.awt.Color(0, 153, 255));
@@ -95,6 +102,10 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
         jLabel3.setText("Descrição*");
 
         jLabel4.setText("ContaCaixa");
+
+        contaCaixa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        igreja.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel5.setText("Igreja");
 
@@ -132,7 +143,13 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
         btnEncerrar.setBackground(new java.awt.Color(255, 0, 0));
         btnEncerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnEncerrar.setText("Encerrar");
+        btnEncerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEncerrarActionPerformed(evt);
+            }
+        });
 
+        diaAniversario.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         diaAniversario.setModel(new javax.swing.SpinnerNumberModel(1, 1, 31, 1));
 
         jLabel10.setText("Aniversario");
@@ -269,6 +286,19 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
         formaConsulta();
     }//GEN-LAST:event_btnOkActionPerformed
 
+    private void buscarAplicacaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarAplicacaoKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            consultarAplicacao();
+            carregarResultadoAplicacao();
+            formaConsulta();
+        }
+    }//GEN-LAST:event_buscarAplicacaoKeyPressed
+
+    private void btnEncerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEncerrarActionPerformed
+        encerrarAplicacao();
+        formInicial();
+    }//GEN-LAST:event_btnEncerrarActionPerformed
+
     private void consultarAplicacao(){        
         String textoBusca = this.buscarAplicacao.getText(); // Texto digitado na busca       
         this.listaAplicacao = this.aplicacaoDao.consultarAplicacao(textoBusca); //Lista recebe a busca retornada do banco
@@ -347,7 +377,6 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
         this.igreja.setEnabled(false);
         this.rbDiario.setEnabled(false);
         this.rbMensal.setEnabled(false);
-        this.diaAniversario.setEnabled(false);
     }
     
     private boolean verificarPreenchimentoDados(){
@@ -370,7 +399,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
         Integer diaAniversario = (Integer )this.diaAniversario.getValue();
         String tipoRendimento = "Mensal";
         if(this.rbDiario.isSelected()){
-            tipoRendimento = "Diário";
+            tipoRendimento = "Diario";
         }
         ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
@@ -394,12 +423,24 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
                 this.aplicacaoDao.cadastrarAplicacao(aplicacao, this.usuarioLogado);
             }else{
                 aplicacao.setCodigo(Integer.valueOf(this.codAplicacao.getText()));
-                
+               this.aplicacaoDao.alterarAplicacao(aplicacao);
             }
         }else{
             JOptionPane.showMessageDialog(null, "Informe os campos obrigatórios", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
    
+    }
+    
+    private void encerrarAplicacao(){
+        if(!this.codAplicacao.getText().isEmpty()){
+            Aplicacao aplicacao = new Aplicacao();
+            aplicacao.setCodigo(Integer.valueOf(this.codAplicacao.getText()));
+            
+            this.aplicacaoDao.encerrarAplicacao(aplicacao);
+        }else{
+            JOptionPane.showMessageDialog(null, "Informe a aplicação que será encerrada", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+
     }
     
     @Override

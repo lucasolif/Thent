@@ -11,6 +11,7 @@ import dao.TipoOfertaDao;
 import dao.TransferenciaDepositoDao;
 import Services.Utilitarios;
 import Services.PaletaCores;
+import dao.AplicacaoDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,6 +24,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import model.Aplicacao;
 import model.ContaCaixa;
 import model.FormaPagto;
 import model.Igreja;
@@ -37,6 +39,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
 
     private final PessoaDao pessoaDao = new PessoaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
     private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
@@ -56,7 +59,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         initComponents();
         configInicial();
         carregarContaCaixaSaldo();
-        atualizarSaldoBancos();
+        atualizarDashBoadSaldoBancos();
         this.usuarioLogado = usuarioLogado;
     }
     
@@ -112,8 +115,14 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         jLabel13 = new javax.swing.JLabel();
         valorSaida = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        saldo = new javax.swing.JTextField();
+        saldoAtual = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        saldoAnterior = new javax.swing.JTextField();
+        valorAplicação = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        valorRendimento = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
         btnExcluir = new javax.swing.JButton();
         rbSaida = new javax.swing.JRadioButton();
         rbEntrada = new javax.swing.JRadioButton();
@@ -149,22 +158,12 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Filtros Por Data De:", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         grupoData.add(rbDataPagtoRecebimento);
-        rbDataPagtoRecebimento.setText("Pagamento/Recebimento");
-        rbDataPagtoRecebimento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDataPagtoRecebimentoActionPerformed(evt);
-            }
-        });
+        rbDataPagtoRecebimento.setText("Pagto/Recebimento");
 
         grupoData.add(rbDataMovimentacao);
         rbDataMovimentacao.setText("Movimentação");
-        rbDataMovimentacao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDataMovimentacaoActionPerformed(evt);
-            }
-        });
 
-        txData.setText("Movimentação:");
+        txData.setText("De:");
 
         try {
             dataInicial.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -192,14 +191,14 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rbDataPagtoRecebimento))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(txData, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txData)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dataInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dataFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(41, 41, 41))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,29 +377,47 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             }
         });
 
-        jLabel12.setText("Entrada (R$): ");
+        jLabel12.setText("Entrada: ");
 
         valorEntrada.setEditable(false);
         valorEntrada.setBackground(new java.awt.Color(204, 204, 204));
         valorEntrada.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         valorEntrada.setFocusable(false);
 
-        jLabel13.setText("Saída (R$):");
+        jLabel13.setText("Saída:");
 
         valorSaida.setEditable(false);
         valorSaida.setBackground(new java.awt.Color(204, 204, 204));
         valorSaida.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         valorSaida.setFocusable(false);
 
-        jLabel14.setText("Saldo (R$):");
+        jLabel14.setText("Saldo Atual:");
 
-        saldo.setEditable(false);
-        saldo.setBackground(new java.awt.Color(204, 204, 204));
-        saldo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        saldo.setForeground(new java.awt.Color(0, 0, 244));
-        saldo.setFocusable(false);
+        saldoAtual.setEditable(false);
+        saldoAtual.setBackground(new java.awt.Color(204, 204, 204));
+        saldoAtual.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        saldoAtual.setForeground(new java.awt.Color(0, 0, 244));
+        saldoAtual.setFocusable(false);
 
         jLabel15.setText("Caixa/Banco:");
+
+        jLabel16.setText("Saldo Ant:");
+
+        saldoAnterior.setEditable(false);
+        saldoAnterior.setBackground(new java.awt.Color(204, 204, 204));
+        saldoAnterior.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        valorAplicação.setEditable(false);
+        valorAplicação.setBackground(new java.awt.Color(204, 204, 204));
+        valorAplicação.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        jLabel17.setText("Aplicação:");
+
+        valorRendimento.setEditable(false);
+        valorRendimento.setBackground(new java.awt.Color(204, 204, 204));
+        valorRendimento.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        jLabel18.setText("Rendimen:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -408,19 +425,34 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contaCaixaSaldoBanco, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(saldo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                        .addComponent(valorSaida, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(valorEntrada, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(valorEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(saldoAtual, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                                .addComponent(valorAplicação)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel18)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(saldoAnterior)
+                            .addComponent(valorRendimento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                            .addComponent(valorSaida)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(contaCaixaSaldoBanco, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -431,16 +463,22 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(valorEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(valorSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
+                    .addComponent(valorEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13)
+                    .addComponent(valorSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saldoAtual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16)
+                    .addComponent(saldoAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(valorAplicação, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17)
+                    .addComponent(valorRendimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         btnExcluir.setBackground(new java.awt.Color(255, 0, 0));
@@ -482,7 +520,8 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -505,7 +544,6 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         .addComponent(btnFiltrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExcluir))
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -516,17 +554,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(descricaoMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel7)
-                                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(rbEntradaSaida)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -536,16 +566,26 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel6)
-                                            .addComponent(formaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5)
-                                    .addComponent(tipoOferta, 0, 143, Short.MAX_VALUE)
-                                    .addComponent(contaCaixa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                            .addComponent(formaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(8, 8, 8)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2)
+                                            .addComponent(descricaoMovimento, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel7)
+                                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(tipoOferta, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -608,19 +648,11 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnExcluir)
                         .addComponent(btnFiltrar)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void rbDataPagtoRecebimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataPagtoRecebimentoActionPerformed
-        txData.setText("Pagamento:");
-    }//GEN-LAST:event_rbDataPagtoRecebimentoActionPerformed
-
-    private void rbDataMovimentacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDataMovimentacaoActionPerformed
-        txData.setText("Movimentação:");
-    }//GEN-LAST:event_rbDataMovimentacaoActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         limparFormulário();
@@ -697,7 +729,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_nomeFornecedorOfertanteKeyPressed
 
     private void contaCaixaSaldoBancoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_contaCaixaSaldoBancoItemStateChanged
-        atualizarSaldoBancos();
+        atualizarDashBoadSaldoBancos();
     }//GEN-LAST:event_contaCaixaSaldoBancoItemStateChanged
 
     private void rbEntradaSaidaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbEntradaSaidaItemStateChanged
@@ -846,8 +878,16 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         DefaultTableModel model = (DefaultTableModel) tabelaMovimentacoes.getModel();
         model.setNumRows(0);
    
-        for(MovimentoCaixa mv : listaMovimentacao){      
-            model.addRow(new Object[]{mv.getPessoa().getNome(),mv.getComplemento(),mv.getValorEntrada(), mv.getValorSaida(), mv.getDataMovimento(), mv.getDataPagamentoRecebimento(), mv.getContaCaixa(), mv.getFormaPagto()});
+        for(MovimentoCaixa mv : listaMovimentacao){   
+            //Tratando as datas
+            String dataMovimento = conversor.convertendoDataStringSql((java.sql.Date) mv.getDataMovimento());
+            String dataPagto = null;
+            
+            if(mv.getDataPagamentoRecebimento() != null){
+                dataPagto = conversor.convertendoDataStringSql((java.sql.Date) mv.getDataPagamentoRecebimento());
+            }
+            
+            model.addRow(new Object[]{mv.getPessoa().getNome(),mv.getComplemento(),mv.getValorEntrada(), mv.getValorSaida(), dataMovimento, dataPagto, mv.getContaCaixa(), mv.getFormaPagto()});
         }
     }
     
@@ -921,26 +961,49 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         mostrarTotalSaidaEntrada();
    }
     
-    private void atualizarSaldoBancos(){
-        MovimentoCaixa mvCaixa = new MovimentoCaixa();
-        
+    private void atualizarDashBoadSaldoBancos(){
+ 
         ContaCaixa contaCx = (ContaCaixa) contaCaixaSaldoBanco.getSelectedItem();
-        mvCaixa.setContaCaixa(contaCx);
         
-        mvCaixa = movimentoCaixaDao.consultarSaldo(mvCaixa);
-        Double valEntrada = mvCaixa.getValorEntrada();
-        Double valSaida = mvCaixa.getValorSaida();
-        Double valSaldo = valEntrada - valSaida;
+        //Coletando o saldo atual da conta caixa
+        MovimentoCaixa saldosAtuais = movimentoCaixaDao.consultarSaldoAtual(contaCx);
+        Double valEntradaAtual = saldosAtuais.getValorEntrada();
+        Double valSaidaAtual = saldosAtuais.getValorSaida();
+        Double valSaldoAtual = valEntradaAtual - valSaidaAtual;
         
-        this.valorEntrada.setText(Double.toString(valEntrada));
-        this.valorSaida.setText(Double.toString(valSaida));
-        this.saldo.setText(Double.toString(valSaldo));
+        this.valorEntrada.setText(Double.toString(valEntradaAtual).replace(".", ","));
+        this.valorSaida.setText(Double.toString(valSaidaAtual).replace(".", ","));
+        this.saldoAtual.setText(Double.toString(valSaldoAtual).replace(".", ","));
         
-        //Deiinindo a cor do campo de acordo com o saldo
-        if(valSaldo < 0){
-            this.saldo.setForeground(Color.red);
+        
+        //Coletando o saldo anterior da conta caixa
+        MovimentoCaixa mvCaixa = movimentoCaixaDao.consultarSaldoAtual(contaCx);
+        Double valEntradaAnterior = mvCaixa.getValorEntrada();
+        Double valSaidaAnterior = mvCaixa.getValorSaida();
+        Double valSaldoAnterior = valEntradaAnterior - valSaidaAnterior;
+        
+        this.saldoAnterior.setText(Double.toString(valSaldoAnterior).replace(".", ","));
+        
+        //Coletando o valor aplicado e o rendimento da conta caixa escolhida
+        Aplicacao aplicacao = aplicacaoDao.consultarValorAplicadoRendido(contaCx);
+        double valorAplicado = aplicacao.getValorInicial();
+        double valorRendido = aplicacao.getValorRendimento();
+        
+        this.valorAplicação.setText(String.valueOf(valorAplicado).replace(".", ","));
+        this.valorRendimento.setText(String.valueOf(valorRendido).replace(".", ","));
+           
+        //Deiinindo a cor do campo de acordo com o saldo atual
+        if(valSaldoAtual < 0){
+            this.saldoAtual.setForeground(Color.red);
         }else{
-            this.saldo.setForeground(cores.azul());
+            this.saldoAtual.setForeground(cores.azul());
+        }
+        
+        //Deiinindo a cor do campo de acordo com o saldo anterior
+        if(valSaldoAnterior < 0){
+            this.saldoAnterior.setForeground(Color.red);
+        }else{
+            this.saldoAnterior.setForeground(cores.azul());
         }
     }
     
@@ -957,11 +1020,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         //Selecinando as contas que foram excluídas
         for(int index : numLinhaSelec){
             //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
-            listaMvExcluida.add(listaMovimentacao.get(index));    
-            
-            //Excluí a conta da lista de contas a pagar
-            //listaMovimentacao.remove(index);
-            
+            listaMvExcluida.add(listaMovimentacao.get(index));               
         }
 
         int confirm = JOptionPane.showConfirmDialog(null,"Excluir as contas selecionadas ?", "Confirmar", JOptionPane.YES_NO_OPTION);
@@ -1012,6 +1071,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1029,7 +1091,8 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JRadioButton rbEntrada;
     private javax.swing.JRadioButton rbEntradaSaida;
     private javax.swing.JRadioButton rbSaida;
-    private javax.swing.JTextField saldo;
+    private javax.swing.JTextField saldoAnterior;
+    private javax.swing.JTextField saldoAtual;
     private javax.swing.JTable tabelaMovimentacoes;
     private javax.swing.JComboBox<String> tipoOferta;
     private javax.swing.JTextField totalDizimo;
@@ -1037,7 +1100,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JTextField totalOfertas;
     private javax.swing.JTextField totalSaida;
     private javax.swing.JLabel txData;
+    private javax.swing.JTextField valorAplicação;
     private javax.swing.JTextField valorEntrada;
+    private javax.swing.JTextField valorRendimento;
     private javax.swing.JTextField valorSaida;
     // End of variables declaration//GEN-END:variables
 }

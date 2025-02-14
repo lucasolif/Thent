@@ -69,7 +69,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         setClosable(true);
         setIconifiable(true);
         setTitle("Cadastro de Usuários");
-        setPreferredSize(new java.awt.Dimension(475, 320));
+        setPreferredSize(new java.awt.Dimension(556, 320));
 
         btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -221,7 +221,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                                                 .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(cbAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(0, 24, Short.MAX_VALUE)))
+                                .addGap(0, 72, Short.MAX_VALUE)))
                         .addGap(8, 8, 8))))
         );
         layout.setVerticalGroup(
