@@ -9,20 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
+import model.Acessos;
+import model.FuncoesUsuario;
 import model.Igreja;
 import model.Usuario;
+import model.UsuarioLogado;
+import view.Home;
 
 
 public class UsuarioDao {
     
     private final LogsDao logsDao = new LogsDao();
     Connection conexao = null;
+    PreparedStatement stmtSelect = null;
+    PreparedStatement stmtInsert = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
 
-    public void adicionar(Usuario usuario){
+    public void adicionarUsuario(Usuario usuario){
         
-        String sql= "INSERT INTO Usuarios (Nome,Email,Celular,Usuario,Igreja,DataCadastro,Ativo,HashSenha,SaltSenha)VALUES (?,?,?,?,?,GETDATE(),1,?,?)";
+        String sql= "INSERT INTO Usuarios (Nome,Email,Celular,Usuario,Igreja,DataCadastro,Ativo,HashSenha,SaltSenha,Funcao,TodasIgrejas)VALUES (?,?,?,?,?,GETDATE(),1,?,?,?,?)";
              
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -35,6 +41,8 @@ public class UsuarioDao {
             ps.setInt(5,usuario.getIgreja().getCodigo());   
             ps.setString(6,usuario.getHashSenha());
             ps.setString(7,usuario.getSaltSenha());
+            ps.setInt(8,usuario.getFuncaoCargo().getCodigo());
+            ps.setInt(9,usuario.getTodasIgrejas());
             ps.execute();
             
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
@@ -59,18 +67,20 @@ public class UsuarioDao {
 
     }
     
-    public void alterar(Usuario usuario){
+    public void alterarUsuario(Usuario usuario){
              
         try{            
             conexao = Conexao.getDataSource().getConnection();
             
-            String sql= "UPDATE Usuarios SET Email=?,Celular=?,Igreja=?,Ativo=?" + " WHERE Codigo=?";
+            String sql= "UPDATE Usuarios SET Email=?,Celular=?,Igreja=?,Ativo=?,Funcao=?,TodasIgrejas=?" + " WHERE Codigo=?";
             ps = conexao.prepareStatement(sql);
             ps.setString(1,usuario.getEmail());
             ps.setString(2,usuario.getCelular());
             ps.setInt(3,usuario.getIgreja().getCodigo());
             ps.setInt(4,usuario.getAtivo());
-            ps.setInt(5,usuario.getCodigo());
+            ps.setInt(5,usuario.getFuncaoCargo().getCodigo());
+            ps.setInt(6,usuario.getTodasIgrejas());
+            ps.setInt(7,usuario.getCodigo());
             ps.executeUpdate();
             
             JOptionPane.showMessageDialog(null, "Usuário "+usuario.getLogin()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
@@ -119,11 +129,12 @@ public class UsuarioDao {
         }   
     }
     
-    public List<Usuario> consultar(String usuario){
+    public List<Usuario> consultarUsuario(String usuario){
         List<Usuario> listaUsuarios = new ArrayList<>();
          //Estanciando o objeto para consultarIgreja a igreja do usuário
 
-        String sql = "SELECT I.Codigo AS CodIgreja, I.NomeIgreja AS NomeIgreja, * FROM Usuarios AS U "
+        String sql = "SELECT I.Codigo AS CodIgreja, I.NomeIgreja AS NomeIgreja, (Select Nome From Funcoes As F Where F.Codigo = U.Funcao) As NomeFuncao, * "
+        + "FROM Usuarios AS U "
         + "INNER JOIN Igrejas AS I ON I.Codigo = U.Igreja "       
         + "WHERE ((? IS NULL OR U.Codigo LIKE ?) OR (? IS NULL OR U.Nome LIKE ?) OR (? IS NULL OR U.Usuario LIKE ?))"
         + "AND Ativo = 1";
@@ -152,7 +163,10 @@ public class UsuarioDao {
 
             while(rs.next()){
                 Usuario user = new Usuario();
+                FuncoesUsuario funcao = new FuncoesUsuario();
                 Igreja igreja = new Igreja();
+                funcao.setCodigo(rs.getInt("Funcao"));
+                funcao.setNome(rs.getString("NomeFuncao"));
                 igreja.setCodigo(rs.getInt("CodIgreja"));
                 igreja.setNome(rs.getString("NomeIgreja"));
                 user.setCodigo(rs.getInt("Codigo"));
@@ -164,6 +178,8 @@ public class UsuarioDao {
                 user.setIgreja(igreja);
                 user.setHashSenha(rs.getString("HashSenha"));
                 user.setSaltSenha(rs.getString("SaltSenha"));
+                user.setFuncaoCargo(funcao);
+                user.setTodasIgrejas(rs.getInt("TodasIgrejas"));
 
                 listaUsuarios.add(user);
             }          
@@ -185,7 +201,7 @@ public class UsuarioDao {
         return listaUsuarios;
     }
     
-    public void remover(int usuario){
+    public void removerUsuario(int usuario){
         
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -211,4 +227,209 @@ public class UsuarioDao {
             }
         }
     }
+    
+    public void salvarAcessosPersonalizados(List<Acessos> listaAcessos){
+        String sql= "Insert Into PermissaoPersonalizadaUsuario (Usuario, MenuID, PodeAcessar, Editar, Excluir, Cadastrar) VALUES (?,?,?,?,?,?)";
+             
+        try{
+            conexao = Conexao.getDataSource().getConnection();
+                     
+            for(Acessos aces : listaAcessos){
+                stmtInsert = conexao.prepareStatement(sql);
+                
+                stmtInsert.setInt(1,aces.getUsuario().getCodigo());
+                stmtInsert.setInt(2,aces.getMenuId());
+                stmtInsert.setInt(3,aces.getPodeAcesasr());
+                stmtInsert.setInt(4,aces.getEditar());
+                stmtInsert.setInt(5,aces.getExcluir());   
+                stmtInsert.setInt(6,aces.getCadastrar());
+                stmtInsert.execute();
+            }
+
+            JOptionPane.showMessageDialog(null, "Acessos cadastrados com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);       
+        }finally{
+            // Fechar recursos
+            try{
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    public void alterarAcessosPersonalizados(List<Acessos> listaAcessos){
+        String sql= "Update PermissaoPersonalizadaUsuario Set PodeAcessar = ?, Editar = ?, Excluir = ?, Cadastrar = ? "
+            +"Where Usuario = ? AND MenuID = ?";
+        
+             
+        try{
+            conexao = Conexao.getDataSource().getConnection();
+                     
+           for(Acessos aces : listaAcessos){
+                stmtSelect = conexao.prepareStatement(sql);
+                
+                stmtSelect.setInt(1,aces.getPodeAcesasr());
+                stmtSelect.setInt(2,aces.getEditar());
+                stmtSelect.setInt(3,aces.getExcluir());   
+                stmtSelect.setInt(4,aces.getCadastrar());
+                stmtSelect.setInt(5,aces.getUsuario().getCodigo());
+                stmtSelect.setInt(6,aces.getMenuId());
+                stmtSelect.execute();
+           }
+
+            JOptionPane.showMessageDialog(null, "Acessos cadastrados com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
+            
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar o usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);       
+        }finally{
+            // Fechar recursos
+            try{
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    public FuncoesUsuario consultarFuncaoUsuario(UsuarioLogado usuario){
+        FuncoesUsuario funcao = new FuncoesUsuario();  
+
+        String sql = "Select Funcao From Usuarios Where Codigo = ?";
+    
+        try{
+            conexao = Conexao.getDataSource().getConnection();            
+            ps = conexao.prepareStatement(sql);
+            
+            ps.setInt(1,  usuario.getCodUsuario());
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                funcao.setCodigo(rs.getInt("Funcao"));
+            }          
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os acessos do usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return funcao;
+    }
+    
+    public List<Acessos> consultarAcessosPadrao(UsuarioLogado usuario){
+        List<Acessos> listaAcessos = new ArrayList<>();
+         //Estanciando o objeto para consultarIgreja a igreja do usuário
+
+        String sql = "Select * " +
+        "From " +
+        "PermissoesMenus As PM " +
+        "Where " +
+        "PM.FuncaoID = (Select Funcao From Usuarios As U Where U.Codigo = ?)";
+    
+        try{
+            conexao = Conexao.getDataSource().getConnection();            
+            ps = conexao.prepareStatement(sql);
+            
+            ps.setInt(1,  usuario.getCodUsuario());
+  
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                Acessos acessos = new Acessos();
+
+                acessos.setCodFuncao(rs.getInt("FuncaoID"));
+                acessos.setMenuId(rs.getInt("MenuID"));
+                acessos.setPodeAcesasr(rs.getInt("PodeAcessar"));
+                acessos.setEditar(rs.getInt("Editar"));
+                acessos.setExcluir(rs.getInt("Excluir"));
+                acessos.setCadastrar(rs.getInt("Cadastrar"));
+
+                listaAcessos.add(acessos);
+            }          
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os acessos do usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaAcessos;
+    }
+    
+    public List<Acessos> consultarAcessosPersonalizados(Usuario usuario){
+        
+        List<Acessos> listaAcessos = new ArrayList<>();
+         //Estanciando o objeto para consultarIgreja a igreja do usuário
+
+        String sql = "Select * " +
+        "From " +
+        "PermissaoPersonalizadaUsuario " +
+        "Where Usuario = ?";
+    
+        try{
+            conexao = Conexao.getDataSource().getConnection();            
+            ps = conexao.prepareStatement(sql);
+            
+            ps.setInt(1,  usuario.getCodigo());
+  
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                Usuario user = new Usuario();
+                Acessos acessos = new Acessos();
+                
+                user.setCodigo(rs.getInt("Usuario"));
+                acessos.setMenuId(rs.getInt("MenuID"));
+                acessos.setPodeAcesasr(rs.getInt("PodeAcessar"));
+                acessos.setEditar(rs.getInt("Editar"));
+                acessos.setExcluir(rs.getInt("Excluir"));
+                acessos.setCadastrar(rs.getInt("Cadastrar"));
+                acessos.setUsuario(user);
+
+                listaAcessos.add(acessos);
+            }          
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os acessos do usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);   
+        }finally{
+            // Fechar recursos
+            try{
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaAcessos;
+    }
+    
+  
 }

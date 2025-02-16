@@ -9,8 +9,8 @@ import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;
 import dao.TransferenciaDepositoDao;
-import Services.Utilitarios;
-import Services.PaletaCores;
+import Ferramentas.Utilitarios;
+import Ferramentas.PaletaCores;
 import dao.AplicacaoDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
@@ -996,14 +996,14 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         if(valSaldoAtual < 0){
             this.saldoAtual.setForeground(Color.red);
         }else{
-            this.saldoAtual.setForeground(cores.azul());
+            this.saldoAtual.setForeground(cores.getAzul());
         }
         
         //Deiinindo a cor do campo de acordo com o saldo anterior
         if(valSaldoAnterior < 0){
             this.saldoAnterior.setForeground(Color.red);
         }else{
-            this.saldoAnterior.setForeground(cores.azul());
+            this.saldoAnterior.setForeground(cores.getAzul());
         }
     }
     

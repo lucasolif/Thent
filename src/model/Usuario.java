@@ -13,17 +13,27 @@ public class Usuario {
     private String celular;
     private String hashSenha;
     private String saltSenha;
-    private Integer perfilAcesso;
+    private FuncoesUsuario funcaoCargo;
+    private Integer todasIgrejas;
+    
 
     public Usuario() {
     }
 
-    public Integer getPerfilAcesso() {
-        return perfilAcesso;
+    public Integer getTodasIgrejas() {
+        return todasIgrejas;
     }
 
-    public void setPerfilAcesso(Integer perfilAcesso) {
-        this.perfilAcesso = perfilAcesso;
+    public void setTodasIgrejas(Integer todasIgrejas) {
+        this.todasIgrejas = todasIgrejas;
+    }
+    
+    public FuncoesUsuario getFuncaoCargo() {
+        return funcaoCargo;
+    }
+
+    public void setFuncaoCargo(FuncoesUsuario funcaoCargo) {
+        this.funcaoCargo = funcaoCargo;
     }
 
     public Integer getCodigo() {

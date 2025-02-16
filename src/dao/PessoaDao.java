@@ -1,7 +1,7 @@
 
 package dao;
 
-import Services.Utilitarios;
+import Ferramentas.Utilitarios;
 import jdbc.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

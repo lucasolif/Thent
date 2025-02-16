@@ -7,9 +7,9 @@ import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
-import Services.PaletaCores;
-import Services.StatusCoresContaPagarReceber;
-import Services.Utilitarios;
+import Ferramentas.PaletaCores;
+import Ferramentas.StatusCoresContaPagarReceber;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;
@@ -946,19 +946,19 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                         Color corFundo = Color.GRAY; // Cor padrão
                         
                         if(status.equalsIgnoreCase("pago")){
-                            corFundo = paletaCores.azul(); 
+                            corFundo = paletaCores.getAzul(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
-                            corFundo = paletaCores.vermelhoEscuro(); 
+                            corFundo = paletaCores.getVermelho(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
-                            corFundo = paletaCores.vermelhoClaro(); 
+                            corFundo = paletaCores.getVermelhoClaro(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
-                            corFundo = paletaCores.amareloEscuro(); 
+                            corFundo = paletaCores.getAmareloEscuro(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
-                            corFundo = paletaCores.amareloClaro(); 
+                            corFundo = paletaCores.getAmareloClaro(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
-                            corFundo = paletaCores.verdeLimao(); 
+                            corFundo = paletaCores.getVerdeLimao(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
-                            corFundo = paletaCores.verdeEscuro(); 
+                            corFundo = paletaCores.getVerdeEscuro(); 
                         }
                         
                         // Definir a cor de preenchimento do círculo

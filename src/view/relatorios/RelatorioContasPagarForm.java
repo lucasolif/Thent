@@ -1,13 +1,13 @@
 
 package view.relatorios;
 
-import Services.Relatorios;
+import Ferramentas.Relatorios;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Services.Utilitarios;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;

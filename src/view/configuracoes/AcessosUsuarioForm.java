@@ -1,14 +1,38 @@
 
 package view.configuracoes;
 
+import dao.UsuarioDao;
+import interfaces.ConsultaUsuarios;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import model.Acessos;
+import model.FuncoesUsuario;
+import model.Usuario;
+import model.UsuarioLogado;
+import view.carregamentoConsultas.TelaConsultaUsuarios;
 
 
-public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
+public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements ConsultaUsuarios {
 
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private List<Usuario> listaUsuario;
+    private List<JCheckBox> listaCheckbox = null;
+    List<Acessos> listaConsultaAcesso = null;
+    
 
     public AcessosUsuarioForm() {
         initComponents();
+        
+        nomearCheckBox();
     }
 
     public void setPosicao() {
@@ -20,7 +44,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        acessoMenus1 = new javax.swing.JTabbedPane();
+        acessosUsuario = new javax.swing.JTabbedPane();
         acessosMenus = new javax.swing.JPanel();
         cbx7 = new javax.swing.JCheckBox();
         cbx6 = new javax.swing.JCheckBox();
@@ -87,18 +111,18 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
         cbx58 = new javax.swing.JCheckBox();
         cbx56 = new javax.swing.JCheckBox();
         cbx57 = new javax.swing.JCheckBox();
-        jSeparator7 = new javax.swing.JSeparator();
         cbx59 = new javax.swing.JCheckBox();
         cbx60 = new javax.swing.JCheckBox();
-        permissoes = new javax.swing.JPanel();
-        cbx61 = new javax.swing.JCheckBox();
         btnSalvar = new javax.swing.JButton();
+        codUsuario = new javax.swing.JTextField();
+        nomeUsuario = new javax.swing.JTextField();
+        btnOk = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Acessos de Usuários");
 
-        acessoMenus1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        acessosUsuario.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         cbx7.setText("Cadastro Conta Caixa");
 
@@ -317,10 +341,10 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                     .addComponent(cbx34))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbx33)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
-        acessoMenus1.addTab("Acesso Menus", acessosMenus);
+        acessosUsuario.addTab("Acesso Menus", acessosMenus);
 
         jSeparator4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Menu Campanhas", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
@@ -376,8 +400,6 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
 
         cbx57.setText("SubMenu Usuários");
 
-        jSeparator7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Alterar Senha", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
-
         cbx59.setText("Menu Alterar Senha");
 
         cbx60.setText("Alterar Senha");
@@ -389,7 +411,6 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
             .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING)
             .addComponent(jSeparator4)
             .addComponent(jSeparator6)
-            .addComponent(jSeparator7, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(acessosMenu1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(acessosMenu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -445,8 +466,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbx57)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx58))
-                            .addGroup(acessosMenu1Layout.createSequentialGroup()
+                                .addComponent(cbx58)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbx59)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbx60)))
@@ -497,70 +518,325 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
                 .addGroup(acessosMenu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbx56)
                     .addComponent(cbx57)
-                    .addComponent(cbx58))
-                .addGap(41, 41, 41)
-                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(acessosMenu1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbx58)
                     .addComponent(cbx59)
                     .addComponent(cbx60))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
-        acessoMenus1.addTab("Acesso Menus 1", acessosMenu1);
-
-        cbx61.setText("Acessar os dados de todos os campo/igrejas?");
-
-        javax.swing.GroupLayout permissoesLayout = new javax.swing.GroupLayout(permissoes);
-        permissoes.setLayout(permissoesLayout);
-        permissoesLayout.setHorizontalGroup(
-            permissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(permissoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cbx61)
-                .addContainerGap(449, Short.MAX_VALUE))
-        );
-        permissoesLayout.setVerticalGroup(
-            permissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(permissoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cbx61)
-                .addContainerGap(371, Short.MAX_VALUE))
-        );
-
-        acessoMenus1.addTab("Permissões", permissoes);
+        acessosUsuario.addTab("Acesso Menus 1", acessosMenu1);
 
         btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+
+        codUsuario.setEditable(false);
+        codUsuario.setBackground(new java.awt.Color(204, 204, 204));
+
+        nomeUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeUsuarioKeyPressed(evt);
+            }
+        });
+
+        btnOk.setBackground(new java.awt.Color(0, 153, 255));
+        btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnOk.setText("OK");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(acessoMenus1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(acessosUsuario)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(codUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSalvar)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(acessoMenus1)
-                .addGap(18, 18, 18)
-                .addComponent(btnSalvar)
+                .addComponent(acessosUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalvar)
+                    .addComponent(codUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOk))
                 .addGap(23, 23, 23))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void nomeUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeUsuarioKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            consultarUsuarios();
+            carregarResultadoConsultaUsuarios();
+            if(verificarFuncaoUsuario()){
+                consultarCarregarAcessosPersonalizado();
+            }else{
+                JOptionPane.showMessageDialog(null, "Para personalizar o acesso, é preciso definir a função PERSONALIZADO no cadastro do usuário", "Erro", JOptionPane.WARNING_MESSAGE);
+                formInicial();
+            }
+        }
+    }//GEN-LAST:event_nomeUsuarioKeyPressed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        salvarAlterarAcessosCadastrados();
+        formInicial();
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void nomearCheckBox(){
+        this.cbx1.setName("1");
+        this.cbx2.setName("2");
+        this.cbx3.setName("3");
+        this.cbx4.setName("4");
+        this.cbx5.setName("5");
+        this.cbx6.setName("6");
+        this.cbx7.setName("7");
+        this.cbx8.setName("8");
+        this.cbx9.setName("9");
+        this.cbx10.setName("10");
+        this.cbx11.setName("11");
+        this.cbx12.setName("12");
+        this.cbx13.setName("13");
+        this.cbx14.setName("14");
+        this.cbx15.setName("15");
+        this.cbx16.setName("16");
+        this.cbx17.setName("17");
+        this.cbx18.setName("18");
+        this.cbx19.setName("19");
+        this.cbx20.setName("20");
+        this.cbx21.setName("21");
+        this.cbx22.setName("22");
+        this.cbx23.setName("23");
+        this.cbx24.setName("24");
+        this.cbx25.setName("25");
+        this.cbx26.setName("26");
+        this.cbx27.setName("27");
+        this.cbx28.setName("28");
+        this.cbx29.setName("29");
+        this.cbx30.setName("30");
+        this.cbx31.setName("31");
+        this.cbx32.setName("32");
+        this.cbx33.setName("33");
+        this.cbx34.setName("34");
+        this.cbx35.setName("35");
+        this.cbx36.setName("36");
+        this.cbx37.setName("37");
+        this.cbx38.setName("38");
+        this.cbx39.setName("39");
+        this.cbx40.setName("40");
+        this.cbx41.setName("41");
+        this.cbx42.setName("42");
+        this.cbx43.setName("43");
+        this.cbx44.setName("44");
+        this.cbx45.setName("45");
+        this.cbx46.setName("46");
+        this.cbx47.setName("47");
+        this.cbx48.setName("48");
+        this.cbx49.setName("49");
+        this.cbx50.setName("50");
+        this.cbx51.setName("51");
+        this.cbx52.setName("52");
+        this.cbx53.setName("53");
+        this.cbx54.setName("54");
+        this.cbx55.setName("55");
+        this.cbx56.setName("56");
+        this.cbx57.setName("57");
+        this.cbx58.setName("58");
+        this.cbx59.setName("59");
+        this.cbx60.setName("60");
+    }
+    
+    private void consultarUsuarios(){
+        String textoBusca = this.nomeUsuario.getText();
+        this.listaUsuario = this.usuarioDao.consultarUsuario(textoBusca);
+    }
+    
+    private void carregarResultadoConsultaUsuarios(){
+        TelaConsultaUsuarios resultConsultaUsuarios = new TelaConsultaUsuarios((Frame) SwingUtilities.getWindowAncestor(this), this.listaUsuario);
+        resultConsultaUsuarios.setUsuarioSelecionado(this);
+        resultConsultaUsuarios.setLocationRelativeTo(this);
+        resultConsultaUsuarios.setVisible(true);
+    }
+    
+    private void carregarUsuarioEscolhido(Usuario usuario){
+        this.codUsuario.setText(String.valueOf(usuario.getCodigo()));
+        this.nomeUsuario.setText(usuario.getNome());
+
+    }
+    
+    private void formInicial(){
+        this.codUsuario.setText("");
+        this.nomeUsuario.setText("");
+        
+        //Percorre todos os checkbox e desmarca eles
+        for (Component comp : this.acessosMenus.getComponents()) {
+            // Verificar se o componente é um JCheckBox
+            if(comp instanceof JCheckBox checkBox) {
+                checkBox.setSelected(false);  // Desmarcar o JCheckBox
+            }
+        }
+        
+        //Percorre todos os checkbox e desmarca eles
+        for (Component comp : this.acessosMenu1.getComponents()) {
+            // Verificar se o componente é um JCheckBox
+            if(comp instanceof JCheckBox checkBox) {
+                checkBox.setSelected(false);  // Desmarcar o JCheckBox
+            }
+        }
+    }
+    
+    private void consultarCarregarAcessosPersonalizado(){
+        
+        Usuario usuario = new Usuario();
+        usuario.setCodigo(Integer.valueOf(this.codUsuario.getText()));
+        this.listaConsultaAcesso = usuarioDao.consultarAcessosPersonalizados(usuario);
+        
+        for(Acessos aces : listaConsultaAcesso){
+                   
+            //Percorre o checkbox primeiro painel
+            for (Component comp : this.acessosMenus.getComponents()) {
+                // Verificar se o componente é um JCheckBox
+                if(comp instanceof JCheckBox checkBox) {
+                    if(aces.getMenuId() == Integer.valueOf(checkBox.getName()) && aces.getPodeAcesasr() == 1){
+                        checkBox.setSelected(true);  // Desmarcar o JCheckBox
+                    }else if(aces.getMenuId() == Integer.valueOf(checkBox.getName()) && aces.getPodeAcesasr() == 0){
+                        checkBox.setSelected(false);  // Desmarcar o JCheckBox
+                    }
+                }
+            }
+
+            //Percorre o checkbox do segundo painel
+            for (Component comp : this.acessosMenu1.getComponents()) {
+                // Verificar se o componente é um JCheckBox
+                if(comp instanceof JCheckBox checkBox) {
+                    if(aces.getMenuId() == Integer.valueOf(checkBox.getName())  && aces.getPodeAcesasr() == 1){
+                        checkBox.setSelected(true);  // Desmarcar o JCheckBox
+                    }else if(aces.getMenuId() == Integer.valueOf(checkBox.getName())  && aces.getPodeAcesasr() == 0){
+                        checkBox.setSelected(false);  // Desmarcar o JCheckBox
+                    }
+                }
+            }
+            
+        } 
+    }
+    
+    private boolean verificarFuncaoUsuario(){
+        UsuarioLogado usuario = new UsuarioLogado();
+        usuario.setCodUsuario(Integer.valueOf(this.codUsuario.getText()));
+        boolean userPersonalizado = false;
+        
+        //Obter a função do usuário
+        FuncoesUsuario funcao = usuarioDao.consultarFuncaoUsuario(usuario);
+        
+        if(funcao.getCodigo() == 1){
+            userPersonalizado = true;
+        }
+        
+        return userPersonalizado;
+    }
+    
+    private void salvarAlterarAcessosCadastrados(){
+        
+        List<Acessos> listaAcessoAtual = this.listaConsultaAcesso; //Acessos que o usuário tem atualmente
+        List<Acessos> listaAcessosAlterados = acessosPersonalizado(); //Acesso adicionados ou retirados
+        
+        //Verifica se a lista de consulta dos acessos personalizados não é vazia
+        if(!listaAcessoAtual.isEmpty()){
+            //Chamar função que altera o acesso que já existe para o usuário
+            usuarioDao.alterarAcessosPersonalizados(listaAcessosAlterados);
+        }else{
+            //Chama função que cadastrada os acesso que nunca foram utilizados pelo usuário
+            usuarioDao.salvarAcessosPersonalizados(listaAcessosAlterados);
+        }
+    }
+    
+    private List<Acessos> acessosPersonalizado(){
+        
+        Usuario usuario = new Usuario();
+        List<Acessos> listaAcessosPerson = new ArrayList<>();
+        usuario.setCodigo(Integer.valueOf(this.codUsuario.getText()));
+        Integer podeAcessar = 0;
+        Integer menuId = 0;
+        
+        //Percorre todos os checkbox e desmarca eles
+        for (Component comp : this.acessosMenus.getComponents()) {
+            // Verificar se o componente é um JCheckBox
+            if(comp instanceof JCheckBox checkBox) {
+                if(checkBox.isSelected()){
+                    podeAcessar = 1;
+                }else{
+                    podeAcessar = 0; 
+                }
+                menuId = Integer.valueOf(checkBox.getName());
+                Acessos acessoPerson = new Acessos();
+                acessoPerson.setCadastrar(0);
+                acessoPerson.setEditar(0);
+                acessoPerson.setExcluir(0);
+                acessoPerson.setMenuId(menuId);
+                acessoPerson.setPodeAcesasr(podeAcessar);
+                acessoPerson.setUsuario(usuario);
+                
+                listaAcessosPerson.add(acessoPerson);
+            }
+        }
+        
+        //Zerando as variáveis
+        podeAcessar = 0;
+        menuId = 0;
+
+        //Percorre todos os checkbox e desmarca eles
+        for (Component comp : this.acessosMenu1.getComponents()) {
+            // Verificar se o componente é um JCheckBox
+            if(comp instanceof JCheckBox checkBox) {
+                if(checkBox.isSelected()){
+                    podeAcessar = 1;
+                }else{
+                    podeAcessar = 0; 
+                }
+                
+                menuId = Integer.valueOf(checkBox.getName());
+                Acessos acessoPerson = new Acessos();
+                acessoPerson.setCadastrar(0);
+                acessoPerson.setEditar(0);
+                acessoPerson.setExcluir(0);
+                acessoPerson.setMenuId(menuId);
+                acessoPerson.setPodeAcesasr(podeAcessar);
+                acessoPerson.setUsuario(usuario);
+                
+                listaAcessosPerson.add(acessoPerson);
+            }
+        }    
+
+        return listaAcessosPerson;
+        
+    }
+   
+    
+    @Override
+    public void usuarioSelecionado(Usuario usuarioEscolhido) {
+        carregarUsuarioEscolhido(usuarioEscolhido);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTabbedPane acessoMenus1;
     private javax.swing.JPanel acessosMenu1;
     private javax.swing.JPanel acessosMenus;
+    private javax.swing.JTabbedPane acessosUsuario;
+    private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JCheckBox cbx1;
     private javax.swing.JCheckBox cbx10;
@@ -619,17 +895,17 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox cbx59;
     private javax.swing.JCheckBox cbx6;
     private javax.swing.JCheckBox cbx60;
-    private javax.swing.JCheckBox cbx61;
     private javax.swing.JCheckBox cbx7;
     private javax.swing.JCheckBox cbx8;
     private javax.swing.JCheckBox cbx9;
+    private javax.swing.JTextField codUsuario;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JPanel permissoes;
+    private javax.swing.JTextField nomeUsuario;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -1,7 +1,7 @@
 
 package view.biblioteca;
 
-import Services.PaletaCores;
+import Ferramentas.PaletaCores;
 
 public class StatusCores extends javax.swing.JDialog{
 
@@ -102,9 +102,9 @@ public class StatusCores extends javax.swing.JDialog{
     }// </editor-fold>//GEN-END:initComponents
 
     private void cores(){
-        this.verde.setBackground(paletaCores.azul());
-        this.azul.setBackground(paletaCores.verdeLimao());
-        this.vermelho.setBackground(paletaCores.vermelhoEscuro());
+        this.verde.setBackground(paletaCores.getAzul());
+        this.azul.setBackground(paletaCores.getVerdeLimao());
+        this.vermelho.setBackground(paletaCores.getVermelho());
     }
     
 

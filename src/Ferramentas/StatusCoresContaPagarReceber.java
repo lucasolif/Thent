@@ -1,7 +1,7 @@
 
-package Services;
+package Ferramentas;
 
-import Services.PaletaCores;
+import Ferramentas.PaletaCores;
 
 public class StatusCoresContaPagarReceber extends javax.swing.JDialog{
 
@@ -132,7 +132,6 @@ public class StatusCoresContaPagarReceber extends javax.swing.JDialog{
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(azul, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(amareloEscuro, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,7 +140,6 @@ public class StatusCoresContaPagarReceber extends javax.swing.JDialog{
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(verdeLimao, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(amareloClaro, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -163,13 +161,13 @@ public class StatusCoresContaPagarReceber extends javax.swing.JDialog{
     }// </editor-fold>//GEN-END:initComponents
 
     private void cores(){
-        this.azul.setBackground(paletaCores.azul());
-        this.amareloClaro.setBackground(paletaCores.amareloClaro());
-        this.amareloEscuro.setBackground(paletaCores.amareloEscuro());
-        this.verdeLimao.setBackground(paletaCores.verdeLimao());
-        this.verdeEscuro.setBackground(paletaCores.verdeEscuro());
-        this.vermelhoEscuro.setBackground(paletaCores.vermelhoEscuro());
-        this.vermelhoClaro.setBackground(paletaCores.vermelhoClaro());
+        this.azul.setBackground(paletaCores.getAzul());
+        this.amareloClaro.setBackground(paletaCores.getAmareloClaro());
+        this.amareloEscuro.setBackground(paletaCores.getAmareloEscuro());
+        this.verdeLimao.setBackground(paletaCores.getVerdeLimao());
+        this.verdeEscuro.setBackground(paletaCores.getVerdeEscuro());
+        this.vermelhoEscuro.setBackground(paletaCores.getVermelho());
+        this.vermelhoClaro.setBackground(paletaCores.getVermelhoClaro());
     }
     
 

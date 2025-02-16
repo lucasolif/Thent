@@ -5,7 +5,7 @@ import dao.CampanhaDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Services.Utilitarios;
+import Ferramentas.Utilitarios;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -339,6 +339,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
                 return canEdit [columnIndex];
             }
         });
+        tabelaParticipantes.setToolTipText("");
         jScrollPane1.setViewportView(tabelaParticipantes);
         if (tabelaParticipantes.getColumnModel().getColumnCount() > 0) {
             tabelaParticipantes.getColumnModel().getColumn(0).setResizable(false);

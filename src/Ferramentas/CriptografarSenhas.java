@@ -1,5 +1,5 @@
 
-package Services;
+package Ferramentas;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

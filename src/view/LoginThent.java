@@ -2,10 +2,10 @@
 package view;
 
 import dao.LoginDao;
-import Services.Utilitarios;
+import Ferramentas.Utilitarios;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import Services.CriptografarSenhas;
+import Ferramentas.CriptografarSenhas;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Base64;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import jdbc.Conexao;
 import jdbc.Configuracao;
 import model.Login;
@@ -176,10 +178,8 @@ public class LoginThent extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Arquivo JSON do banco de dados está vazio", "Erro 014", JOptionPane.ERROR_MESSAGE);
             }            
         } catch (IOException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao tentar ler o arquivo JSON do banco de dados", "Erro 014", JOptionPane.ERROR_MESSAGE);
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro na sintaxe do arquivo JSON do banco de dados.", "Erro 014", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -213,31 +213,13 @@ public class LoginThent extends javax.swing.JFrame {
     }
     
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginThent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginThent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginThent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginThent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            // Definir o LookAndFeel para o Nimbus
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginThent().setVisible(true);

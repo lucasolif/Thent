@@ -4,7 +4,7 @@ package view.campanhas;
 import dao.CampanhaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Services.Utilitarios;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;

@@ -6,8 +6,8 @@ import dao.EmprestimoLivroDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
-import Services.PaletaCores;
-import Services.Utilitarios;
+import Ferramentas.PaletaCores;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;
@@ -696,11 +696,11 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
                         String status = (String) tabelaEmprestimos.getValueAt(row, 7);
                         
                         if(status.equalsIgnoreCase("emprestado")){
-                            corFundo = paletaCores.verdeLimao(); 
+                            corFundo = paletaCores.getVerdeLimao(); 
                         }else if(status.equalsIgnoreCase("devolvido")){                             
-                            corFundo = paletaCores.azul();    
+                            corFundo = paletaCores.getAzul();    
                         }else if(status.equalsIgnoreCase("perdido")){
-                            corFundo = paletaCores.vermelhoEscuro();  
+                            corFundo = paletaCores.getVermelho();  
                         }
 
                         // Definir a cor de preenchimento do círculo

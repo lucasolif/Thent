@@ -5,8 +5,8 @@ import java.util.Base64;
 import dao.IgrejaDao;
 import model.Usuario;
 import dao.UsuarioDao;
-import Services.CriptografarSenhas;
-import Services.PaletaCores;
+import Ferramentas.CriptografarSenhas;
+import Ferramentas.PaletaCores;
 import dao.PermissoesDao;
 import interfaces.ConsultaUsuarios;
 import java.awt.Dimension;
@@ -22,6 +22,7 @@ import model.FuncoesUsuario;
 import model.Igreja;
 import model.UsuarioLogado;
 import view.carregamentoConsultas.TelaConsultaUsuarios;
+
 public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaUsuarios{
 
     private final PermissoesDao permissaoDao = new PermissoesDao();
@@ -65,6 +66,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         jLabel18 = new javax.swing.JLabel();
         funcaoCargo = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        todasIgrejas = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -151,6 +153,8 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
 
         jLabel1.setText("Função/Cargo");
 
+        todasIgrejas.setText("Acessar todas igrejas?");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -168,11 +172,12 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                                 .addComponent(jLabel9)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(campoIgreja, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(84, 84, 84))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnLimpar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnExcluir)
@@ -190,38 +195,36 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                                         .addComponent(usuarioSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-                                    .addComponent(usuarioConfirmSenha))
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(usuarioConfirmSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(funcaoCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel1)
-                                        .addGap(0, 0, Short.MAX_VALUE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(buscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnBuscar))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(usuarioCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel14))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(usuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel10)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(cbAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                .addGap(0, 72, Short.MAX_VALUE)))
+                                        .addGap(0, 97, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel13)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(buscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnBuscar))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(usuarioCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel14))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(usuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel10)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(todasIgrejas))))))
                         .addGap(8, 8, 8))))
         );
         layout.setVerticalGroup(
@@ -247,7 +250,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbAtivo))))
+                            .addComponent(todasIgrejas))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -273,7 +276,9 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(campoIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(campoIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbAtivo))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -325,9 +330,9 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private void formAtualizacao(){ 
         this.usuarioLogin.setFocusable(false);
         this.usuarioLogin.setEditable(false);
-        this.usuarioLogin.setBackground(cores.cinza());
-        this.usuarioSenha.setBackground(cores.cinza());
-        this.usuarioConfirmSenha.setBackground(cores.cinza());
+        this.usuarioLogin.setBackground(cores.getCinza());
+        this.usuarioSenha.setBackground(cores.getCinza());
+        this.usuarioConfirmSenha.setBackground(cores.getCinza());
         this.usuarioSenha.setEditable(false);
         this.usuarioConfirmSenha.setEditable(false);
         this.usuarioSenha.setFocusable(false);
@@ -345,14 +350,15 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         this.usuarioLogin.setText("");
         this.usuarioSenha.setText("");
         this.usuarioConfirmSenha.setText("");
-        this.usuarioLogin.setBackground(cores.branco());
-        this.usuarioSenha.setBackground(cores.branco());
-        this.usuarioConfirmSenha.setBackground(cores.branco());
+        this.usuarioLogin.setBackground(cores.getBranco());
+        this.usuarioSenha.setBackground(cores.getBranco());
+        this.usuarioConfirmSenha.setBackground(cores.getBranco());
         this.usuarioSenha.setEditable(true);
         this.usuarioConfirmSenha.setEditable(true);
         this.usuarioLogin.setEnabled(true);
         this.usuarioSenha.setEnabled(true);
         this.usuarioConfirmSenha.setEnabled(true);
+        this.todasIgrejas.setSelected(false);
         this.cbAtivo.setEnabled(false);
         this.cbAtivo.setSelected(true);
         this.userSelec = null;
@@ -362,7 +368,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     
     private void consultarUsuarios(){
         String textoBusca = this.buscarUsuario.getText();
-        this.listaUser = this.usuarioDao.consultar(textoBusca);
+        this.listaUser = this.usuarioDao.consultarUsuario(textoBusca);
     }
     
     private void carregarResultadoConsultaUsuarios(){
@@ -381,10 +387,18 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         this.usuarioSenha.setText(usuario.getHashSenha());
         this.usuarioConfirmSenha.setText(usuario.getHashSenha());
         this.campoIgreja.setSelectedItem(usuario.getIgreja());
+        this.funcaoCargo.setSelectedItem(usuario.getFuncaoCargo());
+        
         if(usuario.getAtivo() == 1){
             cbAtivo.setSelected(true);
         }else{
             cbAtivo.setSelected(false);
+        }
+        
+        if(usuario.getTodasIgrejas() == 1){
+            this.todasIgrejas.setSelected(true);
+        }else{
+            this.todasIgrejas.setSelected(false);
         }
         
         this.userSelec = usuario;
@@ -411,6 +425,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private void salvarAlterarCadastro() throws Exception{
            
         Integer status = 0;
+        Integer todasIgrejas = 0;
         String rashSenha = null;
         String saltSenha = null;
         String nome = usuarioNome.getText();
@@ -419,11 +434,16 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         Igreja igreja = (Igreja) this.campoIgreja.getSelectedItem();
         String login = usuarioLogin.getText();
         String senha = usuarioSenha.getText();
-        String confirmSenha = usuarioConfirmSenha.getText();        
+        String confirmSenha = usuarioConfirmSenha.getText();
+        FuncoesUsuario funcaoCargo = (FuncoesUsuario) this.funcaoCargo.getSelectedItem();      
         
         if(cbAtivo.isSelected()){
             status = 1;
         }   
+        
+        if(this.todasIgrejas.isSelected()){
+            todasIgrejas = 1;
+        }
         
         if(verificandoCamposVazio(nome, celular, email, login, senha)){
             JOptionPane.showMessageDialog(null, "Campos vazios. Preencha todos os campos obrigatórios", "Erro", JOptionPane.WARNING_MESSAGE);
@@ -444,20 +464,26 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                     usuario.setIgreja(igreja);
                     usuario.setSaltSenha(saltSenha);
                     usuario.setHashSenha(rashSenha);
+                    usuario.setFuncaoCargo(funcaoCargo);
+                    usuario.setTodasIgrejas(todasIgrejas);
                     
-                    this.usuarioDao.adicionar(usuario);                  
+                    this.usuarioDao.adicionarUsuario(usuario);   
+                    
                     formInicial();
                 }else{
                     JOptionPane.showMessageDialog(null, "Se senha precisa ser iguais e conter letras maísculo e números", "Erro", JOptionPane.WARNING_MESSAGE);
                 }
             }else{
+                FuncoesUsuario funcao = (FuncoesUsuario) this.funcaoCargo.getSelectedItem();
                 this.userSelec.setNome(nome);
                 this.userSelec.setCelular(celular);
                 this.userSelec.setEmail(email);
                 this.userSelec.setIgreja(igreja);
                 this.userSelec.setAtivo(status);
+                this.userSelec.setFuncaoCargo(funcao);
+                this.userSelec.setTodasIgrejas(todasIgrejas);
                 
-                this.usuarioDao.alterar(this.userSelec);               
+                this.usuarioDao.alterarUsuario(this.userSelec);               
                 formInicial();
             }
         } 
@@ -469,7 +495,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         }else{  
             int confirm = JOptionPane.showConfirmDialog(null,"Excluir o usuário "+userSelec.getLogin()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
             if(confirm == JOptionPane.YES_OPTION){
-                this.usuarioDao.remover(this.userSelec.getCodigo());
+                this.usuarioDao.removerUsuario(this.userSelec.getCodigo());
                 consultarUsuarios();
                 formInicial();
             }else if(confirm == JOptionPane.NO_OPTION){
@@ -477,14 +503,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
             }
         }
     }
-    
-    /*private void abrirTelaAcesso(){
-        AcessosUsuarios acessoUsuario = new AcessosUsuarios((Frame) SwingUtilities.getWindowAncestor(this), this.userSelec);
-        acessoUsuario.setUsuarioSelecionado(this);
-        acessoUsuario.setLocationRelativeTo(this);
-        acessoUsuario.setVisible(true);
-    }*/
-    
+   
     private boolean verificandoCamposVazio(String nome, String celular, String email, String login, String senha){
         if(nome.isEmpty() || celular.isEmpty() || email.isEmpty() || login.isEmpty() || senha.isEmpty()){        
             return true;
@@ -520,7 +539,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         }       
         return control;
     }
-        
+    
     @Override
     public void usuarioSelecionado(Usuario usuarioEscolhido) {
         carregarUsuarioEscolhido(usuarioEscolhido);
@@ -545,6 +564,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JCheckBox todasIgrejas;
     private javax.swing.JFormattedTextField usuarioCelular;
     private javax.swing.JTextField usuarioCodigo;
     private javax.swing.JPasswordField usuarioConfirmSenha;

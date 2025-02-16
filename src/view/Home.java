@@ -1,9 +1,19 @@
 package view;
 
-import Services.AgendadorTarefas;
+import Ferramentas.AgendadorTarefas;
+import Ferramentas.PaletaCores;
+import dao.UsuarioDao;
+import java.awt.Color;
+import java.util.List;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import jdbc.Conexao;
+import model.Acessos;
+import model.FuncoesUsuario;
 import model.Login;
+import model.Usuario;
 import model.UsuarioLogado;
 import view.biblioteca.AdicionarLivroForm;
 import view.biblioteca.AutorForm;
@@ -48,6 +58,8 @@ import view.relatorios.RelatorioPrestacaoContaMensal;
 public class Home extends javax.swing.JFrame {
     
     UsuarioLogado userLogado = new UsuarioLogado();
+    UsuarioDao usuarioDao = new UsuarioDao();
+    PaletaCores cores = new PaletaCores();
     
     public Home(Login usuarioLogado) {
         initComponents();
@@ -60,7 +72,15 @@ public class Home extends javax.swing.JFrame {
         //Executar tarefas automaticamente
         AgendadorTarefas exeTaregas = new AgendadorTarefas();
         exeTaregas.executarTarefasDiarias();
-
+        
+        //Nomea os menus
+        nomearMenus();
+        
+        //Verifica e libera os acesso conforme o tipo
+        verificarTipoAcesso();
+        
+        //Definindo a imagem do fundo da tela inicial
+        fundoTelaInicial();
     }
 
 
@@ -838,6 +858,8 @@ public class Home extends javax.swing.JFrame {
   
     private void nomearMenus(){
         
+        this.painelHome.setName("0");
+        
         this.menuCadastros.setName("1");
         this.formCadastroPessoas.setName("2");
         this.formCadastroIgreja.setName("3");
@@ -906,6 +928,105 @@ public class Home extends javax.swing.JFrame {
         this.formAlterarSenha.setName("60");
         
     }
+    
+    private void verificarTipoAcesso(){
+        
+        FuncoesUsuario funcaoUsuario = usuarioDao.consultarFuncaoUsuario(this.userLogado);
+        
+        if(funcaoUsuario.getCodigo() == 1){
+            acessosPersonalizado();
+            
+        }else{
+            acessosPadrao();
+        }
+    }
+    
+    private void acessosPadrao(){
+        List<Acessos> listaAcesso = usuarioDao.consultarAcessosPadrao(this.userLogado);
+        boolean acessoMenu = true;
+        
+        for(Acessos aces : listaAcesso){
+            for (int i = 0; i < menuBarra.getMenuCount(); i++) {
+                JMenu menu = menuBarra.getMenu(i);
+                Integer codMenu = Integer.valueOf(menu.getName());
+
+                //Verifica se o número do Menu é igual ao número que consta no banco de dados, verificando se tem acesso
+                if(codMenu == aces.getMenuId() && aces.getPodeAcesasr() == 0){
+                    menu.setEnabled(false);
+                    acessoMenu = false;
+                }
+
+                //Se tiver acesso ao menu, ele verifica os submenus
+                if(acessoMenu){
+                    // Iterar sobre os itens de menu dentro de cada JMenu
+                    for (int j = 0; j < menu.getItemCount(); j++) {
+                        JMenuItem subMenu = menu.getItem(j);
+                        Integer codSubMenu = Integer.valueOf(subMenu.getName());
+                        if(codSubMenu != 0 && codSubMenu == aces.getMenuId() && aces.getPodeAcesasr() == 0){
+                            subMenu.setEnabled(false);  
+                        }                                       
+                    }
+                }
+            }       
+        }
+    }
+    
+    private void acessosPersonalizado(){
+        Usuario usuario = new Usuario();
+        usuario.setCodigo(this.userLogado.getCodUsuario()); 
+        List<Acessos> listAcesPerson = usuarioDao.consultarAcessosPersonalizados(usuario);
+        boolean acessoMenu = true;
+        
+        System.out.println();
+        
+        if(!listAcesPerson.isEmpty()){
+            
+            for(Acessos aces : listAcesPerson){
+                for (int i = 0; i < menuBarra.getMenuCount(); i++) {
+                    JMenu menu = menuBarra.getMenu(i);
+                    Integer codMenu = Integer.valueOf(menu.getName());
+
+                    //Verifica se o número do Menu é igual ao número que consta no banco de dados, verificando se tem acesso
+                    if(codMenu == aces.getMenuId() && aces.getPodeAcesasr() == 0){
+                        menu.setEnabled(false);
+                        acessoMenu = false;
+                    }
+
+                    //Se tiver acesso ao menu, ele verifica os submenus
+                    if(acessoMenu){
+                        // Iterar sobre os itens de menu dentro de cada JMenu
+                        for (int j = 0; j < menu.getItemCount(); j++) {
+                            JMenuItem subMenu = menu.getItem(j);
+                            Integer codSubMenu = Integer.valueOf(subMenu.getName());
+                            if(codSubMenu != 0 && codSubMenu == aces.getMenuId() && aces.getPodeAcesasr() == 0){
+                                subMenu.setEnabled(false);  
+                            }                                       
+                        }
+                    }
+                }       
+            }
+        }else{
+            //Se não tiver nada na tabela de PermissoesPersonalizada, bloqueia o acesso a todas a telas
+            for (int i = 0; i < menuBarra.getMenuCount(); i++) {
+                JMenu menu = menuBarra.getMenu(i);
+                Integer codMenu = Integer.valueOf(menu.getName());
+
+                menu.setEnabled(false);
+            }
+            
+        }
+    }
+    
+    private void fundoTelaInicial(){
+        // Obtém o JDesktopPane, caso já não esteja referenciado
+        JDesktopPane telaIniciao = painelHome;
+        
+        // Define a cor de fundo para o JDesktopPane (por exemplo, azul claro)
+        telaIniciao.setBackground(cores.getAzulClaro()); // Altere para a cor desejada
+    }
+    
+    
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

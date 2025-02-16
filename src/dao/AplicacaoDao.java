@@ -225,7 +225,8 @@ public class AplicacaoDao {
         
         String sql = "Insert Into RendimentoAplicacao (AplicacaoID,ValorRendimento,DataProcessamento) Values (?,?,GETDATE())";           
 
-        try{            
+        try{         
+            this.conexao = Conexao.getDataSource().getConnection();
             this.stmtInsert = this.conexao.prepareStatement(sql);
             
             for(Aplicacao aplic : aplicacao){

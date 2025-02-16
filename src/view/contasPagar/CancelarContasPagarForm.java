@@ -3,7 +3,7 @@ package view.contasPagar;
 
 import dao.ContasPagarDao;
 import dao.PessoaDao;
-import Services.Utilitarios;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;

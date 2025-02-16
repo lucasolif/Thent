@@ -1,15 +1,15 @@
 
 package view.contasPagar;
 
-import Services.StatusCoresContaPagarReceber;
+import Ferramentas.StatusCoresContaPagarReceber;
 import dao.ContaCaixaDao;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Services.PaletaCores;
-import Services.Utilitarios;
+import Ferramentas.PaletaCores;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;
@@ -901,12 +901,12 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 String status = value.toString();
                 // Alterar a cor de fundo e do texto para a coluna "Valor"
                 if (status.equalsIgnoreCase("pago")) {
-                    ((JLabel) componente).setForeground(paletaCores.verde()); // Cor do texto
+                    ((JLabel) componente).setForeground(paletaCores.getVerde()); // Cor do texto
                 }else if(status.equalsIgnoreCase("pendente")){
                     //componente.setBackground(Color.WHITE);
-                    ((JLabel) componente).setForeground(paletaCores.laranja()); // Cor do texto
+                    ((JLabel) componente).setForeground(paletaCores.getLaranja()); // Cor do texto
                 }else{
-                    ((JLabel) componente).setForeground(paletaCores.azul()); // Cor do texto
+                    ((JLabel) componente).setForeground(paletaCores.getAzul()); // Cor do texto
                 }            
                 
                 //((JLabel) componente).setFont(new Font("Sanserif", Font.BOLD, 12)); // Fonte negrito, tamanho 12
@@ -940,19 +940,19 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                         Color corFundo = Color.GRAY; // Cor padrão
                         
                         if(status.equalsIgnoreCase("pago")){
-                            corFundo = paletaCores.azul(); 
+                            corFundo = paletaCores.getAzul(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("aberto")){
-                            corFundo = paletaCores.vermelhoEscuro(); 
+                            corFundo = paletaCores.getVermelho(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 1 && status.equalsIgnoreCase("pendente")){
-                            corFundo = paletaCores.vermelhoClaro(); 
+                            corFundo = paletaCores.getVermelhoClaro(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("aberto")){
-                            corFundo = paletaCores.amareloEscuro(); 
+                            corFundo = paletaCores.getAmareloEscuro(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 2 && status.equalsIgnoreCase("pendente")){
-                            corFundo = paletaCores.amareloClaro(); 
+                            corFundo = paletaCores.getAmareloClaro(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("aberto")){
-                            corFundo = paletaCores.verdeLimao(); 
+                            corFundo = paletaCores.getVerdeLimao(); 
                         }else if(conversor.compararDataComDataAtual(vencimento) == 3 && status.equalsIgnoreCase("pendente")){
-                            corFundo = paletaCores.verdeEscuro(); 
+                            corFundo = paletaCores.getVerdeEscuro(); 
                         }
                         
                         // Definir a cor de preenchimento do círculo

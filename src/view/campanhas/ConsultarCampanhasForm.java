@@ -2,8 +2,8 @@
 package view.campanhas;
 
 import dao.CampanhaDao;
-import Services.PaletaCores;
-import Services.Utilitarios;
+import Ferramentas.PaletaCores;
+import Ferramentas.Utilitarios;
 import interfaces.ConsultaCampanhas;
 import java.awt.Color;
 import java.awt.Component;
@@ -478,9 +478,9 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
                         Color corFundo = Color.GRAY; // Cor padrão
                         
                         if(status.equalsIgnoreCase("ativo")){
-                            corFundo = paletaCores.verdeLimao();  
+                            corFundo = paletaCores.getVerdeLimao();  
                         }else if(status.equalsIgnoreCase("inativo")){
-                            corFundo = paletaCores.vermelhoEscuro();
+                            corFundo = paletaCores.getVermelho();
                         }
                         // Definir a cor de preenchimento do círculo
                         g.setColor(corFundo);
