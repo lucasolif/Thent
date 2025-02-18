@@ -86,7 +86,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
 
         jLabel5.setText("Código");
 
-        btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
+        btnSalvar.setBackground(new java.awt.Color(0, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSalvar.setText("Salvar");
         btnSalvar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -98,7 +98,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
 
         jLabel1.setText("Descrição*");
 
-        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
+        btnBuscar.setBackground(new java.awt.Color(51, 153, 255));
         btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -152,7 +152,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(constaRelatorioMensal, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)))
+                        .addComponent(constaRelatorioMensal, javax.swing.GroupLayout.PREFERRED_SIZE, 161, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

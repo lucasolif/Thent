@@ -156,7 +156,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
         codFornecedor.setBackground(new java.awt.Color(204, 204, 204));
         codFornecedor.setFocusable(false);
 
-        jLabel1.setText("Fornecedor");
+        jLabel1.setText("Fornecedor*");
 
         nomeFornecedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -210,11 +210,11 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
             tabelaContasPagar.getColumnModel().getColumn(0).setResizable(false);
             tabelaContasPagar.getColumnModel().getColumn(0).setPreferredWidth(30);
             tabelaContasPagar.getColumnModel().getColumn(1).setResizable(false);
-            tabelaContasPagar.getColumnModel().getColumn(1).setPreferredWidth(10);
+            tabelaContasPagar.getColumnModel().getColumn(1).setPreferredWidth(40);
             tabelaContasPagar.getColumnModel().getColumn(2).setResizable(false);
-            tabelaContasPagar.getColumnModel().getColumn(2).setPreferredWidth(40);
+            tabelaContasPagar.getColumnModel().getColumn(2).setPreferredWidth(60);
             tabelaContasPagar.getColumnModel().getColumn(3).setResizable(false);
-            tabelaContasPagar.getColumnModel().getColumn(3).setPreferredWidth(250);
+            tabelaContasPagar.getColumnModel().getColumn(3).setPreferredWidth(230);
             tabelaContasPagar.getColumnModel().getColumn(4).setResizable(false);
             tabelaContasPagar.getColumnModel().getColumn(4).setPreferredWidth(250);
         }
@@ -260,9 +260,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
                                     .addComponent(descricaoContas, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(36, 36, 36))
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(numNota, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                                 .addComponent(btnFiltrar))
@@ -321,7 +319,6 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_rbDataLancamentoActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-        listaFornecedor.clear(); //Limpando a lista, antes de receber novos dados.
         consultarContasPagar();
         atualizarTabela();
     }//GEN-LAST:event_btnFiltrarActionPerformed
@@ -415,12 +412,17 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
 
         }
 
-        this.contasPagar.setFornecedor(this.fornecedor);
-        this.contasPagar.setNumNota(numeroNota);
-        this.contasPagar.setDescricaoConta(descricao);
-        
-        //Adiciona o resultado da consulta dentro de uma lista
-        this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
+        if(this.codFornecedor.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Para cancelar a nota, é necessário informar o fornecedor", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }else{
+            this.contasPagar.setFornecedor(this.fornecedor);
+            this.contasPagar.setNumNota(numeroNota);
+            this.contasPagar.setDescricaoConta(descricao);
+
+            //Adiciona o resultado da consulta dentro de uma lista
+            this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
+        }
+ 
     }
     
     private void atualizarTabela(){
@@ -436,9 +438,9 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
         int[] numLinhaSelec = tabelaContasPagar.getSelectedRows();
         List<ContasPagar> listaCpExcluida = new ArrayList<>();
         boolean contaPaga = false;
-        int confirm;
+        int confirm = 0;
         
-        //Verifica se foi selecionado algum cliente da lista
+        //Verifica se foi selecionado alguma conta a pagar da lista
         if(numLinhaSelec.length < 0){
             JOptionPane.showMessageDialog(null, "Selecione a(s) conta(s) a pagar a ser excluída", "Atenção", JOptionPane.WARNING_MESSAGE);
             return;
@@ -448,7 +450,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
         for(int index : numLinhaSelec){
             //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
             listaCpExcluida.add(listaContasPagar.get(index));    
-            this.listaFornecedor.remove(index);    
+            this.listaContasPagar.remove(index);    
         }
         
         //Verificando se alguma contas a pagar já foi baixada
@@ -460,7 +462,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
 
         //Se houver contas a pagar liquidada, ele informa e pergunta ser quer realmente excluir
         if(contaPaga){
-            confirm = JOptionPane.showConfirmDialog(null,"Existe contas baixadas, continuar com a exclusão ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            JOptionPane.showMessageDialog(null, "A conta está baixada no caixa, não é possível excluir", "Erro", JOptionPane.ERROR_MESSAGE);
         }else{
             confirm = JOptionPane.showConfirmDialog(null,"Excluir as contas selecionadas ?", "Confirmar", JOptionPane.YES_NO_OPTION);
         }

@@ -73,7 +73,7 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="iconLimpar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="iconExcluir" min="-2" max="-2" attributes="0"/>
+                          <Component id="iconExcluir" min="-2" pref="70" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnFiltrar" min="-2" pref="78" max="-2" attributes="0"/>
                       </Group>
@@ -130,10 +130,10 @@
                   <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="codOfertante" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="nomeOfertante" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnBuscar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="nomeOfertante" alignment="0" max="32767" attributes="0"/>
+                      <Component id="codOfertante" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -176,7 +176,7 @@
                           <Component id="btnFiltrar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

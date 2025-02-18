@@ -376,7 +376,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(iconLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(iconExcluir)
+                        .addComponent(iconExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -419,10 +419,10 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
                 .addGap(17, 17, 17)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(codOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nomeOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(nomeOfertante)
+                    .addComponent(codOfertante))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -456,7 +456,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
                         .addComponent(jLabel9)
                         .addComponent(totalDizimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnFiltrar)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -687,8 +687,10 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         DefaultTableModel model = (DefaultTableModel) tabelaRegistros.getModel();
         model.setNumRows(0);
 
-        for(RegistroDizimoOferta rg : listaRegistro){      
-            model.addRow(new Object[]{rg.getOfertante().getNome(),rg.getValorOferta(), rg.getTpOferta(), rg.getIgreja().getNome(), rg.getDataOferta(), rg.getDataCadastro()});
+        for(RegistroDizimoOferta rg : listaRegistro){     
+            String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
+            String dataCadastro = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataCadastro());
+            model.addRow(new Object[]{rg.getOfertante().getNome(),rg.getValorOferta(), rg.getTpOferta(), rg.getIgreja().getNome(), dataOferta, dataCadastro});
         }
     }
     

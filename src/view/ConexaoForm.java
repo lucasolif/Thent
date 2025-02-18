@@ -128,7 +128,7 @@ public class ConexaoForm extends javax.swing.JDialog {
     }//GEN-LAST:event_senhaKeyPressed
 
     private void criandoArquivoConexao(String servidor, String bancoDados, String login, String senha){
-        String caminhoArquivo = "C:\\Users\\Lucas Oliveira\\Documents\\Projetos\\Thent\\config.txt"; //Caminho onde salva o arquivo
+        String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Tithe\\config.txt"; //Caminho onde salva o arquivo
         File arquivo = new File(caminhoArquivo); //Cria o arquivo no caminho especificado acima
         
         try(FileWriter escritor = new FileWriter(arquivo)){
@@ -146,7 +146,7 @@ public class ConexaoForm extends javax.swing.JDialog {
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar salvar os dados do banco de dados", "Erro 014", JOptionPane.ERROR_MESSAGE);
-            return;
+            System.out.println(e);
         }
     }
     
@@ -167,7 +167,6 @@ public class ConexaoForm extends javax.swing.JDialog {
             this.bancoDados.setText("");
             this.login.setText("");
             this.senha.setText("");
-            return;
         }  
     }
 

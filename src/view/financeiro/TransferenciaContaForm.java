@@ -91,7 +91,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         jLabel4.setText("Igreja/Campo");
 
         tipoTransferencia.add(rbSaida);
-        rbSaida.setText("Saque");
+        rbSaida.setText("Saída");
         rbSaida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbSaidaActionPerformed(evt);
@@ -117,7 +117,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         });
 
         tipoTransferencia.add(rbDeposito);
-        rbDeposito.setText("Depósito");
+        rbDeposito.setText("Entrada");
         rbDeposito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rbDepositoActionPerformed(evt);
@@ -178,7 +178,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rbSaida))
                             .addComponent(jLabel7))))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,7 +197,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
                                 .addComponent(rbDepositoOferta))
                             .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(dpTesourariaGeral)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

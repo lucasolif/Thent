@@ -6,6 +6,7 @@ import Ferramentas.Utilitarios;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import Ferramentas.CriptografarSenhas;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -48,7 +49,6 @@ public class LoginThent extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 0));
-        setMaximumSize(new java.awt.Dimension(408, 413));
         setResizable(false);
 
         LabelLogin.setFont(new java.awt.Font("Sylfaen", 1, 15)); // NOI18N
@@ -60,7 +60,7 @@ public class LoginThent extends javax.swing.JFrame {
             }
         });
 
-        btnEntrar.setBackground(new java.awt.Color(39, 59, 128));
+        btnEntrar.setBackground(new java.awt.Color(0, 102, 255));
         btnEntrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
@@ -153,7 +153,7 @@ public class LoginThent extends javax.swing.JFrame {
     }
     
     private void verificandoConexao(){
-        String caminhoArquivo = "C:\\Users\\Lucas Oliveira\\Documents\\Projetos\\Thent\\config.txt"; //Caminho onde salva o arquivo
+      String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Tithe\\config.txt"; //Caminho onde salva o arquivo
         arquivo = new File(caminhoArquivo); //Cria o arquivo no caminho especificado acima
         
         // Verifica se o arquivo já existe
@@ -211,15 +211,11 @@ public class LoginThent extends javax.swing.JFrame {
    
         return userValidado;
     }
-    
     public static void main(String args[]) {
         try {
-            // Definir o LookAndFeel para o Nimbus
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (UnsupportedLookAndFeelException e) {
         }
-        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new LoginThent().setVisible(true);

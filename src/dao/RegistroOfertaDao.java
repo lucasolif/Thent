@@ -64,7 +64,8 @@ public class RegistroOfertaDao {
 
                     // Inserir dados na segunda tabela usando a chave primária da primeira tabela
                     String sql2 = "INSERT INTO MovimentoCaixa (Pessoa,RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
-                    String complemento = rg.getOfertante().getNome().substring(0, 30)+" | "+rg.getTpOferta().getNome();
+                    String complemento = rg.getOfertante().getNome();
+                    //String complemento = rg.getOfertante().getNome().substring(0, 30)+" | "+rg.getTpOferta().getNome();
                     psMovimento = conexao.prepareStatement(sql2);
                     
                     psMovimento.setInt(1, rg.getOfertante().getCodigo());

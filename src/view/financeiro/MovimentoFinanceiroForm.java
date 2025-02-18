@@ -127,6 +127,8 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         rbSaida = new javax.swing.JRadioButton();
         rbEntrada = new javax.swing.JRadioButton();
         rbEntradaSaida = new javax.swing.JRadioButton();
+        jLabel19 = new javax.swing.JLabel();
+        motivoExclusão = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -291,6 +293,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                 return canEdit [columnIndex];
             }
         });
+        tabelaMovimentacoes.setShowGrid(false);
         jScrollPane1.setViewportView(tabelaMovimentacoes);
         if (tabelaMovimentacoes.getColumnModel().getColumnCount() > 0) {
             tabelaMovimentacoes.getColumnModel().getColumn(0).setResizable(false);
@@ -334,7 +337,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         jLabel7.setText("Igreja/Campo");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel8.setText("Total Entradas (RS):");
+        jLabel8.setText("Entradas (RS):");
 
         totalEntrada.setEditable(false);
         totalEntrada.setBackground(new java.awt.Color(204, 204, 204));
@@ -343,7 +346,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         totalEntrada.setFocusable(false);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel9.setText("Total Saída (R$):");
+        jLabel9.setText("Saída (R$):");
 
         totalSaida.setEditable(false);
         totalSaida.setBackground(new java.awt.Color(204, 204, 204));
@@ -352,7 +355,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         totalSaida.setFocusable(false);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel10.setText("Total Dízimo (RS):");
+        jLabel10.setText("Dízimo (RS):");
 
         totalDizimo.setEditable(false);
         totalDizimo.setBackground(new java.awt.Color(204, 204, 204));
@@ -361,7 +364,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         totalDizimo.setFocusable(false);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel11.setText("Total Ofertas (R$):");
+        jLabel11.setText("Ofertas (R$):");
 
         totalOfertas.setEditable(false);
         totalOfertas.setBackground(new java.awt.Color(204, 204, 204));
@@ -514,6 +517,10 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             }
         });
 
+        jLabel19.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel19.setText("Motivo Exclusão");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -525,25 +532,29 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(totalEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(totalSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalDizimo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(totalDizimo, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(totalOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(motivoExclusão)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnFiltrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluir))
+                        .addComponent(btnFiltrar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -643,11 +654,12 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         .addComponent(jLabel10)
                         .addComponent(totalDizimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel11)
-                        .addComponent(totalOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnLimpar)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(totalOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExcluir)
-                        .addComponent(btnFiltrar)))
+                        .addComponent(jLabel19)
+                        .addComponent(motivoExclusão, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnLimpar)
+                    .addComponent(btnFiltrar))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -713,12 +725,13 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_formaPagtoKeyPressed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        excluirMovimentacao();
-        configInicial();
-        consultarMovimentacao();
-        atualizarTabela();
-        mostrarTotalDizimoOfertas();
-        mostrarTotalSaidaEntrada();
+        if(excluirMovimentacao()){
+            configInicial();
+            consultarMovimentacao();
+            atualizarTabela();
+            mostrarTotalDizimoOfertas();
+            mostrarTotalSaidaEntrada();
+        }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void nomeFornecedorOfertanteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeFornecedorOfertanteKeyPressed
@@ -906,8 +919,6 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             }
         }
         
-        totalDizimo.setText(Double.toString(valorDizimo));
-        totalOfertas.setText(Double.toString(valorOferta));
     }
     
     private void mostrarTotalSaidaEntrada(){
@@ -1007,40 +1018,54 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         }
     }
     
-    private void excluirMovimentacao(){
+    private boolean excluirMovimentacao(){
         int[] numLinhaSelec = tabelaMovimentacoes.getSelectedRows();
         List<MovimentoCaixa> listaMvExcluida = new ArrayList<>();
+        String tipoMovimento = "";
+        boolean exclusaoSucesso = false;
         
         //Verifica se foi selecionado algum cliente da lista
         if(numLinhaSelec.length < 0){
             JOptionPane.showMessageDialog(null, "Selecione a(s) a movimentação referente ao contas a pagar, a ser excluída", "Atenção", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        //Selecinando as contas que foram excluídas
-        for(int index : numLinhaSelec){
-            //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
-            listaMvExcluida.add(listaMovimentacao.get(index));               
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(null,"Excluir as contas selecionadas ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        //Verifica qual a opção escolhida
-        if(confirm == JOptionPane.YES_OPTION){
-            
-            //Percorre o vetor para verificar se a movimentacao é referente a transrefencia bancária, deposito ou saque
-            for(MovimentoCaixa mvEx: listaMvExcluida){
-                if(mvEx.getTransferecia().getCodigo() != null){
-                    transfDeposiDao.excluirOperacaoBancaria(mvEx.getTransferecia());
-                }if(mvEx.getRgOferta().getCodRegistro() != null){
-                    rgOfertaDao.deletarRegistrosMovimento(mvEx.getRgOferta());
-                }if(mvEx.getContaPagar().getCodigo() != null){
-                    movimentoCaixaDao.excluirMovimentacao(listaMvExcluida);
-                }
+        }else if(this.motivoExclusão.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Informe o motivo para exclusão da movimentação", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }else{                
+            //Selecinando as contas que foram excluídas
+            for(int index : numLinhaSelec){
+                //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
+                listaMvExcluida.add(listaMovimentacao.get(index));               
             }
 
-        }else if(confirm == JOptionPane.NO_OPTION){
-            JOptionPane.showMessageDialog(null, "Operação cancelada!");
-        } 
+            int confirm = JOptionPane.showConfirmDialog(null,"Excluir as contas selecionadas ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            //Verifica qual a opção escolhida
+            if(confirm == JOptionPane.YES_OPTION){
+
+                //Percorre o vetor para verificar se a movimentacao é referente a transrefencia bancária, deposito ou saque
+                for(MovimentoCaixa mvEx: listaMvExcluida){
+                    System.out.println("ContaCaixa: " + mvEx.getContaCaixa().getCodigo());
+
+                    if(mvEx.getTransferecia().getCodigo() != 0){
+                        //Exclui a operação bancária e automaticamente a movimentação é excluída
+                        transfDeposiDao.excluirOperacaoBancaria(mvEx.getTransferecia());
+                        tipoMovimento = "Operação Bancária";
+                    }if(mvEx.getRgOferta().getCodRegistro() != 0){
+                        //Excluí o registro de oferta e dízimo, e automaticamente a movimentação é excluída
+                        rgOfertaDao.deletarRegistrosMovimento(mvEx.getRgOferta());
+                        tipoMovimento = "Ofertas e Dízimo";
+                    }if(mvEx.getContaPagar().getCodigo() != 0){
+                        //Excluí a movimentação e o contas a pagar fica como aberta
+                        movimentoCaixaDao.excluirMovimentacao(listaMvExcluida);
+                        tipoMovimento = "Contas a Pagar";
+                    }
+                    String motivoExclusao = this.motivoExclusão.getText();
+                    movimentoCaixaDao.movimentacaoExcluida(mvEx, motivoExclusao, tipoMovimento, this.usuarioLogado);
+                }
+                exclusaoSucesso = true;
+            }else if(confirm == JOptionPane.NO_OPTION){
+                JOptionPane.showMessageDialog(null, "Operação cancelada!");
+            } 
+        }
+        return exclusaoSucesso;
     }
     
     @Override
@@ -1074,6 +1099,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1085,6 +1111,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField motivoExclusão;
     private javax.swing.JTextField nomeFornecedorOfertante;
     private javax.swing.JRadioButton rbDataMovimentacao;
     private javax.swing.JRadioButton rbDataPagtoRecebimento;

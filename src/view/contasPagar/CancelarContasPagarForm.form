@@ -239,7 +239,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Fornecedor"/>
+        <Property name="text" type="java.lang.String" value="Fornecedor*"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="nomeFornecedor">
@@ -309,17 +309,17 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="10" resizable="false">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="40" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="false">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="60" resizable="false">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="230" resizable="false">
                   <Title/>
                   <Editor/>
                   <Renderer/>

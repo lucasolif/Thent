@@ -297,8 +297,9 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 return canEdit [columnIndex];
             }
         });
+        tabelaParcelas.setName(""); // NOI18N
         tabelaParcelas.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tabelaParcelas.setShowGrid(true);
+        tabelaParcelas.setShowGrid(false);
         tabelaParcelas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tabelaParcelasMousePressed(evt);

@@ -31,7 +31,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="nomeUsuario" min="-2" pref="204" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnOk" min="-2" pref="47" max="-2" attributes="0"/>
+              <Component id="btnOk" min="-2" pref="51" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
               <Component id="btnSalvar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>

@@ -65,7 +65,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="buscarAplicacao" min="-2" pref="269" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnOk" min="-2" pref="47" max="-2" attributes="0"/>
+                              <Component id="btnOk" min="-2" pref="51" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -193,7 +193,7 @@
     <Component class="javax.swing.JButton" name="btnOk">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="99" red="0" type="rgb"/>
+          <Color blue="ff" green="0" red="0" type="rgb"/>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="12" style="1"/>

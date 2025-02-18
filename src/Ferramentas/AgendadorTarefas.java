@@ -28,19 +28,19 @@ public class AgendadorTarefas {
     
     public void executarTarefasDiarias(){
         
-         // CriaÁ„o do agendador para rodar a executarTarefasDiarias todos os dias (1 vez ao dia) as 02:30
+         // Cria√ß√£o do agendador para rodar a executarTarefasDiarias todos os dias (1 vez ao dia) as 02:30
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);      
         
-        // Definir o hor·rio de execuÁ„o: 02:30
+        // Definir o hor√°rio de execu√ß√£o: 02:30
         LocalTime horaExecucao = LocalTime.of(2, 30); // 02:30
         
-        // Pega o hor·rio atual
+        // Pega o hor√°rio atual
         LocalDateTime agora = LocalDateTime.now();
         
-        // Pega o prÛximo hor·rio de execuÁ„o (02:30 do prÛximo dia)
+        // Pega o pr√≥ximo hor√°rio de execu√ß√£o (02:30 do pr√≥ximo dia)
         LocalDateTime proximaExecucao = agora.with(horaExecucao).plusDays(agora.toLocalTime().isAfter(horaExecucao) ? 1 : 0);
         
-        // Calcula o tempo atÈ o prÛximo agendamento (em milissegundos)
+        // Calcula o tempo at√© o pr√≥ximo agendamento (em milissegundos)
         long delay = Duration.between(agora, proximaExecucao).toMillis();
         
         Runnable tarefa = new Runnable() {
@@ -50,19 +50,19 @@ public class AgendadorTarefas {
                 LocalDate hoje = LocalDate.now();
                 int diaAtual = hoje.getDayOfMonth();
                 
-                //Verifica se h· alguma aplicaÁ„o para ser calculada nesse dia
+                //Verifica se h√° alguma aplica√ß√£o para ser calculada nesse dia
                 List<Aplicacao> listaAplicacaoMensal = aplicacaoDao.totalRendimentoParaCalcularRendimentoMensal(diaAtual);
                 List<Aplicacao> listaAplicacaoDiaria = aplicacaoDao.totalRendimentoParaCalcularRendimentoDiario();
                 
-                //Verifica se tem aplicaÁ„o mensal para ser executada
+                //Verifica se tem aplica√ß√£o mensal para ser executada
                 if(!listaAplicacaoMensal.isEmpty()){
-                    // Chama a funÁ„o que ir· realizar o c·lculo e salvar novamente os dados no banco de dados
+                    // Chama a fun√ß√£o que ir√° realizar o c√°lculo e salvar novamente os dados no banco de dados
                     tarefaAplicacaoBancariaMensal(listaAplicacaoMensal);
                 }
            
-                //Verifica se tem aplicaÁ„o di·ria para ser executada
+                //Verifica se tem aplica√ß√£o di√°ria para ser executada
                 if(!listaAplicacaoDiaria.isEmpty()){
-                    // Chama a funÁ„o que ir· realizar o c·lculo e salvar novamente os dados no banco de dados
+                    // Chama a fun√ß√£o que ir√° realizar o c√°lculo e salvar novamente os dados no banco de dados
                     tarefaAplicacaoBancariaDiaria(listaAplicacaoDiaria);
                 }
             }
@@ -72,7 +72,7 @@ public class AgendadorTarefas {
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Agendar a execuÁ„o da tarefa para o primeiro hor·rio de execuÁ„o (02:30)
+                // Agendar a execu√ß√£o da tarefa para o primeiro hor√°rio de execu√ß√£o (02:30)
                 scheduler.scheduleAtFixedRate(tarefa, delay, TimeUnit.DAYS.toMillis(1), TimeUnit.MILLISECONDS);
                 return null;
             }

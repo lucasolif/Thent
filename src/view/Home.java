@@ -3,7 +3,6 @@ package view;
 import Ferramentas.AgendadorTarefas;
 import Ferramentas.PaletaCores;
 import dao.UsuarioDao;
-import java.awt.Color;
 import java.util.List;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;

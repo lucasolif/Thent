@@ -85,7 +85,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
 
         jLabel1.setText("Buscar Aplicação");
 
-        btnOk.setBackground(new java.awt.Color(0, 153, 255));
+        btnOk.setBackground(new java.awt.Color(0, 0, 255));
         btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnOk.setText("OK");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
@@ -188,7 +188,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(buscarAplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)

@@ -39,7 +39,10 @@ public class MovimentoCaixaDao {
         
         String sql = "SELECT "
             + "P.Nome As Pessoa, "
+            + "MF.Pessoa As CodPessoa, "
+            + "MF.ContaCaixa As CodContaCaixa, "
             + "MF.RegistroOferta As RegistroOferta, "
+            + "MF.Igreja As CodIgreja, "
             + "MF.RegistroContaPagar As RegistroContaPagar, "
             + "MF.Complemento As Complemento, "
             + "MF.ValorEntrada As ValorEntrada, "
@@ -176,6 +179,7 @@ public class MovimentoCaixaDao {
             while (this.rs.next()) {               
                 Pessoa pessoa = new Pessoa(); 
                 ContaCaixa contaCaixa = new ContaCaixa();
+                Igreja igreja = new Igreja();
                 FormaPagto formaPagto = new FormaPagto();
                 MovimentoCaixa mvCaixa = new MovimentoCaixa();
                 TipoOferta tpOferta = new TipoOferta();
@@ -184,7 +188,10 @@ public class MovimentoCaixaDao {
                 ContasPagar contaPagar = new ContasPagar();
                 
                 pessoa.setNome(this.rs.getString("Pessoa")); 
+                pessoa.setCodigo(this.rs.getInt("CodPessoa"));
+                igreja.setCodigo(this.rs.getInt("CodIgreja"));
                 contaCaixa.setNome(this.rs.getString("ContaCaixa"));
+                contaCaixa.setCodigo(this.rs.getInt("CodContaCaixa"));
                 formaPagto.setNome(this.rs.getString("FormaPagto"));
                 tpOferta.setCodigo(this.rs.getInt("TipoOferta"));
                 rgDizimoOferta.setTpOferta(tpOferta);
@@ -203,6 +210,7 @@ public class MovimentoCaixaDao {
                 mvCaixa.setRgOferta(rgDizimoOferta);
                 mvCaixa.setTransferecia(transfDepos);
                 mvCaixa.setContaPagar(contaPagar);
+                mvCaixa.setIgreja(igreja);
                 
                 listaMovimento.add(mvCaixa);            
             }
@@ -667,4 +675,47 @@ public class MovimentoCaixaDao {
 
     }
 
+    //Adicionar a movimentação excluída
+    public void movimentacaoExcluida(MovimentoCaixa movimento, String motivo, String tipo, UsuarioLogado usuario){
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();
+            
+            String sql = "Insert Into MovimentoCaixaExcluido(Tipo,Usuario,Pessoa,Motivo,Valor,ContaCaixa,Complemento,Igreja,DataExclusao) Values(?,?,?,?,?,?,?,?,GETDATE())";
+            this.stmInsert = this.conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            this.stmInsert.setString(1, tipo);
+            this.stmInsert.setInt(2, usuario.getCodUsuario());
+            this.stmInsert.setInt(3, movimento.getPessoa().getCodigo());
+            this.stmInsert.setString(4, motivo);
+            this.stmInsert.setDouble(5, movimento.getValorEntrada()+movimento.getValorSaida());
+            this.stmInsert.setInt(6, movimento.getContaCaixa().getCodigo());
+            this.stmInsert.setString(7, movimento.getComplemento());
+            this.stmInsert.setInt(8, movimento.getIgreja().getCodigo());            
+            this.stmInsert.execute(); 
+    
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            //Se ocorrer um erro, fazer rollback da transação
+            if(this.conexao != null){
+                try{
+                    this.conexao.rollback();
+                }catch(SQLException e){
+                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar a movimentação excluída", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            //Fechar os recursos abertos
+            try{
+                if(this.rs != null) this.rs.close();
+                if(this.stmInsert != null) this.stmInsert.close();
+                if(this.conexao != null) this.conexao.close();
+            }catch(SQLException ex){
+                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
 }

@@ -32,13 +32,18 @@ public class ContasPagarDao {
     public void adicionarContasPagar(List<ContasPagar> contasPagar, UsuarioLogado usuarioLogado, boolean efetivar, ContaCaixa contaCaixa){
 
         ResultSet generatedKeys = null;
+        String sql = null;
         
         try{
             conexao = Conexao.getDataSource().getConnection(); 
             conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             for(ContasPagar cp : contasPagar){ 
-                String sql = "INSERT INTO ContasPagar (Fornecedor,FormaPagto,Descricao,Valor,ValorPago,ValorPendente,NumNota,Parcela,DataVencimento,SubContaResultado,Status,DescricaoStatus,DataCadastro,Observacao,Boleto,Igreja,UsuarioLancamento) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,GETDATE(),?,?,?,?)";
+                if(efetivar){
+                    sql = "INSERT INTO ContasPagar (Fornecedor,FormaPagto,Descricao,Valor,ValorPago,ValorPendente,NumNota,Parcela,DataVencimento,DataPagamento,SubContaResultado,Status,DescricaoStatus,DataCadastro,Observacao,Boleto,Igreja,UsuarioLancamento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?,?,?,GETDATE(),?,?,?,?)";
+                }else{
+                    sql = "INSERT INTO ContasPagar (Fornecedor,FormaPagto,Descricao,Valor,ValorPago,ValorPendente,NumNota,Parcela,DataVencimento,SubContaResultado,Status,DescricaoStatus,DataCadastro,Observacao,Boleto,Igreja,UsuarioLancamento) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,GETDATE(),?,?,?,?)";
+                }
                 ps = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); 
 
                 ps.setInt(1, cp.getFornecedor().getCodigo());

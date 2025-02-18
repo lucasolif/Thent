@@ -99,7 +99,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
         setClosable(true);
         setIconifiable(true);
         setTitle("Contas a Pagar");
-        setPreferredSize(new java.awt.Dimension(776, 620));
+        setPreferredSize(new java.awt.Dimension(776, 615));
 
         codFornecedor.setEditable(false);
         codFornecedor.setBackground(new java.awt.Color(204, 204, 204));
@@ -235,6 +235,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
 
         jLabel7.setText("Data Pagamento");
 
+        dataPagamento.setEditable(false);
         try {
             dataPagamento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
         } catch (java.text.ParseException ex) {
@@ -424,7 +425,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
                     .addComponent(btnExcluir)
                     .addComponent(btnLimpar)
                     .addComponent(iconAlterar))
-                .addGap(66, 66, 66))
+                .addGap(60, 60, 60))
         );
 
         codFornecedor.getAccessibleContext().setAccessibleName("Código do Fornecedor");
@@ -452,7 +453,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }//GEN-LAST:event_btnGerarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        lançarContasPagar();
+        lancarContasPagar();
         limparTabela();
         formInicial();
     }//GEN-LAST:event_btnSalvarActionPerformed
@@ -550,7 +551,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     //Salvar os dados no banco de dados
-    private void lançarContasPagar(){
+    private void lancarContasPagar(){
         
         ContasPagar contasPagar  = new ContasPagar();  
         List<ContasPagar> listaContasPagar = new ArrayList<>();
