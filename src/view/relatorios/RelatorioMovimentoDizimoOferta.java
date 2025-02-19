@@ -430,7 +430,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
                 String formaPagto = rg.getFormaPagto().getNome();
                 String tipoOfertaDizimo = rg.getTpOferta().getNome();
-                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOferta()).replace(".", ",");
+                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
                 String igreja = rg.getIgreja().getNome();
                 String contaCaixa = rg.getContaCaixa().getNome();
                 
@@ -473,11 +473,11 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 
                 //Verificando quem é dízimo e quem é oferta
                 if(rg.getTpOferta().getCodigo() == 1){
-                    totalDizimo += rg.getValorOferta();
+                    totalDizimo += rg.getValorOfertaEntrada();
                 }else{
-                    totalOfertas += rg.getValorOferta();
+                    totalOfertas += rg.getValorOfertaEntrada();
                 }           
-                totalDizimoOfertas += rg.getValorOferta();
+                totalDizimoOfertas += rg.getValorOfertaEntrada();
             }
             xPosition += 350;
             yPosition -= 30;
@@ -611,7 +611,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
                 String formaPagto = rg.getFormaPagto().getNome();
                 String tipoOfertaDizimo = rg.getTpOferta().getNome();
-                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOferta()).replace(".", ",");
+                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
                 String igreja = rg.getIgreja().getNome();
                 String contaCaixa = rg.getContaCaixa().getNome();
                 
@@ -654,14 +654,14 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 
                 //Verificando quem é dízimo e quem é oferta
                 if(rg.getTpOferta().getCodigo() == 1){
-                    subTotalDizimo += rg.getValorOferta();
-                    totalDizimo += rg.getValorOferta();
+                    subTotalDizimo += rg.getValorOfertaEntrada();
+                    totalDizimo += rg.getValorOfertaEntrada();
                 }else{
-                    subTotalOfertas += rg.getValorOferta();
-                    totalOfertas += rg.getValorOferta();
+                    subTotalOfertas += rg.getValorOfertaEntrada();
+                    totalOfertas += rg.getValorOfertaEntrada();
                 }
                 
-                totalDizimoOfertas += rg.getValorOferta();
+                totalDizimoOfertas += rg.getValorOfertaEntrada();
             }
             //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
             xPosition += 350;
@@ -805,7 +805,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
                 String formaPagto = rg.getFormaPagto().getNome();
                 String tipoOfertaDizimo = rg.getTpOferta().getNome();
-                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOferta()).replace(".", ",");
+                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
                 String igreja = rg.getIgreja().getNome();
                 String contaCaixa = rg.getContaCaixa().getNome();
                 
@@ -848,14 +848,14 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 
                 //Verificando quem é dízimo e quem é oferta
                 if(rg.getTpOferta().getCodigo() == 1){
-                    subTotalDizimo += rg.getValorOferta();
-                    totalDizimo += rg.getValorOferta();
+                    subTotalDizimo += rg.getValorOfertaEntrada();
+                    totalDizimo += rg.getValorOfertaEntrada();
                 }else{
-                    subTotalOfertas += rg.getValorOferta();
-                    totalOfertas += rg.getValorOferta();
+                    subTotalOfertas += rg.getValorOfertaEntrada();
+                    totalOfertas += rg.getValorOfertaEntrada();
                 }
                 
-                totalDizimoOfertas += rg.getValorOferta();
+                totalDizimoOfertas += rg.getValorOfertaEntrada();
             }
             //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
             xPosition += 330;

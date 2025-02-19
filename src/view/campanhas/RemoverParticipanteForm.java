@@ -140,6 +140,9 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
              consultarParticipante();
              carregarResultadoConsultaParticipante();
          }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codParticipante.setText("");
+        } 
     }//GEN-LAST:event_nomeParticipanteKeyPressed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed

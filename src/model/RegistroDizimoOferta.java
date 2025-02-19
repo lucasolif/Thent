@@ -9,7 +9,8 @@ public class RegistroDizimoOferta {
     
     private Integer codRegistro;
     private TipoOferta tpOferta;
-    private double valorOferta;
+    private double valorOfertaEntrada;
+    private double valorOfertaSaida;
     private FormaPagto formaPagto;
     private Pessoa ofertante;
     private Date dataOferta;
@@ -24,7 +25,7 @@ public class RegistroDizimoOferta {
     
     public RegistroDizimoOferta(TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, SubContaResultado subContaResultado) {
         this.tpOferta = tpOferta;
-        this.valorOferta = valorOferta;
+        this.valorOfertaEntrada = valorOferta;
         this.formaPagto = formaPagto;
         this.ofertante = ofertante;
         this.dataOferta = dataOferta;
@@ -37,7 +38,7 @@ public class RegistroDizimoOferta {
     public RegistroDizimoOferta(Integer codRegistro, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Date dataCadastro ) {
         this.codRegistro = codRegistro;
         this.tpOferta = tpOferta;
-        this.valorOferta = valorOferta;
+        this.valorOfertaEntrada = valorOferta;
         this.formaPagto = formaPagto;
         this.ofertante = ofertante;
         this.dataOferta = dataOferta;
@@ -49,7 +50,7 @@ public class RegistroDizimoOferta {
     public RegistroDizimoOferta(Integer codigo, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
         this.codRegistro = codigo;
         this.tpOferta = tpOferta;
-        this.valorOferta = valorOferta;
+        this.valorOfertaEntrada = valorOferta;
         this.formaPagto = formaPagto;
         this.ofertante = ofertante;
         this.dataOferta = dataOferta;
@@ -60,7 +61,7 @@ public class RegistroDizimoOferta {
 
     public RegistroDizimoOferta(TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
         this.tpOferta = tpOferta;
-        this.valorOferta = valorOferta;
+        this.valorOfertaEntrada = valorOferta;
         this.formaPagto = formaPagto;
         this.ofertante = ofertante;
         this.dataOferta = dataOferta;
@@ -69,6 +70,14 @@ public class RegistroDizimoOferta {
         this.usuario = usuario;
     }
 
+    public double getValorOfertaSaida() {
+        return valorOfertaSaida;
+    }
+
+    public void setValorOfertaSaida(double valorOfertaSaida) {
+        this.valorOfertaSaida = valorOfertaSaida;
+    }
+    
     public Integer getCodRegistro() {
         return codRegistro;
     }
@@ -85,12 +94,12 @@ public class RegistroDizimoOferta {
         this.tpOferta = tpOferta;
     }
 
-    public double getValorOferta() {
-        return valorOferta;
+    public double getValorOfertaEntrada() {
+        return valorOfertaEntrada;
     }
 
-    public void setValorOferta(double valorOferta) {
-        this.valorOferta = valorOferta;
+    public void setValorOfertaEntrada(double valorOfertaEntrada) {
+        this.valorOfertaEntrada = valorOfertaEntrada;
     }
 
     public FormaPagto getFormaPagto() {
@@ -162,7 +171,7 @@ public class RegistroDizimoOferta {
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.codRegistro);
         hash = 67 * hash + Objects.hashCode(this.tpOferta);
-        hash = 67 * hash + (int) (Double.doubleToLongBits(this.valorOferta) ^ (Double.doubleToLongBits(this.valorOferta) >>> 32));
+        hash = 67 * hash + (int) (Double.doubleToLongBits(this.valorOfertaEntrada) ^ (Double.doubleToLongBits(this.valorOfertaEntrada) >>> 32));
         hash = 67 * hash + Objects.hashCode(this.formaPagto);
         hash = 67 * hash + Objects.hashCode(this.ofertante);
         hash = 67 * hash + Objects.hashCode(this.dataOferta);
@@ -186,7 +195,7 @@ public class RegistroDizimoOferta {
             return false;
         }
         final RegistroDizimoOferta other = (RegistroDizimoOferta) obj;
-        if (Double.doubleToLongBits(this.valorOferta) != Double.doubleToLongBits(other.valorOferta)) {
+        if (Double.doubleToLongBits(this.valorOfertaEntrada) != Double.doubleToLongBits(other.valorOfertaEntrada)) {
             return false;
         }
         if (!Objects.equals(this.dataOferta, other.dataOferta)) {

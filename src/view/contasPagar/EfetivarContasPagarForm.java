@@ -634,7 +634,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             buscarFornecedor();
             carregarResultadoConsultaFornecedor();
-        }else if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        }else if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
             this.codFornecedor.setText("");
             this.nomeFornecedor.setText("");
         } 

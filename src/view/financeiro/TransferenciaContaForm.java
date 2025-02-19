@@ -5,6 +5,7 @@ import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.TransferenciaDepositoDao;
 import Ferramentas.Utilitarios;
+import dao.TipoOfertaDao;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -16,6 +17,7 @@ import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
 import model.Pessoa;
+import model.TipoOferta;
 import model.TransferenciaConta;
 import model.Usuario;
 import model.UsuarioLogado;
@@ -27,6 +29,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     Pessoa pessoa = new Pessoa();
     Usuario usuario = new Usuario();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
+    private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final TransferenciaDepositoDao transfDepositoDao = new TransferenciaDepositoDao();
     private final Utilitarios conversor = new Utilitarios();
@@ -60,7 +63,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         dataOperacao = new javax.swing.JFormattedTextField();
         rbTransferencia = new javax.swing.JRadioButton();
-        rbDeposito = new javax.swing.JRadioButton();
+        rbEntrada = new javax.swing.JRadioButton();
         dpTesourariaGeral = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -68,12 +71,13 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         rbDepositoDizimo = new javax.swing.JRadioButton();
         rbDepositoOferta = new javax.swing.JRadioButton();
+        tpOferta = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Transferência de Contas");
-        setPreferredSize(new java.awt.Dimension(510, 260));
+        setPreferredSize(new java.awt.Dimension(510, 275));
 
         btnConfirmar.setBackground(new java.awt.Color(0, 204, 0));
         btnConfirmar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -116,11 +120,11 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
             }
         });
 
-        tipoTransferencia.add(rbDeposito);
-        rbDeposito.setText("Entrada");
-        rbDeposito.addActionListener(new java.awt.event.ActionListener() {
+        tipoTransferencia.add(rbEntrada);
+        rbEntrada.setText("Entrada");
+        rbEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rbDepositoActionPerformed(evt);
+                rbEntradaActionPerformed(evt);
             }
         });
 
@@ -145,67 +149,73 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         rbDepositoOferta.setForeground(new java.awt.Color(204, 0, 0));
         rbDepositoOferta.setText("Deposito Oferta");
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel8.setText("Tipo Deposito Tesouraria");
+        jLabel8.setText("Tipo Oferta (Saída Oferta)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(contaCaixaSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(valor)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dataOperacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(rbTransferencia)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rbDeposito)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rbSaida))
-                            .addComponent(jLabel7))))
-                .addContainerGap(68, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(147, 147, 147)
-                        .addComponent(contaCaixaEntrada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(contaCaixaSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel2))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(valor)
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(dataOperacao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel5))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(rbTransferencia)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(rbEntrada)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(rbSaida))
+                                            .addComponent(jLabel7)))))
                             .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(dpTesourariaGeral)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rbDepositoDizimo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rbDepositoOferta))
-                            .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(rbDepositoOferta)))
+                        .addGap(0, 62, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(dpTesourariaGeral)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(complemento)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(147, 147, 147)
+                                .addComponent(contaCaixaEntrada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tpOferta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(complemento, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -225,7 +235,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dataOperacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rbTransferencia)
-                            .addComponent(rbDeposito)
+                            .addComponent(rbEntrada)
                             .addComponent(rbSaida))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,25 +251,22 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(complemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dpTesourariaGeral))
+                    .addComponent(tpOferta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnConfirmar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rbDepositoDizimo)
-                            .addComponent(rbDepositoOferta))
-                        .addGap(15, 15, 15))))
+                    .addComponent(dpTesourariaGeral)
+                    .addComponent(rbDepositoDizimo)
+                    .addComponent(rbDepositoOferta))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(btnConfirmar)
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -270,24 +277,27 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         formInicial();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
-    private void rbDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDepositoActionPerformed
-       if(rbDeposito.isSelected()){
-           contaCaixaSaida.setEnabled(false);
-           contaCaixaEntrada.setEnabled(true);
+    private void rbEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbEntradaActionPerformed
+       if(rbEntrada.isSelected()){
+           this.contaCaixaSaida.setEnabled(false);
+           this.contaCaixaEntrada.setEnabled(true);
+           this.tpOferta.setEnabled(false);
        }
-    }//GEN-LAST:event_rbDepositoActionPerformed
+    }//GEN-LAST:event_rbEntradaActionPerformed
 
     private void rbSaidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbSaidaActionPerformed
         if(rbSaida.isSelected()){
-           contaCaixaEntrada.setEnabled(false);
-           contaCaixaSaida.setEnabled(true);
+           this.contaCaixaEntrada.setEnabled(false);
+           this.contaCaixaSaida.setEnabled(true);
+           this.tpOferta.setEnabled(true);
        }
     }//GEN-LAST:event_rbSaidaActionPerformed
 
     private void rbTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbTransferenciaActionPerformed
         if(rbTransferencia.isSelected()){
-           contaCaixaEntrada.setEnabled(true);
-           contaCaixaSaida.setEnabled(true);
+           this.contaCaixaEntrada.setEnabled(true);
+           this.contaCaixaSaida.setEnabled(true);
+           this.tpOferta.setEnabled(false);
        }
     }//GEN-LAST:event_rbTransferenciaActionPerformed
 
@@ -312,6 +322,9 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
             dpTesouraria = 1;
         }    
         
+        if(this.dpTesourariaGeral.isSelected()){
+            
+        }
         MovimentoCaixa mvCaixa = new MovimentoCaixa();
         TransferenciaConta transf = new TransferenciaConta();
         transf.setCxSaida(cxSaida);
@@ -326,11 +339,11 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         mvCaixa.setTransferecia(transf);
         mvCaixa.setComplemento(complemento); 
             
-        if(!rbTransferencia.isSelected() && !rbDeposito.isSelected() && !rbSaida.isSelected() || valor <= 0 || this.complemento.getText().isEmpty()){
+        if(!rbTransferencia.isSelected() && !rbEntrada.isSelected() && !rbSaida.isSelected() || valor <= 0 || this.complemento.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Preecha os campos corretamente", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else if(rbTransferencia.isSelected()){                     
             transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 1, this.usuarioLogado);     
-        }else if(rbDeposito.isSelected()){             
+        }else if(rbEntrada.isSelected()){             
             transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 2, this.usuarioLogado);          
         }else{         
             transfDepositoDao.realizarOperacoesBancarias(mvCaixa, 3, this.usuarioLogado);         
@@ -347,8 +360,10 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         this.rbDepositoDizimo.setEnabled(false);
         this.rbDepositoOferta.setEnabled(false);
         this.complemento.setEditable(true);
+        this.tpOferta.setEnabled(false);
         carregarContaCaixa();
         carregarIgrejas();
+        carregarTipoOferta();
         
     }
     
@@ -376,6 +391,15 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         
     }
     
+    private void carregarTipoOferta(){
+        List<TipoOferta> listaTpOferta = tipoOfertaDao.consultarTipoOferta();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)tpOferta.getModel();
+        modelo.removeAllElements();
+        for(TipoOferta tpOferta : listaTpOferta){
+            modelo.addElement(tpOferta);
+        }
+    }
+    
     private void gerenciarCheckBoxRadioButtons(){
         // Adicionando listener para o JCheckBox
         this.dpTesourariaGeral.addItemListener(new ItemListener() {
@@ -394,6 +418,8 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
                     complemento.setText("");
                     tipoDepositoTesouraria.clearSelection(); //Limpa os RadioButtons selecionados, ao demarcar o CheckBox
                     complemento.setEditable(true);
+                }else{
+                    complemento.setEditable(false);
                 }
                        
             }
@@ -440,13 +466,14 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JRadioButton rbDeposito;
     private javax.swing.JRadioButton rbDepositoDizimo;
     private javax.swing.JRadioButton rbDepositoOferta;
+    private javax.swing.JRadioButton rbEntrada;
     private javax.swing.JRadioButton rbSaida;
     private javax.swing.JRadioButton rbTransferencia;
     private javax.swing.ButtonGroup tipoDepositoTesouraria;
     private javax.swing.ButtonGroup tipoTransferencia;
+    private javax.swing.JComboBox<String> tpOferta;
     private javax.swing.JFormattedTextField valor;
     // End of variables declaration//GEN-END:variables
 }

@@ -28,6 +28,7 @@ public class RegistroOfertaDao {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
     private PreparedStatement stmSelect = null;
+    private PreparedStatement stmInsert = null;
     
     //Adiciona todos os registros de oferta e dizimos, na tabela de registros e no movimento financeiro ao mesmo tempo
     public void adicionarRegistroOfertaDizimo(List<RegistroDizimoOferta> registros, UsuarioLogado usuarioLogado){
@@ -46,7 +47,7 @@ public class RegistroOfertaDao {
 
                 psRegistro.setInt(1, rg.getOfertante().getCodigo());
                 psRegistro.setDouble(2, rg.getTpOferta().getCodigo());
-                psRegistro.setDouble(3, rg.getValorOferta());
+                psRegistro.setDouble(3, rg.getValorOfertaEntrada());
                 psRegistro.setInt(4, rg.getFormaPagto().getCodigo());
                 psRegistro.setInt(5, rg.getSubContaResultado().getCodigo());
                 psRegistro.setDate(6, (java.sql.Date) rg.getDataOferta());
@@ -59,28 +60,12 @@ public class RegistroOfertaDao {
                 // Recuperar a chave primária gerada
                 generatedKeys = psRegistro.getGeneratedKeys();
                 
-                if (generatedKeys.next()) {
-                    int idRegistro = generatedKeys.getInt(1);
-
-                    // Inserir dados na segunda tabela usando a chave primária da primeira tabela
-                    String sql2 = "INSERT INTO MovimentoCaixa (Pessoa,RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
-                    String complemento = rg.getOfertante().getNome();
-                    //String complemento = rg.getOfertante().getNome().substring(0, 30)+" | "+rg.getTpOferta().getNome();
-                    psMovimento = conexao.prepareStatement(sql2);
+                if (generatedKeys.next()) {                
+                    //Movimentar no caixa os valores referente ao registro de dizimo e ofertas
+                    adicionarOfertaDizimoMovimentoFinanceiro(rg, usuarioLogado, generatedKeys);
                     
-                    psMovimento.setInt(1, rg.getOfertante().getCodigo());
-                    psMovimento.setInt(2, idRegistro);
-                    psMovimento.setDouble(3, rg.getValorOferta());
-                    psMovimento.setDouble(4, 0);
-                    psMovimento.setInt(5, rg.getContaCaixa().getCodigo());
-                    psMovimento.setString(6, complemento);
-                    psMovimento.setInt(7, rg.getFormaPagto().getCodigo());
-                    psMovimento.setInt(8, rg.getIgreja().getCodigo());
-                    psMovimento.setInt(9, usuarioLogado.getCodUsuario());
-                    psMovimento.setDate(10, (java.sql.Date) rg.getDataOferta());
-                    
-                    psMovimento.execute();
-
+                    //Adicioanr registro no movimento de ofertas, possibilitando um controle sobre os valores de cada tipo de oferta
+                    adicionarOfertaDizimoMovimentoTipoOferta(rg, generatedKeys);             
                 }
             }
             //Confimar a transação, ou seja, a inserção dos dados
@@ -112,6 +97,62 @@ public class RegistroOfertaDao {
         }
 
     }   
+    
+    //Adicionar os registros de dizimo e ofertas no movimento financeiro
+    private void adicionarOfertaDizimoMovimentoFinanceiro (RegistroDizimoOferta registroOferta, UsuarioLogado usuarioLogado,ResultSet chaveRgOferta ){
+        
+        try{
+            int idRegistro = chaveRgOferta.getInt(1);
+
+            // Inserir dados na segunda tabela usando a chave primária da primeira tabela
+            String sql = "INSERT INTO MovimentoCaixa (Pessoa,RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
+            String complemento = registroOferta.getOfertante().getNome();
+            //String complemento = rg.getOfertante().getNome().substring(0, 30)+" | "+rg.getTpOferta().getNome();
+            stmInsert = conexao.prepareStatement(sql);
+
+            stmInsert.setInt(1, registroOferta.getOfertante().getCodigo());
+            stmInsert.setInt(2, idRegistro);
+            stmInsert.setDouble(3, registroOferta.getValorOfertaEntrada());
+            stmInsert.setDouble(4, 0);
+            stmInsert.setInt(5, registroOferta.getContaCaixa().getCodigo());
+            stmInsert.setString(6, complemento);
+            stmInsert.setInt(7, registroOferta.getFormaPagto().getCodigo());
+            stmInsert.setInt(8, registroOferta.getIgreja().getCodigo());
+            stmInsert.setInt(9, usuarioLogado.getCodUsuario());
+            stmInsert.setDate(10, (java.sql.Date) registroOferta.getDataOferta());
+
+            stmInsert.execute();
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar o dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    //Adicionar os registros de dizimo e ofertas no movimento de dizimo e ofertas
+    private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta,ResultSet chaveRgOferta ){
+        
+        try{
+            int idRegistro = chaveRgOferta.getInt(1);
+
+            // Inserir dados na segunda tabela usando a chave primária da primeira tabela
+            String sql = "INSERT INTO MovimentoTipoOferta (CodRegistroOfertaDizimo,TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,DataMovimento) VALUES(?,?,?,?,?,?,?,GETDATE())";
+            String complemento = "Entrada de "+registroOferta.getTpOferta().getNome();
+            stmInsert = conexao.prepareStatement(sql);
+
+            stmInsert.setInt(1, idRegistro);
+            stmInsert.setInt(2, registroOferta.getTpOferta().getCodigo());
+            stmInsert.setDouble(3, registroOferta.getValorOfertaEntrada());
+            stmInsert.setDouble(4, 0);
+            stmInsert.setString(5, complemento);
+            stmInsert.setInt(6, registroOferta.getContaCaixa().getCodigo());
+            stmInsert.setInt(7, registroOferta.getIgreja().getCodigo());
+            stmInsert.execute();
+            
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar registro de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
     //Consulta todos os registros de ofertas e dizimos
     public List<RegistroDizimoOferta> consultarRegistrosOfertas(RegistroDizimoOferta rgDizimoOferta, Date dataLancInicial, Date dataLancFinal, Date dataOfertaInicial, Date dataOfertaFinal){
@@ -446,7 +487,7 @@ public class RegistroOfertaDao {
                 tipoOferta.setCodigo(this.rs.getInt("CodTipoOferta"));
                 dizimoOferta.setDataCadastro(this.rs.getDate("DataCadastro"));
                 dizimoOferta.setDataOferta(this.rs.getDate("DataOferta"));
-                dizimoOferta.setValorOferta(this.rs.getDouble("ValorOferta"));
+                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorOferta"));
                 dizimoOferta.setContaCaixa(contaCaixa);
                 dizimoOferta.setFormaPagto(formaPagto);
                 dizimoOferta.setIgreja(igreja);
@@ -511,7 +552,7 @@ public class RegistroOfertaDao {
                 TipoOferta tipoOferta = new TipoOferta();
                 RegistroDizimoOferta dizimoOferta = new RegistroDizimoOferta();
                 tipoOferta.setNome(this.rs.getString("NomeTipoOferta"));    
-                dizimoOferta.setValorOferta(this.rs.getDouble("ValorOferta"));
+                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorOferta"));
                 dizimoOferta.setTpOferta(tipoOferta);
                 
                 listaDizimoOferta.add(dizimoOferta);

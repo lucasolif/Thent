@@ -295,6 +295,9 @@ public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame 
             consultarCampanhas();
             carregarResultadoConsultaCampanha();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codCampanha.setText("");
+        } 
     }//GEN-LAST:event_nomeCampanhaKeyPressed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
@@ -307,6 +310,9 @@ public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame 
             consultarParticipante();
             carregarResultadoConsultaParticipante();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codParticipante.setText("");
+        } 
     }//GEN-LAST:event_nomeParticipanteKeyPressed
   
     private void formInicial(){

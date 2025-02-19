@@ -1,6 +1,7 @@
 
 package view.dizimosOfertas;
 
+import Ferramentas.PersonalizaTabela;
 import dao.ContaCaixaDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
@@ -18,7 +19,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.ContaCaixa;
 import model.FormaPagto;
@@ -33,6 +36,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
@@ -49,11 +53,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     
     public ConsultaRegistroDizimoOferta(UsuarioLogado usuarioLogado) {
         initComponents();
-        rbDataLancamento.setSelected(true);
-        dataInicial.setText(conversor.dataAtualString());
-        dataFinal.setText(conversor.dataAtualString());
-        totalDizimo.setText("0.00");
-        totalOferta.setText("0.00");
+        formInicial();
     }
     
     public void setPosicao() {
@@ -139,6 +139,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
                 return canEdit [columnIndex];
             }
         });
+        tabelaRegistros.setRowSelectionAllowed(true);
         tabelaRegistros.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(tabelaRegistros);
         if (tabelaRegistros.getColumnModel().getColumnCount() > 0) {
@@ -556,6 +557,10 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
             buscarOfertante();
             carregarResultadoConsultaFornecedor();
         } 
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codOfertante.setText("");
+            this.nomeOfertante.setText("");
+        } 
     }//GEN-LAST:event_nomeOfertanteKeyPressed
 
     private void consultarRgDizimoOferta(){
@@ -690,7 +695,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         for(RegistroDizimoOferta rg : listaRegistro){     
             String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
             String dataCadastro = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataCadastro());
-            model.addRow(new Object[]{rg.getOfertante().getNome(),rg.getValorOferta(), rg.getTpOferta(), rg.getIgreja().getNome(), dataOferta, dataCadastro});
+            model.addRow(new Object[]{rg.getOfertante().getNome(),rg.getValorOfertaEntrada(), rg.getTpOferta(), rg.getIgreja().getNome(), dataOferta, dataCadastro});
         }
     }
     
@@ -734,10 +739,10 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         for(int i=0; i < numLinhaSelec.length; i++){
             
             int index = numLinhaSelec[i];
-            RegistroDizimoOferta rgExcluído = listaRgDizimoOfertas.get(index);
+            RegistroDizimoOferta rgExcluido = listaRgDizimoOfertas.get(index);
             
             //Lista de exclusão receber o dado da lista de contas a pagar no indice selecionado, uma vez que o indíce da tabela é o mesmo da lista
-            listaRgExcluida.add(rgExcluído);    
+            listaRgExcluida.add(rgExcluido);    
             listaRgDizimoOfertas.remove(index);
             System.out.println("Linha Selecionada: "+index);
             System.out.println("Tamanho da Lista: "+listaRgDizimoOfertas.size());
@@ -757,6 +762,61 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         //Atualiza tabela
         atualizarTabela();
         listaRgExcluida.clear();     
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        
+        // Obtendo o renderizador de cabeçalho (título das colunas)
+        /*JTableHeader tableHeader = this.tabelaRegistros.getTableHeader();
+        String nomeFonte = tableHeader.getFont().getFontName();
+        int tamanhoFonte = tableHeader.getFont().getSize();
+        tableHeader.setFont(new Font(nomeFonte, Font.BOLD, tamanhoFonte));*/  // Definindo a fonte para o cabeçalho (negrito)
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer alinhasEsqOfertante = new DefaultTableCellRenderer();
+        alinhasEsqOfertante.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaRegistros.getColumnModel().getColumn(0).setCellRenderer(alinhasEsqOfertante);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer alinhaCenterValor = new DefaultTableCellRenderer();
+        alinhaCenterValor.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(1).setCellRenderer(alinhaCenterValor);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer alinhaEsqTpOferta = new DefaultTableCellRenderer();
+        alinhaEsqTpOferta.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaRegistros.getColumnModel().getColumn(2).setCellRenderer(alinhaEsqTpOferta);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer alinhaEsqIgreja = new DefaultTableCellRenderer();
+        alinhaEsqIgreja.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaRegistros.getColumnModel().getColumn(3).setCellRenderer(alinhaEsqIgreja);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer alinhaCenterDataOferta = new DefaultTableCellRenderer();
+        alinhaCenterDataOferta.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(4).setCellRenderer(alinhaCenterDataOferta);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer alinhaCenterDataLanc = new DefaultTableCellRenderer();
+        alinhaCenterDataLanc.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(5).setCellRenderer(alinhaCenterDataLanc);
+    }
+
+    private void formInicial(){      
+        tipoOferta.removeAllItems();
+        igreja.removeAllItems();
+        formaPagto.removeAllItems();
+        subContaResultado.removeAllItems();
+        contaCaixa.removeAllItems();
+        rbDataLancamento.setSelected(true);
+        dataInicial.setText(conversor.dataAtualString());
+        dataFinal.setText(conversor.dataAtualString());
+        totalDizimo.setText("0.00");
+        totalOferta.setText("0.00");
+        alinharConteudoTabela();
+        personalizaTabela.definirNegritoTituloColuna(tabelaRegistros);
     }
     
     @Override

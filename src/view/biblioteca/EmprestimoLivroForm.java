@@ -262,6 +262,9 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
             consultarPessoas();
             abrirTelaEscolhaPessoa();
         } 
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codPessoa.setText("");
+        } 
     }//GEN-LAST:event_nomePessoaKeyPressed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed

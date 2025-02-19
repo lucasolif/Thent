@@ -620,6 +620,10 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     private void nomeParticipanteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeParticipanteKeyPressed
         consultarParticipante();
         carregarResultadoConsultaParticipante();
+        
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codParticipante.setText("");
+        } 
     }//GEN-LAST:event_nomeParticipanteKeyPressed
 
     private void campanhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campanhaKeyPressed

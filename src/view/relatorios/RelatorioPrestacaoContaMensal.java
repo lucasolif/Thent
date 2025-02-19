@@ -276,7 +276,7 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
 
                 // Obter os dados da lista        
                 String descricao = entrada.getTpOferta().getNome();
-                String valores = this.conversor.formatarDoubleString(entrada.getValorOferta()).replace(".", ",");
+                String valores = this.conversor.formatarDoubleString(entrada.getValorOfertaEntrada()).replace(".", ",");
 
                 fluxoConteudo.beginText();
                 fluxoConteudo.setFont(times, tamanhaFonte);
@@ -291,7 +291,7 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
                 fluxoConteudo.endText();         
                 yPosition -= 20;// Descer para a próxima linha 
                 
-                entradas += entrada.getValorOferta();
+                entradas += entrada.getValorOfertaEntrada();
 
             }
             yPosition -= 10;

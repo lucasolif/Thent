@@ -467,6 +467,9 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
             buscarFornecedor();
             carregarResultadoConsultaFornecedor();
         } 
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codFornecedor.setText("");
+        } 
     }//GEN-LAST:event_nomeFornecedorKeyPressed
 
     private void cbxEfetivarCpMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbxEfetivarCpMousePressed

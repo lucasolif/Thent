@@ -127,6 +127,12 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
 
         jLabel7.setText("Data Final");
 
+        descricaoCampanha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                descricaoCampanhaKeyPressed(evt);
+            }
+        });
+
         jLabel3.setText("Descrição da Campanha*");
 
         jLabel8.setText("Observação");
@@ -430,6 +436,12 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
             this.dataFimCampanha.setText(dataFinal);
         }
     }//GEN-LAST:event_duracaoCampanhaKeyPressed
+
+    private void descricaoCampanhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descricaoCampanhaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codCampanha.setText("");
+        } 
+    }//GEN-LAST:event_descricaoCampanhaKeyPressed
 
     private void carregarIgrejas(){
         List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();

@@ -738,6 +738,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             buscarFornecedor();
             carregarResultadoConsultaFornecedor();
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codFornecedorOfertante.setText("");
         } 
     }//GEN-LAST:event_nomeFornecedorOfertanteKeyPressed
 

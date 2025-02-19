@@ -279,6 +279,9 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
             consultarParticipante();
             carregarResultadoConsultaParticipante();
         }
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.codParticipante.setText("");
+        } 
     }//GEN-LAST:event_nomeParticipanteKeyPressed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
