@@ -1,6 +1,7 @@
 
 package view.contasPagar;
 
+import Ferramentas.PersonalizaTabela;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
@@ -19,7 +20,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.ContaCaixa;
 import model.ContasPagar;
@@ -33,6 +36,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class ContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -638,10 +642,12 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
         observacaoConta.setText("");
         descricaoConta.setText("");
         btnGerar.setEnabled(true);
+        personalizaTabela.definirNegritoTituloColuna(tabelaParcelas);
         carregarSubContaResultado();
         carregarFormaPagto();
         carregarIgrejas();
         carregarContaCaixa();
+        alinharConteudoTabela();
     }
     
     private boolean validarCampos(){
@@ -717,6 +723,30 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
                 contaCaixa.setEnabled(isSelected);                    
             }
         });
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaParcelas.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+        
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
+        
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
+      
     }
     
     @Override

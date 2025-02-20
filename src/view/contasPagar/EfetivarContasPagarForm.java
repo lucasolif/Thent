@@ -9,6 +9,7 @@ import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import Ferramentas.PaletaCores;
+import Ferramentas.PersonalizaTabela;
 import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
@@ -26,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import model.ContaCaixa;
@@ -39,6 +41,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private UsuarioLogado usuarioLogado = new UsuarioLogado();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
@@ -871,10 +874,12 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         this.numNotaPagar.setText("");
         this.numParcelaPagar.setText("");
         this.subContaResultado.removeAllItems();
+        this.personalizaTabela.definirNegritoTituloColuna(tabelaParcelas);
         consultarContasAbertasMes();
         atualizarTabela(); 
         carregarFormaPagto();
         carregarContaCaixa();
+        alinharConteudoTabela();
     }
     
     private void formEfetivar(){
@@ -902,12 +907,12 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 String status = value.toString();
                 // Alterar a cor de fundo e do texto para a coluna "Valor"
                 if (status.equalsIgnoreCase("pago")) {
-                    ((JLabel) componente).setForeground(paletaCores.getVerde()); // Cor do texto
+                    ((JLabel) componente).setForeground(paletaCores.getAzul()); // Cor do texto
                 }else if(status.equalsIgnoreCase("pendente")){
                     //componente.setBackground(Color.WHITE);
                     ((JLabel) componente).setForeground(paletaCores.getLaranja()); // Cor do texto
                 }else{
-                    ((JLabel) componente).setForeground(paletaCores.getAzul()); // Cor do texto
+                    ((JLabel) componente).setForeground(paletaCores.getVerde()); // Cor do texto
                 }            
                 
                 //((JLabel) componente).setFont(new Font("Sanserif", Font.BOLD, 12)); // Fonte negrito, tamanho 12
@@ -972,6 +977,50 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 return label; // Retorna o JLabel modificado
             }
         });
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaParcelas.getColumnModel().getColumn(1).setCellRenderer(primeiraColuna);
+
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaParcelas.getColumnModel().getColumn(2).setCellRenderer(segundaColuna);
+
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(3).setCellRenderer(terceiraColuna);
+        
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(4).setCellRenderer(quartaColuna);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(5).setCellRenderer(quintaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(6).setCellRenderer(sextaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
+        setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(7).setCellRenderer(setimaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer oitavaColuna = new DefaultTableCellRenderer();
+        oitavaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(9).setCellRenderer(oitavaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer nonaColuna = new DefaultTableCellRenderer();
+        nonaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParcelas.getColumnModel().getColumn(9).setCellRenderer(nonaColuna);
     }
     
     @Override

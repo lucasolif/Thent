@@ -7,6 +7,7 @@ import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
 import Ferramentas.PaletaCores;
+import Ferramentas.PersonalizaTabela;
 import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
@@ -24,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import model.Biblioteca;
@@ -36,6 +38,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final LivroDao livroDao = new LivroDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final Biblioteca biblioteca = new Biblioteca();
@@ -513,6 +516,8 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
         this.livros.setSelectedItem("");
         this.txData.setText("Empréstimo:");
         this.bibliotecaJComboBox.setSelectedItem("");
+        personalizaTabela.definirNegritoTituloColuna(tabelaEmprestimos);
+        alinharConteudoTabela();
     }
     
     private void carregarLivros(){  
@@ -720,6 +725,50 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
             }
         });
     }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaEmprestimos.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaEmprestimos.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaEmprestimos.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaEmprestimos.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaEmprestimos.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
+        setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaEmprestimos.getColumnModel().getColumn(6).setCellRenderer(setimaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer oitavaColuna = new DefaultTableCellRenderer();
+        oitavaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaEmprestimos.getColumnModel().getColumn(7).setCellRenderer(oitavaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer nonaColuna = new DefaultTableCellRenderer();
+        nonaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaEmprestimos.getColumnModel().getColumn(8).setCellRenderer(nonaColuna);
+    }
+    
     
     @Override
     public void pessoaSelecionada(Pessoa pessoaSelecionada) {

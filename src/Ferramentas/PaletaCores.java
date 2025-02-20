@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class PaletaCores {
     
-    private Color azulClaro = new Color(166,235,255); 
+    private Color azulCiano = new Color(166,235,255); 
     private Color azul = new Color(0,0,244); 
     private Color cinza = new Color(204,204,204); 
     private Color branco = new Color(255,255,255); 
@@ -17,9 +17,10 @@ public class PaletaCores {
     private Color amareloEscuro = new Color(238, 173, 45);
     private Color verdeLimao = new Color(0, 255, 0); 
     private Color verdeEscuro = new Color(0, 100, 0); 
+    private Color azulClaro = new Color(231, 254, 255); 
 
-    public Color getAzulClaro() {
-        return azulClaro;
+    public Color getAzulCiano() {
+        return azulCiano;
     }
 
     public Color getAzul() {
@@ -64,6 +65,10 @@ public class PaletaCores {
 
     public Color getVerdeEscuro() {
         return verdeEscuro;
+    }
+    
+    public Color getAzulClaro(){
+        return azulClaro;
     }
     
     

@@ -8,6 +8,7 @@ import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import Ferramentas.PaletaCores;
+import Ferramentas.PersonalizaTabela;
 import Ferramentas.StatusCoresContaPagarReceber;
 import Ferramentas.Utilitarios;
 import interfaces.ConsultaPessoas;
@@ -24,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import model.Campanha;
@@ -41,19 +43,20 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class GerenciarContasReceberForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
-   private UsuarioLogado usuarioLogado = new UsuarioLogado();
-   private final Utilitarios conversor = new Utilitarios();
-   private final IgrejaDao igrejaDao = new IgrejaDao();
-   private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
-   private final CampanhaDao campanhaDao = new CampanhaDao();
-   private final PessoaDao pessoaDao = new PessoaDao();
-   private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
-   private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
-   private final PaletaCores paletaCores = new PaletaCores();
-   private List<Pessoa> listaParticipantes = null;
-   private List<ContasReceberCampanha> listaCrCampanha = null;
-   private Pessoa pessoaSelec = null;
-   private ParticipanteCampanha participanteSelec = null;
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
+    private UsuarioLogado usuarioLogado = new UsuarioLogado();
+    private final Utilitarios conversor = new Utilitarios();
+    private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
+    private final CampanhaDao campanhaDao = new CampanhaDao();
+    private final PessoaDao pessoaDao = new PessoaDao();
+    private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
+    private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
+    private final PaletaCores paletaCores = new PaletaCores();
+    private List<Pessoa> listaParticipantes = null;
+    private List<ContasReceberCampanha> listaCrCampanha = null;
+    private Pessoa pessoaSelec = null;
+    private ParticipanteCampanha participanteSelec = null;
     
     public GerenciarContasReceberForm(UsuarioLogado usuarioLogado) {
         initComponents();
@@ -715,8 +718,10 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         this.obsPagamento.setText("");
         this.btnBaixar.setEnabled(false);
         this.numContaReceber.setText("");
+        this.personalizaTabela.definirNegritoTituloColuna(tabelaCr);
         limparTabela();  
         formConsulta();
+        alinharConteudoTabela();
     }
     
     private void tabelaInicial(){
@@ -981,6 +986,54 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
                 return label; // Retorna o JLabel modificado
             }
         });
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaCr.getColumnModel().getColumn(1).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(2).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(3).setCellRenderer(terceiraColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(4).setCellRenderer(quartaColuna);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(5).setCellRenderer(quintaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(6).setCellRenderer(sextaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
+        setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(7).setCellRenderer(setimaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer oitavaColuna = new DefaultTableCellRenderer();
+        oitavaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCr.getColumnModel().getColumn(8).setCellRenderer(oitavaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer nonaColuna = new DefaultTableCellRenderer();
+        nonaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaCr.getColumnModel().getColumn(9).setCellRenderer(nonaColuna);
     }
     
     @Override

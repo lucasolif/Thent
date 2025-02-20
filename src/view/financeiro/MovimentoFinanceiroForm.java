@@ -11,6 +11,7 @@ import dao.TipoOfertaDao;
 import dao.TransferenciaDepositoDao;
 import Ferramentas.Utilitarios;
 import Ferramentas.PaletaCores;
+import Ferramentas.PersonalizaTabela;
 import dao.AplicacaoDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
@@ -22,7 +23,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Aplicacao;
 import model.ContaCaixa;
@@ -39,6 +42,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
 
     private final PessoaDao pessoaDao = new PessoaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -965,6 +969,8 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }
     
     private void configInicial(){
+        alinharConteudoTabela();
+        this.personalizaTabela.definirNegritoTituloColuna(tabelaMovimentacoes);
         rbEntradaSaida.setSelected(true);
         rbDataMovimentacao.setSelected(true);
         dataInicial.setText(conversor.dataAtualString());
@@ -973,6 +979,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         atualizarTabela();
         mostrarTotalDizimoOfertas();
         mostrarTotalSaidaEntrada();
+        
    }
     
     private void atualizarDashBoadSaldoBancos(){
@@ -1069,6 +1076,50 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             } 
         }
         return exclusaoSucesso;
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(1).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(2).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(3).setCellRenderer(terceiraColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(4).setCellRenderer(quartaColuna);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(5).setCellRenderer(quintaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(6).setCellRenderer(sextaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
+        setimaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(7).setCellRenderer(setimaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer oitavaColuna = new DefaultTableCellRenderer();
+        oitavaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaMovimentacoes.getColumnModel().getColumn(8).setCellRenderer(oitavaColuna);
+        
     }
     
     @Override

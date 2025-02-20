@@ -1,6 +1,7 @@
 
 package view.campanhas;
 
+import Ferramentas.PersonalizaTabela;
 import dao.CampanhaDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
@@ -18,6 +19,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
 import interfaces.ConsultaPessoas;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import model.Igreja;
 import model.ContasReceberCampanha;
 import model.ParticipanteCampanha;
@@ -29,6 +32,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
     private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final CampanhaDao campanhaDao = new CampanhaDao();
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
@@ -574,6 +578,8 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
         this.btnAdicionar.setEnabled(true);
         this.nomeParticipante.setEditable(true); 
         this.descricaoCampanha.requestFocusInWindow();
+        alinharConteudoTabela();
+        personalizaTabela.definirNegritoTituloColuna(tabelaParticipantes);
     }
        
     private void limparTabela(){
@@ -601,6 +607,30 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     public void adicionarParticipanteEscolhido(Pessoa pessoa){
         DefaultTableModel model = (DefaultTableModel) this.tabelaParticipantes.getModel();
         model.addRow(new Object[]{pessoa.getCodigo(),pessoa,pessoa.getCpfCnpj(),pessoa.getIgreja()});     
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaParticipantes.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaParticipantes.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaParticipantes.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaParticipantes.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
+
     }
     
     @Override

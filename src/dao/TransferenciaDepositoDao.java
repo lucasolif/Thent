@@ -13,6 +13,7 @@ import jdbc.Conexao;
 import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
+import model.RegistroDizimoOferta;
 import model.TransferenciaConta;
 import model.UsuarioLogado;
 
@@ -22,6 +23,7 @@ public class TransferenciaDepositoDao {
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private PreparedStatement stmSelect = null;
+    private PreparedStatement stmInsert = null;
     private ResultSet rs = null;
     
     public void realizarOperacoesBancarias(MovimentoCaixa mvCaixa, int tpOpe, UsuarioLogado usuarioLogado){
@@ -47,14 +49,14 @@ public class TransferenciaDepositoDao {
             
             //No caso da transfêrencia, ele satisfaz as duas condiçãos, uma para saída e outra para entrada.
             if(generatedKeys.next()){               
-                int idRegistro = generatedKeys.getInt(1);             
+                int idTransfer = generatedKeys.getInt(1);             
                 String sqlMov = "INSERT INTO MovimentoCaixa (Pessoa,TransferenciaDeposito,ValorEntrada,ValorSaida,ContaCaixa,Complemento,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,GETDATE(),?)";
             
                 if(tpOpe == 1 || tpOpe == 3){ //Verifica se a operação é de saída
                     psMovimento = conexao.prepareStatement(sqlMov);                       
 
                     psMovimento.setInt(1, mvCaixa.getTransferecia().getPessoa().getCodigo());
-                    psMovimento.setInt(2, idRegistro);
+                    psMovimento.setInt(2, idTransfer);
                     psMovimento.setDouble(3, 0);
                     psMovimento.setDouble(4, mvCaixa.getTransferecia().getValorEntradaSaida());
                     psMovimento.setInt(5, mvCaixa.getTransferecia().getCxSaida().getCodigo());
@@ -63,6 +65,17 @@ public class TransferenciaDepositoDao {
                     psMovimento.setInt(8, usuarioLogado.getCodUsuario());
                     psMovimento.setDate(9, (Date) mvCaixa.getDataPagamentoRecebimento());
                     psMovimento.executeUpdate();
+                    
+                    //Para movimento tipo oferta
+                    String complemento = "Saída - "+mvCaixa.getComplemento();
+                    RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
+                    rgDizimoOferta.setTpOferta(mvCaixa.getRgOferta().getTpOferta());
+                    rgDizimoOferta.setValorOfertaEntrada(0);
+                    rgDizimoOferta.setValorOfertaSaida(mvCaixa.getTransferecia().getValorEntradaSaida());
+                    rgDizimoOferta.setContaCaixa(mvCaixa.getTransferecia().getCxSaida());
+                    rgDizimoOferta.setIgreja(mvCaixa.getIgreja());
+                            
+                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, complemento);
 
                 }
                 
@@ -70,7 +83,7 @@ public class TransferenciaDepositoDao {
                     psMovimento = conexao.prepareStatement(sqlMov);
 
                     psMovimento.setInt(1, mvCaixa.getTransferecia().getPessoa().getCodigo());
-                    psMovimento.setInt(2, idRegistro);
+                    psMovimento.setInt(2, idTransfer);
                     psMovimento.setDouble(3, mvCaixa.getTransferecia().getValorEntradaSaida());
                     psMovimento.setDouble(4, 0);
                     psMovimento.setInt(5, mvCaixa.getTransferecia().getCxEntrada().getCodigo());
@@ -79,6 +92,17 @@ public class TransferenciaDepositoDao {
                     psMovimento.setInt(8, usuarioLogado.getCodUsuario());
                     psMovimento.setDate(9, (Date) mvCaixa.getDataPagamentoRecebimento());
                     psMovimento.executeUpdate();
+                    
+                    //Para movimento tipo oferta
+                    String complemento = "Entrada - "+mvCaixa.getComplemento();
+                    RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
+                    rgDizimoOferta.setTpOferta(mvCaixa.getRgOferta().getTpOferta());
+                    rgDizimoOferta.setValorOfertaEntrada(mvCaixa.getTransferecia().getValorEntradaSaida());
+                    rgDizimoOferta.setValorOfertaSaida(0);
+                    rgDizimoOferta.setContaCaixa(mvCaixa.getTransferecia().getCxSaida());
+                    rgDizimoOferta.setIgreja(mvCaixa.getIgreja());
+                            
+                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, complemento);
                 }         
             }
            
@@ -188,5 +212,27 @@ public class TransferenciaDepositoDao {
             }
         }
         return listaMovimentoCaixa;   
+    }
+    
+    //Adicionar os registros de dizimo e ofertas no movimento de dizimo e ofertas
+    private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta,String complemento){
+        
+        try{
+            // Inserir dados na segunda tabela usando a chave primária da primeira tabela
+            String sql = "INSERT INTO MovimentoTipoOferta (TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,DataMovimento) VALUES(?,?,?,?,?,?,GETDATE())";
+            stmInsert = conexao.prepareStatement(sql);
+
+            stmInsert.setInt(1, registroOferta.getTpOferta().getCodigo());
+            stmInsert.setDouble(2, registroOferta.getValorOfertaEntrada());
+            stmInsert.setDouble(3, registroOferta.getValorOfertaSaida());
+            stmInsert.setString(4, complemento);
+            stmInsert.setInt(5, registroOferta.getContaCaixa().getCodigo());
+            stmInsert.setInt(6, registroOferta.getIgreja().getCodigo());
+            stmInsert.execute();
+            
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar movimentação de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -1,6 +1,7 @@
 
 package view.contasPagar;
 
+import Ferramentas.PersonalizaTabela;
 import dao.ContasPagarDao;
 import dao.PessoaDao;
 import Ferramentas.Utilitarios;
@@ -12,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.ContasPagar;
 import model.Pessoa;
@@ -21,6 +24,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class CancelarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas {
     
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final Utilitarios conversor = new Utilitarios();
     private final ContasPagarDao contasPagarDao = new ContasPagarDao();
@@ -31,9 +35,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
     
     public CancelarContasPagarForm(UsuarioLogado usuarioLogado) {
         initComponents();
-        rbDataVencimento.setSelected(true);
-        dataInicial.setText(conversor.dataAtualString());
-        dataFinal.setText(conversor.dataAtualString());
+        formInicial();
     }
     
     //Centralizar a tela no meio
@@ -483,6 +485,38 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
             DefaultTableModel model = (DefaultTableModel) tabelaContasPagar.getModel();
             model.setRowCount(0);
         }
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaContasPagar.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaContasPagar.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaContasPagar.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+        
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaContasPagar.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
+        
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaContasPagar.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
+        
+    }
+    
+    private void formInicial(){
+        alinharConteudoTabela();
+        this.personalizaTabela.definirNegritoTituloColuna(tabelaContasPagar);
+        rbDataVencimento.setSelected(true);
+        dataInicial.setText(conversor.dataAtualString());
+        dataFinal.setText(conversor.dataAtualString());
     }
     
     @Override

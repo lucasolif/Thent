@@ -1,6 +1,7 @@
 
 package view.biblioteca;
 
+import Ferramentas.PersonalizaTabela;
 import dao.BibliotecaDao;
 import dao.EmprestimoLivroDao;
 import dao.LivroDao;
@@ -16,7 +17,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Biblioteca;
 import model.EmprestimoLivro;
@@ -29,6 +32,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements ConsultaPessoas {
 
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final EmprestimoLivroDao emprestimoDao = new EmprestimoLivroDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
@@ -304,6 +308,8 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
         this.codPessoa.setText("");
         this.nomePessoa.setText("");
         carregarBibliotecas();
+        alinharConteudoTabela();
+        personalizaTabela.definirNegritoTituloColuna(tabelaLivros);
         
         if(this.bibliotecaJComboBox.getItemCount() > 0){
             carregarLivros();
@@ -429,6 +435,26 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
         }
 
     }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+
+    }
+    
     
     @Override
     public void pessoaSelecionada(Pessoa pessoaSelecionada) {

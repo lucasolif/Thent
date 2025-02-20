@@ -1,6 +1,7 @@
 
 package view.campanhas;
 
+import Ferramentas.PersonalizaTabela;
 import dao.CampanhaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
@@ -14,7 +15,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
 import model.ContasReceberCampanha;
@@ -27,6 +30,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
+     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final CampanhaDao campanhaDao = new CampanhaDao();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final SubContaResultadoDao subContaResultadoDao = new SubContaResultadoDao();
@@ -314,6 +318,8 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
         limparTabela();
         carregarSubContaResultado();
         carregarCampanhas();
+        alinharConteudoTabela();
+        this.personalizaTabela.definirNegritoTituloColuna(tabelaCrGerada);
     }
     
     private void formGerarCr(){
@@ -426,6 +432,30 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
                 JOptionPane.showMessageDialog(null, "Operação cancelada!");
             }     
         }          
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaCrGerada.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCrGerada.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaCrGerada.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaCrGerada.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);    
+
     }
     
     @Override

@@ -1,6 +1,7 @@
 
 package view.biblioteca;
 
+import Ferramentas.PersonalizaTabela;
 import dao.AutorDao;
 import dao.BibliotecaDao;
 import dao.EditoraDao;
@@ -13,7 +14,9 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.Autor;
 import model.Biblioteca;
@@ -23,8 +26,9 @@ import model.RegistroBiblioteca;
 import model.UsuarioLogado;
 
 
-public class BibliotecaForm extends javax.swing.JInternalFrame {
+public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
 
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final LivroDao livroDao = new LivroDao();
     private final AutorDao autorDao = new AutorDao();
@@ -33,8 +37,9 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private List<RegistroBiblioteca> listaRgBilioteca = new ArrayList();
 
-    public BibliotecaForm(UsuarioLogado usuarioLogado) {
+    public AcervoBibliotecaForm(UsuarioLogado usuarioLogado) {
         initComponents();
+        formInicial();
     }
     
     public void setPosicao() {
@@ -70,7 +75,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         tabelaLivros = new javax.swing.JTable();
         btnLimpar = new javax.swing.JButton();
         adicionarLivro = new javax.swing.JButton();
-        emprestar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -322,15 +326,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
             }
         });
 
-        emprestar.setBackground(new java.awt.Color(255, 204, 51));
-        emprestar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        emprestar.setText("Emprestar");
-        emprestar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emprestarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -344,9 +339,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(adicionarLivro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(emprestar)))
+                        .addComponent(adicionarLivro)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -358,9 +351,7 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                        .addComponent(adicionarLivro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(emprestar))
+                    .addComponent(adicionarLivro)
                     .addComponent(btnLimpar))
                 .addGap(24, 24, 24))
         );
@@ -401,10 +392,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     private void editoraMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editoraMousePressed
         carregarEditora();
     }//GEN-LAST:event_editoraMousePressed
-
-    private void emprestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emprestarActionPerformed
-        
-    }//GEN-LAST:event_emprestarActionPerformed
 
     private void livroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_livroKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
@@ -520,6 +507,44 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
         addLivroBiblioteca.setVisible(true);
     }
     
+    private void formInicial(){
+        personalizaTabela.definirNegritoTituloColuna(tabelaLivros);
+        alinharConteudoTabela();
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaLivros.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaLivros.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaLivros.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
+    }
+    
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -529,7 +554,6 @@ public class BibliotecaForm extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JComboBox<String> editora;
-    private javax.swing.JButton emprestar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

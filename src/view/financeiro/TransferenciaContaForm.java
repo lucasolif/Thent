@@ -17,6 +17,7 @@ import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
 import model.Pessoa;
+import model.RegistroDizimoOferta;
 import model.TipoOferta;
 import model.TransferenciaConta;
 import model.Usuario;
@@ -281,7 +282,6 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
        if(rbEntrada.isSelected()){
            this.contaCaixaSaida.setEnabled(false);
            this.contaCaixaEntrada.setEnabled(true);
-           this.tpOferta.setEnabled(false);
        }
     }//GEN-LAST:event_rbEntradaActionPerformed
 
@@ -289,7 +289,6 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         if(rbSaida.isSelected()){
            this.contaCaixaEntrada.setEnabled(false);
            this.contaCaixaSaida.setEnabled(true);
-           this.tpOferta.setEnabled(true);
        }
     }//GEN-LAST:event_rbSaidaActionPerformed
 
@@ -297,7 +296,6 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         if(rbTransferencia.isSelected()){
            this.contaCaixaEntrada.setEnabled(true);
            this.contaCaixaSaida.setEnabled(true);
-           this.tpOferta.setEnabled(false);
        }
     }//GEN-LAST:event_rbTransferenciaActionPerformed
 
@@ -314,17 +312,19 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         double valor = Double.parseDouble(this.valor.getText().replace(",", "."));
         Date dataOp = this.conversor.convertendoStringDateSql(dataOperacao.getText());
         this.pessoa.setCodigo(1);
-        this.usuario.setCodigo(1);
+        this.usuario.setCodigo(usuarioLogado.getCodUsuario());
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
 
        //Verifica se a movimentação é referente ao deposito da tesouraria geral
         if(this.dpTesourariaGeral.isSelected()){
             dpTesouraria = 1;
         }    
-        
-        if(this.dpTesourariaGeral.isSelected()){
-            
-        }
+
+        //Definindo os valores no objeto RegistroDizimo Oferta para utilizar na movimentação do tipo de oferta.
+        RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
+        TipoOferta tpOferta = (TipoOferta) this.tpOferta.getSelectedItem();
+        rgDizimoOferta.setTpOferta(tpOferta); 
+
         MovimentoCaixa mvCaixa = new MovimentoCaixa();
         TransferenciaConta transf = new TransferenciaConta();
         transf.setCxSaida(cxSaida);
@@ -338,7 +338,9 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         mvCaixa.setIgreja(igreja);
         mvCaixa.setTransferecia(transf);
         mvCaixa.setComplemento(complemento); 
-            
+        mvCaixa.setRgOferta(rgDizimoOferta);
+                
+
         if(!rbTransferencia.isSelected() && !rbEntrada.isSelected() && !rbSaida.isSelected() || valor <= 0 || this.complemento.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Preecha os campos corretamente", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else if(rbTransferencia.isSelected()){                     
@@ -360,7 +362,6 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         this.rbDepositoDizimo.setEnabled(false);
         this.rbDepositoOferta.setEnabled(false);
         this.complemento.setEditable(true);
-        this.tpOferta.setEnabled(false);
         carregarContaCaixa();
         carregarIgrejas();
         carregarTipoOferta();

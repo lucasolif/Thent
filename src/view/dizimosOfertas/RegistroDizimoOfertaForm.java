@@ -1,6 +1,7 @@
 
 package view.dizimosOfertas;
 
+import Ferramentas.PersonalizaTabela;
 import dao.ContaCaixaDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
@@ -20,7 +21,9 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.ContaCaixa;
 import model.FormaPagto;
@@ -36,6 +39,7 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
     private UsuarioLogado usuarioLogado;
+    private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
@@ -269,12 +273,12 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
             tabelaOfertas.getColumnModel().getColumn(1).setResizable(false);
             tabelaOfertas.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaOfertas.getColumnModel().getColumn(2).setResizable(false);
-            tabelaOfertas.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tabelaOfertas.getColumnModel().getColumn(2).setPreferredWidth(150);
             tabelaOfertas.getColumnModel().getColumn(3).setResizable(false);
             tabelaOfertas.getColumnModel().getColumn(3).setPreferredWidth(100);
             tabelaOfertas.getColumnModel().getColumn(4).setResizable(false);
             tabelaOfertas.getColumnModel().getColumn(5).setResizable(false);
-            tabelaOfertas.getColumnModel().getColumn(5).setPreferredWidth(200);
+            tabelaOfertas.getColumnModel().getColumn(5).setPreferredWidth(150);
             tabelaOfertas.getColumnModel().getColumn(6).setResizable(false);
         }
 
@@ -544,6 +548,46 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         carregarContaCaixa();
         dataOferta.setText(conversor.dataAtualString());
         carregarSubContaResultado();
+        personalizaTabela.definirNegritoTituloColuna(tabelaOfertas);
+        alinharConteudoTabela();
+    }
+    
+    private void alinharConteudoTabela(){
+        
+        // Alinhamento do Ofertante (à esquerda)
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaOfertas.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
+
+        // Alinhamento do Valor (centro)
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaOfertas.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
+
+        //Alinhamento do tipo de oferta
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaOfertas.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
+        
+        //Alinhamento da igreja
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaOfertas.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
+        
+        //Alinhamento da data de oferta
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaOfertas.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaOfertas.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
+        setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaOfertas.getColumnModel().getColumn(6).setCellRenderer(setimaColuna);
     }
     
     @Override

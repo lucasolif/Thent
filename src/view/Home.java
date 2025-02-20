@@ -16,7 +16,7 @@ import model.Usuario;
 import model.UsuarioLogado;
 import view.biblioteca.AdicionarLivroForm;
 import view.biblioteca.AutorForm;
-import view.biblioteca.BibliotecaForm;
+import view.biblioteca.AcervoBibliotecaForm;
 import view.biblioteca.CadastroBibliotecaForm;
 import view.biblioteca.ConsultaEmprestimoForm;
 import view.biblioteca.EditoraForm;
@@ -705,7 +705,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formCadastroLivrosActionPerformed
 
     private void formConsultarAcervoBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultarAcervoBibliotecaActionPerformed
-        BibliotecaForm biblioteca = new BibliotecaForm(this.userLogado);
+        AcervoBibliotecaForm biblioteca = new AcervoBibliotecaForm(this.userLogado);
         this.painelHome.add(biblioteca);
         biblioteca.setVisible(true);
         biblioteca.setPosicao();
