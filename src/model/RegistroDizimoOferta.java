@@ -11,6 +11,7 @@ public class RegistroDizimoOferta {
     private TipoOferta tpOferta;
     private double valorOfertaEntrada;
     private double valorOfertaSaida;
+    private double valorTotal;
     private FormaPagto formaPagto;
     private Pessoa ofertante;
     private Date dataOferta;
@@ -18,6 +19,7 @@ public class RegistroDizimoOferta {
     private Igreja igreja;
     private Usuario usuario;
     private ContaCaixa contaCaixa;
+    private String complemento;
     private SubContaResultado subContaResultado;
     
     public RegistroDizimoOferta() {
@@ -70,6 +72,22 @@ public class RegistroDizimoOferta {
         this.usuario = usuario;
     }
 
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+    
     public double getValorOfertaSaida() {
         return valorOfertaSaida;
     }

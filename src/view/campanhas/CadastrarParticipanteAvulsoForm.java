@@ -24,7 +24,7 @@ import model.Igreja;
 import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.SubContaResultado;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasCampanhas;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
@@ -45,7 +45,7 @@ public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame 
     private List<ParticipanteCampanha> listaParticipante = null;
     
 
-    public CadastrarParticipanteAvulsoForm(UsuarioLogado usuarioLogado) {
+    public CadastrarParticipanteAvulsoForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

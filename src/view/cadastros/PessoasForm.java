@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 import model.Endereco;
 import model.Igreja;
 import model.Pessoa;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -25,7 +25,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
     private Pessoa pessoaSelec;
     private List<Pessoa> listaPessoa;
 
-    public PessoasForm(UsuarioLogado usuarioLogado) {
+    public PessoasForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

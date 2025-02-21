@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.ContasPagar;
 import model.Pessoa;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class CancelarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas {
@@ -33,7 +33,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
     private List<ContasPagar> listaContasPagar = new ArrayList<>();
     private List<Pessoa> listaFornecedor = null;
     
-    public CancelarContasPagarForm(UsuarioLogado usuarioLogado) {
+    public CancelarContasPagarForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

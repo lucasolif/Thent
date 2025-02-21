@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
-import model.UsuarioLogado;
 
 
 public class LogsDao {

@@ -13,8 +13,7 @@ import model.Acessos;
 import model.FuncoesUsuario;
 import model.Igreja;
 import model.Usuario;
-import model.UsuarioLogado;
-import view.Home;
+
 
 
 public class UsuarioDao {
@@ -300,7 +299,7 @@ public class UsuarioDao {
         }
     }
     
-    public FuncoesUsuario consultarFuncaoUsuario(UsuarioLogado usuario){
+    public FuncoesUsuario consultarFuncaoUsuario(Usuario usuario){
         FuncoesUsuario funcao = new FuncoesUsuario();  
 
         String sql = "Select Funcao From Usuarios Where Codigo = ?";
@@ -309,7 +308,7 @@ public class UsuarioDao {
             conexao = Conexao.getDataSource().getConnection();            
             ps = conexao.prepareStatement(sql);
             
-            ps.setInt(1,  usuario.getCodUsuario());
+            ps.setInt(1,  usuario.getCodigo());
             rs = ps.executeQuery();
 
             while(rs.next()){
@@ -333,7 +332,7 @@ public class UsuarioDao {
         return funcao;
     }
     
-    public List<Acessos> consultarAcessosPadrao(UsuarioLogado usuario){
+    public List<Acessos> consultarAcessosPadrao(Usuario usuario){
         List<Acessos> listaAcessos = new ArrayList<>();
          //Estanciando o objeto para consultarIgreja a igreja do usuário
 
@@ -347,7 +346,7 @@ public class UsuarioDao {
             conexao = Conexao.getDataSource().getConnection();            
             ps = conexao.prepareStatement(sql);
             
-            ps.setInt(1,  usuario.getCodUsuario());
+            ps.setInt(1,  usuario.getCodigo());
   
             rs = ps.executeQuery();
 

@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.ContaResultado;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaContaResultado;
 
 public class ContaResultadoForm extends javax.swing.JInternalFrame implements ConsultaContaResultado{
@@ -19,7 +19,7 @@ public class ContaResultadoForm extends javax.swing.JInternalFrame implements Co
     private ContaResultado contaResultadoSelec;
     private List<ContaResultado> listaContaResultado;
     
-    public ContaResultadoForm(UsuarioLogado usuarioLogado) {
+    public ContaResultadoForm(Usuario usuarioLogado) {
         initComponents();
     }
 

@@ -30,7 +30,7 @@ import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.SubContaResultado;
 import model.TipoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -51,7 +51,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     private Pessoa ofertanteSelec;
     private List<Pessoa> listaOfertante = null;
     
-    public ConsultaRegistroDizimoOferta(UsuarioLogado usuarioLogado) {
+    public ConsultaRegistroDizimoOferta(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

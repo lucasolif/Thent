@@ -14,7 +14,7 @@ import view.carregamentoConsultas.TelaConsultaContaCaixa;
 import interfaces.ConsultaContaCaixa;
 import javax.swing.DefaultComboBoxModel;
 import model.Igreja;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class ContaCaixaForm extends javax.swing.JInternalFrame implements ConsultaContaCaixa{
@@ -24,7 +24,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     private List<ContaCaixa> listaContaCaixa = null;
     private final IgrejaDao igrejaDao = new IgrejaDao();
 
-    public ContaCaixaForm(UsuarioLogado usuarioLogado) {
+    public ContaCaixaForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

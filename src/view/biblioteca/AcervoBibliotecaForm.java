@@ -23,7 +23,7 @@ import model.Biblioteca;
 import model.Editora;
 import model.Livro;
 import model.RegistroBiblioteca;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
@@ -36,10 +36,12 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private List<RegistroBiblioteca> listaRgBilioteca = new ArrayList();
+    private Usuario usuarioLogado;
 
-    public AcervoBibliotecaForm(UsuarioLogado usuarioLogado) {
+    public AcervoBibliotecaForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
+        this.usuarioLogado = usuarioLogado;
     }
     
     public void setPosicao() {
@@ -502,21 +504,21 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
     }
     
     private void formAdicionarLivroBiblioteca(){
-        AdicionarLivroForm addLivroBiblioteca = new AdicionarLivroForm((Frame) SwingUtilities.getWindowAncestor(this), true);
+        AdicionarLivroForm addLivroBiblioteca = new AdicionarLivroForm((Frame) SwingUtilities.getWindowAncestor(this), true, usuarioLogado);
         addLivroBiblioteca.setLocationRelativeTo(this);
         addLivroBiblioteca.setVisible(true);
     }
     
     private void formInicial(){
-        personalizaTabela.definirNegritoTituloColuna(tabelaLivros);
         alinharConteudoTabela();
+        personalizaTabela.definirNegritoTituloColuna(tabelaLivros);
     }
     
     private void alinharConteudoTabela(){
         
         // Alinhamento do Ofertante (à esquerda)
         DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
-        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        primeiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
         this.tabelaLivros.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
 
         // Alinhamento do Valor (centro)
@@ -528,7 +530,7 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
         DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
         terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
         this.tabelaLivros.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
-        
+    
         //Alinhamento da igreja
         DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
         quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
@@ -543,6 +545,7 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
         DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
         sextaColuna.setHorizontalAlignment(SwingConstants.LEFT);
         this.tabelaLivros.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
+
     }
     
 

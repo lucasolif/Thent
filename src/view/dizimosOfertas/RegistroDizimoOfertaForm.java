@@ -32,13 +32,13 @@ import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.SubContaResultado;
 import model.TipoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
-    private UsuarioLogado usuarioLogado;
+    private Usuario usuarioLogado;
     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -54,7 +54,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     private Pessoa ofertanteSelec;
     private RegistroDizimoOferta rgOfertaSelec;
     
-    public RegistroDizimoOfertaForm(UsuarioLogado usuarioLogado) {
+    public RegistroDizimoOfertaForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();  
         this.usuarioLogado = usuarioLogado;

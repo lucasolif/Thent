@@ -25,7 +25,7 @@ import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
 import model.Pessoa;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -42,7 +42,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     List<Pessoa> listaPessoa;
 
-    public EmprestimoLivroForm(UsuarioLogado usuarioLogado) {
+    public EmprestimoLivroForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

@@ -21,12 +21,11 @@ import model.RegistroDizimoOferta;
 import model.TipoOferta;
 import model.TransferenciaConta;
 import model.Usuario;
-import model.UsuarioLogado;
 
 
 public class TransferenciaContaForm extends javax.swing.JInternalFrame {
 
-    private UsuarioLogado usuarioLogado;
+    private Usuario usuarioLogado;
     Pessoa pessoa = new Pessoa();
     Usuario usuario = new Usuario();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
@@ -35,7 +34,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     private final TransferenciaDepositoDao transfDepositoDao = new TransferenciaDepositoDao();
     private final Utilitarios conversor = new Utilitarios();
     
-    public TransferenciaContaForm(UsuarioLogado usuarioLogado) {
+    public TransferenciaContaForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         this.usuarioLogado = usuarioLogado;
@@ -312,7 +311,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
         double valor = Double.parseDouble(this.valor.getText().replace(",", "."));
         Date dataOp = this.conversor.convertendoStringDateSql(dataOperacao.getText());
         this.pessoa.setCodigo(1);
-        this.usuario.setCodigo(usuarioLogado.getCodUsuario());
+        this.usuario.setCodigo(usuarioLogado.getCodigo());
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
 
        //Verifica se a movimentação é referente ao deposito da tesouraria geral

@@ -35,7 +35,7 @@ import model.MovimentoCaixa;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
@@ -57,9 +57,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private MovimentoCaixa movimentoCaixa = new MovimentoCaixa();
     private List<MovimentoCaixa> listaMovimentacao = new ArrayList<>();
     private List<Pessoa> listaOfertante = null;
-    private UsuarioLogado usuarioLogado;
+    private Usuario usuarioLogado;
 
-    public MovimentoFinanceiroForm(UsuarioLogado usuarioLogado) {
+    public MovimentoFinanceiroForm(Usuario usuarioLogado) {
         initComponents();
         configInicial();
         carregarContaCaixaSaldo();

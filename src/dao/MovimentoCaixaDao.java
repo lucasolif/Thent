@@ -19,7 +19,7 @@ import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
 import model.TransferenciaConta;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class MovimentoCaixaDao {
@@ -345,7 +345,7 @@ public class MovimentoCaixaDao {
         return listaMovimento;
     }
 
-    public void movimentarContasPagar (List<MovimentoCaixa> mvContaPagar, UsuarioLogado usuarioLogado){
+    public void movimentarContasPagar (List<MovimentoCaixa> mvContaPagar, Usuario usuarioLogado){
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -363,7 +363,7 @@ public class MovimentoCaixaDao {
                 this.stmInsert.setString(6, mv.getComplemento());
                 this.stmInsert.setInt(7, mv.getFormaPagto().getCodigo());
                 this.stmInsert.setInt(8, mv.getContaPagar().getIgreja().getCodigo());
-                this.stmInsert.setInt(9, usuarioLogado.getCodUsuario());
+                this.stmInsert.setInt(9, usuarioLogado.getCodigo());
                 this.stmInsert.setDate(10, (java.sql.Date) mv.getDataPagamentoRecebimento());               
                 this.stmInsert.executeUpdate();
                 
@@ -403,7 +403,7 @@ public class MovimentoCaixaDao {
         }
     }
     
-    public void movimentarContasReceberCampanha (MovimentoCaixa CrCampanha, UsuarioLogado usuarioLogado){
+    public void movimentarContasReceberCampanha (MovimentoCaixa CrCampanha, Usuario usuarioLogado){
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -420,7 +420,7 @@ public class MovimentoCaixaDao {
             this.stmInsert.setString(6, CrCampanha.getComplemento());
             this.stmInsert.setInt(7, CrCampanha.getCrCampanha().getFormaPagto().getCodigo());
             this.stmInsert.setInt(8, CrCampanha.getCrCampanha().getIgreja().getCodigo());
-            this.stmInsert.setInt(9, usuarioLogado.getCodUsuario());
+            this.stmInsert.setInt(9, usuarioLogado.getCodigo());
             this.stmInsert.setDate(10, (java.sql.Date) CrCampanha.getDataPagamentoRecebimento());
             this.stmInsert.executeUpdate();
             
@@ -676,7 +676,7 @@ public class MovimentoCaixaDao {
     }
 
     //Adicionar a movimentação excluída
-    public void movimentacaoExcluida(MovimentoCaixa movimento, String motivo, String tipo, UsuarioLogado usuario){
+    public void movimentacaoExcluida(MovimentoCaixa movimento, String motivo, String tipo, Usuario usuario){
         try{
             this.conexao = Conexao.getDataSource().getConnection();
             
@@ -684,7 +684,7 @@ public class MovimentoCaixaDao {
             this.stmInsert = this.conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             this.stmInsert.setString(1, tipo);
-            this.stmInsert.setInt(2, usuario.getCodUsuario());
+            this.stmInsert.setInt(2, usuario.getCodigo());
             this.stmInsert.setInt(3, movimento.getPessoa().getCodigo());
             this.stmInsert.setString(4, motivo);
             this.stmInsert.setDouble(5, movimento.getValorEntrada()+movimento.getValorSaida());

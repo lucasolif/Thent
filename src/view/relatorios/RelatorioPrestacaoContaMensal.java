@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import model.Igreja;
 import model.MovimentoCaixa;
 import model.RegistroDizimoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -38,7 +38,7 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
     private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
     private final Relatorios funcoesRelatorio = new Relatorios();
     
-    public RelatorioPrestacaoContaMensal(UsuarioLogado usuarioLogado) {
+    public RelatorioPrestacaoContaMensal(Usuario usuarioLogado) {
         initComponents();
         formaInicial();
     }

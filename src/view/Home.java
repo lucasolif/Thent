@@ -13,7 +13,6 @@ import model.Acessos;
 import model.FuncoesUsuario;
 import model.Login;
 import model.Usuario;
-import model.UsuarioLogado;
 import view.biblioteca.AdicionarLivroForm;
 import view.biblioteca.AutorForm;
 import view.biblioteca.AcervoBibliotecaForm;
@@ -43,6 +42,7 @@ import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
 import view.contasPagar.EfetivarContasPagarForm;
 import view.dizimosOfertas.ConsultaRegistroDizimoOferta;
+import view.dizimosOfertas.ConsultaSaldoTipoOfertaForm;
 import view.financeiro.MovimentoFinanceiroForm;
 import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.AplicacaoFinanceiraForm;
@@ -56,17 +56,17 @@ import view.relatorios.RelatorioPrestacaoContaMensal;
 
 public class Home extends javax.swing.JFrame {
     
-    UsuarioLogado userLogado = new UsuarioLogado();
+    Usuario userLogado = new Usuario();
     UsuarioDao usuarioDao = new UsuarioDao();
     PaletaCores cores = new PaletaCores();
     
     public Home(Login usuarioLogado) {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
-       
+
         //seta o codigo e nome do usuário para o objeto UsuerioLogado, que será utilizado nos processos do sistema
-        userLogado.setCodUsuario(usuarioLogado.getCodUsuario());
-        userLogado.setNomeUsuario(usuarioLogado.getUsuario());
+        this.userLogado.setCodigo(usuarioLogado.getCodUsuario());
+        this.userLogado.setNome(usuarioLogado.getUsuario());
         
         //Executar tarefas automaticamente
         AgendadorTarefas exeTaregas = new AgendadorTarefas();
@@ -104,6 +104,7 @@ public class Home extends javax.swing.JFrame {
         subMenuFinanceiroDizimoOfertas = new javax.swing.JMenu();
         formRegistrarOfertasDizimo = new javax.swing.JMenuItem();
         formConsultarDizimoOfertas = new javax.swing.JMenuItem();
+        formConsultaSaldoTipoOferta = new javax.swing.JMenuItem();
         subMenuFinanceiroContasPagar = new javax.swing.JMenu();
         formLancarContasPagar = new javax.swing.JMenuItem();
         formEfetivarContasPagar = new javax.swing.JMenuItem();
@@ -275,6 +276,14 @@ public class Home extends javax.swing.JFrame {
             }
         });
         subMenuFinanceiroDizimoOfertas.add(formConsultarDizimoOfertas);
+
+        formConsultaSaldoTipoOferta.setText("Consulta Saldo Tipo Oferta");
+        formConsultaSaldoTipoOferta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formConsultaSaldoTipoOfertaActionPerformed(evt);
+            }
+        });
+        subMenuFinanceiroDizimoOfertas.add(formConsultaSaldoTipoOferta);
 
         menuFinanceiro.add(subMenuFinanceiroDizimoOfertas);
 
@@ -745,7 +754,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formCadastroEditoraActionPerformed
 
     private void formAdicionarLivroBibliotecaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formAdicionarLivroBibliotecaActionPerformed
-        AdicionarLivroForm dialogAddLivroBibli = new AdicionarLivroForm(this, true);
+        AdicionarLivroForm dialogAddLivroBibli = new AdicionarLivroForm(this, true, this.userLogado);
         dialogAddLivroBibli.setLocationRelativeTo(this);
         dialogAddLivroBibli.setVisible(true);
     }//GEN-LAST:event_formAdicionarLivroBibliotecaActionPerformed
@@ -854,6 +863,13 @@ public class Home extends javax.swing.JFrame {
         retirada.setVisible(true);
         retirada.setPosicao();
     }//GEN-LAST:event_formRetiradaAplicacaoActionPerformed
+
+    private void formConsultaSaldoTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultaSaldoTipoOfertaActionPerformed
+        ConsultaSaldoTipoOfertaForm tipoOfertaConsulta = new ConsultaSaldoTipoOfertaForm(this.userLogado);
+        this.painelHome.add(tipoOfertaConsulta);
+        tipoOfertaConsulta.setVisible(true);
+        tipoOfertaConsulta.setPosicao();
+    }//GEN-LAST:event_formConsultaSaldoTipoOfertaActionPerformed
   
     private void nomearMenus(){
         
@@ -926,6 +942,8 @@ public class Home extends javax.swing.JFrame {
         this.menuAlterarSenha.setName("59");
         this.formAlterarSenha.setName("60");
         
+        this.formConsultaSaldoTipoOferta.setName("61");
+        
     }
     
     private void verificarTipoAcesso(){
@@ -972,7 +990,7 @@ public class Home extends javax.swing.JFrame {
     
     private void acessosPersonalizado(){
         Usuario usuario = new Usuario();
-        usuario.setCodigo(this.userLogado.getCodUsuario()); 
+        usuario.setCodigo(this.userLogado.getCodigo()); 
         List<Acessos> listAcesPerson = usuarioDao.consultarAcessosPersonalizados(usuario);
         boolean acessoMenu = true;
         
@@ -1018,10 +1036,10 @@ public class Home extends javax.swing.JFrame {
     
     private void fundoTelaInicial(){
         // Obtém o JDesktopPane, caso já não esteja referenciado
-        JDesktopPane telaIniciao = painelHome;
+        JDesktopPane telaInicial = painelHome;
         
         // Define a cor de fundo para o JDesktopPane (por exemplo, azul claro)
-        telaIniciao.setBackground(cores.getAzulClaro()); // Altere para a cor desejada
+        telaInicial.setBackground(cores.getAzulClaro()); // Altere para a cor desejada
     }
     
     
@@ -1048,6 +1066,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem formCadastroTipoOferta;
     private javax.swing.JMenuItem formCadastroUsuario;
     private javax.swing.JMenuItem formCancelarContasPagar;
+    private javax.swing.JMenuItem formConsultaSaldoTipoOferta;
     private javax.swing.JMenuItem formConsultarAcervoBiblioteca;
     private javax.swing.JMenuItem formConsultarCampanhas;
     private javax.swing.JMenuItem formConsultarDizimoOfertas;

@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.Endereco;
 import model.Igreja;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaIgreja;
 
 
@@ -21,7 +21,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
     private Igreja igrejaSelec = null;
     private List<Igreja> listaIgreja = null;
     
-    public IgrejaForm(UsuarioLogado usuarioLogado) {
+    public IgrejaForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

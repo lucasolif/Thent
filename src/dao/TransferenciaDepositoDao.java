@@ -10,12 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
-import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
 import model.RegistroDizimoOferta;
 import model.TransferenciaConta;
-import model.UsuarioLogado;
+import model.Usuario;
 
 public class TransferenciaDepositoDao {
     
@@ -26,7 +25,7 @@ public class TransferenciaDepositoDao {
     private PreparedStatement stmInsert = null;
     private ResultSet rs = null;
     
-    public void realizarOperacoesBancarias(MovimentoCaixa mvCaixa, int tpOpe, UsuarioLogado usuarioLogado){
+    public void realizarOperacoesBancarias(MovimentoCaixa mvCaixa, int tpOpe, Usuario usuarioLogado){
 
         PreparedStatement psRegistro = null;
         PreparedStatement psMovimento = null;
@@ -41,7 +40,7 @@ public class TransferenciaDepositoDao {
             //Adicionando e obtendo a primaryKey
             psRegistro = conexao.prepareStatement(sqlReg, PreparedStatement.RETURN_GENERATED_KEYS);
             psRegistro.setInt(1, mvCaixa.getTransferecia().getDpTesourariaGeral());
-            psRegistro.setInt(2, usuarioLogado.getCodUsuario());
+            psRegistro.setInt(2, usuarioLogado.getCodigo());
             psRegistro.executeUpdate();
             
             //Atribuindo a chave primária a uma variável
@@ -62,12 +61,12 @@ public class TransferenciaDepositoDao {
                     psMovimento.setInt(5, mvCaixa.getTransferecia().getCxSaida().getCodigo());
                     psMovimento.setString(6, mvCaixa.getComplemento());
                     psMovimento.setInt(7, mvCaixa.getIgreja().getCodigo());
-                    psMovimento.setInt(8, usuarioLogado.getCodUsuario());
+                    psMovimento.setInt(8, usuarioLogado.getCodigo());
                     psMovimento.setDate(9, (Date) mvCaixa.getDataPagamentoRecebimento());
                     psMovimento.executeUpdate();
                     
                     //Para movimento tipo oferta
-                    String complemento = "Saída - "+mvCaixa.getComplemento();
+                    String complemento = mvCaixa.getComplemento();
                     RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
                     rgDizimoOferta.setTpOferta(mvCaixa.getRgOferta().getTpOferta());
                     rgDizimoOferta.setValorOfertaEntrada(0);
@@ -89,12 +88,12 @@ public class TransferenciaDepositoDao {
                     psMovimento.setInt(5, mvCaixa.getTransferecia().getCxEntrada().getCodigo());
                     psMovimento.setString(6, mvCaixa.getComplemento());
                     psMovimento.setInt(7, mvCaixa.getIgreja().getCodigo());
-                    psMovimento.setInt(8, usuarioLogado.getCodUsuario());
+                    psMovimento.setInt(8, usuarioLogado.getCodigo());
                     psMovimento.setDate(9, (Date) mvCaixa.getDataPagamentoRecebimento());
                     psMovimento.executeUpdate();
                     
                     //Para movimento tipo oferta
-                    String complemento = "Entrada - "+mvCaixa.getComplemento();
+                    String complemento = mvCaixa.getComplemento();
                     RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
                     rgDizimoOferta.setTpOferta(mvCaixa.getRgOferta().getTpOferta());
                     rgDizimoOferta.setValorOfertaEntrada(mvCaixa.getTransferecia().getValorEntradaSaida());

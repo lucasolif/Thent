@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.FuncoesUsuario;
 import model.Igreja;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaUsuarios;
 
 public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaUsuarios{
@@ -32,7 +32,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private Usuario userSelec;
     private List<Usuario> listaUser;
       
-    public UsuarioForm(UsuarioLogado usuarioLogado) {
+    public UsuarioForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

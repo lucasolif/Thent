@@ -17,7 +17,7 @@ import model.Igreja;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class RegistroOfertaDao {
@@ -31,7 +31,7 @@ public class RegistroOfertaDao {
     private PreparedStatement stmInsert = null;
     
     //Adiciona todos os registros de oferta e dizimos, na tabela de registros e no movimento financeiro ao mesmo tempo
-    public void adicionarRegistroOfertaDizimo(List<RegistroDizimoOferta> registros, UsuarioLogado usuarioLogado){
+    public void adicionarRegistroOfertaDizimo(List<RegistroDizimoOferta> registros, Usuario usuarioLogado){
 
         PreparedStatement psRegistro = null;
         PreparedStatement psMovimento = null;
@@ -53,7 +53,7 @@ public class RegistroOfertaDao {
                 psRegistro.setDate(6, (java.sql.Date) rg.getDataOferta());
                 psRegistro.setInt(7, 1);
                 psRegistro.setInt(8, rg.getIgreja().getCodigo());
-                psRegistro.setInt(9, usuarioLogado.getCodUsuario());
+                psRegistro.setInt(9, usuarioLogado.getCodigo());
                 psRegistro.setInt(10, rg.getContaCaixa().getCodigo());
                 psRegistro.executeUpdate();
 
@@ -99,7 +99,7 @@ public class RegistroOfertaDao {
     }   
     
     //Adicionar os registros de dizimo e ofertas no movimento financeiro
-    private void adicionarOfertaDizimoMovimentoFinanceiro (RegistroDizimoOferta registroOferta, UsuarioLogado usuarioLogado,ResultSet chaveRgOferta ){
+    private void adicionarOfertaDizimoMovimentoFinanceiro (RegistroDizimoOferta registroOferta, Usuario usuarioLogado,ResultSet chaveRgOferta ){
         
         try{
             int idRegistro = chaveRgOferta.getInt(1);
@@ -118,7 +118,7 @@ public class RegistroOfertaDao {
             stmInsert.setString(6, complemento);
             stmInsert.setInt(7, registroOferta.getFormaPagto().getCodigo());
             stmInsert.setInt(8, registroOferta.getIgreja().getCodigo());
-            stmInsert.setInt(9, usuarioLogado.getCodUsuario());
+            stmInsert.setInt(9, usuarioLogado.getCodigo());
             stmInsert.setDate(10, (java.sql.Date) registroOferta.getDataOferta());
 
             stmInsert.execute();
@@ -136,7 +136,7 @@ public class RegistroOfertaDao {
 
             // Inserir dados na segunda tabela usando a chave primária da primeira tabela
             String sql = "INSERT INTO MovimentoTipoOferta (CodRegistroOfertaDizimo,TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,DataMovimento) VALUES(?,?,?,?,?,?,?,GETDATE())";
-            String complemento = "Entrada de "+registroOferta.getTpOferta().getNome();
+            String complemento = registroOferta.getTpOferta().getNome();
             stmInsert = conexao.prepareStatement(sql);
 
             stmInsert.setInt(1, idRegistro);

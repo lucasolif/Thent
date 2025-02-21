@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import model.Igreja;
 import model.RegistroDizimoOferta;
 import model.TipoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -40,7 +40,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
     private final String textoTotalOfertas = "TOTAL DE OFERTAS:";
     private final String textoTotalDizimoOfertas = "SOMA TOTAL:";
 
-    public RelatorioMovimentoDizimoOferta(UsuarioLogado usuarioLogado) {
+    public RelatorioMovimentoDizimoOferta(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

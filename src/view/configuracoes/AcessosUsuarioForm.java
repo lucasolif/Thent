@@ -6,8 +6,6 @@ import interfaces.ConsultaUsuarios;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ import javax.swing.SwingUtilities;
 import model.Acessos;
 import model.FuncoesUsuario;
 import model.Usuario;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaUsuarios;
 
 
@@ -83,6 +81,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
         cbx30 = new javax.swing.JCheckBox();
         cbx24 = new javax.swing.JCheckBox();
         cbx25 = new javax.swing.JCheckBox();
+        cbx61 = new javax.swing.JCheckBox();
         acessosMenu1 = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
         cbx39 = new javax.swing.JCheckBox();
@@ -201,6 +200,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
 
         cbx25.setText("Retirar Aplicação");
 
+        cbx61.setText("Consulta Saldo Tipo Oferta");
+
         javax.swing.GroupLayout acessosMenusLayout = new javax.swing.GroupLayout(acessosMenus);
         acessosMenus.setLayout(acessosMenusLayout);
         acessosMenusLayout.setHorizontalGroup(
@@ -276,7 +277,9 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbx13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbx24))
+                        .addComponent(cbx24)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbx61))
                     .addComponent(cbx33))
                 .addContainerGap(67, Short.MAX_VALUE))
         );
@@ -324,7 +327,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                 .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbx25)
                     .addComponent(cbx13)
-                    .addComponent(cbx24))
+                    .addComponent(cbx24)
+                    .addComponent(cbx61))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -659,6 +663,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
         this.cbx58.setName("58");
         this.cbx59.setName("59");
         this.cbx60.setName("60");
+        this.cbx61.setName("61");
     }
     
     private void consultarUsuarios(){
@@ -736,8 +741,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
     }
     
     private boolean verificarFuncaoUsuario(){
-        UsuarioLogado usuario = new UsuarioLogado();
-        usuario.setCodUsuario(Integer.valueOf(this.codUsuario.getText()));
+        Usuario usuario = new Usuario();
+        usuario.setCodigo(Integer.valueOf(this.codUsuario.getText()));
         boolean userPersonalizado = false;
         
         //Obter a função do usuário
@@ -895,6 +900,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
     private javax.swing.JCheckBox cbx59;
     private javax.swing.JCheckBox cbx6;
     private javax.swing.JCheckBox cbx60;
+    private javax.swing.JCheckBox cbx61;
     private javax.swing.JCheckBox cbx7;
     private javax.swing.JCheckBox cbx8;
     private javax.swing.JCheckBox cbx9;

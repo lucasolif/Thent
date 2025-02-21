@@ -12,19 +12,19 @@ import javax.swing.JOptionPane;
 import model.Biblioteca;
 import model.Livro;
 import model.RegistroBiblioteca;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class SaidaAvulsaLivroForm extends javax.swing.JInternalFrame {
     
-    private UsuarioLogado usuarioLogado;
+    private Usuario usuarioLogado;
     private final Biblioteca biblioteca = new Biblioteca();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private final LivroDao livroDao = new LivroDao();
 
-    public SaidaAvulsaLivroForm(UsuarioLogado usuarioLogado) {
+    public SaidaAvulsaLivroForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         this.usuarioLogado = usuarioLogado;

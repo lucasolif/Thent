@@ -30,7 +30,7 @@ import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -46,9 +46,9 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     private final Pessoa fornecedor = new Pessoa();
     private List<Pessoa> listaFornecedor = null;
     private final Utilitarios conversor = new Utilitarios();
-    private UsuarioLogado usuarioLogado;
+    private Usuario usuarioLogado;
     
-    public ContasPagarForm(UsuarioLogado usuarioLogado) {
+    public ContasPagarForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         this.usuarioLogado = usuarioLogado;

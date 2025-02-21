@@ -32,7 +32,7 @@ import model.Biblioteca;
 import model.EmprestimoLivro;
 import model.Livro;
 import model.Pessoa;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -51,7 +51,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     private List<Pessoa> listaPessoa = null;
     
 
-    public ConsultaEmprestimoForm(UsuarioLogado usuarioLogado) {
+    public ConsultaEmprestimoForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         consultarTodosEmprestimos();

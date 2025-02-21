@@ -17,22 +17,21 @@ import javax.swing.SwingUtilities;
 import model.Aplicacao;
 import model.ContaCaixa;
 import model.Igreja;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaAplicacao;
-import view.carregamentoConsultas.TelaConsultaContaCaixa;
 
 
 public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implements ConsultaAplicacoes{
 
     private List<Aplicacao> listaAplicacao = null;
     private Aplicacao aplicacaoSelec = null;
-    private UsuarioLogado usuarioLogado = null;
+    private Usuario usuarioLogado = null;
     private final Utilitarios conversor = new Utilitarios();
     private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     
-    public AplicacaoFinanceiraForm(UsuarioLogado usuarioLogado) {
+    public AplicacaoFinanceiraForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         this.usuarioLogado = usuarioLogado;

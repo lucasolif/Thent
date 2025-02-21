@@ -9,17 +9,17 @@ import javax.swing.DefaultComboBoxModel;
 import model.Biblioteca;
 import model.Livro;
 import model.RegistroBiblioteca;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class AdicionarLivroForm extends javax.swing.JDialog {
 
-    private UsuarioLogado usuarioLogado;
+    private Usuario usuarioLogado;
     private final LivroDao livroDao = new LivroDao();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
 
-    public AdicionarLivroForm(java.awt.Frame parent, boolean modal) {
+    public AdicionarLivroForm(java.awt.Frame parent, boolean modal, Usuario usuarioLogado) {
         super(parent, modal);
         initComponents();
         carregarLivros();

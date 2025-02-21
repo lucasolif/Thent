@@ -17,7 +17,7 @@ import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.SubContaResultado;
-import model.UsuarioLogado;
+import model.Usuario;
 
 public class ContasPagarDao {
    
@@ -29,7 +29,7 @@ public class ContasPagarDao {
     private final LogsDao logsDao = new LogsDao();
     
     //Adiciona o contas a pagar dentro do banco de dados
-    public void adicionarContasPagar(List<ContasPagar> contasPagar, UsuarioLogado usuarioLogado, boolean efetivar, ContaCaixa contaCaixa){
+    public void adicionarContasPagar(List<ContasPagar> contasPagar, Usuario usuarioLogado, boolean efetivar, ContaCaixa contaCaixa){
 
         ResultSet generatedKeys = null;
         String sql = null;
@@ -61,7 +61,7 @@ public class ContasPagarDao {
                 ps.setString(13, cp.getObservacao());
                 ps.setString(14, cp.getBoleto());
                 ps.setInt(15, cp.getIgreja().getCodigo());
-                ps.setInt(16, usuarioLogado.getCodUsuario());            
+                ps.setInt(16, usuarioLogado.getCodigo());            
                 ps.executeUpdate();
                 
                 // Recuperar a chave primária gerada
@@ -84,7 +84,7 @@ public class ContasPagarDao {
                         this.stmInsert.setString(6, complemento);
                         this.stmInsert.setInt(7, cpEft.getFormaPagto().getCodigo());
                         this.stmInsert.setInt(8, cpEft.getIgreja().getCodigo());
-                        this.stmInsert.setInt(9, usuarioLogado.getCodUsuario());
+                        this.stmInsert.setInt(9, usuarioLogado.getCodigo());
                         this.stmInsert.setDate(10, (java.sql.Date) cpEft.getDataPagamento());               
                         this.stmInsert.executeUpdate();
                     }

@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import model.TipoOferta;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaTiposOferta;
 
 
@@ -20,7 +20,7 @@ public class TipoOfertaForm extends javax.swing.JInternalFrame implements Consul
     private TipoOferta tpOfertaSelec;
     private List<TipoOferta> listaTpOferta;
     
-    public TipoOfertaForm(UsuarioLogado usuarioLogado) {
+    public TipoOfertaForm(Usuario usuarioLogado) {
         initComponents();
         formIncial();
     }

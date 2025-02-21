@@ -14,7 +14,7 @@ import model.Biblioteca;
 import model.Editora;
 import model.Livro;
 import model.RegistroBiblioteca;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class RegistroBibliotecaDao {
@@ -26,7 +26,7 @@ public class RegistroBibliotecaDao {
     private PreparedStatement updateStmt = null;
     private ResultSet rs = null;
     
-    public void adicionarLivroBiblioteca(RegistroBiblioteca rgBiblioteca, UsuarioLogado usuarioLogado){
+    public void adicionarLivroBiblioteca(RegistroBiblioteca rgBiblioteca, Usuario usuarioLogado){
         
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade + 1 WHERE Biblioteca=? AND Livro=?";
         String sqlInsert1 = "INSERT INTO RegistroBiblioteca (Biblioteca,Livro,Quantidade)VALUES (?,?,?)";
@@ -53,7 +53,7 @@ public class RegistroBibliotecaDao {
             
             //Insere na tabela a movimentação do tipo entrada
             this.insertStmt = this.conexao.prepareStatement(sqlInsert2); 
-            this.updateStmt.setInt(1,  usuarioLogado.getCodUsuario());
+            this.insertStmt.setInt(1,  usuarioLogado.getCodigo());
             this.insertStmt.execute();  
             
             JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" adicionado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase()+" com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
@@ -204,7 +204,7 @@ public class RegistroBibliotecaDao {
         return listaLivros;      
     }   
     
-    public void removerLivroBiblioteca(RegistroBiblioteca rgBiblioteca, UsuarioLogado usuarioLogado){
+    public void removerLivroBiblioteca(RegistroBiblioteca rgBiblioteca, Usuario usuarioLogado){
         String sqlUpdate = "UPDATE RegistroBiblioteca SET Quantidade = Quantidade-1 WHERE Biblioteca=? AND Livro=?";
         String sqlInsert = "INSERT INTO RegistroSaidaEntradaLivro (TipoMovimentacao,DataMovimentacao, Usuario)VALUES ('Saída - Avulsa',GETDATE(),?)";
         
@@ -221,7 +221,7 @@ public class RegistroBibliotecaDao {
                 
                 //Insere na tabela a movimentação do tipo entrada
                 this.insertStmt = this.conexao.prepareStatement(sqlInsert);
-                this.updateStmt.setInt(1,  usuarioLogado.getCodUsuario());
+                this.updateStmt.setInt(1,  usuarioLogado.getCodigo());
                 this.insertStmt.execute();    
                 
                 JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" removido da biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase()+" com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);

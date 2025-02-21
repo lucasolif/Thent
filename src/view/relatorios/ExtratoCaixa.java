@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
-import model.UsuarioLogado;
+import model.Usuario;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -34,7 +34,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();
 
 
-    public ExtratoCaixa(UsuarioLogado usuarioLogado) {
+    public ExtratoCaixa(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

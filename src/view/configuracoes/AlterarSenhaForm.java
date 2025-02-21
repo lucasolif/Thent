@@ -5,19 +5,17 @@ import Ferramentas.CriptografarSenhas;
 import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import model.Usuario;
-import model.UsuarioLogado;
+import model.Usuario;
 
 public class AlterarSenhaForm extends javax.swing.JInternalFrame{
     
     private final UsuarioDao usuarioDao = new UsuarioDao();
 
-    public AlterarSenhaForm(UsuarioLogado usuarioLogado) {
+    public AlterarSenhaForm(Usuario usuarioLogado) {
         initComponents();
         carregarDadosUsuario(usuarioLogado);
     }
@@ -127,9 +125,9 @@ public class AlterarSenhaForm extends javax.swing.JInternalFrame{
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void carregarDadosUsuario(UsuarioLogado userLogado){   
-        String codUsuario = String.valueOf(userLogado.getCodUsuario());
-        String nomeUsuario = userLogado.getNomeUsuario();
+    private void carregarDadosUsuario(Usuario userLogado){   
+        String codUsuario = String.valueOf(userLogado.getCodigo());
+        String nomeUsuario = userLogado.getLogin();
         
         this.codUsuarioLogado.setText(codUsuario);   
         this.usuarioLogado.setText(nomeUsuario);

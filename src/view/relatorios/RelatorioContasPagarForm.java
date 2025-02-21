@@ -27,7 +27,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import model.SubContaResultado;
-import model.UsuarioLogado;
+import model.Usuario;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -45,7 +45,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private List<Pessoa> listaPessoa = null;
     private Pessoa pessoaSelec = null;
 
-    public RelatorioContasPagarForm(UsuarioLogado usuarioLogado) {
+    public RelatorioContasPagarForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
     }

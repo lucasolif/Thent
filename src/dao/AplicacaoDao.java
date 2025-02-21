@@ -13,7 +13,7 @@ import jdbc.Conexao;
 import model.Aplicacao;
 import model.ContaCaixa;
 import model.Igreja;
-import model.UsuarioLogado;
+import model.Usuario;
 
 
 public class AplicacaoDao {
@@ -27,7 +27,7 @@ public class AplicacaoDao {
     private final LogsDao logsDao = new LogsDao();
     
     
-    public void cadastrarAplicacao(Aplicacao aplicacao, UsuarioLogado usuarioLogado){
+    public void cadastrarAplicacao(Aplicacao aplicacao, Usuario usuarioLogado){
         
         String sql = "INSERT INTO Aplicacoes (Descricao, ContaCaixa, Igreja, ValorInicialAplicacao, TipoRendimento, PercentualAplicacao, DataAplicacao, DataCadastro, Status,DiaAniversario) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE(), 1,?)";
         ResultSet generatedKeys = null;
@@ -74,7 +74,7 @@ public class AplicacaoDao {
         }
     }   
     
-    private void inserirRendimentoCadastroAplicacao(ResultSet generatedKeysAplicacao, Aplicacao aplicacao, UsuarioLogado usuarioLogado){    
+    private void inserirRendimentoCadastroAplicacao(ResultSet generatedKeysAplicacao, Aplicacao aplicacao, Usuario usuarioLogado){    
         
         String sql = "Insert Into RendimentoAplicacao (AplicacaoID,ValorRendimento,DataProcessamento) Values (?,?,GETDATE())";           
 
@@ -102,7 +102,7 @@ public class AplicacaoDao {
         }
     }
     
-    private void saidaCaixaValorAplicado(int idRendimento, Aplicacao aplicacao, UsuarioLogado usuarioLogado){    
+    private void saidaCaixaValorAplicado(int idRendimento, Aplicacao aplicacao, Usuario usuarioLogado){    
         
         String sql = "INSERT INTO MovimentoCaixa (Pessoa,ValorEntrada,ValorSaida,ContaCaixa,Complemento,Igreja,UsuarioCadastro,DataMovimento,RegistroAplicacao) VALUES(1,0,?,?,?,?,?,GETDATE(),?)";
         String complemento = "Aplicação Financeira | "+ aplicacao.getContaCaixa().getNome();
@@ -114,7 +114,7 @@ public class AplicacaoDao {
             this.stmtInsert.setInt(2, aplicacao.getContaCaixa().getCodigo());
             this.stmtInsert.setString(3, complemento);
             this.stmtInsert.setInt(4, aplicacao.getIgreja().getCodigo());
-            this.stmtInsert.setInt(5, usuarioLogado.getCodUsuario());
+            this.stmtInsert.setInt(5, usuarioLogado.getCodigo());
             this.stmtInsert.setInt(6, idRendimento);
             this.stmtInsert.execute(); 
         }catch(SQLException ex){

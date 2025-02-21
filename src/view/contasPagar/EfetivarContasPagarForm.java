@@ -36,13 +36,13 @@ import model.FormaPagto;
 import model.MovimentoCaixa;
 import model.Pessoa;
 import model.SubContaResultado;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
-    private UsuarioLogado usuarioLogado = new UsuarioLogado();
+    private Usuario usuarioLogado = new Usuario();
     private final PessoaDao pessoaDao = new PessoaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -56,7 +56,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private List<ContasPagar> listaContasPagar = null;
     private List<Pessoa> listaFornecedor = null;
 
-    public EfetivarContasPagarForm(UsuarioLogado usuarioLogado) {
+    public EfetivarContasPagarForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         this.usuarioLogado = usuarioLogado;

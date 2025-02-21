@@ -37,14 +37,14 @@ import model.MovimentoCaixa;
 import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.Usuario;
-import model.UsuarioLogado;
+import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
 public class GerenciarContasReceberForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
 
     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
-    private UsuarioLogado usuarioLogado = new UsuarioLogado();
+    private Usuario usuarioLogado = new Usuario();
     private final Utilitarios conversor = new Utilitarios();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
@@ -58,7 +58,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     private Pessoa pessoaSelec = null;
     private ParticipanteCampanha participanteSelec = null;
     
-    public GerenciarContasReceberForm(UsuarioLogado usuarioLogado) {
+    public GerenciarContasReceberForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
         tabelaInicial();
