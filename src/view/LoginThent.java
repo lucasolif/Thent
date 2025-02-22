@@ -18,14 +18,15 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import jdbc.Conexao;
 import jdbc.Configuracao;
-import model.Login;
+import model.Usuario;
+
 
 
 public class LoginThent extends javax.swing.JFrame {
 
     private final Utilitarios cores = new Utilitarios();
     private File arquivo = new File("");
-    private Login loginSelec = null;
+    private Usuario loginSelec = null;
 
     public LoginThent() {
         initComponents();
@@ -137,11 +138,11 @@ public class LoginThent extends javax.swing.JFrame {
             //Verificando se o usuario existe no banco de dados e obtendo o Hash e Salt
             loginSelec = loginDao.consultarLogin(loginInformado);
             
-            if(loginSelec.getUsuario() != null && verificarSenha()){
+            if(loginSelec.getLogin() != null && verificarSenha()){
                 Home telaInicial = new Home(loginSelec);
                 telaInicial.setVisible(true); //Abrindo a tela do sistema
                 dispose();
-                loginDao.adicionarLogin(loginSelec.getCodUsuario()); //Adicionando o login na tabela de Login
+                loginDao.adicionarLogin(loginSelec.getCodigo()); //Adicionando o login na tabela de Login
 
             }else{
                 JOptionPane.showMessageDialog(null, "Login ou senha inválida", "Erro 004",JOptionPane.WARNING_MESSAGE);
@@ -153,7 +154,10 @@ public class LoginThent extends javax.swing.JFrame {
     }
     
     private void verificandoConexao(){
-      String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Tithe\\config.txt"; //Caminho onde salva o arquivo
+        
+        //Pega a pasta raiz onde o projeto está instalado
+        String caminhoArquivo = System.getProperty("user.dir")+"\\config.txt";
+        
         arquivo = new File(caminhoArquivo); //Cria o arquivo no caminho especificado acima
         
         // Verifica se o arquivo já existe

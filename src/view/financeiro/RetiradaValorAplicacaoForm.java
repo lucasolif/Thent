@@ -1,14 +1,27 @@
 
 package view.financeiro;
 
+import Ferramentas.Utilitarios;
+import dao.AplicacaoDao;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Aplicacao;
+import model.Usuario;
 
 
 public class RetiradaValorAplicacaoForm extends javax.swing.JInternalFrame {
 
+    private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
+    private final Utilitarios conversor = new Utilitarios();
+    private Usuario usuarioLogado;
 
-    public RetiradaValorAplicacaoForm() {
+    public RetiradaValorAplicacaoForm(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        formInicial();
     }
 
     public void setPosicao() {
@@ -25,38 +38,30 @@ public class RetiradaValorAplicacaoForm extends javax.swing.JInternalFrame {
         valorRetirada = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
-        igreja = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        dataRetirada = new javax.swing.JFormattedTextField();
-        jLabel4 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Retirada Valor Aplicação");
 
-        aplicacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel1.setText("Aplicação");
 
         valorRetirada.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        valorRetirada.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                valorRetiradaKeyPressed(evt);
+            }
+        });
 
         jLabel2.setText("Valor (R$)");
 
         btnSalvar.setBackground(new java.awt.Color(0, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSalvar.setText("Salvar");
-
-        igreja.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel3.setText("Igreja");
-
-        try {
-            dataRetirada.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-
-        jLabel4.setText("Data");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,68 +70,92 @@ public class RetiradaValorAplicacaoForm extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(dataRetirada, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(aplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(valorRetirada, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabel1)
+                    .addComponent(aplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSalvar)
+                    .addComponent(jLabel2)
+                    .addComponent(valorRetirada, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalvar)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(aplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(valorRetirada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(aplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dataRetirada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(51, 51, 51)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(valorRetirada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addComponent(btnSalvar)
-                .addGap(34, 34, 34))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        efetuarRetirada();
+        formInicial();
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void valorRetiradaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valorRetiradaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            if(!this.valorRetirada.getText().isEmpty()){
+                efetuarRetirada();
+                formInicial();
+            }else{
+                JOptionPane.showMessageDialog(null, "Para efetuar o resgate, é obrigatório preencher o valor.", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        } 
+    }//GEN-LAST:event_valorRetiradaKeyPressed
+
+    private void carregarAplicacoes(){
+        List<Aplicacao> listaAplicacao = aplicacaoDao.consultarTodasAplicacoes(this.usuarioLogado);
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)aplicacao.getModel();
+        modelo.removeAllElements();
+        for(Aplicacao aplic : listaAplicacao){
+            modelo.addElement(aplic);
+        }
+    }
+    
+    private void efetuarRetirada(){
+        Aplicacao aplicacao = (Aplicacao) this.aplicacao.getSelectedItem();
+        double valorDisponivel = aplicacaoDao.consultarValorDisponivel(aplicacao);
+
+        if(!this.valorRetirada.getText().isEmpty()){
+            
+            double valorRetirada = Double.parseDouble(this.valorRetirada.getText().replace(",", "."));
+            
+            if(valorRetirada <= valorDisponivel){
+                aplicacao.setValorRetirada(valorRetirada);
+                this.aplicacaoDao.resgatarRendimento(aplicacao, usuarioLogado);
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "O valor do resgate não pode ser maior que o valor disponível. VALOR DISPONÍVEL: R$ "+valorDisponivel, "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Para efetuar o resgate, é obrigatório preencher o valor.", "Erro 012", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void formInicial(){
+        this.valorRetirada.setText("");
+        carregarAplicacoes();
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> aplicacao;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JFormattedTextField dataRetirada;
-    private javax.swing.JComboBox<String> igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JFormattedTextField valorRetirada;
     // End of variables declaration//GEN-END:variables
 }

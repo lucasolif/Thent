@@ -11,7 +11,6 @@ import javax.swing.JMenuItem;
 import jdbc.Conexao;
 import model.Acessos;
 import model.FuncoesUsuario;
-import model.Login;
 import model.Usuario;
 import view.biblioteca.AdicionarLivroForm;
 import view.biblioteca.AutorForm;
@@ -60,13 +59,12 @@ public class Home extends javax.swing.JFrame {
     UsuarioDao usuarioDao = new UsuarioDao();
     PaletaCores cores = new PaletaCores();
     
-    public Home(Login usuarioLogado) {
+    public Home(Usuario usuarioLogado) {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
 
         //seta o codigo e nome do usuário para o objeto UsuerioLogado, que será utilizado nos processos do sistema
-        this.userLogado.setCodigo(usuarioLogado.getCodUsuario());
-        this.userLogado.setNome(usuarioLogado.getUsuario());
+        this.userLogado = usuarioLogado;
         
         //Executar tarefas automaticamente
         AgendadorTarefas exeTaregas = new AgendadorTarefas();
@@ -858,10 +856,10 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formAplicacaoFinanceiraActionPerformed
 
     private void formRetiradaAplicacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRetiradaAplicacaoActionPerformed
-        RetiradaValorAplicacaoForm retirada = new RetiradaValorAplicacaoForm();
-        this.painelHome.add(retirada);
-        retirada.setVisible(true);
-        retirada.setPosicao();
+        RetiradaValorAplicacaoForm resgateAplicacaoForm = new RetiradaValorAplicacaoForm(this.userLogado);
+        this.painelHome.add(resgateAplicacaoForm);
+        resgateAplicacaoForm.setVisible(true);
+        resgateAplicacaoForm.setPosicao();
     }//GEN-LAST:event_formRetiradaAplicacaoActionPerformed
 
     private void formConsultaSaldoTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultaSaldoTipoOfertaActionPerformed

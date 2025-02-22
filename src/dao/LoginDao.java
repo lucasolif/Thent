@@ -7,7 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
-import model.Login;
+import model.Igreja;
+import model.Usuario;
 
 
 public class LoginDao {
@@ -42,43 +43,12 @@ public class LoginDao {
             }
         }
     }
-    
-    public void alterarSenha(String senha, int codUsuario){
-            
-        try{    
-            conexao = Conexao.getDataSource().getConnection();
-            
-            String sql= "UPDATE Usuarios SET Senha=?" + " WHERE Codigo=?";
-            ps = conexao.prepareStatement(sql);
-            ps.setString(1, senha);
-            ps.setInt(2, codUsuario);
-
-            ps.executeUpdate();
-            ps.close();
-            conexao.close();   
-            
-            JOptionPane.showMessageDialog(null, "Senha alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-            
-        }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a senha ", "Erro 006", JOptionPane.ERROR_MESSAGE);
-        }finally{
-            // Fechar recursos
-            try{
-                if (ps != null) ps.close();
-                if (conexao != null) conexao.close();
-            } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
-                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
   
     //Consultar para validar os dados do login
-    public Login consultarLogin(String usuario){
+    public Usuario consultarLogin(String usuario){
 
-        String sql = "SELECT Codigo, Usuario, HashSenha, SaltSenha FROM Usuarios WHERE Usuario=? AND Ativo = 1";
-        Login login = new Login();
+        String sql = "SELECT Codigo, Usuario, HashSenha, SaltSenha, Igreja FROM Usuarios WHERE Usuario=? AND Ativo = 1";
+        Usuario userLogin = new Usuario();
               
         try{           
             conexao = Conexao.getDataSource().getConnection();
@@ -88,10 +58,13 @@ public class LoginDao {
             rs = ps.executeQuery();
 
             while(rs.next()){              
-                login.setCodUsuario(rs.getInt("Codigo"));
-                login.setUsuario(rs.getString("Usuario"));
-                login.setHashSenha(rs.getString("HashSenha"));
-                login.setSaltSenha(rs.getString("SaltSenha"));
+                Igreja igreja = new Igreja();
+                igreja.setCodigo(rs.getInt("Igreja"));
+                userLogin.setCodigo(rs.getInt("Codigo"));
+                userLogin.setLogin(rs.getString("Usuario"));
+                userLogin.setHashSenha(rs.getString("HashSenha"));
+                userLogin.setSaltSenha(rs.getString("SaltSenha"));
+                userLogin.setIgreja(igreja);
             }
         }catch (SQLException ex) {
             logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
@@ -107,7 +80,7 @@ public class LoginDao {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
-        return login;
+        return userLogin;
     } 
 
 }

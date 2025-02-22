@@ -128,7 +128,10 @@ public class ConexaoForm extends javax.swing.JDialog {
     }//GEN-LAST:event_senhaKeyPressed
 
     private void criandoArquivoConexao(String servidor, String bancoDados, String login, String senha){
-        String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Tithe\\config.txt"; //Caminho onde salva o arquivo
+        
+        //Pega a pasta raiz onde o projeto está instalado
+        String caminhoArquivo = System.getProperty("user.dir")+"\\config.txt";
+        
         File arquivo = new File(caminhoArquivo); //Cria o arquivo no caminho especificado acima
         
         try(FileWriter escritor = new FileWriter(arquivo)){
