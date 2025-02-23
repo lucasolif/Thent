@@ -10,6 +10,7 @@ import dao.RegistroOfertaDao;
 import dao.SubContaResultadoDao;
 import dao.TipoOfertaDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -50,10 +51,13 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     private List<RegistroDizimoOferta> listaRgDizimoOfertas = new ArrayList<>();
     private Pessoa ofertanteSelec;
     private List<Pessoa> listaOfertante = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public ConsultaRegistroDizimoOferta(Usuario usuarioLogado) {
         initComponents();
         formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
     }
     
     public void setPosicao() {
@@ -580,7 +584,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         
         //Passando os filtros como parametris, e a variável recebe os dados obtidos na consulta.
         listaRgDizimoOfertas.clear();
-        listaRgDizimoOfertas = rgOfertaDao.consultarRegistrosOfertas(rgDizimoOfertas, dataLancInicial, dataLancFinal, dataOfertaInicial, dataOfertaFinal);
+        listaRgDizimoOfertas = rgOfertaDao.consultarRegistrosOfertas(rgDizimoOfertas, dataLancInicial, dataLancFinal, dataOfertaInicial, dataOfertaFinal,this.filtroIgreja);
     }
      
     private void limparFormulario(){
@@ -606,7 +610,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     }
 
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){
@@ -633,7 +637,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa( this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

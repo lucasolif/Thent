@@ -59,7 +59,7 @@ public class AplicacaoDao {
             JOptionPane.showMessageDialog(null, "Aplicação cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);        
         }catch (SQLException ex) {            
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a aplicação", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }
         finally{
             // Fechar recursos
@@ -89,13 +89,13 @@ public class AplicacaoDao {
                 this.stmtInsert.execute();            
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());  
         }finally{
             try{
                 if (this.stmtInsert != null) this.stmtInsert.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             }
         }
     }
@@ -127,7 +127,7 @@ public class AplicacaoDao {
             conexao.commit();
             JOptionPane.showMessageDialog(null, "Resgate efetuado com sucesso, no valor de R$ "+aplicacao.getValorRetirada(), "Concluído", JOptionPane.INFORMATION_MESSAGE); 
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o resgate", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -148,14 +148,14 @@ public class AplicacaoDao {
             
             JOptionPane.showMessageDialog(null, "Aplicação alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);         
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a aplicação", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.stmtUpdate != null) this.stmtUpdate.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -173,14 +173,14 @@ public class AplicacaoDao {
             
             JOptionPane.showMessageDialog(null, "Aplicação encerrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);         
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar encerrar a aplicação", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.stmtUpdate != null) this.stmtUpdate.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -209,7 +209,7 @@ public class AplicacaoDao {
                 saidaCaixaValorAplicado(idRendimento, aplicacao, usuarioLogado);  
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastro o rendimento", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -230,7 +230,7 @@ public class AplicacaoDao {
             this.stmtInsert.setInt(6, idRendimento);
             this.stmtInsert.execute(); 
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar o valor aplicado, no caixa", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }   
@@ -253,7 +253,7 @@ public class AplicacaoDao {
             this.stmtInsert.setInt(7, idRendimento);
             this.stmtInsert.execute(); 
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar o valor do resgate, no caixa", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }  
@@ -290,7 +290,7 @@ public class AplicacaoDao {
                 listaAplicacao.add(aplicacao);
             }     
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar os dados para calcular a aplicação", "Erro 011", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -299,7 +299,7 @@ public class AplicacaoDao {
                 if (stmtSelect != null) stmtSelect.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -337,7 +337,7 @@ public class AplicacaoDao {
                 listaAplicacao.add(aplicacao);
             }     
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar os dados para calcular a aplicação", "Erro 011", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -356,13 +356,14 @@ public class AplicacaoDao {
     }   
     
     //Consultar aplicação no mecanimos de busca
-    public  List<Aplicacao> consultarAplicacao(String textoBusca){
+    public  List<Aplicacao> consultarAplicacao(String textoBusca, String filtroIgreja){
         
         List<Aplicacao> listaAplicacao = new ArrayList<>();   
         String sql = "SELECT *, " +
             "(SELECT NomeIgreja FROM Igrejas AS I WHERE A.Igreja = I.Codigo) As NomeIgreja, " +
             "(SELECT Descricao FROM ContasCaixa As CC WHERE CC.Codigo = A.ContaCaixa) As NomeContaCaixa " +
-            "FROM Aplicacoes AS A WHERE (? IS NULL OR A.Codigo LIKE ?) OR (? IS NULL OR A.Descricao LIKE ?)";
+            "FROM Aplicacoes AS A " +
+            "WHERE ((? IS NULL OR A.Codigo LIKE ?) OR (? IS NULL OR A.Descricao LIKE ?)) AND A.Igreja IN ("+filtroIgreja+")";
     
         try{
             this.conexao = Conexao.getDataSource().getConnection();           
@@ -403,7 +404,7 @@ public class AplicacaoDao {
                 listaAplicacao.add(aplicacao);
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as aplicações", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -411,7 +412,7 @@ public class AplicacaoDao {
                 if (this.stmtSelect != null) this.stmtSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -444,7 +445,7 @@ public class AplicacaoDao {
                 aplicacao.setValorRendimento(this.rs.getDouble("ValorRendido"));
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o valor aplicado e o valor de rendimento", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -452,7 +453,7 @@ public class AplicacaoDao {
                 if (this.stmtSelect != null) this.stmtSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }     
@@ -480,7 +481,7 @@ public class AplicacaoDao {
                 valorRendimento = this.rs.getDouble("Rendimento");
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o rendimento", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -488,7 +489,7 @@ public class AplicacaoDao {
                 if (this.stmtSelect != null) this.stmtSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }     
@@ -496,22 +497,14 @@ public class AplicacaoDao {
     }
     
     //consultar de aplicação para inserir no Checkbox
-    public List<Aplicacao> consultarTodasAplicacoes (Usuario usuarioLogado){
+    public List<Aplicacao> consultarTodasAplicacoes (Usuario usuarioLogado, String filtroIgreja){
         
-        String sql = "SELECT * FROM Aplicacoes WHERE Status = 1 AND (? IS NULL OR Igreja = ?) ORDER BY Descricao";
+        String sql = "SELECT * FROM Aplicacoes WHERE Status = 1 AND Igreja IN ("+filtroIgreja+") ORDER BY Descricao";
         List<Aplicacao> todasAplicacoes = new ArrayList<>();
 
         try{
             this.conexao = Conexao.getDataSource().getConnection();           
             this.stmtSelect = this.conexao.prepareStatement(sql);
-            
-            if (usuarioLogado.getIgreja() != null) {
-                this.stmtSelect.setInt(1, usuarioLogado.getIgreja().getCodigo());
-                this.stmtSelect.setInt(2, usuarioLogado.getIgreja().getCodigo());
-            } else {
-                this.stmtSelect.setNull(1, java.sql.Types.INTEGER);
-                this.stmtSelect.setNull(2, java.sql.Types.INTEGER);
-            }
             
             this.rs = this.stmtSelect.executeQuery();
 
@@ -535,7 +528,7 @@ public class AplicacaoDao {
                 todasAplicacoes.add(aplicacao);
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as aplicaçõs", "Erro", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -543,7 +536,7 @@ public class AplicacaoDao {
                 if (this.stmtSelect != null) this.stmtSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -567,7 +560,7 @@ public class AplicacaoDao {
                 valorDisponivel = (this.rs.getDouble("ValorDisponivel"));
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o valor disponível para retirada", "Erro", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -575,7 +568,7 @@ public class AplicacaoDao {
                 if (this.stmtSelect != null) this.stmtSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("AplicacaoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

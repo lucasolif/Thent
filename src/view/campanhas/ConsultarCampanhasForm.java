@@ -5,6 +5,7 @@ import dao.CampanhaDao;
 import Ferramentas.PaletaCores;
 import Ferramentas.PersonalizaTabela;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaCampanhas;
 import java.awt.Color;
 import java.awt.Component;
@@ -35,9 +36,12 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
     private final PaletaCores paletaCores = new PaletaCores();
     private List<Campanha> listaCampanhas = null;
     private Campanha campanhaSelec = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public ConsultarCampanhasForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
     
@@ -421,7 +425,7 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
      
     private void consultarCampanhas(){
         String textoConsulta = this.consultaCampanha.getText();
-        this.listaCampanhas = this.campanhaDao.consultarCampanhas(textoConsulta);
+        this.listaCampanhas = this.campanhaDao.consultarCampanhas(textoConsulta, this.filtroIgreja);
     }
     
     private void carregarResultadoConsultaCampanha(){
@@ -510,37 +514,37 @@ public class ConsultarCampanhasForm extends javax.swing.JInternalFrame implement
         // Alinhamento do Ofertante (à esquerda)
         DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
         primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
-        this.tabelaParticipantes.getColumnModel().getColumn(1).setCellRenderer(primeiraColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
 
         // Alinhamento do Valor (centro)
         DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
         segundaColuna.setHorizontalAlignment(SwingConstants.LEFT);
-        this.tabelaParticipantes.getColumnModel().getColumn(2).setCellRenderer(segundaColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
 
         //Alinhamento do tipo de oferta
         DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
         terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaParticipantes.getColumnModel().getColumn(3).setCellRenderer(terceiraColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
         
         //Alinhamento da igreja
         DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
         quartaColuna.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaParticipantes.getColumnModel().getColumn(4).setCellRenderer(quartaColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
         
         //Alinhamento da data de oferta
         DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
         quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaParticipantes.getColumnModel().getColumn(5).setCellRenderer(quintaColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
         
         //Alinhamento da data de lançamento
         DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
         sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaParticipantes.getColumnModel().getColumn(6).setCellRenderer(sextaColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
         
         //Alinhamento da data de lançamento
         DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
         setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaParticipantes.getColumnModel().getColumn(7).setCellRenderer(setimaColuna);
+        this.tabelaParticipantes.getColumnModel().getColumn(6).setCellRenderer(setimaColuna);
     }
         
     @Override

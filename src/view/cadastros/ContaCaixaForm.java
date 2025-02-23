@@ -3,6 +3,7 @@ package view.cadastros;
 
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -23,9 +24,14 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     private ContaCaixa contaCaixaSelec;
     private List<ContaCaixa> listaContaCaixa = null;
     private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
+    
 
     public ContaCaixaForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        
         formInicial();
     }
 
@@ -246,11 +252,11 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     
     private void consultarContaCaixa(){        
         String textoBusca = this.campoBusca.getText(); // Texto digitado na busca       
-        this.listaContaCaixa = this.contaCaixaDao.consultar(textoBusca); //Lista recebe a busca retornada do banco
+        this.listaContaCaixa = this.contaCaixaDao.consultar(textoBusca, this.filtroIgreja); //Lista recebe a busca retornada do banco
     }
     
     private void carregarIgreja(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
         igreja.removeAllElements();
         for(Igreja igre : listaIgrejas){

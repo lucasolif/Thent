@@ -40,7 +40,7 @@ public class SubContaResultadoDao {
                 listaSubContaResultado.add(subCtResult);
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as sub contas de resultado", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -49,7 +49,7 @@ public class SubContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -71,7 +71,7 @@ public class SubContaResultadoDao {
             JOptionPane.showMessageDialog(null, "Sub Conta de Resultado cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a conta de resultado", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -79,7 +79,7 @@ public class SubContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -100,7 +100,7 @@ public class SubContaResultadoDao {
             JOptionPane.showMessageDialog(null, "Sub Conta de Resultado "+subCtResultado.getDescricao()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a sub conta de resultado "+subCtResultado.getDescricao(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -108,7 +108,7 @@ public class SubContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -157,7 +157,7 @@ public class SubContaResultadoDao {
                 listaSubCtResult.add(subContResult);
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a sub conta de resultado", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -166,7 +166,7 @@ public class SubContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -187,7 +187,7 @@ public class SubContaResultadoDao {
             JOptionPane.showMessageDialog(null, "Sub Conta de Resultado "+subContResult.getDescricao()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a sub conta de resultado "+subContResult.getDescricao(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -195,7 +195,7 @@ public class SubContaResultadoDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("SubContaResultadoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

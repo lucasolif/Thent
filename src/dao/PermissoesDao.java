@@ -39,7 +39,7 @@ public class PermissoesDao {
                 listaFuncoes.add(funcoes);
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("PermissoesDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as funções dos usuário", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -48,7 +48,7 @@ public class PermissoesDao {
                 if (stmtSelect != null) stmtSelect.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("PermissoesDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

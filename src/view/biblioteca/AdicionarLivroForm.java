@@ -4,6 +4,7 @@ package view.biblioteca;
 import dao.BibliotecaDao;
 import dao.LivroDao;
 import dao.RegistroBibliotecaDao;
+import dao.UsuarioDao;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import model.Biblioteca;
@@ -18,13 +19,17 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
     private final LivroDao livroDao = new LivroDao();
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
-
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
+   
     public AdicionarLivroForm(java.awt.Frame parent, boolean modal, Usuario usuarioLogado) {
         super(parent, modal);
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+
         carregarLivros();
         carregarBibliotecas();
-        this.usuarioLogado = usuarioLogado;
     }
 
 
@@ -128,7 +133,7 @@ public class AdicionarLivroForm extends javax.swing.JDialog {
     }
     
     private void carregarBibliotecas(){  
-        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.biblioteca.getModel();
         modelo.removeAllElements();
         for(Biblioteca bibli : listaBiblioteca){

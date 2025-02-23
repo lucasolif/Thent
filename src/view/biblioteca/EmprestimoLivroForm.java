@@ -8,6 +8,7 @@ import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -40,11 +41,16 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
     private final LivroDao livroDao = new LivroDao();
     private final Utilitarios conversor = new Utilitarios(); 
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
-    List<Pessoa> listaPessoa;
+    private List<Pessoa> listaPessoa;
+    private Usuario usuarioLogado;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public EmprestimoLivroForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        formInicial();     
     }
     
     public void setPosicao() {
@@ -318,7 +324,7 @@ public class EmprestimoLivroForm extends javax.swing.JInternalFrame implements C
     }
     
     private void carregarBibliotecas(){  
-        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.bibliotecaJComboBox.getModel();
         for(Biblioteca bibli : listaBiblioteca){
             modelo.addElement(bibli);

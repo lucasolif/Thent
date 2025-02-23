@@ -39,7 +39,7 @@ public class ContaCaixaDao {
             JOptionPane.showMessageDialog(null, "Conta Caixa cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);        
         }catch(SQLException ex){
             //Grava o log de erro na tabela de LogsErro
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
+            logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a Conta Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
@@ -47,7 +47,7 @@ public class ContaCaixaDao {
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 //Grava o log de erro na tabela de LogsErro
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
+                logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -71,7 +71,7 @@ public class ContaCaixaDao {
             JOptionPane.showMessageDialog(null, "Conta caixa "+contaCaixa.getNome().toUpperCase()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);        
         }catch(SQLException ex){
             //Grava o log de erro na tabela de LogsErro
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
+            logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());  
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a Conta Caixa "+contaCaixa.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -80,16 +80,17 @@ public class ContaCaixaDao {
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
                 //Grava o log de erro na tabela de LogsErro
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());  
+                logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());  
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
     }
     
     //Consulta para popular o JComboBox
-    public List<ContaCaixa> consultarContaCaixa(){
-        String sql = "SELECT * FROM ContasCaixa WHERE Status = 1 ORDER BY Descricao ";  
-        List<ContaCaixa> listaCaixas = new ArrayList<>();
+    public List<ContaCaixa> consultarContaCaixa(String filtroIgreja){
+        
+        List<ContaCaixa> listaCaixas = new ArrayList<>();     
+        String sql = "SELECT * FROM ContasCaixa WHERE Status = 1 AND Igreja IN ("+filtroIgreja+") ORDER BY Descricao ";
  
         try{
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -108,7 +109,7 @@ public class ContaCaixaDao {
             }
           
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage()); 
+            logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage()); 
             JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as Contas Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -117,7 +118,7 @@ public class ContaCaixaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage()); 
+                logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage()); 
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -126,13 +127,13 @@ public class ContaCaixaDao {
     }
     
     //Consultar para mostra na tabela todos os caixas cadastrados
-    public List<ContaCaixa> consultar(String conta){
+    public List<ContaCaixa> consultar(String conta, String filtroIgreja){
         
         List<ContaCaixa> listaCaixas = new ArrayList<>();
         String sql = "Select CC.*, " +
         "(Select NomeIgreja From Igrejas As I Where I.Codigo = CC.Igreja) As NomeIgreja " +
         "From ContasCaixa As CC " +
-        "WHERE (? IS NULL OR CC.Codigo LIKE ?) OR (? IS NULL OR CC.Descricao LIKE ?)";
+        "WHERE ((? IS NULL OR CC.Codigo LIKE ?) OR (? IS NULL OR CC.Descricao LIKE ?)) AND CC.Igreja In ("+filtroIgreja+") ";
 
         try{
             this.conexao = Conexao.getDataSource().getConnection();           
@@ -166,7 +167,7 @@ public class ContaCaixaDao {
                 listaCaixas.add(caixa);
             }
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a Conta Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -175,7 +176,7 @@ public class ContaCaixaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -195,7 +196,7 @@ public class ContaCaixaDao {
             
             JOptionPane.showMessageDialog(null, "Conta Caixa "+contaCaixa.getNome().toUpperCase()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);     
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a Conta Caixa "+contaCaixa.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -203,7 +204,7 @@ public class ContaCaixaDao {
                 if (this.deleteStmt != null) this.deleteStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

@@ -3,6 +3,7 @@ package view.financeiro;
 
 import Ferramentas.Utilitarios;
 import dao.AplicacaoDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -17,10 +18,13 @@ public class RetiradaValorAplicacaoForm extends javax.swing.JInternalFrame {
     private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final Utilitarios conversor = new Utilitarios();
     private Usuario usuarioLogado;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public RetiradaValorAplicacaoForm(Usuario usuarioLogado) {
         initComponents();
         this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
 
@@ -117,7 +121,7 @@ public class RetiradaValorAplicacaoForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_valorRetiradaKeyPressed
 
     private void carregarAplicacoes(){
-        List<Aplicacao> listaAplicacao = aplicacaoDao.consultarTodasAplicacoes(this.usuarioLogado);
+        List<Aplicacao> listaAplicacao = aplicacaoDao.consultarTodasAplicacoes(this.usuarioLogado, this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)aplicacao.getModel();
         modelo.removeAllElements();
         for(Aplicacao aplic : listaAplicacao){

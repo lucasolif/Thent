@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import model.Biblioteca;
 import model.Igreja;
+import model.Usuario;
 
 
 public class BibliotecaDao {
@@ -139,15 +140,15 @@ public class BibliotecaDao {
         }
     }
 
-    public List<Biblioteca> consultarBibliotecaJComboBox(){
+    public List<Biblioteca> consultarBibliotecaJComboBox(String filtroLogin){
       
         List<Biblioteca> listaBiblioteca = new ArrayList<>();
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
             
-            String sql = "SELECT * FROM Bibliotecas WHERE AtivoInativo = 1 ORDER BY NomeBiblioteca";
-            this.selectStmt = this.conexao.prepareStatement(sql);           
+            String sql = "SELECT * FROM Bibliotecas WHERE AtivoInativo = 1 AND Igreja IN("+filtroLogin+") ORDER BY NomeBiblioteca";
+            this.selectStmt = this.conexao.prepareStatement(sql);          
             this.rs = this.selectStmt.executeQuery();
 
             while(this.rs.next()){
@@ -158,7 +159,7 @@ public class BibliotecaDao {
                 listaBiblioteca.add(biblioteca);
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("BibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro a(s) biblioteca(s)", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }
         finally{

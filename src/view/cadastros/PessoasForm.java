@@ -3,6 +3,7 @@ package view.cadastros;
 
 import dao.IgrejaDao;
 import dao.PessoaDao;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -24,9 +25,14 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private Pessoa pessoaSelec;
     private List<Pessoa> listaPessoa;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
+    private Usuario usuarioLogado;
 
     public PessoasForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        this.usuarioLogado = usuarioLogado;
         formInicial();
     }
     
@@ -506,7 +512,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
 
     private void carregarIgrejas(){
    
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)campoIgreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){

@@ -3,6 +3,7 @@ package view.campanhas;
 
 import dao.CampanhaDao;
 import dao.PessoaDao;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -25,9 +26,13 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
     private List<Pessoa> listaParticipantes = null;
     private ParticipanteCampanha participanteSelec = null;
     private Pessoa pessoaSelec = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
+
 
     public RemoverParticipanteForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
 
@@ -157,7 +162,7 @@ public class RemoverParticipanteForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarCampanhas(){
-        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhasAtiva();
+        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhasAtiva(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.campanha.getModel();
         modelo.removeAllElements();
         for(Campanha campanha : listaCampanha){

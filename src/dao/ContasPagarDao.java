@@ -95,7 +95,7 @@ public class ContasPagarDao {
             JOptionPane.showMessageDialog(null, "Contas a pagar cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){      
             //Salvar o log do erro no banco de dados
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
             if(conexao != null){
                 try{
                     conexao.rollback();
@@ -116,9 +116,13 @@ public class ContasPagarDao {
 
     }   
     
-    public List<ContasPagar> consultarContasPagar(ContasPagar cpFiltros, Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataCadastroInicial, Date dataCadastroFinal, Date dataPagamentoInicial, Date dataPagamentoFinal){
+    public List<ContasPagar> consultarContasPagar(ContasPagar cpFiltros, Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataCadastroInicial, Date dataCadastroFinal, Date dataPagamentoInicial, Date dataPagamentoFinal, String filtroIgreja){
 
         List<ContasPagar> listaContasPagar = new ArrayList<>();
+        
+        if(cpFiltros.getIgreja() != null){
+            filtroIgreja = String.valueOf(cpFiltros.getIgreja().getCodigo());
+        }
 
         // Montando a query SQL com placeholders
         String sql = "SELECT P.Codigo AS CodFornecedor, P.Nome AS NomeFornecedor, P.CPF AS CPFCNPJ, " +
@@ -142,7 +146,7 @@ public class ContasPagarDao {
             "AND (? IS NULL OR CP.Status = ?) " +
             "AND (? IS NULL OR CP.SubContaResultado = ?) " +
             "AND (? IS NULL OR CP.FormaPagto = ?) " +
-            "AND (? IS NULL OR CP.Igreja = ?) ";
+            "AND CP.Igreja IN ("+filtroIgreja+") ";
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -235,15 +239,6 @@ public class ContasPagarDao {
                 this.stmSelect.setNull(21, java.sql.Types.INTEGER);
             }
             
-            // Parâmetro para igreja
-            if (cpFiltros.getIgreja() != null) {
-                this.stmSelect.setInt(22, cpFiltros.getIgreja().getCodigo());
-                this.stmSelect.setInt(23, cpFiltros.getIgreja().getCodigo());
-            } else {
-                this.stmSelect.setNull(22, java.sql.Types.INTEGER);
-                this.stmSelect.setNull(23, java.sql.Types.INTEGER);
-            }
-               
             rs = this.stmSelect.executeQuery();
 
             // Iterando sobre os resultados
@@ -288,7 +283,7 @@ public class ContasPagarDao {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -301,9 +296,12 @@ public class ContasPagarDao {
         return listaContasPagar;       
     }
     
-    public List<ContasPagar> consultarContasPagarRelatorio(FormaPagto filtroFormaPagto, Pessoa filtroPessoa, Igreja filtroIgreja, Integer filtroStatus, SubContaResultado filtroSubContaResultado, String ordemDados, Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataCadastroInicial, Date dataCadastroFinal, Date dataPagamentoInicial, Date dataPagamentoFinal){
+    public List<ContasPagar> consultarContasPagarRelatorio(FormaPagto filtroFormaPagto, Pessoa filtroPessoa, Igreja filtroIgreja, Integer filtroStatus, SubContaResultado filtroSubContaResultado, String ordemDados, Date dataVencimentoInicial, Date dataVencimentoFinal, Date dataCadastroInicial, Date dataCadastroFinal, Date dataPagamentoInicial, Date dataPagamentoFinal, String filtroIgrejaUsuario){
 
         List<ContasPagar> listaContasPagar = new ArrayList<>();
+        if(filtroIgreja != null){
+            filtroIgrejaUsuario = String.valueOf(filtroIgreja.getCodigo());
+        }
 
         // Montando a query SQL com placeholders
         String sql = "SELECT P.Codigo AS CodFornecedor, P.Nome AS NomeFornecedor, P.CPF AS CPFCNPJ, " +
@@ -325,7 +323,7 @@ public class ContasPagarDao {
             "AND (? IS NULL OR CP.Status = ?) " +
             "AND (? IS NULL OR CP.SubContaResultado = ?) " +
             "AND (? IS NULL OR CP.FormaPagto = ?) " +
-            "AND (? IS NULL OR CP.Igreja = ?) " +
+            "AND CP.Igreja IN ("+filtroIgrejaUsuario+") " +
             "ORDER BY CP."+ordemDados;
         
         try {
@@ -455,7 +453,7 @@ public class ContasPagarDao {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -531,7 +529,7 @@ public class ContasPagarDao {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as contas a pagar em aberto no mês atual", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -563,7 +561,7 @@ public class ContasPagarDao {
             
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o contas a pagar ", "Erro 014", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
@@ -594,7 +592,7 @@ public class ContasPagarDao {
                 cpExiste = true;
             }
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             // Fechando recursos
             try {
@@ -624,7 +622,7 @@ public class ContasPagarDao {
             ps.executeUpdate();           
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar o status a(s) conta(s) a pagar", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("ContasPagarDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             try{
                 if (ps != null) ps.close();

@@ -11,6 +11,7 @@ import dao.SubContaResultadoDao;
 import Ferramentas.PaletaCores;
 import Ferramentas.PersonalizaTabela;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;
@@ -55,11 +56,14 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private Pessoa fornecedor = new Pessoa();  
     private List<ContasPagar> listaContasPagar = null;
     private List<Pessoa> listaFornecedor = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public EfetivarContasPagarForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         this.usuarioLogado = usuarioLogado;
+        formInicial();  
     }
     
     public void setPosicao() {
@@ -731,7 +735,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         this.contasPagar.setDescricaoConta(descricao);
         this.contasPagar.setStatus(status);
         
-        this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
+        this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal, this.filtroIgreja);  
     }
     
     private void consultarContasAbertasMes(){
@@ -750,7 +754,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
             String dataPagamento = this.conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
             model.addRow(new Object[]{" ",cp.getDescricaoConta(), cp.getFornecedor(), cp.getNumNota(), cp.getParcela(), cp.getValor(),  cp.getValorPago(), cp.getDescricaoStatus(), dataVencimento, dataPagamento});
         }
-        statusVencimento();
+        bolinhaStatusVencimento();
     }
     
     private void carregarSubContaResultado(){
@@ -772,7 +776,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -923,7 +927,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         
     }
     
-    private void statusVencimento(){
+    private void bolinhaStatusVencimento(){
         // Definindo a cor conforme a data de vencimento
         this.tabelaParcelas.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             @Override
@@ -936,7 +940,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                         super.paintComponent(g); // Chama o método para garantir a renderização padrão da célula
 
                         // Definir o tamanho do círculo (ajuste de acordo com o tamanho da célula)
-                        int diameter = Math.min(getWidth(), getHeight()) - 4; // Aumente o valor (-5, 0 ou outro valor) para maior bolinha
+                        int diameter = Math.min(getWidth(), getHeight()) - 8; // Aumente o valor (-5, 0 ou outro valor) para maior bolinha
 
                         // Obter a data de vencimento da linha correspondente (coluna 8)
                         String vencimento = (String) table.getValueAt(row, 8);

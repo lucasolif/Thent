@@ -6,6 +6,7 @@ import Ferramentas.Utilitarios;
 import dao.ContaCaixaDao;
 import dao.MovimentoOfertaDizimoDao;
 import dao.TipoOfertaDao;
+import dao.UsuarioDao;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -29,11 +30,14 @@ public class ConsultaSaldoTipoOfertaForm extends javax.swing.JInternalFrame {
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final Utilitarios conversor = new Utilitarios();
     private Usuario usuarioLogado = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public ConsultaSaldoTipoOfertaForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
         this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        formInicial();
     }
     
     public void setPosicao() {
@@ -383,7 +387,7 @@ public class ConsultaSaldoTipoOfertaForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa( this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

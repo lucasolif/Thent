@@ -6,6 +6,7 @@ import dao.IgrejaDao;
 import dao.TransferenciaDepositoDao;
 import Ferramentas.Utilitarios;
 import dao.TipoOfertaDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -33,11 +34,15 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final TransferenciaDepositoDao transfDepositoDao = new TransferenciaDepositoDao();
     private final Utilitarios conversor = new Utilitarios();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public TransferenciaContaForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         this.usuarioLogado = usuarioLogado;
+        formInicial();
+
     }
     
     public void setPosicao() {
@@ -368,7 +373,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){
@@ -377,7 +382,7 @@ public class TransferenciaContaForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo1 = (DefaultComboBoxModel)contaCaixaEntrada.getModel();
         DefaultComboBoxModel modelo2 = (DefaultComboBoxModel)contaCaixaSaida.getModel();
         

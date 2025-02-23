@@ -7,6 +7,7 @@ import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import Ferramentas.PaletaCores;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -43,10 +44,13 @@ public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame 
     private ParticipanteCampanha participanteSelec = null;
     private Campanha campanhaSelec = null;
     private List<ParticipanteCampanha> listaParticipante = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
 
     public CadastrarParticipanteAvulsoForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
 
@@ -341,7 +345,7 @@ public class CadastrarParticipanteAvulsoForm extends javax.swing.JInternalFrame 
     
     private void consultarCampanhas(){
         String busca = this.nomeCampanha.getText();
-        this.listaCampanha = campanhaDao.consultarCampanhasAtiva(busca); 
+        this.listaCampanha = campanhaDao.consultarCampanhasAtiva(busca, this.filtroIgreja); 
     }
     
     private void carregarResultadoConsultaCampanha(){

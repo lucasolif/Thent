@@ -109,13 +109,13 @@ public class TransferenciaDepositoDao {
             conexao.commit();
             JOptionPane.showMessageDialog(null, "Serviço bancário efetuado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);           
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             //Se ocorrer um erro, fazer rollback da transação
             if(conexao != null){
                 try{
                     conexao.rollback();
                 }catch(SQLException e){
-                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+e.getSQLState()+" - "+e.getMessage());
                 }
             }
             JOptionPane.showMessageDialog(null, "Erro ao efetuar o serviço bancário", "Erro 011", JOptionPane.ERROR_MESSAGE);
@@ -127,7 +127,7 @@ public class TransferenciaDepositoDao {
                 if(psMovimento != null) psMovimento.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -147,14 +147,14 @@ public class TransferenciaDepositoDao {
             
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir a Transferência/Deposito. ", "Erro 014", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -198,7 +198,7 @@ public class TransferenciaDepositoDao {
             }
 
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as operações do caixa referente ao deposito da tesouraria geral", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
@@ -206,7 +206,7 @@ public class TransferenciaDepositoDao {
                 if (this.stmSelect != null) this.stmSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -230,7 +230,7 @@ public class TransferenciaDepositoDao {
             stmInsert.execute();
             
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar salvar movimentação de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }

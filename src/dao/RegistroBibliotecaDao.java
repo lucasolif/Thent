@@ -59,14 +59,14 @@ public class RegistroBibliotecaDao {
             JOptionPane.showMessageDialog(null, "Livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" adicionado na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase()+" com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
             this.conexao.commit();
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             //Se ocorrer um erro, fazer rollback da transação
             if(this.conexao != null){
                 try{
                     this.conexao.rollback();
                 }catch(SQLException e){
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
-                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    logsDao.gravaLogsErro("RegistroBibliotecaDao - "+e.getSQLState()+" - "+e.getMessage());
                 }
             }
             JOptionPane.showMessageDialog(null, "Erro ao tentar adicionar o livro "+rgBiblioteca.getLivro().getNomeLivro().toUpperCase()+" na biblioteca "+rgBiblioteca.getBiblioteca().getNomeBiblioteca().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
@@ -78,13 +78,13 @@ public class RegistroBibliotecaDao {
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
     
-    public List<RegistroBiblioteca> consultarRegistroBiblioteca(Autor filtroAutor, Livro filtroLivro, Editora filtroEditora, Biblioteca filtroBiblioteca, Integer filtroStatus, Integer filtroVolumeLivro){
+    public List<RegistroBiblioteca> consultarRegistroBiblioteca(Autor filtroAutor, Livro filtroLivro, Editora filtroEditora, Biblioteca filtroBiblioteca, Integer filtroStatus, Integer filtroVolumeLivro, String filtroIgreja){
         
         List<RegistroBiblioteca> listaLivros = new ArrayList();
             
@@ -102,7 +102,7 @@ public class RegistroBibliotecaDao {
             "FROM RegistroBiblioteca AS RB " +
             "INNER JOIN Livros AS LV ON LV.Codigo = RB.Livro " +
             "INNER JOIN Autores AS AUT ON AUT.Codigo = LV.Autor " +
-            "INNER JOIN Bibliotecas AS B ON B.Codigo = RB.Biblioteca "+
+            "INNER JOIN Bibliotecas AS B ON B.Codigo = RB.Biblioteca AND RB.Igreja In ("+filtroIgreja+")"+
             "WHERE (? IS NULL OR RB.Biblioteca = ?) " +
             "AND (? IS NULL OR RB.Livro = ?) " +
             "AND (? IS NULL OR LV.Autor = ?) " +
@@ -189,7 +189,7 @@ public class RegistroBibliotecaDao {
                 listaLivros.add(rgBibli);
             }
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os dados da biblioteca", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
             // Fechando recursos
@@ -198,7 +198,7 @@ public class RegistroBibliotecaDao {
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             }
         }        
         return listaLivros;      
@@ -232,7 +232,7 @@ public class RegistroBibliotecaDao {
 
             this.conexao.commit();
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             //Se ocorrer um erro, fazer rollback da transação
             if(this.conexao != null){
                 try{
@@ -250,7 +250,7 @@ public class RegistroBibliotecaDao {
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -274,13 +274,13 @@ public class RegistroBibliotecaDao {
                 status = true;
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
                 if (this.selectStmt != null) this.selectStmt.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
@@ -335,13 +335,13 @@ public class RegistroBibliotecaDao {
             }
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao consultar livros disponível para empréstimo na biblioteca: "+biblioteca.getNomeBiblioteca(), "Erro 012", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
                 if (this.selectStmt != null) this.selectStmt.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }      
@@ -394,13 +394,13 @@ public class RegistroBibliotecaDao {
             }
         }catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao consultar livros disponível na biblioteca", "Erro 012", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
         }finally{
             // Fechar recursos
             try{
                 if (this.selectStmt != null) this.selectStmt.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroBibliotecaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }      

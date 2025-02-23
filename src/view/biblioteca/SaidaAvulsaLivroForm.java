@@ -5,6 +5,7 @@ import dao.BibliotecaDao;
 import dao.EmprestimoLivroDao;
 import dao.LivroDao;
 import dao.RegistroBibliotecaDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -23,11 +24,14 @@ public class SaidaAvulsaLivroForm extends javax.swing.JInternalFrame {
     private final EmprestimoLivroDao empLivroDao = new EmprestimoLivroDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private final LivroDao livroDao = new LivroDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public SaidaAvulsaLivroForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
         this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        formInicial();      
     }
     
     public void setPosicao() {
@@ -133,7 +137,7 @@ public class SaidaAvulsaLivroForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarBibliotecas(){  
-        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.bibliotecaJComboBox.getModel();
         modelo.removeAllElements();
         for(Biblioteca bibli : listaBiblioteca){

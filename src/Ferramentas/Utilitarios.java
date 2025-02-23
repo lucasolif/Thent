@@ -1,6 +1,7 @@
 
 package Ferramentas;
 
+import dao.UsuarioDao;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -14,10 +15,15 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import model.AcessosIgreja;
+import model.Usuario;
 
 public class Utilitarios{
+    
+    private UsuarioDao usuarioDao = new UsuarioDao();
      
     //Arredondando o valor para cima se for maior que 0.5 e para baixo se for menos que 0.5
     public double arrendodarValores(double valor){
@@ -212,4 +218,6 @@ public class Utilitarios{
         
         return valor;
     }
+    
+
 }

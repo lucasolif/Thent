@@ -5,6 +5,7 @@ import Ferramentas.Utilitarios;
 import dao.AplicacaoDao;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
+import dao.UsuarioDao;
 import interfaces.ConsultaAplicacoes;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -30,11 +31,14 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
     private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public AplicacaoFinanceiraForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         this.usuarioLogado = usuarioLogado;
+        formInicial();    
     }
     
     public void setPosicao() {
@@ -84,7 +88,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
 
         jLabel1.setText("Buscar Aplicação");
 
-        btnOk.setBackground(new java.awt.Color(0, 0, 255));
+        btnOk.setBackground(new java.awt.Color(0, 102, 255));
         btnOk.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnOk.setText("OK");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
@@ -300,7 +304,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
 
     private void consultarAplicacao(){        
         String textoBusca = this.buscarAplicacao.getText(); // Texto digitado na busca       
-        this.listaAplicacao = this.aplicacaoDao.consultarAplicacao(textoBusca); //Lista recebe a busca retornada do banco
+        this.listaAplicacao = this.aplicacaoDao.consultarAplicacao(textoBusca, this.filtroIgreja); //Lista recebe a busca retornada do banco
     }
     
     private void carregarResultadoAplicacao(){
@@ -329,7 +333,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -339,7 +343,7 @@ public class AplicacaoFinanceiraForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){

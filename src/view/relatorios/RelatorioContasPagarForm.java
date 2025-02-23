@@ -8,6 +8,7 @@ import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -44,9 +45,14 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private final ContasPagarDao contasPagarDao = new ContasPagarDao();
     private List<Pessoa> listaPessoa = null;
     private Pessoa pessoaSelec = null;
+    private Usuario usuarioLogado;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public RelatorioContasPagarForm(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
     
@@ -86,7 +92,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         rbFormaPagto = new javax.swing.JRadioButton();
         rbStatusPagamento = new javax.swing.JRadioButton();
         rbIgreja = new javax.swing.JRadioButton();
-        rbPadrão = new javax.swing.JRadioButton();
+        rbPadrao = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         btnGerar = new javax.swing.JButton();
         contaResultado = new javax.swing.JComboBox<>();
@@ -247,8 +253,8 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         layoutRelatorio.add(rbIgreja);
         rbIgreja.setText("Igreja");
 
-        layoutRelatorio.add(rbPadrão);
-        rbPadrão.setText("Padrão");
+        layoutRelatorio.add(rbPadrao);
+        rbPadrao.setText("Padrão");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -261,13 +267,13 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                     .addComponent(rbFormaPagto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rbContaResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rbFornecedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rbPadrão, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(rbPadrao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(rbPadrão)
+                .addComponent(rbPadrao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(rbFornecedor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -432,7 +438,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         this.dataInicial.setText(this.conversor.dataAtualString());
         this.dataFinal.setText(this.conversor.dataAtualString());
         this.rbAberto.setSelected(true);
-        this.rbPadrão.setSelected(true);
+        this.rbPadrao.setSelected(true);
         this.formaPagto.setSelectedItem("");
         this.igreja.setSelectedItem("");
     }
@@ -447,7 +453,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     }
     
     private void carregarIgreja(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
         igreja.removeAllElements();
         for(Igreja igre : listaIgrejas){
@@ -486,7 +492,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         
         List<ContasPagar> listaContasPagar = null;
         
-        if(this.rbPadrão.isSelected()){
+        if(this.rbPadrao.isSelected()){
             listaContasPagar = consultarContasPagar("Fornecedor");
             layoutPadrao(listaContasPagar);
         }else if(this.rbFornecedor.isSelected()){
@@ -547,7 +553,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         contasPagar.setIgreja(igreja);
         contasPagar.setStatus(status);
         
-        listaContasPagar = this.contasPagarDao.consultarContasPagarRelatorio(formaPagto, pessoa, igreja, status, subContaResultado, ordemDados, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal);    
+        listaContasPagar = this.contasPagarDao.consultarContasPagarRelatorio(formaPagto, pessoa, igreja, status, subContaResultado, ordemDados, dataVencimentoInicial, dataVencimentoFinal, dataCadastroInicial, dataCadastroFinal, dataPagtoInicial, dataPagtoFinal, this.filtroIgreja);    
     
         return listaContasPagar;
     }
@@ -1556,7 +1562,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
     private javax.swing.JRadioButton rbFormaPagto;
     private javax.swing.JRadioButton rbFornecedor;
     private javax.swing.JRadioButton rbIgreja;
-    private javax.swing.JRadioButton rbPadrão;
+    private javax.swing.JRadioButton rbPadrao;
     private javax.swing.JRadioButton rbPago;
     private javax.swing.JRadioButton rbStatusPagamento;
     private javax.swing.ButtonGroup statusPagamento;

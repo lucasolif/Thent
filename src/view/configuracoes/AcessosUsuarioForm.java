@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import model.Acessos;
+import model.AcessosTela;
 import model.FuncoesUsuario;
 import model.Usuario;
 import model.Usuario;
@@ -24,7 +24,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private List<Usuario> listaUsuario;
     private List<JCheckBox> listaCheckbox = null;
-    List<Acessos> listaConsultaAcesso = null;
+    List<AcessosTela> listaConsultaAcesso = null;
     
 
     public AcessosUsuarioForm() {
@@ -711,7 +711,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
         usuario.setCodigo(Integer.valueOf(this.codUsuario.getText()));
         this.listaConsultaAcesso = usuarioDao.consultarAcessosPersonalizados(usuario);
         
-        for(Acessos aces : listaConsultaAcesso){
+        for(AcessosTela aces : listaConsultaAcesso){
                    
             //Percorre o checkbox primeiro painel
             for (Component comp : this.acessosMenus.getComponents()) {
@@ -757,8 +757,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
     
     private void salvarAlterarAcessosCadastrados(){
         
-        List<Acessos> listaAcessoAtual = this.listaConsultaAcesso; //Acessos que o usuário tem atualmente
-        List<Acessos> listaAcessosAlterados = acessosPersonalizado(); //Acesso adicionados ou retirados
+        List<AcessosTela> listaAcessoAtual = this.listaConsultaAcesso; //Acessos que o usuário tem atualmente
+        List<AcessosTela> listaAcessosAlterados = acessosPersonalizado(); //Acesso adicionados ou retirados
         
         //Verifica se a lista de consulta dos acessos personalizados não é vazia
         if(!listaAcessoAtual.isEmpty()){
@@ -770,10 +770,10 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
         }
     }
     
-    private List<Acessos> acessosPersonalizado(){
+    private List<AcessosTela> acessosPersonalizado(){
         
         Usuario usuario = new Usuario();
-        List<Acessos> listaAcessosPerson = new ArrayList<>();
+        List<AcessosTela> listaAcessosPerson = new ArrayList<>();
         usuario.setCodigo(Integer.valueOf(this.codUsuario.getText()));
         Integer podeAcessar = 0;
         Integer menuId = 0;
@@ -788,7 +788,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                     podeAcessar = 0; 
                 }
                 menuId = Integer.valueOf(checkBox.getName());
-                Acessos acessoPerson = new Acessos();
+                AcessosTela acessoPerson = new AcessosTela();
                 acessoPerson.setCadastrar(0);
                 acessoPerson.setEditar(0);
                 acessoPerson.setExcluir(0);
@@ -815,7 +815,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                 }
                 
                 menuId = Integer.valueOf(checkBox.getName());
-                Acessos acessoPerson = new Acessos();
+                AcessosTela acessoPerson = new AcessosTela();
                 acessoPerson.setCadastrar(0);
                 acessoPerson.setEditar(0);
                 acessoPerson.setExcluir(0);

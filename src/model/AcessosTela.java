@@ -2,7 +2,7 @@
 package model;
 
 
-public class Acessos {
+public class AcessosTela {
     private Usuario usuario;
     private Integer codFuncao;
     private Integer menuId;

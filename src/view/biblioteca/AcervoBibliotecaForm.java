@@ -8,6 +8,7 @@ import dao.EditoraDao;
 import dao.IgrejaDao;
 import dao.LivroDao;
 import dao.RegistroBibliotecaDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -36,12 +37,15 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao();
     private final RegistroBibliotecaDao rgBibliotecaDao = new RegistroBibliotecaDao();
     private List<RegistroBiblioteca> listaRgBilioteca = new ArrayList();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
     private Usuario usuarioLogado;
+    private String filtroIgreja = "";
 
     public AcervoBibliotecaForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
         this.usuarioLogado = usuarioLogado;
+        formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
     }
     
     public void setPosicao() {
@@ -420,7 +424,6 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_editoraKeyPressed
 
     private void consultarRegistroBiblioteca(){      
-        String textoBusca = this.textoBusca.getText();
         Autor autor = (Autor) this.autor.getSelectedItem();
         Livro livro = (Livro) this.livro.getSelectedItem();
         Editora editora = (Editora) this.editora.getSelectedItem();
@@ -436,9 +439,9 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
             status = 1;
         }else if(this.rbInativo.isSelected()){
             status = 0;
-        }
+        } 
        
-        this.listaRgBilioteca = this.rgBibliotecaDao.consultarRegistroBiblioteca(autor, livro, editora, biblioteca,status,volumeLivro);   
+        this.listaRgBilioteca = this.rgBibliotecaDao.consultarRegistroBiblioteca(autor, livro, editora, biblioteca,status,volumeLivro, this.filtroIgreja);   
     }
     
     private void atualizarTabela(){  
@@ -451,7 +454,7 @@ public class AcervoBibliotecaForm extends javax.swing.JInternalFrame {
     }
     
     private void carregarBibliotecas(){  
-        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox( this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.bibliotecaIgreja.getModel();
         modelo.removeAllElements();
         for(Biblioteca bibli : listaBiblioteca){

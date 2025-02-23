@@ -51,12 +51,12 @@ public class EmprestimoLivroDao {
             this.conexao.commit(); 
             
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             if(this.conexao != null){
                 try{
                     this.conexao.rollback();
                 }catch(SQLException e){
-                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    logsDao.gravaLogsErro("EmprestimoLivroDao - "+e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -68,7 +68,7 @@ public class EmprestimoLivroDao {
                 if(this.insertStmt != null) this.insertStmt.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -111,7 +111,7 @@ public class EmprestimoLivroDao {
                 }          
             }         
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar registrar o empréstimo do livro", "Erro 007", JOptionPane.ERROR_MESSAGE);
         } 
     }
@@ -124,7 +124,7 @@ public class EmprestimoLivroDao {
             this.updateStmt.setInt(2, bibliteca.getCodigo());
             this.updateStmt.executeUpdate();            
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar atualizar o saldo do livro", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -136,7 +136,7 @@ public class EmprestimoLivroDao {
             this.insertStmt.setInt(2, idLivroEmprestado);
             this.insertStmt.execute(); 
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o empréstimo", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
         
@@ -176,7 +176,7 @@ public class EmprestimoLivroDao {
             }
             this.conexao.commit();        
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             if(this.conexao != null){
                 try{
                     this.conexao.rollback();
@@ -191,7 +191,7 @@ public class EmprestimoLivroDao {
                 if(this.updateStmt != null) this.updateStmt.close();
                 if(this.conexao != null) this.conexao.close();
             }catch(SQLException ex){
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -311,7 +311,7 @@ public class EmprestimoLivroDao {
                 listaEmpLivro.add(empLivro);
             }
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os empréstimos dos livros", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
             // Fechando recursos
@@ -320,7 +320,7 @@ public class EmprestimoLivroDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
@@ -379,7 +379,7 @@ public class EmprestimoLivroDao {
             }
 
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar todos os livros emprestados", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
             // Fechando recursos
@@ -388,7 +388,7 @@ public class EmprestimoLivroDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   
@@ -415,7 +415,7 @@ public class EmprestimoLivroDao {
                 livroEncontrado = true;
             }
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o empréstimo do livro", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
             // Fechando recursos
@@ -424,7 +424,7 @@ public class EmprestimoLivroDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("EmprestimoLivroDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }   

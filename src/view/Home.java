@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import jdbc.Conexao;
-import model.Acessos;
+import model.AcessosTela;
 import model.FuncoesUsuario;
 import model.Usuario;
 import view.biblioteca.AdicionarLivroForm;
@@ -47,7 +47,7 @@ import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.AplicacaoFinanceiraForm;
 import view.financeiro.RetiradaValorAplicacaoForm;
 import view.financeiro.TransferenciaContaForm;
-import view.relatorios.ExtratoCaixa;
+import view.relatorios.RelatorioExtratoCaixa;
 import view.relatorios.RelatorioContasPagarForm;
 import view.relatorios.RelatorioMovimentoDizimoOferta;
 import view.relatorios.RelatorioPrestacaoContaMensal;
@@ -65,6 +65,7 @@ public class Home extends javax.swing.JFrame {
 
         //seta o codigo e nome do usuário para o objeto UsuerioLogado, que será utilizado nos processos do sistema
         this.userLogado = usuarioLogado;
+        this.formAlterarContasPagar.setEnabled(false);
         
         //Executar tarefas automaticamente
         AgendadorTarefas exeTaregas = new AgendadorTarefas();
@@ -821,7 +822,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formRelatorioContasPagarActionPerformed
 
     private void formRelatorioExtratoCaixaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioExtratoCaixaActionPerformed
-        ExtratoCaixa extratoCaixa = new ExtratoCaixa(this.userLogado);
+        RelatorioExtratoCaixa extratoCaixa = new RelatorioExtratoCaixa(this.userLogado);
         this.painelHome.add(extratoCaixa);
         extratoCaixa.setVisible(true);
         extratoCaixa.setPosicao();
@@ -957,10 +958,10 @@ public class Home extends javax.swing.JFrame {
     }
     
     private void acessosPadrao(){
-        List<Acessos> listaAcesso = usuarioDao.consultarAcessosPadrao(this.userLogado);
+        List<AcessosTela> listaAcesso = usuarioDao.consultarAcessosPadrao(this.userLogado);
         boolean acessoMenu = true;
         
-        for(Acessos aces : listaAcesso){
+        for(AcessosTela aces : listaAcesso){
             for (int i = 0; i < menuBarra.getMenuCount(); i++) {
                 JMenu menu = menuBarra.getMenu(i);
                 Integer codMenu = Integer.valueOf(menu.getName());
@@ -989,14 +990,14 @@ public class Home extends javax.swing.JFrame {
     private void acessosPersonalizado(){
         Usuario usuario = new Usuario();
         usuario.setCodigo(this.userLogado.getCodigo()); 
-        List<Acessos> listAcesPerson = usuarioDao.consultarAcessosPersonalizados(usuario);
+        List<AcessosTela> listAcesPerson = usuarioDao.consultarAcessosPersonalizados(usuario);
         boolean acessoMenu = true;
         
         System.out.println();
         
         if(!listAcesPerson.isEmpty()){
             
-            for(Acessos aces : listAcesPerson){
+            for(AcessosTela aces : listAcesPerson){
                 for (int i = 0; i < menuBarra.getMenuCount(); i++) {
                     JMenu menu = menuBarra.getMenu(i);
                     Integer codMenu = Integer.valueOf(menu.getName());

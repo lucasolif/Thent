@@ -9,6 +9,7 @@ import dao.RegistroBibliotecaDao;
 import Ferramentas.PaletaCores;
 import Ferramentas.PersonalizaTabela;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,13 +50,18 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     private final PaletaCores paletaCores = new PaletaCores();
     private List<EmprestimoLivro> listaEmpLivros = new ArrayList<>();
     private List<Pessoa> listaPessoa = null;
+    private Usuario usuarioLogado;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
 
     public ConsultaEmprestimoForm(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;   
         formInicial();
         consultarTodosEmprestimos();
         atualizarTabela();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
     }
 
     public void setPosicao() {
@@ -530,7 +536,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     }
     
     private void carregarBibliotecas(){  
-        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox();
+        List<Biblioteca> listaBiblioteca = this.bibliotecaDao.consultarBibliotecaJComboBox(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.bibliotecaJComboBox.getModel();
         modelo.removeAllElements();
         for(Biblioteca bibli : listaBiblioteca){

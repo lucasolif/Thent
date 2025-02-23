@@ -44,14 +44,14 @@ public class IgrejaDao {
             
             JOptionPane.showMessageDialog(null, "Igreja cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);       
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar a igreja", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.insertStmt != null) this.insertStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -79,14 +79,14 @@ public class IgrejaDao {
             
             JOptionPane.showMessageDialog(null, "Igreja "+igreja.getNome().toUpperCase()+" alterada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);         
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar alterar a igreja "+igreja.getNome().toUpperCase(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.updateStmt != null) this.updateStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -127,7 +127,7 @@ public class IgrejaDao {
                 listaIgreja.add(igreja);
             }
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar as igrejas cadastradas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -136,7 +136,7 @@ public class IgrejaDao {
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -144,7 +144,46 @@ public class IgrejaDao {
     } 
     
     // Consulta igreja para popular o JComboBox de Igreja, no cadastro das pessoas
-    public List<Igreja> consultarTodasIgrejas(){
+    public List<Igreja> consultarTodasIgrejas(String filtroIgreja){
+        
+        String sql = "SELECT * FROM Igrejas WHERE Status = 1 AND Codigo IN ("+filtroIgreja+") ORDER BY NomeIgreja";
+        List<Igreja> todasIgrejas = new ArrayList<>();
+
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();           
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                Endereco endereco = new Endereco(this.rs.getString("Logradouro"), this.rs.getInt("Numero"), this.rs.getString("CEP"), this.rs.getString("Bairro"), this.rs.getString("Cidade"), this.rs.getString("Estado"), this.rs.getString("Complemento"));
+                Igreja igreja = new Igreja();
+                igreja.setCodigo(this.rs.getInt("Codigo"));
+                igreja.setNome(this.rs.getString("NomeIgreja"));
+                igreja.setDataCadastro(this.rs.getDate("DataCadastro"));
+                igreja.setStatus(this.rs.getInt("Status"));
+                igreja.setEndereco(endereco);
+                
+                todasIgrejas.add(igreja);
+            }       
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as igrejas", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return todasIgrejas;
+    } 
+    
+    // Consulta igreja para popular o JComboBox de Igreja, no cadastro das pessoas
+    public List<Igreja> consultarTodasIgrejasSemFiltro(){
         
         String sql = "SELECT * FROM Igrejas WHERE Status = 1 ORDER BY NomeIgreja";
         List<Igreja> todasIgrejas = new ArrayList<>();
@@ -167,15 +206,15 @@ public class IgrejaDao {
                 todasIgrejas.add(igreja);
             }       
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as Contas Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar a igreja", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.rs != null) this.rs.close();
                 if (this.selectStmt != null) this.selectStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -204,8 +243,8 @@ public class IgrejaDao {
             conexao.close();
           
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao tentar carregar as Contas Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar igreja", "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
             try{
@@ -213,7 +252,7 @@ public class IgrejaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -234,14 +273,14 @@ public class IgrejaDao {
             
             JOptionPane.showMessageDialog(null, "Igreja "+igreja.getNome().toUpperCase()+" excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);            
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o cadastro da igreja "+igreja.getNome(), "Erro 001", JOptionPane.ERROR_MESSAGE);
         }finally{
             try{
                 if (this.deleteStmt != null) this.deleteStmt.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

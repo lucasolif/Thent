@@ -72,13 +72,13 @@ public class RegistroOfertaDao {
             conexao.commit();
             JOptionPane.showMessageDialog(null, "Dizimos e ofertas registrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             //Se ocorrer um erro, fazer rollback da transação
             if(conexao != null){
                 try{
                     conexao.rollback();
                 }catch(SQLException e){
-                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    logsDao.gravaLogsErro("RegistroOfertaDao - "+e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar efetuar o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -91,7 +91,7 @@ public class RegistroOfertaDao {
                 if(psMovimento != null) psMovimento.close();
                 if(conexao != null) conexao.close();
             }catch(SQLException ex){
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -123,7 +123,7 @@ public class RegistroOfertaDao {
 
             stmInsert.execute();
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar o dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -149,15 +149,19 @@ public class RegistroOfertaDao {
             stmInsert.execute();
             
         }catch(SQLException ex){
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar salvar registro de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     //Consulta todos os registros de ofertas e dizimos
-    public List<RegistroDizimoOferta> consultarRegistrosOfertas(RegistroDizimoOferta rgDizimoOferta, Date dataLancInicial, Date dataLancFinal, Date dataOfertaInicial, Date dataOfertaFinal){
+    public List<RegistroDizimoOferta> consultarRegistrosOfertas(RegistroDizimoOferta rgDizimoOferta, Date dataLancInicial, Date dataLancFinal, Date dataOfertaInicial, Date dataOfertaFinal, String filtroIgreja){
 
         List<RegistroDizimoOferta> listaRegistros = new ArrayList<>();
+        
+        if(rgDizimoOferta.getIgreja()!= null){
+            filtroIgreja = String.valueOf(rgDizimoOferta.getIgreja().getCodigo());
+        }
 
         String sql = "SELECT " +
             "RG.Codigo As Codigo, " +
@@ -184,7 +188,7 @@ public class RegistroOfertaDao {
             "AND (? IS NULL OR RG.TipoOferta = ?) " +
             "AND (? IS NULL OR RG.FormaPagto = ?) " +
             "AND (? IS NULL OR RG.Ofertante = ?) " +
-            "AND (? IS NULL OR RG.Igreja = ?) " +
+            "AND RG.Igreja IN ("+filtroIgreja+") " +
             "AND (? IS NULL OR RG.DataOferta BETWEEN ? AND ?) " +
             "AND (? IS NULL OR RG.DataCadastro BETWEEN ? AND ?) " +
             "AND (? IS NULL OR RG.SubContaResultado = ?) ";
@@ -229,43 +233,34 @@ public class RegistroOfertaDao {
                 ps.setNull(8, java.sql.Types.INTEGER);
             }
             
-            //Parametro Igreja
-            if(rgDizimoOferta.getIgreja() != null){
-                ps.setInt(9, rgDizimoOferta.getIgreja().getCodigo());
-                ps.setInt(10, rgDizimoOferta.getIgreja().getCodigo());
-            }else{
-                ps.setNull(9, java.sql.Types.INTEGER);
-                ps.setNull(10, java.sql.Types.INTEGER);
-            }
-            
             // Parametros referente a data da oferta
             if (dataOfertaInicial != null && dataOfertaFinal != null){
-                ps.setDate(11, new java.sql.Date(dataOfertaInicial.getTime()));
-                ps.setDate(12, new java.sql.Date(dataOfertaInicial.getTime()));
-                ps.setDate(13, new java.sql.Date(dataOfertaFinal.getTime()));
+                ps.setDate(9, new java.sql.Date(dataOfertaInicial.getTime()));
+                ps.setDate(10, new java.sql.Date(dataOfertaInicial.getTime()));
+                ps.setDate(11, new java.sql.Date(dataOfertaFinal.getTime()));
             }else{
+                ps.setNull(9, java.sql.Types.DATE);
+                ps.setNull(10, java.sql.Types.DATE);
                 ps.setNull(11, java.sql.Types.DATE);
-                ps.setNull(12, java.sql.Types.DATE);
-                ps.setNull(13, java.sql.Types.DATE);
             }
             
             //Parametro referente a data de lançamento
             if (dataLancInicial != null && dataLancFinal != null){
-                ps.setDate(14, new java.sql.Date(dataLancInicial.getTime()));
-                ps.setDate(15, new java.sql.Date(dataLancInicial.getTime()));
-                ps.setDate(16, new java.sql.Date(dataLancFinal.getTime()));
+                ps.setDate(12, new java.sql.Date(dataLancInicial.getTime()));
+                ps.setDate(13, new java.sql.Date(dataLancInicial.getTime()));
+                ps.setDate(14, new java.sql.Date(dataLancFinal.getTime()));
             }else{
+                ps.setNull(12, java.sql.Types.DATE);
+                ps.setNull(13, java.sql.Types.DATE);
                 ps.setNull(14, java.sql.Types.DATE);
-                ps.setNull(15, java.sql.Types.DATE);
-                ps.setNull(16, java.sql.Types.DATE);
             }
             
             if(rgDizimoOferta.getSubContaResultado() != null){
-                ps.setInt(17, rgDizimoOferta.getSubContaResultado().getCodigo());
-                ps.setInt(18, rgDizimoOferta.getSubContaResultado().getCodigo());
+                ps.setInt(15, rgDizimoOferta.getSubContaResultado().getCodigo());
+                ps.setInt(16, rgDizimoOferta.getSubContaResultado().getCodigo());
             }else{
-                ps.setNull(17, java.sql.Types.INTEGER);
-                ps.setNull(18, java.sql.Types.INTEGER);
+                ps.setNull(15, java.sql.Types.INTEGER);
+                ps.setNull(16, java.sql.Types.INTEGER);
             }
                       
             rs = ps.executeQuery();
@@ -302,7 +297,7 @@ public class RegistroOfertaDao {
                 listaRegistros.add(registrosDizimoOferta);
             }     
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar buscar os registros de dizimo e ofertas", "Erro 011", JOptionPane.ERROR_MESSAGE);
         }finally{
             // Fechar recursos
@@ -311,7 +306,7 @@ public class RegistroOfertaDao {
                 if (ps != null) ps.close();
                 if (conexao != null) conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -338,13 +333,13 @@ public class RegistroOfertaDao {
             }
             
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             // Reverter a transação em caso de erro
             if (conexao != null) {
                 try {
                     conexao.rollback();
                 } catch (SQLException e) {
-                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    logsDao.gravaLogsErro("RegistroOfertaDao - "+e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar fazer o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -377,13 +372,13 @@ public class RegistroOfertaDao {
             JOptionPane.showMessageDialog(null, "Dizimo/Oferta excluída com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
                  
         }catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             // Reverter a transação em caso de erro
             if (conexao != null) {
                 try {
                     conexao.rollback();
                 } catch (SQLException e) {
-                    logsDao.gravaLogsErro(e.getSQLState()+" - "+e.getMessage());
+                    logsDao.gravaLogsErro("RegistroOfertaDao - "+e.getSQLState()+" - "+e.getMessage());
                     JOptionPane.showMessageDialog(null, "Erro ao tentar fazer o rollback", "Erro 013", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -400,9 +395,12 @@ public class RegistroOfertaDao {
     }
     
     //Consulta registros de dízimo e ofertas para ser utilizada no relatório.
-    public List<RegistroDizimoOferta> consultaRegistroDizimoOfertaRelatorio(RegistroDizimoOferta rgDizimoOferta, String ordemDados, Date dataLancInicial, Date dataLancFinal, Date dataOfertaInicial, Date dataOfertaFinal){
+    public List<RegistroDizimoOferta> consultaRegistroDizimoOfertaRelatorio(RegistroDizimoOferta rgDizimoOferta, String ordemDados, Date dataLancInicial, Date dataLancFinal, Date dataOfertaInicial, Date dataOfertaFinal, String filtroIgreja){
         
         List<RegistroDizimoOferta> listaDizimoOferta = new ArrayList<>();
+        if(rgDizimoOferta.getIgreja() != null){
+            filtroIgreja = String.valueOf(rgDizimoOferta.getIgreja().getCodigo());
+        }
 
         // Montando a query SQL com placeholders
         String sql = "SELECT " +
@@ -419,7 +417,7 @@ public class RegistroOfertaDao {
                     "FROM RegistroDizimoOferta AS RDO " +
                     "WHERE (? IS NULL OR RDO.DataCadastro BETWEEN ? AND ?) " +
                     "AND (? IS NULL OR RDO.DataOferta BETWEEN ? AND ?) " +
-                    "AND (? IS NULL OR RDO.Igreja = ?)" +
+                    "AND RDO.Igreja IN ("+filtroIgreja+")" +
                     "AND (? IS NULL OR RDO.TipoOferta = ?) " +
                     "ORDER BY RDO."+ordemDados;
         
@@ -449,23 +447,13 @@ public class RegistroOfertaDao {
                 this.stmSelect.setNull(6, java.sql.Types.DATE);
             }
             
-            // Parâmetro para Cliente
-            if (rgDizimoOferta.getIgreja() != null) {
-                this.stmSelect.setInt(7, rgDizimoOferta.getIgreja().getCodigo());
-                this.stmSelect.setInt(8, rgDizimoOferta.getIgreja().getCodigo());
+            // Parâmetro para Status (Baixada)
+            if (rgDizimoOferta.getTpOferta() != null) {
+                this.stmSelect.setInt(7, rgDizimoOferta.getTpOferta().getCodigo());
+                this.stmSelect.setInt(8, rgDizimoOferta.getTpOferta().getCodigo());
             } else {
                 this.stmSelect.setNull(7, java.sql.Types.INTEGER);
                 this.stmSelect.setNull(8, java.sql.Types.INTEGER);
-            }
-
-
-            // Parâmetro para Status (Baixada)
-            if (rgDizimoOferta.getTpOferta() != null) {
-                this.stmSelect.setInt(9, rgDizimoOferta.getTpOferta().getCodigo());
-                this.stmSelect.setInt(10, rgDizimoOferta.getTpOferta().getCodigo());
-            } else {
-                this.stmSelect.setNull(9, java.sql.Types.INTEGER);
-                this.stmSelect.setNull(10, java.sql.Types.INTEGER);
             }
                
             rs = this.stmSelect.executeQuery();
@@ -499,14 +487,14 @@ public class RegistroOfertaDao {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os registros de dizimos e ofertas", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
                 if (this.stmSelect != null) this.stmSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -559,7 +547,7 @@ public class RegistroOfertaDao {
             }
 
         } catch (SQLException ex) {
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os registros de dizimos e ofertas", "Erro 001", JOptionPane.ERROR_MESSAGE);
         } finally {
             try {
@@ -567,7 +555,7 @@ public class RegistroOfertaDao {
                 if (this.stmSelect != null) this.stmSelect.close();
                 if (this.conexao != null) this.conexao.close();
             } catch (SQLException ex) {
-                logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+                logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }

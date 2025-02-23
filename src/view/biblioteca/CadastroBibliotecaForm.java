@@ -3,6 +3,7 @@ package view.biblioteca;
 
 import dao.BibliotecaDao;
 import dao.IgrejaDao;
+import dao.UsuarioDao;
 import interfaces.ConsultaBibliotecas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -21,11 +22,13 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame implement
     private final BibliotecaDao bibliotecaDao = new BibliotecaDao(); 
     private List<Biblioteca> listaBiblioteca = null;
     private Biblioteca bibliotecaSelec = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
  
     public CadastroBibliotecaForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
-        carregarIgrejas();
     }
 
     public void setPosicao() {
@@ -165,7 +168,7 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame implement
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){
@@ -227,6 +230,7 @@ public class CadastroBibliotecaForm extends javax.swing.JInternalFrame implement
         this.nomeBiblioteca.setText("");
         this.cbxAtivo.setSelected(true);
         this.cbxAtivo.setEnabled(false);
+        carregarIgrejas();
     }
     
     @Override

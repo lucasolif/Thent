@@ -25,7 +25,6 @@ public class LogsDao {
             this.insertStmt.execute();
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Erro ao tentar gravar log do erro", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.out.println(ex.getMessage());
         }finally{
             try{
                 if(this.insertStmt != null) this.insertStmt.close();

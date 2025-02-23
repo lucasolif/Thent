@@ -6,6 +6,7 @@ import Ferramentas.Utilitarios;
 import dao.IgrejaDao;
 import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -33,6 +34,9 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
     private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
     private final Utilitarios conversor = new Utilitarios();
     private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
+    private Usuario usuarioLogado;
     private final String textoSubTotalDizimo = "SUBTOTAL DE DÍZIMOS:";
     private final String textoSubTotalOfertas = "SUBTOTAL DE OFERTAS:";
     private final String textoSubTotalDizimoOfertas = "SOMA SUBTOTAL:";
@@ -42,6 +46,8 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
 
     public RelatorioMovimentoDizimoOferta(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
 
@@ -69,7 +75,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         rbTipoOferta = new javax.swing.JRadioButton();
-        rbPadrão = new javax.swing.JRadioButton();
+        rbPadrao = new javax.swing.JRadioButton();
         rbIgreja = new javax.swing.JRadioButton();
         btnGerarRe = new javax.swing.JButton();
 
@@ -170,8 +176,8 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
         grupoLayout.add(rbTipoOferta);
         rbTipoOferta.setText("Tipo Oferta");
 
-        grupoLayout.add(rbPadrão);
-        rbPadrão.setText("Padrão");
+        grupoLayout.add(rbPadrao);
+        rbPadrao.setText("Padrão");
 
         grupoLayout.add(rbIgreja);
         rbIgreja.setText("Igreja");
@@ -183,14 +189,14 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(rbTipoOferta, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                    .addComponent(rbPadrão, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbPadrao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rbIgreja, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(rbPadrão)
+                .addComponent(rbPadrao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbTipoOferta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -286,14 +292,14 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
         DefaultComboBoxModel tipoOferta = (DefaultComboBoxModel)this.tipoOferta.getModel();
         igreja.removeAllElements();
         tipoOferta.removeAllElements();
-        this.rbPadrão.setSelected(true);
+        this.rbPadrao.setSelected(true);
         this.rbDataOferta.setSelected(true);
         this.dataInicial.setText(this.conversor.dataAtualString());
         this.dataFinal.setText(this.conversor.dataAtualString());
     }
     
     private void carregarIgreja(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
         igreja.removeAllElements();
         for(Igreja igre : listaIgrejas){
@@ -314,7 +320,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
         
         List<RegistroDizimoOferta> listaRgDizimoOferta = null;
         
-        if(this.rbPadrão.isSelected()){
+        if(this.rbPadrao.isSelected()){
             listaRgDizimoOferta = consultarRgDizimoOferta("Ofertante");
             layoutPadrao(listaRgDizimoOferta);
         }else if(this.rbTipoOferta.isSelected()){
@@ -347,7 +353,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
             dataLancamentoFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
         }
         
-        List<RegistroDizimoOferta> listaRgDizimoOferta = this.rgOfertaDao.consultaRegistroDizimoOfertaRelatorio(rgDizimoOferta, ordemConsulta, dataLancamentoInicial, dataLancamentoFinal, dataOfertaInicial, dataOfertaFinal);
+        List<RegistroDizimoOferta> listaRgDizimoOferta = this.rgOfertaDao.consultaRegistroDizimoOfertaRelatorio(rgDizimoOferta, ordemConsulta, dataLancamentoInicial, dataLancamentoFinal, dataOfertaInicial, dataOfertaFinal, this.filtroIgreja);
         
         return listaRgDizimoOferta;
     }
@@ -906,7 +912,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton rbDataLancamento;
     private javax.swing.JRadioButton rbDataOferta;
     private javax.swing.JRadioButton rbIgreja;
-    private javax.swing.JRadioButton rbPadrão;
+    private javax.swing.JRadioButton rbPadrao;
     private javax.swing.JRadioButton rbTipoOferta;
     private javax.swing.JComboBox<String> tipoOferta;
     private javax.swing.JLabel txData;

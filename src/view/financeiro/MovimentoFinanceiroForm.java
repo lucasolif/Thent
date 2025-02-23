@@ -13,6 +13,7 @@ import Ferramentas.Utilitarios;
 import Ferramentas.PaletaCores;
 import Ferramentas.PersonalizaTabela;
 import dao.AplicacaoDao;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -58,13 +59,16 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private List<MovimentoCaixa> listaMovimentacao = new ArrayList<>();
     private List<Pessoa> listaOfertante = null;
     private Usuario usuarioLogado;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
     public MovimentoFinanceiroForm(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         configInicial();
         carregarContaCaixaSaldo();
         atualizarDashBoadSaldoBancos();
-        this.usuarioLogado = usuarioLogado;
     }
     
     public void setPosicao() {
@@ -123,7 +127,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         saldoAnterior = new javax.swing.JTextField();
-        valorAplicação = new javax.swing.JTextField();
+        valorAplicacao = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         valorRendimento = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
@@ -132,7 +136,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         rbEntrada = new javax.swing.JRadioButton();
         rbEntradaSaida = new javax.swing.JRadioButton();
         jLabel19 = new javax.swing.JLabel();
-        motivoExclusão = new javax.swing.JTextField();
+        motivoExclusao = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -414,9 +418,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         saldoAnterior.setBackground(new java.awt.Color(204, 204, 204));
         saldoAnterior.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
-        valorAplicação.setEditable(false);
-        valorAplicação.setBackground(new java.awt.Color(204, 204, 204));
-        valorAplicação.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        valorAplicacao.setEditable(false);
+        valorAplicacao.setBackground(new java.awt.Color(204, 204, 204));
+        valorAplicacao.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLabel17.setText("Aplicação:");
 
@@ -443,7 +447,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                             .addComponent(valorEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(saldoAtual, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                                .addComponent(valorAplicação)))
+                                .addComponent(valorAplicacao)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel18)
@@ -481,7 +485,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                     .addComponent(saldoAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(valorAplicação, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(valorAplicacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17)
                     .addComponent(valorRendimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18))
@@ -552,7 +556,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(motivoExclusão)
+                        .addComponent(motivoExclusao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnExcluir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -661,7 +665,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         .addComponent(totalOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnExcluir)
                         .addComponent(jLabel19)
-                        .addComponent(motivoExclusão, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(motivoExclusao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnLimpar)
                     .addComponent(btnFiltrar))
                 .addContainerGap(19, Short.MAX_VALUE))
@@ -671,7 +675,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        limparFormulário();
+        limparFormulario();
         limparTabela();
     }//GEN-LAST:event_btnLimparActionPerformed
 
@@ -795,7 +799,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igr : listaIgrejas){
@@ -822,7 +826,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -833,7 +837,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     }
     
     private void carregarContaCaixaSaldo(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixaSaldoBanco.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -890,7 +894,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         movimentoCaixa.setRgOferta(rgDizimoOferta);
         movimentoCaixa.setContaCaixa(contaCx);
                
-        listaMovimentacao = movimentoCaixaDao.consultarMovimentacao(movimentoCaixa, dataPagamentoInicial, dataPagamentoFinal, dataMovimentoInicial, dataMovimentoFinal, tpMovimentacao);
+        listaMovimentacao = movimentoCaixaDao.consultarMovimentacao(movimentoCaixa, dataPagamentoInicial, dataPagamentoFinal, dataMovimentoInicial, dataMovimentoFinal, tpMovimentacao, this.filtroIgreja);
         
     }
     
@@ -954,7 +958,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         }
     }
     
-    private void limparFormulário(){
+    private void limparFormulario(){
         codFornecedorOfertante.setText("");
         nomeFornecedorOfertante.setText("");
         rbEntradaSaida.setSelected(true);
@@ -1010,7 +1014,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         double valorAplicado = aplicacao.getValorInicial();
         double valorRendido = aplicacao.getValorRendimento();
         
-        this.valorAplicação.setText(String.valueOf(valorAplicado).replace(".", ","));
+        this.valorAplicacao.setText(String.valueOf(valorAplicado).replace(".", ","));
         this.valorRendimento.setText(String.valueOf(valorRendido).replace(".", ","));
            
         //Deiinindo a cor do campo de acordo com o saldo atual
@@ -1037,7 +1041,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         //Verifica se foi selecionado algum cliente da lista
         if(numLinhaSelec.length < 0){
             JOptionPane.showMessageDialog(null, "Selecione a(s) a movimentação referente ao contas a pagar, a ser excluída", "Atenção", JOptionPane.WARNING_MESSAGE);
-        }else if(this.motivoExclusão.getText().isEmpty()){
+        }else if(this.motivoExclusao.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Informe o motivo para exclusão da movimentação", "Atenção", JOptionPane.WARNING_MESSAGE);
         }else{                
             //Selecinando as contas que foram excluídas
@@ -1067,7 +1071,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         movimentoCaixaDao.excluirMovimentacao(listaMvExcluida);
                         tipoMovimento = "Contas a Pagar";
                     }
-                    String motivoExclusao = this.motivoExclusão.getText();
+                    String motivoExclusao = this.motivoExclusao.getText();
                     movimentoCaixaDao.movimentacaoExcluida(mvEx, motivoExclusao, tipoMovimento, this.usuarioLogado);
                 }
                 exclusaoSucesso = true;
@@ -1165,7 +1169,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField motivoExclusão;
+    private javax.swing.JTextField motivoExclusao;
     private javax.swing.JTextField nomeFornecedorOfertante;
     private javax.swing.JRadioButton rbDataMovimentacao;
     private javax.swing.JRadioButton rbDataPagtoRecebimento;
@@ -1181,7 +1185,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JTextField totalOfertas;
     private javax.swing.JTextField totalSaida;
     private javax.swing.JLabel txData;
-    private javax.swing.JTextField valorAplicação;
+    private javax.swing.JTextField valorAplicacao;
     private javax.swing.JTextField valorEntrada;
     private javax.swing.JTextField valorRendimento;
     private javax.swing.JTextField valorSaida;

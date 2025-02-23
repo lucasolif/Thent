@@ -9,6 +9,7 @@ import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
 import dao.RegistroOfertaDao;
 import dao.TransferenciaDepositoDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.List;
@@ -37,9 +38,14 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
     private final Utilitarios conversor = new Utilitarios();
     private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
     private final Relatorios funcoesRelatorio = new Relatorios();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private Usuario usuarioLogado;
+    private String filtroIgreja = "";
     
     public RelatorioPrestacaoContaMensal(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formaInicial();
     }
     
@@ -143,7 +149,7 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnGerarActionPerformed
  
     private void carregarIgreja(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
         igreja.removeAllElements();
         for(Igreja igre : listaIgrejas){

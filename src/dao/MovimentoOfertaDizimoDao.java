@@ -93,7 +93,7 @@ public class MovimentoOfertaDizimoDao {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar movimento de dízimo e ofertas", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("MovimentoOfertaDizimo - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();
@@ -158,7 +158,7 @@ public class MovimentoOfertaDizimoDao {
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar consultar o total do movimento de dízimo e ofertas", "Erro 001", JOptionPane.ERROR_MESSAGE);
-            logsDao.gravaLogsErro(ex.getSQLState()+" - "+ex.getMessage());
+            logsDao.gravaLogsErro("MovimentoOfertaDizimo - "+ex.getSQLState()+" - "+ex.getMessage());
         } finally {
             try {
                 if (this.rs != null) this.rs.close();

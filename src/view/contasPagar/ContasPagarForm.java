@@ -9,6 +9,7 @@ import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import Ferramentas.Utilitarios;
 import dao.ContaCaixaDao;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -47,11 +48,14 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     private List<Pessoa> listaFornecedor = null;
     private final Utilitarios conversor = new Utilitarios();
     private Usuario usuarioLogado;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public ContasPagarForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         this.usuarioLogado = usuarioLogado;
+        formInicial();
     }
     
     public void setPosicao() {
@@ -499,7 +503,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     private void carregarIgrejas(){ 
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igreja.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){
@@ -508,7 +512,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

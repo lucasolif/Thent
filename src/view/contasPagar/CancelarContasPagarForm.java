@@ -5,6 +5,7 @@ import Ferramentas.PersonalizaTabela;
 import dao.ContasPagarDao;
 import dao.PessoaDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -32,9 +33,12 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
     private Pessoa fornecedor = new Pessoa();
     private List<ContasPagar> listaContasPagar = new ArrayList<>();
     private List<Pessoa> listaFornecedor = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public CancelarContasPagarForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
     
@@ -425,7 +429,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
             this.contasPagar.setDescricaoConta(descricao);
 
             //Adiciona o resultado da consulta dentro de uma lista
-            this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal);  
+            this.listaContasPagar = this.contasPagarDao.consultarContasPagar(this.contasPagar, dataVencimentoInicial, dataVencimentoFinal, dataLancamentoInicial, dataLancamentoFinal, dataPagamentoInicial, dataPagamentoFinal,this.filtroIgreja);  
         }
  
     }

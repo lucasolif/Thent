@@ -6,6 +6,7 @@ import Ferramentas.Utilitarios;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -25,17 +26,20 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
-public class ExtratoCaixa extends javax.swing.JInternalFrame {
+public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
     
     private final Utilitarios conversor = new Utilitarios();
     private final Relatorios funcoesRelatorio = new Relatorios();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
 
 
-    public ExtratoCaixa(Usuario usuarioLogado) {
+    public RelatorioExtratoCaixa(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
     
@@ -61,7 +65,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         rbDataMovimento = new javax.swing.JRadioButton();
         rbIgreja = new javax.swing.JRadioButton();
-        rbPadrão = new javax.swing.JRadioButton();
+        rbPadrao = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         rbEntradaSaida = new javax.swing.JRadioButton();
         rbEntrada = new javax.swing.JRadioButton();
@@ -112,8 +116,8 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         rbGrupoLayout.add(rbIgreja);
         rbIgreja.setText("Igreja");
 
-        rbGrupoLayout.add(rbPadrão);
-        rbPadrão.setText("Padrão");
+        rbGrupoLayout.add(rbPadrao);
+        rbPadrao.setText("Padrão");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -123,13 +127,13 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rbIgreja, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rbDataMovimento, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                    .addComponent(rbPadrão, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(rbPadrao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(rbPadrão)
+                .addComponent(rbPadrao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbDataMovimento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -273,7 +277,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
             tpMovimento = 2;
         } 
         
-        List<MovimentoCaixa> listaMovimento = this.movimentoCaixaDao.consultarMovimentacaoRelatorio(igreja, contaCaixa, dataInicial, dataFinal, ordemConsulta, tpMovimento);
+        List<MovimentoCaixa> listaMovimento = this.movimentoCaixaDao.consultarMovimentacaoRelatorio(igreja, contaCaixa, dataInicial, dataFinal, ordemConsulta, tpMovimento, this.filtroIgreja);
         
         return listaMovimento;
     }
@@ -282,7 +286,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
         
         List<MovimentoCaixa> listaMovimentoCaixa = null;
         
-        if(this.rbPadrão.isSelected()){
+        if(this.rbPadrao.isSelected()){
             listaMovimentoCaixa = consultarMovimentoCaixa("Codigo");
             layoutPadrao(listaMovimentoCaixa);
         }else if(this.rbDataMovimento.isSelected()){
@@ -766,7 +770,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
     } 
     
     private void carregarIgreja(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
         igreja.removeAllElements();
         for(Igreja igre : listaIgrejas){
@@ -775,7 +779,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel contaCaixa = (DefaultComboBoxModel)this.contaCaixa.getModel();
         contaCaixa.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -786,7 +790,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
     private void formInicial(){
         this.igreja.setSelectedItem("");
         this.rbEntradaSaida.setSelected(true);
-        this.rbPadrão.setSelected(true);
+        this.rbPadrao.setSelected(true);
         this.dataInicial.setText(this.conversor.dataAtualString());
         this.dataFinal.setText(this.conversor.dataAtualString());
         carregarContaCaixa();
@@ -809,7 +813,7 @@ public class ExtratoCaixa extends javax.swing.JInternalFrame {
     private javax.swing.ButtonGroup rbGrupoLayout;
     private javax.swing.ButtonGroup rbGrupoTipoMovimento;
     private javax.swing.JRadioButton rbIgreja;
-    private javax.swing.JRadioButton rbPadrão;
+    private javax.swing.JRadioButton rbPadrao;
     private javax.swing.JRadioButton rbSaida;
     private javax.swing.JLabel txData;
     // End of variables declaration//GEN-END:variables

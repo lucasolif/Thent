@@ -11,6 +11,7 @@ import dao.RegistroOfertaDao;
 import dao.SubContaResultadoDao;
 import dao.TipoOfertaDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -53,11 +54,14 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     private List<Pessoa> listaOfertante = null;
     private Pessoa ofertanteSelec;
     private RegistroDizimoOferta rgOfertaSelec;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public RegistroDizimoOfertaForm(Usuario usuarioLogado) {
-        initComponents();
-        formInicial();  
+        initComponents();     
         this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        formInicial();
     }
 
     public void setPosicao() {
@@ -403,7 +407,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     }
 
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)igrejaCampo.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){
@@ -430,7 +434,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)contaCaixa.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){

@@ -7,6 +7,7 @@ import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
@@ -42,10 +43,13 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     private Campanha campanhaSelec = null;
     private Pessoa participanteSelec = null;
     private boolean geraContasReceber = false;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public CadastrarCampanhaForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        formInicial();    
     }
     
     public void setPosicao() {
@@ -448,7 +452,7 @@ public class CadastrarCampanhaForm extends javax.swing.JInternalFrame implements
     }//GEN-LAST:event_descricaoCampanhaKeyPressed
 
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.igrejaCampanha.getModel();
         modelo.removeAllElements();
         for(Igreja igreja : listaIgrejas){

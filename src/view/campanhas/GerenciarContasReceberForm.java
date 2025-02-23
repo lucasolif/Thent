@@ -11,6 +11,7 @@ import Ferramentas.PaletaCores;
 import Ferramentas.PersonalizaTabela;
 import Ferramentas.StatusCoresContaPagarReceber;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
 import java.awt.Component;
@@ -37,7 +38,6 @@ import model.MovimentoCaixa;
 import model.ParticipanteCampanha;
 import model.Pessoa;
 import model.Usuario;
-import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
@@ -57,12 +57,15 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     private List<ContasReceberCampanha> listaCrCampanha = null;
     private Pessoa pessoaSelec = null;
     private ParticipanteCampanha participanteSelec = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
     
     public GerenciarContasReceberForm(Usuario usuarioLogado) {
         initComponents();
+        this.usuarioLogado = usuarioLogado;
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
         tabelaInicial();
-        this.usuarioLogado = usuarioLogado;
     }
 
     public void setPosicao() {
@@ -771,7 +774,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     }
     
     private void carregarCampanha(){
-        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhas();
+        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhas(this.filtroIgreja);
         DefaultComboBoxModel campanha = (DefaultComboBoxModel)this.campanha.getModel();
         campanha.removeAllElements();
         for(Campanha camp : listaCampanha){
@@ -780,7 +783,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     }
     
     private void carregarIgreja(){
-        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas();
+        List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
         igreja.removeAllElements();
         for(Igreja igre : listaIgrejas){
@@ -807,7 +810,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
     }
     
     private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa();
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa( this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixaPagamento.getModel();
         modelo.removeAllElements();
         for(ContaCaixa cx : listaContaCaixa){
@@ -884,7 +887,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         crCampanha.setStatusPagamento(statusPagto);
         crCampanha.setFormaPagto(formaPagto);
         
-        this.listaCrCampanha = this.campanhaDao.consultarContasReceberCampanha(crCampanha,statusCampanha, dataVencimentoInicial, dataVencimentoFinal, dataPagamentoInicial, dataPagamentoFinal);    
+        this.listaCrCampanha = this.campanhaDao.consultarContasReceberCampanha(crCampanha,statusCampanha, dataVencimentoInicial, dataVencimentoFinal, dataPagamentoInicial, dataPagamentoFinal,this.filtroIgreja);    
     }
     
     private void carregarTabelaContasReceber(){

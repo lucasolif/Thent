@@ -6,6 +6,7 @@ import dao.CampanhaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
 import Ferramentas.Utilitarios;
+import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -39,10 +40,13 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
     private ParticipanteCampanha participanteSelec = null;
     private Campanha campanhaSelec = null;
     private List<Pessoa> listaParticipantes = null;
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private String filtroIgreja = "";
         
 
     public GerarContasReceberAvulsaForm(Usuario usuarioLogado) {
         initComponents();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
     }
     
@@ -328,7 +332,7 @@ public class GerarContasReceberAvulsaForm extends javax.swing.JInternalFrame imp
     }
     
     private void carregarCampanhas(){
-        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhasAtiva();
+        List<Campanha> listaCampanha = this.campanhaDao.consultarTodasCampanhasAtiva(this.filtroIgreja);
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.campanha.getModel();
         modelo.removeAllElements();
         for(Campanha campanha : listaCampanha){

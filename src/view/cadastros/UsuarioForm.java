@@ -3,38 +3,50 @@ package view.cadastros;
 
 import java.util.Base64;
 import dao.IgrejaDao;
-import model.Usuario;
 import dao.UsuarioDao;
 import Ferramentas.CriptografarSenhas;
 import Ferramentas.PaletaCores;
 import dao.PermissoesDao;
+import interfaces.ConsultaIgrejas;
 import interfaces.ConsultaUsuarios;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
+import model.AcessosIgreja;
 import model.FuncoesUsuario;
 import model.Igreja;
 import model.Usuario;
+import view.carregamentoConsultas.TelaConsultaIgreja;
 import view.carregamentoConsultas.TelaConsultaUsuarios;
 
-public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaUsuarios{
+public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaUsuarios, ConsultaIgrejas{
 
     private final PermissoesDao permissaoDao = new PermissoesDao();
+    private Igreja igrejaSelec = null;
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final PaletaCores cores = new PaletaCores();
     private Usuario userSelec;
     private List<Usuario> listaUser;
+    private List<Igreja> listaIgrejasJComboBox;
+    private List<Igreja> listaIgrejaConsulta;
+    private List<AcessosIgreja> listaAcessosAtual; 
+    private String filtroIgreja = "";
       
     public UsuarioForm(Usuario usuarioLogado) {
         initComponents();
         formInicial();
+        this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -43,16 +55,27 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
 
         btnSalvar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
-        btnLimpar = new javax.swing.JButton();
+        buscarUsuario = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listagemIgrejaAcesso = new javax.swing.JList<>();
+        codIgreja = new javax.swing.JTextField();
+        nomeIgreja = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnAdicionar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        cbAtivo = new javax.swing.JCheckBox();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        funcaoCargo = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         usuarioLogin = new javax.swing.JTextField();
-        buscarUsuario = new javax.swing.JTextField();
         usuarioSenha = new javax.swing.JPasswordField();
-        btnBuscar = new javax.swing.JButton();
         usuarioConfirmSenha = new javax.swing.JPasswordField();
-        jLabel13 = new javax.swing.JLabel();
         usuarioNome = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -61,17 +84,13 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         usuarioCelular = new javax.swing.JFormattedTextField();
         usuarioEmail = new javax.swing.JTextField();
         campoIgreja = new javax.swing.JComboBox<>();
-        cbAtivo = new javax.swing.JCheckBox();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        funcaoCargo = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
-        todasIgrejas = new javax.swing.JCheckBox();
+        btnLimpar = new javax.swing.JButton();
+        adicionarTodasIgreja = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setTitle("Cadastro de Usuários");
-        setPreferredSize(new java.awt.Dimension(556, 320));
+        setPreferredSize(new java.awt.Dimension(745, 375));
 
         btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
         btnSalvar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -92,21 +111,6 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
             }
         });
 
-        btnLimpar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
-        btnLimpar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimparActionPerformed(evt);
-            }
-        });
-
-        jLabel9.setText("Campo/Igreja");
-
-        jLabel10.setText("Celular*");
-
-        jLabel12.setText("Senha*");
-
         buscarUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 buscarUsuarioKeyPressed(evt);
@@ -126,6 +130,45 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setText("Buscar");
 
+        jScrollPane2.setViewportView(listagemIgrejaAcesso);
+
+        codIgreja.setEditable(false);
+        codIgreja.setBackground(new java.awt.Color(204, 204, 204));
+        codIgreja.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        nomeIgreja.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeIgrejaKeyPressed(evt);
+            }
+        });
+
+        jLabel2.setText("Igrejas Acesso");
+
+        btnAdicionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/adicionar.png"))); // NOI18N
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Dados Usuário", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+
+        cbAtivo.setSelected(true);
+        cbAtivo.setText("Ativo?");
+
+        jLabel17.setText("Usuário*");
+
+        jLabel18.setText("E-mail*");
+
+        jLabel1.setText("Função/Cargo");
+
+        jLabel9.setText("Campo/Igreja");
+
+        jLabel10.setText("Celular*");
+
+        jLabel12.setText("Senha*");
+
         jLabel14.setText("Código");
 
         jLabel15.setText("Confirmar Senha*");
@@ -144,16 +187,122 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
             ex.printStackTrace();
         }
 
-        cbAtivo.setSelected(true);
-        cbAtivo.setText("Ativo?");
+        btnLimpar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLimpar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-atualizar-16.png"))); // NOI18N
+        btnLimpar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
-        jLabel17.setText("Usuário*");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(usuarioEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLimpar)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(funcaoCargo, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(campoIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(usuarioCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(usuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usuarioSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(usuarioConfirmSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel16))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(usuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(usuarioCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(usuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(usuarioSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(usuarioConfirmSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbAtivo))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(funcaoCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(campoIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(7, 7, 7)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(usuarioEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLimpar))
+                .addGap(0, 9, Short.MAX_VALUE))
+        );
 
-        jLabel18.setText("E-mail*");
-
-        jLabel1.setText("Função/Cargo");
-
-        todasIgrejas.setText("Acessar todas igrejas?");
+        adicionarTodasIgreja.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        adicionarTodasIgreja.setText("Adicionar Todas Igrejas");
+        adicionarTodasIgreja.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        adicionarTodasIgreja.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                adicionarTodasIgrejaMousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,129 +311,63 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel18)
-                            .addComponent(usuarioEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(campoIgreja, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(buscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnLimpar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExcluir)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel17)
-                                        .addGap(98, 98, 98)
-                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(usuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(usuarioSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(usuarioConfirmSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(funcaoCargo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(0, 97, Short.MAX_VALUE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel13)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(buscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnBuscar))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(usuarioCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel14))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(usuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel10)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(todasIgrejas))))))
-                        .addGap(8, 8, 8))))
+                        .addComponent(btnBuscar))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(adicionarTodasIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(codIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(nomeIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(btnBuscar)
-                    .addComponent(buscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel16))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(usuarioNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usuarioCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel13)
+                            .addComponent(btnBuscar)
+                            .addComponent(buscarUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(14, 14, 14)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel10)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(usuarioCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(todasIgrejas))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel12))
+                            .addComponent(codIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nomeIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdicionar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(usuarioLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(usuarioSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(usuarioEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(usuarioConfirmSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(funcaoCargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(campoIgreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbAtivo))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSalvar)
+                            .addComponent(btnExcluir)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(adicionarTodasIgreja)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -305,8 +388,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        excluirUsuario();
-        formInicial();
+        excluirAcessoListagem();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -326,6 +408,24 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         carregarResultadoConsultaUsuarios();
         formAtualizacao();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void nomeIgrejaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeIgrejaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            consultarIgreja();
+            carregarResultadoConsultaIgreja();
+        }else if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.nomeIgreja.setText("");
+            this.codIgreja.setText("");
+        }
+    }//GEN-LAST:event_nomeIgrejaKeyPressed
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        criarListagemIgrejasLiberadas();
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void adicionarTodasIgrejaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adicionarTodasIgrejaMousePressed
+        carregarTodosAcessosIgreja();
+    }//GEN-LAST:event_adicionarTodasIgrejaMousePressed
 
     private void formAtualizacao(){ 
         this.usuarioLogin.setFocusable(false);
@@ -358,12 +458,12 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         this.usuarioLogin.setEnabled(true);
         this.usuarioSenha.setEnabled(true);
         this.usuarioConfirmSenha.setEnabled(true);
-        this.todasIgrejas.setSelected(false);
         this.cbAtivo.setEnabled(false);
         this.cbAtivo.setSelected(true);
         this.userSelec = null;
         carregarIgrejas();    
         carregarFuncoesCargos();
+        this.listagemIgrejaAcesso.removeAll();
     }
     
     private void consultarUsuarios(){
@@ -395,20 +495,32 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
             cbAtivo.setSelected(false);
         }
         
-        if(usuario.getTodasIgrejas() == 1){
-            this.todasIgrejas.setSelected(true);
-        }else{
-            this.todasIgrejas.setSelected(false);
-        }
-        
         this.userSelec = usuario;
+        carregarAcessosIgrejaUsuario(); //Carrega os acesso dos dados da igreja.
+    }
+    
+    private void consultarIgreja(){      
+        String buscaIgreja = nomeIgreja.getText(); // Texto digitado na busca       
+        listaIgrejaConsulta = igrejaDao.consultarTodasIgrejasSemFiltro(); //Lista recebe a busca retornada do banco
+    }
+    
+    private void carregarResultadoConsultaIgreja(){
+        TelaConsultaIgreja resultConsultaContaCaixa = new TelaConsultaIgreja((Frame) SwingUtilities.getWindowAncestor(this), this.listaIgrejaConsulta);
+        resultConsultaContaCaixa.setIgrejaSelecionada(this);
+        resultConsultaContaCaixa.setLocationRelativeTo(this);
+        resultConsultaContaCaixa.setVisible(true);
+    }
+    
+    private void carregarIgrejaEscolhida(Igreja igreja){
+        this.codIgreja.setText(String.valueOf(igreja.getCodigo()));
+        this.nomeIgreja.setText(igreja.getNome());
     }
     
     private void carregarIgrejas(){
-        List<Igreja> listaIgrejas = igrejaDao.consultarTodasIgrejas();
+        this.listaIgrejasJComboBox = igrejaDao.consultarTodasIgrejasSemFiltro();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel)campoIgreja.getModel();
         modelo.removeAllElements();
-        for(Igreja igreja : listaIgrejas){
+        for(Igreja igreja : listaIgrejasJComboBox){
             modelo.addElement(igreja);
         }
     }   
@@ -420,8 +532,47 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         for(FuncoesUsuario funcoes : listaFuncoes){
             modelo.addElement(funcoes);
         }
-    } 
+    }
+    
+    private void carregarAcessosIgrejaUsuario(){
+        DefaultListModel<String> modelo = new DefaultListModel<>();       
+        this.listagemIgrejaAcesso.setModel(modelo);// Acesse o modelo do JList
+        
+        this.listaAcessosAtual = this.usuarioDao.consultarAcessoIgreja(this.userSelec);
+        
+        // Adicione os elementos ao modelo
+        for (AcessosIgreja acesso : this.listaAcessosAtual) {
+            modelo.addElement(acesso.getIgreja().getCodigo()+"-"+acesso.getIgreja().getNome()); // Adiciona o valor do tipo String ao JList
+        }
+    }
+    
+    private void carregarTodosAcessosIgreja(){
+        DefaultListModel<String> modelo = new DefaultListModel<>();       
+        this.listagemIgrejaAcesso.setModel(modelo);// Acesse o modelo do JList
+        
+        List<Igreja> listaIgreja = igrejaDao.consultarTodasIgrejasSemFiltro();
+        
+        // Adicione os elementos ao modelo
+        for (Igreja igreja : listaIgreja) {
+            modelo.addElement(igreja.getCodigo()+"-"+igreja.getNome()); // Adiciona o valor do tipo String ao JList
+        }
+    }
+    
+    private void excluirAcessoListagem(){
+        
+        // Verifica se algum item foi selecionado
+        int indiceSelecionado = listagemIgrejaAcesso.getSelectedIndex(); // Obtém o índice do item selecionado
 
+        if (indiceSelecionado >= 0) { // Se um item foi selecionado
+            // Remove o item do DefaultListModel
+            DefaultListModel<String> modelo = (DefaultListModel<String>) listagemIgrejaAcesso.getModel();
+            modelo.remove(indiceSelecionado); // Remove o item na posição do índice selecionado
+        } else {
+            // Caso não haja nenhum item selecionado
+            JOptionPane.showMessageDialog(null, "Selecione um igreja de acesso, para ser excluída", "Erro", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
     private void salvarAlterarCadastro() throws Exception{
            
         Integer status = 0;
@@ -440,11 +591,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         if(cbAtivo.isSelected()){
             status = 1;
         }   
-        
-        if(this.todasIgrejas.isSelected()){
-            todasIgrejas = 1;
-        }
-        
+
         if(verificandoCamposVazio(nome, celular, email, login, senha)){
             JOptionPane.showMessageDialog(null, "Campos vazios. Preencha todos os campos obrigatórios", "Erro", JOptionPane.WARNING_MESSAGE);
         }else{
@@ -467,9 +614,10 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                     usuario.setFuncaoCargo(funcaoCargo);
                     usuario.setTodasIgrejas(todasIgrejas);
                     
-                    this.usuarioDao.adicionarUsuario(usuario);   
+                    int idUsuario = this.usuarioDao.adicionarUsuario(usuario);   //Adiciona o usuário é retorna o código gerado                   
+                    usuario.setCodigo(idUsuario);//Seta o código gerado
+                    this.usuarioDao.alterarUsuario(usuario); // Adicionar as permissões
                     
-                    formInicial();
                 }else{
                     JOptionPane.showMessageDialog(null, "Se senha precisa ser iguais e conter letras maísculo e números", "Erro", JOptionPane.WARNING_MESSAGE);
                 }
@@ -483,27 +631,45 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                 this.userSelec.setFuncaoCargo(funcao);
                 this.userSelec.setTodasIgrejas(todasIgrejas);
                 
-                this.usuarioDao.alterarUsuario(this.userSelec);               
-                formInicial();
+                this.usuarioDao.alterarUsuario(this.userSelec);  
+                adicionarExcluirAcessoIgreja(this.userSelec);
             }
         } 
     }
     
-    private void excluirUsuario(){
-        if(this.usuarioCodigo.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,"Selecione um usuário a ser excluído","Atenção",JOptionPane.WARNING_MESSAGE);
-        }else{  
-            int confirm = JOptionPane.showConfirmDialog(null,"Excluir o usuário "+userSelec.getLogin()+" ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-            if(confirm == JOptionPane.YES_OPTION){
-                this.usuarioDao.removerUsuario(this.userSelec.getCodigo());
-                consultarUsuarios();
-                formInicial();
-            }else if(confirm == JOptionPane.NO_OPTION){
-                JOptionPane.showMessageDialog(null, "Operação cancelada!");
-            }
+    private void adicionarExcluirAcessoIgreja(Usuario usuario){
+        ListModel<String> modelo = listagemIgrejaAcesso.getModel();// Acesse o modelo do JList
+        
+        List<AcessosIgreja> listaAcessosNovos = new ArrayList<>();
+
+        for (int i = 0; i < modelo.getSize(); i++) {       
+            
+            //Pegando o código da igreja que está em uma string junto com o nome da igreja
+            String igrejaSelec = modelo.getElementAt(i);
+            int posicaoCod = igrejaSelec.indexOf("-"); //Pega a posição do traço, pois ele divide o código da igreja e nome
+            
+            int codIgreja = Integer.parseInt(igrejaSelec.substring(0,posicaoCod));
+            
+            AcessosIgreja acessosIgreja = new AcessosIgreja();
+            Igreja igreja = new Igreja();       
+            igreja.setCodigo(codIgreja);
+            acessosIgreja.setIgreja(igreja);
+            acessosIgreja.setUsuario(usuario);
+            
+            listaAcessosNovos.add(acessosIgreja);
+            
+        }
+        
+        if(!listaAcessosAtual.isEmpty() && !listaAcessosNovos.isEmpty()){
+            usuarioDao.excluirAcessoIgreja(this.listaAcessosAtual);
+            usuarioDao.adicionarAcessoIgreja(listaAcessosNovos);
+        }else if(listaAcessosNovos.isEmpty() && !listaAcessosAtual.isEmpty()){
+            usuarioDao.excluirAcessoIgreja(this.listaAcessosAtual);
+        }else if(listaAcessosAtual.isEmpty() && !listaAcessosNovos.isEmpty()){
+            usuarioDao.adicionarAcessoIgreja(listaAcessosNovos);
         }
     }
-   
+     
     private boolean verificandoCamposVazio(String nome, String celular, String email, String login, String senha){
         if(nome.isEmpty() || celular.isEmpty() || email.isEmpty() || login.isEmpty() || senha.isEmpty()){        
             return true;
@@ -540,12 +706,46 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         return control;
     }
     
+    private void criarListagemIgrejasLiberadas(){
+        
+        if (!this.codIgreja.getText().isEmpty()) {
+            // Verifica se o modelo já está definido no JList, se não, cria um novo.
+            DefaultListModel<String> igrejasLiberada = (DefaultListModel<String>) this.listagemIgrejaAcesso.getModel();
+
+            // Se o modelo for null (caso inicial), cria um novo modelo
+            if (igrejasLiberada == null) {
+                igrejasLiberada = new DefaultListModel<>();
+                this.listagemIgrejaAcesso.setModel(igrejasLiberada);  // Atribui o modelo ao JList
+            }
+
+            // Adiciona a igreja no modelo
+            String codIgreja = this.codIgreja.getText();
+            String nomeIgreja = this.nomeIgreja.getText();
+            String igreja = codIgreja + "-" + nomeIgreja; 
+            igrejasLiberada.addElement(igreja);  // Adiciona ao modelo do JList
+
+            // Limpa os campos de texto
+            this.codIgreja.setText("");
+            this.nomeIgreja.setText("");
+        }else {
+            JOptionPane.showMessageDialog(null, "Informe a igreja para ser adicionada na liberação", "Erro", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+    
+    @Override
+    public void igrejaSelecionada(Igreja igrejaSelecionada) {
+        carregarIgrejaEscolhida(igrejaSelecionada);    
+    }
+    
     @Override
     public void usuarioSelecionado(Usuario usuarioEscolhido) {
         carregarUsuarioEscolhido(usuarioEscolhido);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel adicionarTodasIgreja;
+    private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnLimpar;
@@ -553,6 +753,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private javax.swing.JTextField buscarUsuario;
     private javax.swing.JComboBox<String> campoIgreja;
     private javax.swing.JCheckBox cbAtivo;
+    private javax.swing.JTextField codIgreja;
     private javax.swing.JComboBox<String> funcaoCargo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -563,8 +764,12 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JCheckBox todasIgrejas;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<String> listagemIgrejaAcesso;
+    private javax.swing.JTextField nomeIgreja;
     private javax.swing.JFormattedTextField usuarioCelular;
     private javax.swing.JTextField usuarioCodigo;
     private javax.swing.JPasswordField usuarioConfirmSenha;
