@@ -557,5 +557,86 @@ public class RegistroOfertaDao {
         }
         return listaDizimoOferta;   
     }
+    
+    public List<RegistroDizimoOferta> consultarTotaisTipoOferta(Igreja igrejaFiltro, ContaCaixa contaCaixaFiltro, String filtroIgrejaUsuario, Date dataOfertaInicial, Date dataOfertaFinal, Date dataLancInicial, Date dataLancFinal){
+        List<RegistroDizimoOferta> listaRegistros = new ArrayList<>();
+        
+        if(igrejaFiltro.getIgreja()!= null){
+            filtroIgrejaUsuario = String.valueOf(igrejaFiltro.getIgreja().getCodigo());
+        }
+
+        String sql = "Select TipoOferta, Sum(Entrada - Saida) ValorTotal " +
+            "From MovimentoDizimoOferta " +
+            "Where (? IS NULL OR ContaCaixa = ?) " +
+            "And Igreja In ("+filtroIgrejaUsuario+") " +
+            "And (? IS NULL OR DataOferta Between ? And ?) " +
+            "And (? IS NULL OR DataCadastro Between ? And ?) " +
+            "Group By TipoOferta";
+
+        try{
+            conexao = Conexao.getDataSource().getConnection();
+            ps = conexao.prepareStatement(sql);
+            
+            //Parametro ContaCaixa
+            if(contaCaixaFiltro != null){
+                ps.setInt(1, contaCaixaFiltro.getCodigo());
+                ps.setInt(2, contaCaixaFiltro.getCodigo());
+            }else{
+                ps.setNull(1, java.sql.Types.INTEGER);
+                ps.setNull(2, java.sql.Types.INTEGER);
+            }
+            
+                        // Parametros referente a data da oferta
+            if (dataOfertaInicial != null && dataOfertaFinal != null){
+                ps.setDate(3, new java.sql.Date(dataOfertaInicial.getTime()));
+                ps.setDate(4, new java.sql.Date(dataOfertaInicial.getTime()));
+                ps.setDate(5, new java.sql.Date(dataOfertaFinal.getTime()));
+            }else{
+                ps.setNull(3, java.sql.Types.DATE);
+                ps.setNull(4, java.sql.Types.DATE);
+                ps.setNull(5, java.sql.Types.DATE);
+            }
+            
+            //Parametro referente a data de lançamento
+            if (dataLancInicial != null && dataLancFinal != null){
+                ps.setDate(6, new java.sql.Date(dataLancInicial.getTime()));
+                ps.setDate(7, new java.sql.Date(dataLancInicial.getTime()));
+                ps.setDate(8, new java.sql.Date(dataLancFinal.getTime()));
+            }else{
+                ps.setNull(6, java.sql.Types.DATE);
+                ps.setNull(7, java.sql.Types.DATE);
+                ps.setNull(8, java.sql.Types.DATE);
+            }   
+               
+            rs = ps.executeQuery();
+
+            while(rs.next()){               
+                //Instanciando os objetos
+                RegistroDizimoOferta registroDizimoOferta = new RegistroDizimoOferta();
+                TipoOferta tpOferta = new TipoOferta();                       
+                tpOferta.setCodigo(rs.getInt("TipoOferta"));
+                registroDizimoOferta.setCodigo(rs.getInt("Codigo"));
+                registroDizimoOferta.setValorTotal(rs.getDouble("ValorTotal"));
+                registroDizimoOferta.setTpOferta(tpOferta);
+                
+                listaRegistros.add(registroDizimoOferta);
+            }     
+        } catch (SQLException ex) {
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar buscar os totais de registro de dizimo e ofertas", "Erro 011", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        return listaRegistros;  
+    }
 
 }

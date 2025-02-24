@@ -176,7 +176,7 @@
                     <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.String"/>
                     <Column editable="false" title="ContaCx" type="java.lang.Object"/>
                     <Column editable="false" title="Igreja" type="java.lang.Object"/>
-                    <Column editable="false" title="Data Lan&#xe7;amento" type="java.lang.String"/>
+                    <Column editable="false" title="Dt Lan&#xe7;amento" type="java.lang.String"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -186,32 +186,32 @@
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="false">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
                       <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="50" resizable="false">
                       <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                      <Title/>
-                      <Editor/>
-                      <Renderer/>
-                    </Column>
-                    <Column maxWidth="-1" minWidth="-1" prefWidth="200" resizable="false">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="250" resizable="false">
                       <Title/>
                       <Editor/>
                       <Renderer/>
                     </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="150" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="60" resizable="false">
                       <Title/>
                       <Editor/>
                       <Renderer/>
@@ -472,7 +472,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="totalDizimo1" alignment="0" pref="80" max="32767" attributes="0"/>
+                          <Component id="totalDizimo" alignment="0" pref="80" max="32767" attributes="0"/>
                           <Component id="totalOfertaCultos" alignment="0" max="32767" attributes="0"/>
                           <Component id="totalOfertaPrimicias" alignment="0" max="32767" attributes="0"/>
                           <Component id="totalOfertaEscolaSab" alignment="0" max="32767" attributes="0"/>
@@ -501,7 +501,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel13" alignment="0" max="32767" attributes="0"/>
-                          <Component id="totalDizimo1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="totalDizimo" alignment="0" max="32767" attributes="0"/>
                           <Component id="totalOfertaMissionaria" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -519,12 +519,12 @@
                           <Component id="totalOfertaGratidao" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="totalOfertaLiteratura" alignment="1" min="-2" pref="16" max="-2" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="totalOfertaEscolaSab" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="totalOfertaEscolaSab" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -565,7 +565,7 @@
                 <Property name="text" type="java.lang.String" value="Oferta Esc Sabati:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="totalDizimo1">
+            <Component class="javax.swing.JLabel" name="totalDizimo">
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaEscolaSab">
             </Component>

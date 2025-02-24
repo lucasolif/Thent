@@ -95,7 +95,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        totalDizimo1 = new javax.swing.JLabel();
+        totalDizimo = new javax.swing.JLabel();
         totalOfertaEscolaSab = new javax.swing.JLabel();
         totalOfertaPrimicias = new javax.swing.JLabel();
         totalOfertaCultos = new javax.swing.JLabel();
@@ -130,7 +130,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
 
             },
             new String [] {
-                "Tipo Oferta", "Valor (R$)", "Operação", "Descrição", "ContaCx", "Igreja", "Data Lançamento"
+                "Tipo Oferta", "Valor (R$)", "Operação", "Descrição", "ContaCx", "Igreja", "Dt Lançamento"
             }
         ) {
             Class[] types = new Class [] {
@@ -154,14 +154,17 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
             tabelaRegistros.getColumnModel().getColumn(0).setResizable(false);
             tabelaRegistros.getColumnModel().getColumn(0).setPreferredWidth(150);
             tabelaRegistros.getColumnModel().getColumn(1).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tabelaRegistros.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaRegistros.getColumnModel().getColumn(2).setResizable(false);
+            tabelaRegistros.getColumnModel().getColumn(2).setPreferredWidth(50);
             tabelaRegistros.getColumnModel().getColumn(3).setResizable(false);
+            tabelaRegistros.getColumnModel().getColumn(3).setPreferredWidth(250);
             tabelaRegistros.getColumnModel().getColumn(4).setResizable(false);
+            tabelaRegistros.getColumnModel().getColumn(4).setPreferredWidth(100);
             tabelaRegistros.getColumnModel().getColumn(5).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(5).setPreferredWidth(200);
+            tabelaRegistros.getColumnModel().getColumn(5).setPreferredWidth(150);
             tabelaRegistros.getColumnModel().getColumn(6).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(6).setPreferredWidth(100);
+            tabelaRegistros.getColumnModel().getColumn(6).setPreferredWidth(60);
         }
 
         iconExcluir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -338,7 +341,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(totalDizimo1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(totalDizimo, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
                     .addComponent(totalOfertaCultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalOfertaPrimicias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalOfertaEscolaSab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -362,7 +365,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(totalDizimo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalDizimo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalOfertaMissionaria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,12 +380,12 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
                     .addComponent(totalOfertaPrimicias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(totalOfertaGratidao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(totalOfertaLiteratura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
-                        .addComponent(totalOfertaEscolaSab)
-                        .addComponent(jLabel16)))
+                        .addComponent(jLabel16)
+                        .addComponent(totalOfertaEscolaSab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -517,6 +520,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         consultarRgDizimoOferta();
         atualizarTabela();
+        consultarCarregarTotais();
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
     private void iconLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconLimparActionPerformed
@@ -535,7 +539,6 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
         Date dataLancFinal = null;
         Date dataOfertaInicial = null;
         Date dataOfertaFinal = null;
-        Integer codOfert = null;
         Igreja igre = (Igreja) this.igreja.getSelectedItem();
         FormaPagto formPagto = (FormaPagto) this.formaPagto.getSelectedItem();
         ContaCaixa contaCx = (ContaCaixa) this.contaCaixa.getSelectedItem();
@@ -620,11 +623,19 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
         List<RegistroDizimoOferta> listaRegistro = listaRgDizimoOfertas;
         DefaultTableModel model = (DefaultTableModel) tabelaRegistros.getModel();
         model.setNumRows(0);
+        String operacao = "";
+        double valor = 0;
 
         for(RegistroDizimoOferta rg : listaRegistro){     
-            String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
+            if(rg.getValorOfertaEntrada() > 0){
+                valor = rg.getValorOfertaEntrada();
+                operacao = "Entrada";
+            }else{
+                valor = rg.getValorOfertaSaida();
+                operacao = "Saída";
+            }
             String dataCadastro = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataMovimento());
-            model.addRow(new Object[]{rg.getOfertante().getNome(),rg.getValorOfertaEntrada(), rg.getTpOferta(), rg.getIgreja().getNome(), dataOferta, dataCadastro});
+            model.addRow(new Object[]{rg.getTpOferta(),valor, operacao, rg.getComplemento(), rg.getContaCaixa(),rg.getIgreja(), dataCadastro});
         }
     }
     
@@ -669,16 +680,25 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
     
     private void consultarCarregarTotais(){
         
-        TipoOferta tipoOferta = (TipoOferta) this.tipoOferta.getSelectedItem();
+        Date dataLancInicial = null;
+        Date dataLancFinal = null;
+        Date dataOfertaInicial = null;
+        Date dataOfertaFinal = null;
         ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
-        Date dataInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
-        Date dataFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
+        Igreja igreja = (Igreja) this.igreja.getSelectedItem();
+
+        if(rbDataLancamento.isSelected()){
+            dataLancInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
+            dataLancFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
+        }else if(rbDataOferta.isSelected()){
+            dataOfertaInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
+            dataOfertaFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
+        }
         
-        //Resultado da consulta
-        List<RegistroDizimoOferta> listaMvOfertaDizimo = mvOfertaDizimoDao.consultarTotaisDizimoOferta(tipoOferta, contaCaixa, dataInicial, dataFinal);
+        List<RegistroDizimoOferta> listaTotaisDizimoOfertas = rgOfertaDao.consultarTotaisTipoOferta(igreja, contaCaixa, this.filtroIgreja, dataOfertaInicial, dataOfertaFinal, dataLancInicial, dataLancFinal);     
         
         //Carregar os valores
-        for(RegistroDizimoOferta rg : listaMvOfertaDizimo){
+        for(RegistroDizimoOferta rg : listaTotaisDizimoOfertas){
             if(null != rg.getTpOferta().getCodigo())switch (rg.getTpOferta().getCodigo()) {
                 case 1:{
                         String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
@@ -819,6 +839,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
         dataFinal.setText(conversor.dataAtualString());
         alinharConteudoTabela();
         personalizaTabela.definirNegritoTituloColuna(tabelaRegistros);
+        consultarCarregarTotais();
     }
      
 
@@ -854,7 +875,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
     private javax.swing.JRadioButton rbDataOferta;
     private javax.swing.JTable tabelaRegistros;
     private javax.swing.JComboBox<String> tipoOferta;
-    private javax.swing.JLabel totalDizimo1;
+    private javax.swing.JLabel totalDizimo;
     private javax.swing.JLabel totalOfertaCultos;
     private javax.swing.JLabel totalOfertaEscolaSab;
     private javax.swing.JLabel totalOfertaGratidao;
