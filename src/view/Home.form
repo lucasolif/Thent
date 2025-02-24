@@ -126,14 +126,6 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="formConsultarDizimoOfertasActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="formConsultaSaldoTipoOferta">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Consulta Saldo Tipo Oferta"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="formConsultaSaldoTipoOfertaActionPerformed"/>
-                  </Events>
-                </MenuItem>
               </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="subMenuFinanceiroContasPagar">
@@ -273,6 +265,11 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="formRelatorioPrestacaoContaMensalActionPerformed"/>
                   </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="formRelatorioPrestacaoContaMensalGeral">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o Conta Mensal Geral"/>
+                  </Properties>
                 </MenuItem>
               </SubComponents>
             </Menu>

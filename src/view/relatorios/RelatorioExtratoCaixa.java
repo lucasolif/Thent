@@ -372,7 +372,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
                     tipo = "Campanha";
                 }else if(mv.getContaPagar().getCodigo() != 0){
                     tipo = "Conta Pagar";
-                }else if(mv.getRgOferta().getCodRegistro() != 0){
+                }else if(mv.getRgOferta().getCodigo() != 0){
                     tipo = "Oferta/Dízimo";
                 }else{
                     tipo = "Op Bancária";
@@ -535,7 +535,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
                     tipo = "Campanha";
                 }else if(mv.getContaPagar().getCodigo() != 0){
                     tipo = "Conta Pagar";
-                }else if(mv.getRgOferta().getCodRegistro() != 0){
+                }else if(mv.getRgOferta().getCodigo() != 0){
                     tipo = "Oferta/Dízimo";
                 }else{
                     tipo = "Op Bancária";
@@ -697,7 +697,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
                     tipo = "Campanha";
                 }else if(mv.getContaPagar().getCodigo() != 0){
                     tipo = "Conta Pagar";
-                }else if(mv.getRgOferta().getCodRegistro() != 0){
+                }else if(mv.getRgOferta().getCodigo() != 0){
                     tipo = "Oferta/Dízimo";
                 }else{
                     tipo = "Op Bancária";

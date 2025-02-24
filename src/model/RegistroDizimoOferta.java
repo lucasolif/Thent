@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class RegistroDizimoOferta {
     
-    private Integer codRegistro;
+    private Integer codigo;
     private TipoOferta tpOferta;
     private double valorOfertaEntrada;
     private double valorOfertaSaida;
@@ -15,7 +15,7 @@ public class RegistroDizimoOferta {
     private FormaPagto formaPagto;
     private Pessoa ofertante;
     private Date dataOferta;
-    private Date DataCadastro;
+    private Date dataMovimento;
     private Igreja igreja;
     private Usuario usuario;
     private ContaCaixa contaCaixa;
@@ -38,7 +38,7 @@ public class RegistroDizimoOferta {
 
     //Construtor utilizado na consulta de Dizimo e Ofertas
     public RegistroDizimoOferta(Integer codRegistro, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Date dataCadastro ) {
-        this.codRegistro = codRegistro;
+        this.codigo = codRegistro;
         this.tpOferta = tpOferta;
         this.valorOfertaEntrada = valorOferta;
         this.formaPagto = formaPagto;
@@ -46,11 +46,11 @@ public class RegistroDizimoOferta {
         this.dataOferta = dataOferta;
         this.igreja = igreja;
         this.contaCaixa = contaCaixa;
-        this.DataCadastro = dataCadastro;
+        this.dataMovimento = dataCadastro;
     }
     
     public RegistroDizimoOferta(Integer codigo, TipoOferta tpOferta, double valorOferta, FormaPagto formaPagto, Pessoa ofertante, Date dataOferta, Igreja igreja, ContaCaixa contaCaixa, Usuario usuario) {
-        this.codRegistro = codigo;
+        this.codigo = codigo;
         this.tpOferta = tpOferta;
         this.valorOfertaEntrada = valorOferta;
         this.formaPagto = formaPagto;
@@ -96,12 +96,12 @@ public class RegistroDizimoOferta {
         this.valorOfertaSaida = valorOfertaSaida;
     }
     
-    public Integer getCodRegistro() {
-        return codRegistro;
+    public Integer getCodigo() {
+        return codigo;
     }
 
-    public void setCodRegistro(Integer codRegistro) {
-        this.codRegistro = codRegistro;
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
     }
 
     public TipoOferta getTpOferta() {
@@ -144,12 +144,12 @@ public class RegistroDizimoOferta {
         this.dataOferta = dataOferta;
     }
 
-    public Date getDataCadastro() {
-        return DataCadastro;
+    public Date getDataMovimento() {
+        return dataMovimento;
     }
 
-    public void setDataCadastro(Date DataCadastro) {
-        this.DataCadastro = DataCadastro;
+    public void setDataMovimento(Date dataMovimento) {
+        this.dataMovimento = dataMovimento;
     }
 
     public Igreja getIgreja() {
@@ -187,13 +187,13 @@ public class RegistroDizimoOferta {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.codRegistro);
+        hash = 67 * hash + Objects.hashCode(this.codigo);
         hash = 67 * hash + Objects.hashCode(this.tpOferta);
         hash = 67 * hash + (int) (Double.doubleToLongBits(this.valorOfertaEntrada) ^ (Double.doubleToLongBits(this.valorOfertaEntrada) >>> 32));
         hash = 67 * hash + Objects.hashCode(this.formaPagto);
         hash = 67 * hash + Objects.hashCode(this.ofertante);
         hash = 67 * hash + Objects.hashCode(this.dataOferta);
-        hash = 67 * hash + Objects.hashCode(this.DataCadastro);
+        hash = 67 * hash + Objects.hashCode(this.dataMovimento);
         hash = 67 * hash + Objects.hashCode(this.igreja);
         hash = 67 * hash + Objects.hashCode(this.usuario);
         hash = 67 * hash + Objects.hashCode(this.contaCaixa);
@@ -219,10 +219,10 @@ public class RegistroDizimoOferta {
         if (!Objects.equals(this.dataOferta, other.dataOferta)) {
             return false;
         }
-        if (!Objects.equals(this.DataCadastro, other.DataCadastro)) {
+        if (!Objects.equals(this.dataMovimento, other.dataMovimento)) {
             return false;
         }
-        if (!Objects.equals(this.codRegistro, other.codRegistro)) {
+        if (!Objects.equals(this.codigo, other.codigo)) {
             return false;
         }
         if (!Objects.equals(this.tpOferta, other.tpOferta)) {

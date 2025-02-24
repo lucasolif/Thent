@@ -200,7 +200,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
 
         cbx25.setText("Retirar Aplicação");
 
-        cbx61.setText("Consulta Saldo Tipo Oferta");
+        cbx61.setText("SubMenu Relatório Prestação de Contas");
 
         javax.swing.GroupLayout acessosMenusLayout = new javax.swing.GroupLayout(acessosMenus);
         acessosMenus.setLayout(acessosMenusLayout);
@@ -277,10 +277,11 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbx13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbx24)
+                        .addComponent(cbx24))
+                    .addGroup(acessosMenusLayout.createSequentialGroup()
+                        .addComponent(cbx33)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbx61))
-                    .addComponent(cbx33))
+                        .addComponent(cbx61)))
                 .addContainerGap(67, Short.MAX_VALUE))
         );
         acessosMenusLayout.setVerticalGroup(
@@ -327,8 +328,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                 .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbx25)
                     .addComponent(cbx13)
-                    .addComponent(cbx24)
-                    .addComponent(cbx61))
+                    .addComponent(cbx24))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -344,7 +344,9 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                     .addComponent(cbx31)
                     .addComponent(cbx34))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbx33)
+                .addGroup(acessosMenusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbx33)
+                    .addComponent(cbx61))
                 .addContainerGap(11, Short.MAX_VALUE))
         );
 

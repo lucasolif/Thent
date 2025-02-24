@@ -42,19 +42,21 @@ public class RegistroOfertaDao {
             conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             for(RegistroDizimoOferta rg : registros){ 
-                String sql = "INSERT INTO RegistroDizimoOferta (Ofertante,TipoOferta,Valor,FormaPagto,SubContaResultado,DataOferta,Efetivado,Igreja,UsuarioCadastro,DataCadastro,ContaCaixa) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
+                String complemento = rg.getTpOferta().getNome()+" - "+rg.getContaCaixa().getNome();
+                String sql = "INSERT INTO MovimentoDizimoOferta (Ofertante,TipoOferta,Entrada,Saida,Complemento,FormaPagto,Igreja,ContaCaixa,UsuarioCadastro,DataOferta,DataCadastro) VALUES(?,?,?,?,?,?,?,?,?,?,GETDATE())";
                 psRegistro = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); 
 
                 psRegistro.setInt(1, rg.getOfertante().getCodigo());
                 psRegistro.setDouble(2, rg.getTpOferta().getCodigo());
                 psRegistro.setDouble(3, rg.getValorOfertaEntrada());
-                psRegistro.setInt(4, rg.getFormaPagto().getCodigo());
-                psRegistro.setInt(5, rg.getSubContaResultado().getCodigo());
-                psRegistro.setDate(6, (java.sql.Date) rg.getDataOferta());
-                psRegistro.setInt(7, 1);
-                psRegistro.setInt(8, rg.getIgreja().getCodigo());
+                psRegistro.setDouble(4, rg.getValorOfertaSaida());
+                psRegistro.setString(5, complemento);
+                psRegistro.setInt(6, rg.getFormaPagto().getCodigo());
+                psRegistro.setInt(7, rg.getIgreja().getCodigo());
+                psRegistro.setInt(8, rg.getContaCaixa().getCodigo());
                 psRegistro.setInt(9, usuarioLogado.getCodigo());
-                psRegistro.setInt(10, rg.getContaCaixa().getCodigo());
+                psRegistro.setDate(10, (java.sql.Date) rg.getDataOferta());
+                
                 psRegistro.executeUpdate();
 
                 // Recuperar a chave primária gerada
@@ -62,10 +64,7 @@ public class RegistroOfertaDao {
                 
                 if (generatedKeys.next()) {                
                     //Movimentar no caixa os valores referente ao registro de dizimo e ofertas
-                    adicionarOfertaDizimoMovimentoFinanceiro(rg, usuarioLogado, generatedKeys);
-                    
-                    //Adicioanr registro no movimento de ofertas, possibilitando um controle sobre os valores de cada tipo de oferta
-                    adicionarOfertaDizimoMovimentoTipoOferta(rg, generatedKeys);             
+                    adicionarOfertaDizimoMovimentoFinanceiro(rg, usuarioLogado, generatedKeys);         
                 }
             }
             //Confimar a transação, ou seja, a inserção dos dados
@@ -105,21 +104,20 @@ public class RegistroOfertaDao {
             int idRegistro = chaveRgOferta.getInt(1);
 
             // Inserir dados na segunda tabela usando a chave primária da primeira tabela
-            String sql = "INSERT INTO MovimentoCaixa (Pessoa,RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
-            String complemento = registroOferta.getOfertante().getNome();
+            String sql = "INSERT INTO MovimentoCaixa (RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
+            
             //String complemento = rg.getOfertante().getNome().substring(0, 30)+" | "+rg.getTpOferta().getNome();
             stmInsert = conexao.prepareStatement(sql);
 
-            stmInsert.setInt(1, registroOferta.getOfertante().getCodigo());
-            stmInsert.setInt(2, idRegistro);
-            stmInsert.setDouble(3, registroOferta.getValorOfertaEntrada());
-            stmInsert.setDouble(4, 0);
-            stmInsert.setInt(5, registroOferta.getContaCaixa().getCodigo());
-            stmInsert.setString(6, complemento);
-            stmInsert.setInt(7, registroOferta.getFormaPagto().getCodigo());
-            stmInsert.setInt(8, registroOferta.getIgreja().getCodigo());
-            stmInsert.setInt(9, usuarioLogado.getCodigo());
-            stmInsert.setDate(10, (java.sql.Date) registroOferta.getDataOferta());
+            stmInsert.setInt(1, idRegistro);
+            stmInsert.setDouble(2, registroOferta.getValorOfertaEntrada());
+            stmInsert.setDouble(3, registroOferta.getValorOfertaSaida());
+            stmInsert.setInt(4, registroOferta.getContaCaixa().getCodigo());
+            stmInsert.setString(5, registroOferta.getComplemento());
+            stmInsert.setInt(6, registroOferta.getFormaPagto().getCodigo());
+            stmInsert.setInt(7, registroOferta.getIgreja().getCodigo());
+            stmInsert.setInt(8, usuarioLogado.getCodigo());
+            stmInsert.setDate(9, (java.sql.Date) registroOferta.getDataOferta());
 
             stmInsert.execute();
         }catch(SQLException ex){
@@ -127,33 +125,7 @@ public class RegistroOfertaDao {
             JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar o dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    //Adicionar os registros de dizimo e ofertas no movimento de dizimo e ofertas
-    private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta,ResultSet chaveRgOferta ){
-        
-        try{
-            int idRegistro = chaveRgOferta.getInt(1);
-
-            // Inserir dados na segunda tabela usando a chave primária da primeira tabela
-            String sql = "INSERT INTO MovimentoTipoOferta (CodRegistroOfertaDizimo,TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,DataMovimento) VALUES(?,?,?,?,?,?,?,GETDATE())";
-            String complemento = registroOferta.getTpOferta().getNome();
-            stmInsert = conexao.prepareStatement(sql);
-
-            stmInsert.setInt(1, idRegistro);
-            stmInsert.setInt(2, registroOferta.getTpOferta().getCodigo());
-            stmInsert.setDouble(3, registroOferta.getValorOfertaEntrada());
-            stmInsert.setDouble(4, 0);
-            stmInsert.setString(5, complemento);
-            stmInsert.setInt(6, registroOferta.getContaCaixa().getCodigo());
-            stmInsert.setInt(7, registroOferta.getIgreja().getCodigo());
-            stmInsert.execute();
-            
-        }catch(SQLException ex){
-            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar registro de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
+       
     //Consulta todos os registros de ofertas e dizimos
     public List<RegistroDizimoOferta> consultarRegistrosOfertas(RegistroDizimoOferta rgDizimoOferta, Date dataLancInicial, Date dataLancFinal, Date dataOfertaInicial, Date dataOfertaFinal, String filtroIgreja){
 
@@ -163,35 +135,19 @@ public class RegistroOfertaDao {
             filtroIgreja = String.valueOf(rgDizimoOferta.getIgreja().getCodigo());
         }
 
-        String sql = "SELECT " +
-            "RG.Codigo As Codigo, " +
-            "RG.Ofertante As CodOfertante, " +
-            "P.Nome As Ofertante, " +
-            "RG.TipoOferta As CodTipoOferta, " +
-            "T.Descricao As TipoOferta, " +
-            "RG.Valor As ValorOferta, " +
-            "RG.FormaPagto As CodFormaPagto, " +
-            "FP.Descricao As FormaPagto, " +
-            "RG.DataOferta As DataOferta, " +
-            "RG.Igreja As CodIgreja, " +
-            "IG.NomeIgreja As Igreja, " +
-            "RG.DataCadastro As DataCadastro, " +
-            "RG.ContaCaixa As CodContaCaixa, " +
-            "CC.Descricao As ContaCaixa " +
-            "FROM RegistroDizimoOferta As RG " +
-            "INNER JOIN ContasCaixa As CC ON RG.ContaCaixa = CC.Codigo " +
-            "INNER JOIN Pessoas As P ON RG.Ofertante = P.Codigo " +
-            "INNER JOIN TiposOfertas As T ON RG.TipoOferta = T.Codigo " +
-            "INNER JOIN FormasPagamento As FP ON RG.FormaPagto = FP.Codigo " +
-            "INNER JOIN Igrejas As IG ON RG.Igreja = IG.Codigo " +
+        String sql = "Select " +
+            "MDO.*, " +
+            "(Select Nome From Pessoas P Where P.Codigo = MDO.Ofertante) As NomeOfertante, " +
+            "(Select Descricao From TiposOfertas TPO Where TPO.Codigo = MDO.TipoOferta) As NomeTipoOferta, " +
+            "(Select Descricao From FormasPagamento FP Where FP.Codigo = MDO.FormaPagto) As NomeFormaPagto, " +
+            "(Select NomeIgreja From Igrejas I Where I.Codigo = MDO.Igreja) As NomeIgreja, " +
+            "(Select Descricao From ContasCaixa CC Where CC.Codigo = MDO.ContaCaixa) As NomeContaCaixa " +
             "WHERE (? IS NULL OR RG.ContaCaixa = ?) " +
             "AND (? IS NULL OR RG.TipoOferta = ?) " +
             "AND (? IS NULL OR RG.FormaPagto = ?) " +
-            "AND (? IS NULL OR RG.Ofertante = ?) " +
             "AND RG.Igreja IN ("+filtroIgreja+") " +
             "AND (? IS NULL OR RG.DataOferta BETWEEN ? AND ?) " +
-            "AND (? IS NULL OR RG.DataCadastro BETWEEN ? AND ?) " +
-            "AND (? IS NULL OR RG.SubContaResultado = ?) ";
+            "AND (? IS NULL OR RG.DataCadastro BETWEEN ? AND ?) ";
 
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -224,77 +180,57 @@ public class RegistroOfertaDao {
                 ps.setNull(6, java.sql.Types.INTEGER);
             }
             
-            //Parametro Ofertante
-            if(rgDizimoOferta.getOfertante().getCodigo() != null){
-                ps.setInt(7, rgDizimoOferta.getOfertante().getCodigo());
-                ps.setInt(8, rgDizimoOferta.getOfertante().getCodigo());
-            }else{
-                ps.setNull(7, java.sql.Types.INTEGER);
-                ps.setNull(8, java.sql.Types.INTEGER);
-            }
-            
             // Parametros referente a data da oferta
             if (dataOfertaInicial != null && dataOfertaFinal != null){
-                ps.setDate(9, new java.sql.Date(dataOfertaInicial.getTime()));
-                ps.setDate(10, new java.sql.Date(dataOfertaInicial.getTime()));
-                ps.setDate(11, new java.sql.Date(dataOfertaFinal.getTime()));
+                ps.setDate(7, new java.sql.Date(dataOfertaInicial.getTime()));
+                ps.setDate(8, new java.sql.Date(dataOfertaInicial.getTime()));
+                ps.setDate(9, new java.sql.Date(dataOfertaFinal.getTime()));
             }else{
+                ps.setNull(7, java.sql.Types.DATE);
+                ps.setNull(8, java.sql.Types.DATE);
                 ps.setNull(9, java.sql.Types.DATE);
-                ps.setNull(10, java.sql.Types.DATE);
-                ps.setNull(11, java.sql.Types.DATE);
             }
             
             //Parametro referente a data de lançamento
             if (dataLancInicial != null && dataLancFinal != null){
-                ps.setDate(12, new java.sql.Date(dataLancInicial.getTime()));
-                ps.setDate(13, new java.sql.Date(dataLancInicial.getTime()));
-                ps.setDate(14, new java.sql.Date(dataLancFinal.getTime()));
+                ps.setDate(10, new java.sql.Date(dataLancInicial.getTime()));
+                ps.setDate(11, new java.sql.Date(dataLancInicial.getTime()));
+                ps.setDate(12, new java.sql.Date(dataLancFinal.getTime()));
             }else{
+                ps.setNull(10, java.sql.Types.DATE);
+                ps.setNull(11, java.sql.Types.DATE);
                 ps.setNull(12, java.sql.Types.DATE);
-                ps.setNull(13, java.sql.Types.DATE);
-                ps.setNull(14, java.sql.Types.DATE);
-            }
-            
-            if(rgDizimoOferta.getSubContaResultado() != null){
-                ps.setInt(15, rgDizimoOferta.getSubContaResultado().getCodigo());
-                ps.setInt(16, rgDizimoOferta.getSubContaResultado().getCodigo());
-            }else{
-                ps.setNull(15, java.sql.Types.INTEGER);
-                ps.setNull(16, java.sql.Types.INTEGER);
-            }
+            }          
                       
             rs = ps.executeQuery();
 
             while(rs.next()){               
                 //Instanciando os objetos
+                RegistroDizimoOferta registroDizimoOferta = new RegistroDizimoOferta();
                 Igreja igreja = new Igreja();
                 TipoOferta tpOferta = new TipoOferta();
-                Pessoa ofertante = new Pessoa();
                 FormaPagto formaPagto = new FormaPagto();
-                ContaCaixa contaCaixa = new ContaCaixa();
-                Integer codRegistro = rs.getInt("Codigo");
-                double valorOferta = rs.getDouble("ValorOferta");
-                Integer codOfertante = rs.getInt("CodOfertante");
-                Integer codTpOferta = rs.getInt("CodTipoOferta");
-                Integer codFormPagto = rs.getInt("CodFormaPagto");
-                Integer codIgreja = rs.getInt("CodIgreja");
-                Integer codContaCx = rs.getInt("CodContaCaixa");
-                igreja.setCodigo(codIgreja);
-                igreja.setNome(rs.getString("Igreja"));
-                tpOferta.setCodigo(codTpOferta);
-                tpOferta.setNome(rs.getString("TipoOferta"));
-                ofertante.setCodigo(codOfertante);
-                ofertante.setNome(rs.getString("Ofertante"));
-                formaPagto.setCodigo(codFormPagto);
-                formaPagto.setNome(rs.getString("FormaPagto"));
-                contaCaixa.setCodigo(codContaCx);
-                contaCaixa.setNome(rs.getString("ContaCaixa"));
-              
-                Date dataLanc = rs.getDate("DataCadastro");
-                Date dataOfer = rs.getDate("DataOferta");
+                ContaCaixa contaCaixa = new ContaCaixa();                         
+                igreja.setCodigo(rs.getInt("Igreja"));
+                igreja.setNome(rs.getString("NomeIgreja"));
+                tpOferta.setCodigo(rs.getInt("TipoOferta"));
+                tpOferta.setNome(rs.getString("NomeTipoOferta"));
+                contaCaixa.setCodigo(rs.getInt("ContaCaixa"));
+                contaCaixa.setNome(rs.getString("NomeContaCaixa"));
+                formaPagto.setCodigo(rs.getInt("FormaPagto"));
+                formaPagto.setNome(rs.getString("NomeFormaPagto"));
+                registroDizimoOferta.setCodigo(rs.getInt("Codigo"));
+                registroDizimoOferta.setValorOfertaEntrada(rs.getDouble("Entrada"));
+                registroDizimoOferta.setValorOfertaSaida(rs.getDouble("Saida"));
+                registroDizimoOferta.setComplemento(rs.getString("Complemento"));
+                registroDizimoOferta.setDataOferta(rs.getDate("DataOferta"));
+                registroDizimoOferta.setDataMovimento(rs.getDate("DataMovimento"));
+                registroDizimoOferta.setContaCaixa(contaCaixa);
+                registroDizimoOferta.setFormaPagto(formaPagto);
+                registroDizimoOferta.setIgreja(igreja);
+                registroDizimoOferta.setTpOferta(tpOferta);
                 
-                RegistroDizimoOferta registrosDizimoOferta = new RegistroDizimoOferta(codRegistro, tpOferta, valorOferta, formaPagto, ofertante, dataOfer, igreja, contaCaixa, dataLanc);
-                listaRegistros.add(registrosDizimoOferta);
+                listaRegistros.add(registroDizimoOferta);
             }     
         } catch (SQLException ex) {
             logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
@@ -321,13 +257,12 @@ public class RegistroOfertaDao {
         
         try{
             conexao = Conexao.getDataSource().getConnection();
-            String sqlRegistro = "DELETE FROM RegistroDizimoOferta WHERE Codigo=? And Ofertante=?";
+            String sqlRegistro = "DELETE FROM MovimentoDizimoOferta WHERE Codigo=?";
             
             for(RegistroDizimoOferta rg : listaRgExcluidos){             
                 
                 ps = conexao.prepareStatement(sqlRegistro);
-                ps.setInt(1, rg.getCodRegistro());
-                ps.setInt(2, rg.getOfertante().getCodigo());
+                ps.setInt(1, rg.getCodigo());
 
                 ps.executeUpdate();
             }
@@ -362,10 +297,10 @@ public class RegistroOfertaDao {
         
         try{
             conexao = Conexao.getDataSource().getConnection();
-            String sqlRegistro = "DELETE FROM RegistroDizimoOferta WHERE Codigo=?";  
+            String sqlRegistro = "DELETE FROM MovimentoDizimoOferta WHERE Codigo=?";  
                 
             ps = conexao.prepareStatement(sqlRegistro);
-            ps.setInt(1, rgExcluido.getCodRegistro());
+            ps.setInt(1, rgExcluido.getCodigo());
 
             ps.executeUpdate();
             
@@ -473,7 +408,7 @@ public class RegistroOfertaDao {
                 igreja.setCodigo(this.rs.getInt("CodIgreja"));
                 tipoOferta.setNome(this.rs.getString("TipoOferta"));    
                 tipoOferta.setCodigo(this.rs.getInt("CodTipoOferta"));
-                dizimoOferta.setDataCadastro(this.rs.getDate("DataCadastro"));
+                dizimoOferta.setDataMovimento(this.rs.getDate("DataCadastro"));
                 dizimoOferta.setDataOferta(this.rs.getDate("DataOferta"));
                 dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorOferta"));
                 dizimoOferta.setContaCaixa(contaCaixa);
@@ -502,7 +437,68 @@ public class RegistroOfertaDao {
     }
 
     //Consulta para gerar o relatório de prestação de contas mensal, referente a valores de dizimos e ofertas
-    public List<RegistroDizimoOferta> consultaRelatorioPrestacaoContaMensal(Igreja filtroIgreja, Integer mes, Integer ano){
+    public List<RegistroDizimoOferta> consultaRelatorioPrestacaoContaMensalIgrejaLocal(Igreja filtroIgreja, Integer mes, Integer ano){
+        
+        List<RegistroDizimoOferta> listaDizimoOferta = new ArrayList<>();
+
+        // Montando a query SQL com placeholders
+        String sql = "SELECT " +
+            "(SELECT Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = RDO.TipoOferta) AS NomeTipoOferta, " +
+            "SUM(RDO.Valor) AS ValorOferta " +
+            "FROM RegistroDizimoOferta AS RDO " +
+            "WHERE MONTH(RDO.DataOferta) = ? " +
+            "AND YEAR(RDO.DataOferta) = ? " +
+            "AND (? IS NULL OR RDO.Igreja = ?)" +
+            "GROUP BY RDO.TipoOferta";
+        
+        try {
+            this.conexao = Conexao.getDataSource().getConnection();         
+            this.stmSelect = this.conexao.prepareStatement(sql);  
+            
+            //Paramentro para o mes e ano
+            this.stmSelect.setInt(1, mes);
+            this.stmSelect.setInt(2, ano);
+
+            // Parametro para igreja
+            if (filtroIgreja != null) {
+                this.stmSelect.setInt(3, filtroIgreja.getCodigo());
+                this.stmSelect.setInt(4, filtroIgreja.getCodigo());
+            } else {
+                this.stmSelect.setNull(3, java.sql.Types.INTEGER);
+                this.stmSelect.setNull(4, java.sql.Types.INTEGER);
+            }
+
+            this.rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (rs.next()) {
+                TipoOferta tipoOferta = new TipoOferta();
+                RegistroDizimoOferta dizimoOferta = new RegistroDizimoOferta();
+                tipoOferta.setNome(this.rs.getString("NomeTipoOferta"));    
+                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorOferta"));
+                dizimoOferta.setTpOferta(tipoOferta);
+                
+                listaDizimoOferta.add(dizimoOferta);
+            }
+
+        } catch (SQLException ex) {
+            logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar os registros de dizimos e ofertas", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return listaDizimoOferta;   
+    }
+    
+    //Consulta para gerar o relatório de prestação de contas mensal, referente a valores de dizimos e ofertas
+    public List<RegistroDizimoOferta> consultaRelatorioPrestacaoContaMensalAssociacao (Igreja filtroIgreja, Integer mes, Integer ano){
         
         List<RegistroDizimoOferta> listaDizimoOferta = new ArrayList<>();
 

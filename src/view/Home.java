@@ -41,7 +41,6 @@ import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
 import view.contasPagar.EfetivarContasPagarForm;
 import view.dizimosOfertas.ConsultaRegistroDizimoOferta;
-import view.dizimosOfertas.ConsultaSaldoTipoOfertaForm;
 import view.financeiro.MovimentoFinanceiroForm;
 import view.dizimosOfertas.RegistroDizimoOfertaForm;
 import view.financeiro.AplicacaoFinanceiraForm;
@@ -50,7 +49,7 @@ import view.financeiro.TransferenciaContaForm;
 import view.relatorios.RelatorioExtratoCaixa;
 import view.relatorios.RelatorioContasPagarForm;
 import view.relatorios.RelatorioMovimentoDizimoOferta;
-import view.relatorios.RelatorioPrestacaoContaMensal;
+import view.relatorios.RelatorioPrestacaoContaMensalLocal;
 
 
 public class Home extends javax.swing.JFrame {
@@ -103,7 +102,6 @@ public class Home extends javax.swing.JFrame {
         subMenuFinanceiroDizimoOfertas = new javax.swing.JMenu();
         formRegistrarOfertasDizimo = new javax.swing.JMenuItem();
         formConsultarDizimoOfertas = new javax.swing.JMenuItem();
-        formConsultaSaldoTipoOferta = new javax.swing.JMenuItem();
         subMenuFinanceiroContasPagar = new javax.swing.JMenu();
         formLancarContasPagar = new javax.swing.JMenuItem();
         formEfetivarContasPagar = new javax.swing.JMenuItem();
@@ -123,6 +121,7 @@ public class Home extends javax.swing.JFrame {
         formRelatorioMovimentoDizimoOferta = new javax.swing.JMenuItem();
         subMenuRelatorioPrestacaoConta = new javax.swing.JMenu();
         formRelatorioPrestacaoContaMensal = new javax.swing.JMenuItem();
+        formRelatorioPrestacaoContaMensalGeral = new javax.swing.JMenuItem();
         menuBiblioteca = new javax.swing.JMenu();
         subMenuCadastros = new javax.swing.JMenu();
         formCadastroLivros = new javax.swing.JMenuItem();
@@ -276,14 +275,6 @@ public class Home extends javax.swing.JFrame {
         });
         subMenuFinanceiroDizimoOfertas.add(formConsultarDizimoOfertas);
 
-        formConsultaSaldoTipoOferta.setText("Consulta Saldo Tipo Oferta");
-        formConsultaSaldoTipoOferta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                formConsultaSaldoTipoOfertaActionPerformed(evt);
-            }
-        });
-        subMenuFinanceiroDizimoOfertas.add(formConsultaSaldoTipoOferta);
-
         menuFinanceiro.add(subMenuFinanceiroDizimoOfertas);
 
         subMenuFinanceiroContasPagar.setText("Contas a Pagar");
@@ -401,6 +392,9 @@ public class Home extends javax.swing.JFrame {
             }
         });
         subMenuRelatorioPrestacaoConta.add(formRelatorioPrestacaoContaMensal);
+
+        formRelatorioPrestacaoContaMensalGeral.setText("Prestação Conta Mensal Geral");
+        subMenuRelatorioPrestacaoConta.add(formRelatorioPrestacaoContaMensalGeral);
 
         menuRelatorios.add(subMenuRelatorioPrestacaoConta);
 
@@ -836,7 +830,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formRelatorioMovimentoDizimoOfertaActionPerformed
 
     private void formRelatorioPrestacaoContaMensalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioPrestacaoContaMensalActionPerformed
-        RelatorioPrestacaoContaMensal prestacaoMensal = new RelatorioPrestacaoContaMensal(this.userLogado);
+        RelatorioPrestacaoContaMensalLocal prestacaoMensal = new RelatorioPrestacaoContaMensalLocal(this.userLogado);
         this.painelHome.add(prestacaoMensal);
         prestacaoMensal.setVisible(true);
         prestacaoMensal.setPosicao();
@@ -862,13 +856,6 @@ public class Home extends javax.swing.JFrame {
         resgateAplicacaoForm.setVisible(true);
         resgateAplicacaoForm.setPosicao();
     }//GEN-LAST:event_formRetiradaAplicacaoActionPerformed
-
-    private void formConsultaSaldoTipoOfertaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formConsultaSaldoTipoOfertaActionPerformed
-        ConsultaSaldoTipoOfertaForm tipoOfertaConsulta = new ConsultaSaldoTipoOfertaForm(this.userLogado);
-        this.painelHome.add(tipoOfertaConsulta);
-        tipoOfertaConsulta.setVisible(true);
-        tipoOfertaConsulta.setPosicao();
-    }//GEN-LAST:event_formConsultaSaldoTipoOfertaActionPerformed
   
     private void nomearMenus(){
         
@@ -941,7 +928,7 @@ public class Home extends javax.swing.JFrame {
         this.menuAlterarSenha.setName("59");
         this.formAlterarSenha.setName("60");
         
-        this.formConsultaSaldoTipoOferta.setName("61");
+        this.formRelatorioPrestacaoContaMensalGeral.setName("61");
         
     }
     
@@ -1065,7 +1052,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem formCadastroTipoOferta;
     private javax.swing.JMenuItem formCadastroUsuario;
     private javax.swing.JMenuItem formCancelarContasPagar;
-    private javax.swing.JMenuItem formConsultaSaldoTipoOferta;
     private javax.swing.JMenuItem formConsultarAcervoBiblioteca;
     private javax.swing.JMenuItem formConsultarCampanhas;
     private javax.swing.JMenuItem formConsultarDizimoOfertas;
@@ -1083,6 +1069,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem formRelatorioExtratoCaixa;
     private javax.swing.JMenuItem formRelatorioMovimentoDizimoOferta;
     private javax.swing.JMenuItem formRelatorioPrestacaoContaMensal;
+    private javax.swing.JMenuItem formRelatorioPrestacaoContaMensalGeral;
     private javax.swing.JMenuItem formRemoverParticipante;
     private javax.swing.JMenuItem formRetiradaAplicacao;
     private javax.swing.JMenuItem formSaidaAvulsaLivro;

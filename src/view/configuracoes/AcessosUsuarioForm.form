@@ -156,10 +156,12 @@
                               <Component id="cbx13" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx24" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="cbx33" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="cbx61" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="cbx33" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="67" max="32767" attributes="0"/>
                   </Group>
@@ -216,7 +218,6 @@
                           <Component id="cbx25" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx13" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx24" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbx61" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jSeparator3" min="-2" pref="18" max="-2" attributes="0"/>
@@ -235,7 +236,10 @@
                           <Component id="cbx34" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cbx33" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cbx33" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbx61" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace pref="11" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -450,7 +454,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="cbx61">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consulta Saldo Tipo Oferta"/>
+                <Property name="text" type="java.lang.String" value="SubMenu Relat&#xf3;rio Presta&#xe7;&#xe3;o de Contas"/>
               </Properties>
             </Component>
           </SubComponents>

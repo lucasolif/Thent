@@ -12,8 +12,8 @@ import dao.TipoOfertaDao;
 import Ferramentas.Utilitarios;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +21,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.ContaCaixa;
@@ -29,13 +28,12 @@ import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
-import model.SubContaResultado;
 import model.TipoOferta;
 import model.Usuario;
-import view.carregamentoConsultas.TelaConsultasPessoas;
 
 
-public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame implements ConsultaPessoas{
+
+public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
 
     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
@@ -76,15 +74,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         tabelaRegistros = new javax.swing.JTable();
         iconExcluir = new javax.swing.JButton();
         iconLimpar = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        totalOferta = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        totalDizimo = new javax.swing.JTextField();
         btnFiltrar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        codOfertante = new javax.swing.JTextField();
-        nomeOfertante = new javax.swing.JTextField();
-        btnBuscar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         rbDataLancamento = new javax.swing.JRadioButton();
         rbDataOferta = new javax.swing.JRadioButton();
@@ -100,8 +90,23 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         contaCaixa = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         formaPagto = new javax.swing.JComboBox<>();
-        subContaResultado = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        totalDizimo1 = new javax.swing.JLabel();
+        totalOfertaEscolaSab = new javax.swing.JLabel();
+        totalOfertaPrimicias = new javax.swing.JLabel();
+        totalOfertaCultos = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        totalOfertaMissionaria = new javax.swing.JLabel();
+        totalOfertaPobres = new javax.swing.JLabel();
+        totalOfertaGratidao = new javax.swing.JLabel();
+        totalOfertaLiteratura = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -125,14 +130,14 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
 
             },
             new String [] {
-                "Ofertante", "Valor (R$)", "Tipo Oferta", "Igreja", "Data Oferta", "Data Lançamento"
+                "Tipo Oferta", "Valor (R$)", "Operação", "Descrição", "ContaCx", "Igreja", "Data Lançamento"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -147,17 +152,16 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         jScrollPane1.setViewportView(tabelaRegistros);
         if (tabelaRegistros.getColumnModel().getColumnCount() > 0) {
             tabelaRegistros.getColumnModel().getColumn(0).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tabelaRegistros.getColumnModel().getColumn(0).setPreferredWidth(150);
             tabelaRegistros.getColumnModel().getColumn(1).setResizable(false);
             tabelaRegistros.getColumnModel().getColumn(1).setPreferredWidth(100);
             tabelaRegistros.getColumnModel().getColumn(2).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(2).setPreferredWidth(150);
             tabelaRegistros.getColumnModel().getColumn(3).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(3).setPreferredWidth(200);
             tabelaRegistros.getColumnModel().getColumn(4).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(4).setPreferredWidth(100);
             tabelaRegistros.getColumnModel().getColumn(5).setResizable(false);
-            tabelaRegistros.getColumnModel().getColumn(5).setPreferredWidth(100);
+            tabelaRegistros.getColumnModel().getColumn(5).setPreferredWidth(200);
+            tabelaRegistros.getColumnModel().getColumn(6).setResizable(false);
+            tabelaRegistros.getColumnModel().getColumn(6).setPreferredWidth(100);
         }
 
         iconExcluir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -178,54 +182,12 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
             }
         });
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel8.setText("Total de Ofertas (R$):");
-
-        totalOferta.setEditable(false);
-        totalOferta.setBackground(new java.awt.Color(204, 204, 204));
-        totalOferta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        totalOferta.setForeground(new java.awt.Color(0, 0, 255));
-        totalOferta.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        totalOferta.setFocusable(false);
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel9.setText("Total de Dízimo (R$)");
-
-        totalDizimo.setEditable(false);
-        totalDizimo.setBackground(new java.awt.Color(204, 204, 204));
-        totalDizimo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        totalDizimo.setForeground(new java.awt.Color(0, 0, 255));
-        totalDizimo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        totalDizimo.setFocusable(false);
-
         btnFiltrar.setBackground(new java.awt.Color(255, 102, 0));
         btnFiltrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFiltrarActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Ofertante");
-
-        codOfertante.setEditable(false);
-        codOfertante.setBackground(new java.awt.Color(204, 204, 204));
-        codOfertante.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        codOfertante.setFocusable(false);
-
-        nomeOfertante.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                nomeOfertanteKeyPressed(evt);
-            }
-        });
-
-        btnBuscar.setBackground(new java.awt.Color(0, 153, 255));
-        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -338,18 +300,91 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
             }
         });
 
-        subContaResultado.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                subContaResultadoMousePressed(evt);
-            }
-        });
-        subContaResultado.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                subContaResultadoKeyPressed(evt);
-            }
-        });
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Saldo Atual", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
-        jLabel2.setText("SubConta Resultado");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setText("Dízimo:");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setText("Oferta Cultos:");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setText("Oferta Primícias:");
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel7.setText("Oferta Esc Sabati:");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel13.setText("Oferta Missio:");
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel14.setText("Oferta Pobres:");
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel15.setText("Oferta Gratidão:");
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel16.setText("Oferta Literatura:");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalDizimo1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(totalOfertaCultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaPrimicias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaEscolaSab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalOfertaMissionaria, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(totalOfertaPobres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaGratidao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaLiteratura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalDizimo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaMissionaria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaCultos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaPobres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaPrimicias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(totalOfertaGratidao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalOfertaLiteratura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(totalOfertaEscolaSab)
+                        .addComponent(jLabel16)))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -360,96 +395,68 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalOferta, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalDizimo, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 321, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(iconLimpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(iconExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(tipoOferta, javax.swing.GroupLayout.Alignment.LEADING, 0, 227, Short.MAX_VALUE)
+                            .addComponent(igreja, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(codOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nomeOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(tipoOferta, javax.swing.GroupLayout.Alignment.LEADING, 0, 227, Short.MAX_VALUE)
-                                    .addComponent(igreja, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(contaCaixa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(formaPagto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(contaCaixa, 0, 188, Short.MAX_VALUE)
+                                .addComponent(formaPagto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(nomeOfertante)
-                    .addComponent(codOfertante))
-                .addGap(18, 18, 18)
+                .addContainerGap(7, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel11))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tipoOferta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(iconLimpar)
-                            .addComponent(iconExcluir)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel8)
-                                .addComponent(totalOferta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9)
-                                .addComponent(totalDizimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnFiltrar))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(formaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tipoOferta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(formaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(iconLimpar)
+                    .addComponent(iconExcluir)
+                    .addComponent(btnFiltrar))
                 .addGap(34, 34, 34))
         );
 
@@ -466,16 +473,50 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    //Botão "OK" para consultarRegistrosOfertas o ofertante
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        buscarOfertante();
-        carregarResultadoConsultaFornecedor();
-    }//GEN-LAST:event_btnBuscarActionPerformed
-    
+
+    private void formaPagtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formaPagtoKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            formaPagto.removeAllItems();
+        }
+    }//GEN-LAST:event_formaPagtoKeyPressed
+
+    private void formaPagtoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formaPagtoMousePressed
+        carregarFormaPagto();
+    }//GEN-LAST:event_formaPagtoMousePressed
+
+    private void contaCaixaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contaCaixaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            contaCaixa.removeAllItems();
+        }
+    }//GEN-LAST:event_contaCaixaKeyPressed
+
+    private void contaCaixaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contaCaixaMousePressed
+        carregarContaCaixa();
+    }//GEN-LAST:event_contaCaixaMousePressed
+
+    private void tipoOfertaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tipoOfertaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            tipoOferta.removeAllItems();
+        }
+    }//GEN-LAST:event_tipoOfertaKeyPressed
+
+    private void tipoOfertaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tipoOfertaMousePressed
+        carregarTipoOferta();
+    }//GEN-LAST:event_tipoOfertaMousePressed
+
+    private void igrejaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_igrejaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            igreja.removeAllItems();
+        }
+    }//GEN-LAST:event_igrejaKeyPressed
+
+    private void igrejaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_igrejaMousePressed
+        carregarIgrejas();
+    }//GEN-LAST:event_igrejaMousePressed
+
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         consultarRgDizimoOferta();
         atualizarTabela();
-        mostrarTotalDizimo();
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
     private void iconLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconLimparActionPerformed
@@ -483,70 +524,9 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         limparTabela();
     }//GEN-LAST:event_iconLimparActionPerformed
 
-    private void igrejaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_igrejaKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            igreja.removeAllItems();
-        } 
-    }//GEN-LAST:event_igrejaKeyPressed
-
-    private void tipoOfertaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tipoOfertaKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            tipoOferta.removeAllItems();
-        } 
-    }//GEN-LAST:event_tipoOfertaKeyPressed
-
-    private void contaCaixaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contaCaixaKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            contaCaixa.removeAllItems();
-        } 
-    }//GEN-LAST:event_contaCaixaKeyPressed
-
-    private void formaPagtoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formaPagtoKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            formaPagto.removeAllItems();
-        } 
-    }//GEN-LAST:event_formaPagtoKeyPressed
-
     private void iconExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iconExcluirActionPerformed
         deletarRegistroMovimento();
     }//GEN-LAST:event_iconExcluirActionPerformed
-
-    private void subContaResultadoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_subContaResultadoKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            subContaResultado.removeAllItems();
-        } 
-    }//GEN-LAST:event_subContaResultadoKeyPressed
-
-    private void igrejaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_igrejaMousePressed
-        carregarIgrejas();
-    }//GEN-LAST:event_igrejaMousePressed
-
-    private void contaCaixaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contaCaixaMousePressed
-        carregarContaCaixa();
-    }//GEN-LAST:event_contaCaixaMousePressed
-
-    private void subContaResultadoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subContaResultadoMousePressed
-        carregarSubContaResultado();
-    }//GEN-LAST:event_subContaResultadoMousePressed
-
-    private void tipoOfertaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tipoOfertaMousePressed
-        carregarTipoOferta();
-    }//GEN-LAST:event_tipoOfertaMousePressed
-
-    private void formaPagtoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formaPagtoMousePressed
-        carregarFormaPagto();
-    }//GEN-LAST:event_formaPagtoMousePressed
-
-    private void nomeOfertanteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeOfertanteKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            buscarOfertante();
-            carregarResultadoConsultaFornecedor();
-        } 
-        if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-            this.codOfertante.setText("");
-            this.nomeOfertante.setText("");
-        } 
-    }//GEN-LAST:event_nomeOfertanteKeyPressed
 
     private void consultarRgDizimoOferta(){
          
@@ -560,13 +540,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         FormaPagto formPagto = (FormaPagto) this.formaPagto.getSelectedItem();
         ContaCaixa contaCx = (ContaCaixa) this.contaCaixa.getSelectedItem();
         TipoOferta tpOferta = (TipoOferta) this.tipoOferta.getSelectedItem();
-        
-        //Valida se foi informando alguma ofertante/fornecedor
-        if(!this.codOfertante.getText().isEmpty()){
-            codOfert = Integer.valueOf(this.codOfertante.getText());
-            ofertante.setCodigo(codOfert);
-        }
-        
+              
         if(rbDataLancamento.isSelected()){
             dataLancInicial = conversor.convertendoStringDateSql(this.dataInicial.getText());
             dataLancFinal = conversor.convertendoStringDateSql(this.dataFinal.getText());
@@ -588,16 +562,12 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     }
      
     private void limparFormulario(){
-        codOfertante.setText("");
-        nomeOfertante.setText("");
         dataInicial.setText(conversor.dataAtualString());
         dataFinal.setText(conversor.dataAtualString());
         igreja.setSelectedItem("");
         contaCaixa.setSelectedItem("");
         formaPagto.setSelectedItem("");
         tipoOferta.setSelectedItem("");
-        totalDizimo.setText("0.00");
-        totalOferta.setText("0.00");
         
     }
 
@@ -645,33 +615,7 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         }
         
     }
-    
-    private void carregarSubContaResultado(){
-        List<SubContaResultado> listaSubContResult = subContResultDao.consultarSubContaResultado();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)subContaResultado.getModel();
-        modelo.removeAllElements();
-        for(SubContaResultado subCont : listaSubContResult){
-            modelo.addElement(subCont);
-        }
-    }
-    
-    private void buscarOfertante(){
-        String textoBusca = this.nomeOfertante.getText(); // Texto digitado na busca     
-        this.listaOfertante = this.pessoaDao.consultarCadastroAtivoPessoa(textoBusca); //Lista recebe a busca retornada do banco
-    }
-    
-    private void carregarResultadoConsultaFornecedor(){
-        TelaConsultasPessoas resultConsultParticipante = new TelaConsultasPessoas((Frame) SwingUtilities.getWindowAncestor(this), this.listaOfertante);
-        resultConsultParticipante.setPessoaSelecionada(this);
-        resultConsultParticipante.setLocationRelativeTo(this);
-        resultConsultParticipante.setVisible(true);
-    }
-    
-    private void carregarFornecedorEscolhido(Pessoa pessoa){
-        this.codOfertante.setText(Integer.toString(pessoa.getCodigo()));
-        this.nomeOfertante.setText(pessoa.getNome());
-    }
-    
+   
     private void atualizarTabela(){
         List<RegistroDizimoOferta> listaRegistro = listaRgDizimoOfertas;
         DefaultTableModel model = (DefaultTableModel) tabelaRegistros.getModel();
@@ -679,35 +623,9 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
 
         for(RegistroDizimoOferta rg : listaRegistro){     
             String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
-            String dataCadastro = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataCadastro());
+            String dataCadastro = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataMovimento());
             model.addRow(new Object[]{rg.getOfertante().getNome(),rg.getValorOfertaEntrada(), rg.getTpOferta(), rg.getIgreja().getNome(), dataOferta, dataCadastro});
         }
-    }
-    
-    private void mostrarTotalDizimo(){
-        double totalValorDizimo = 0;
-        double totalValorOferta = 0;
-        int qtdLinhasTabela = tabelaRegistros.getRowCount();
-        
-        for(int i = 0; i < qtdLinhasTabela; i++){  
-            
-            TipoOferta tpOferta = (TipoOferta) tabelaRegistros.getModel().getValueAt(i, 2);
-            double valor = (Double) tabelaRegistros.getModel().getValueAt(i, 1);
-            
-            if(tpOferta.getCodigo() == 1){
-                totalValorDizimo += valor;
-            }else{
-                totalValorOferta += valor;
-            }
-            
-        }  
-        
-        totalValorDizimo = conversor.arrendodarValores(totalValorDizimo);
-        totalValorOferta = conversor.arrendodarValores(totalValorOferta);
-        
-        totalDizimo.setText(Double.toString(totalValorDizimo));
-        totalOferta.setText(Double.toString(totalValorOferta));
-    
     }
     
     private void deletarRegistroMovimento(){
@@ -749,64 +667,163 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
         listaRgExcluida.clear();     
     }
     
+    private void consultarCarregarTotais(){
+        
+        TipoOferta tipoOferta = (TipoOferta) this.tipoOferta.getSelectedItem();
+        ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
+        Date dataInicial = this.conversor.convertendoStringDateSql(this.dataInicial.getText());
+        Date dataFinal = this.conversor.convertendoStringDateSql(this.dataFinal.getText());
+        
+        //Resultado da consulta
+        List<RegistroDizimoOferta> listaMvOfertaDizimo = mvOfertaDizimoDao.consultarTotaisDizimoOferta(tipoOferta, contaCaixa, dataInicial, dataFinal);
+        
+        //Carregar os valores
+        for(RegistroDizimoOferta rg : listaMvOfertaDizimo){
+            if(null != rg.getTpOferta().getCodigo())switch (rg.getTpOferta().getCodigo()) {
+                case 1:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalDizimo.setText(valor);
+
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalDizimo.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalDizimo.setForeground(Color.blue);
+                        }
+                        break;
+                    }
+                case 2:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalOfertaEscolaSab.setText(valor);
+
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalOfertaEscolaSab.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalOfertaEscolaSab.setForeground(Color.blue);
+                        }
+                        break;
+                    }
+                case 3:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalOfertaCultos.setText(valor);
+
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalOfertaCultos.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalOfertaCultos.setForeground(Color.blue);
+                        }                    
+                        break;
+                    }
+                case 4:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalOfertaMissionaria.setText(valor);
+                        
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalOfertaMissionaria.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalOfertaMissionaria.setForeground(Color.blue);
+                        }                                   
+                        break;
+                    }
+                case 5:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalOfertaPobres.setText(valor);
+                        
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalOfertaPobres.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalOfertaPobres.setForeground(Color.blue);
+                        }           
+                        break;
+                    }
+                case 6:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalOfertaLiteratura.setText(valor);
+                        
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalOfertaLiteratura.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalOfertaLiteratura.setForeground(Color.blue);
+                        }           
+                        break;
+                    }
+                case 7:{
+                        String valor = String.valueOf("R$ "+rg.getValorTotal()).replace(".", ",");
+                        this.totalOfertaGratidao.setText(valor);
+                        
+                        //Definindo as cores com base no valor
+                        if(rg.getValorTotal() < 0){
+                            this.totalOfertaGratidao.setForeground(Color.red);
+                        }else if(rg.getValorTotal() > 0){
+                            this.totalOfertaGratidao.setForeground(Color.blue);
+                        }           
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+    }
+    
     private void alinharConteudoTabela(){
         
         // Alinhamento do Ofertante (à esquerda)
-        DefaultTableCellRenderer alinhasEsqOfertante = new DefaultTableCellRenderer();
-        alinhasEsqOfertante.setHorizontalAlignment(SwingConstants.LEFT);
-        this.tabelaRegistros.getColumnModel().getColumn(0).setCellRenderer(alinhasEsqOfertante);
+        DefaultTableCellRenderer primeiraColuna = new DefaultTableCellRenderer();
+        primeiraColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaRegistros.getColumnModel().getColumn(0).setCellRenderer(primeiraColuna);
 
         // Alinhamento do Valor (centro)
-        DefaultTableCellRenderer alinhaCenterValor = new DefaultTableCellRenderer();
-        alinhaCenterValor.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaRegistros.getColumnModel().getColumn(1).setCellRenderer(alinhaCenterValor);
+        DefaultTableCellRenderer segundaColuna = new DefaultTableCellRenderer();
+        segundaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(1).setCellRenderer(segundaColuna);
 
         //Alinhamento do tipo de oferta
-        DefaultTableCellRenderer alinhaEsqTpOferta = new DefaultTableCellRenderer();
-        alinhaEsqTpOferta.setHorizontalAlignment(SwingConstants.LEFT);
-        this.tabelaRegistros.getColumnModel().getColumn(2).setCellRenderer(alinhaEsqTpOferta);
+        DefaultTableCellRenderer terceiraColuna = new DefaultTableCellRenderer();
+        terceiraColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(2).setCellRenderer(terceiraColuna);
         
         //Alinhamento da igreja
-        DefaultTableCellRenderer alinhaEsqIgreja = new DefaultTableCellRenderer();
-        alinhaEsqIgreja.setHorizontalAlignment(SwingConstants.LEFT);
-        this.tabelaRegistros.getColumnModel().getColumn(3).setCellRenderer(alinhaEsqIgreja);
+        DefaultTableCellRenderer quartaColuna = new DefaultTableCellRenderer();
+        quartaColuna.setHorizontalAlignment(SwingConstants.LEFT);
+        this.tabelaRegistros.getColumnModel().getColumn(3).setCellRenderer(quartaColuna);
         
         //Alinhamento da data de oferta
-        DefaultTableCellRenderer alinhaCenterDataOferta = new DefaultTableCellRenderer();
-        alinhaCenterDataOferta.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaRegistros.getColumnModel().getColumn(4).setCellRenderer(alinhaCenterDataOferta);
+        DefaultTableCellRenderer quintaColuna = new DefaultTableCellRenderer();
+        quintaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(4).setCellRenderer(quintaColuna);
         
         //Alinhamento da data de lançamento
-        DefaultTableCellRenderer alinhaCenterDataLanc = new DefaultTableCellRenderer();
-        alinhaCenterDataLanc.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaRegistros.getColumnModel().getColumn(5).setCellRenderer(alinhaCenterDataLanc);
+        DefaultTableCellRenderer sextaColuna = new DefaultTableCellRenderer();
+        sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
+        
+        //Alinhamento da data de lançamento
+        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
+        setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
+        this.tabelaRegistros.getColumnModel().getColumn(6).setCellRenderer(setimaColuna);
     }
 
     private void formInicial(){      
         tipoOferta.removeAllItems();
         igreja.removeAllItems();
         formaPagto.removeAllItems();
-        subContaResultado.removeAllItems();
         contaCaixa.removeAllItems();
         rbDataLancamento.setSelected(true);
         dataInicial.setText(conversor.dataAtualString());
         dataFinal.setText(conversor.dataAtualString());
-        totalDizimo.setText("0.00");
-        totalOferta.setText("0.00");
         alinharConteudoTabela();
         personalizaTabela.definirNegritoTituloColuna(tabelaRegistros);
     }
-    
-    @Override
-    public void pessoaSelecionada(Pessoa pessoaSelecionada) {
-        carregarFornecedorEscolhido(pessoaSelecionada);
-    }
-    
+     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnFiltrar;
-    private javax.swing.JTextField codOfertante;
     private javax.swing.JComboBox<String> contaCaixa;
     private javax.swing.JFormattedTextField dataFinal;
     private javax.swing.JFormattedTextField dataInicial;
@@ -819,23 +836,32 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame imp
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField nomeOfertante;
     private javax.swing.JRadioButton rbDataLancamento;
     private javax.swing.JRadioButton rbDataOferta;
-    private javax.swing.JComboBox<String> subContaResultado;
     private javax.swing.JTable tabelaRegistros;
     private javax.swing.JComboBox<String> tipoOferta;
-    private javax.swing.JTextField totalDizimo;
-    private javax.swing.JTextField totalOferta;
+    private javax.swing.JLabel totalDizimo1;
+    private javax.swing.JLabel totalOfertaCultos;
+    private javax.swing.JLabel totalOfertaEscolaSab;
+    private javax.swing.JLabel totalOfertaGratidao;
+    private javax.swing.JLabel totalOfertaLiteratura;
+    private javax.swing.JLabel totalOfertaMissionaria;
+    private javax.swing.JLabel totalOfertaPobres;
+    private javax.swing.JLabel totalOfertaPrimicias;
     private javax.swing.JLabel txData;
     // End of variables declaration//GEN-END:variables
 }

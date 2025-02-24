@@ -1062,7 +1062,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                         //Exclui a operação bancária e automaticamente a movimentação é excluída
                         transfDeposiDao.excluirOperacaoBancaria(mvEx.getTransferecia());
                         tipoMovimento = "Operação Bancária";
-                    }if(mvEx.getRgOferta().getCodRegistro() != 0){
+                    }if(mvEx.getRgOferta().getCodigo() != 0){
                         //Excluí o registro de oferta e dízimo, e automaticamente a movimentação é excluída
                         rgOfertaDao.deletarRegistrosMovimento(mvEx.getRgOferta());
                         tipoMovimento = "Ofertas e Dízimo";

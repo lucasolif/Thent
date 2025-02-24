@@ -10,7 +10,6 @@ import dao.MovimentoCaixaDao;
 import dao.RegistroOfertaDao;
 import dao.TransferenciaDepositoDao;
 import dao.UsuarioDao;
-import java.awt.Dimension;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -27,9 +26,10 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
-public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
-    
-    //Estanciamento de classes que serão utilizadas
+
+public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFrame {
+
+        //Estanciamento de classes que serão utilizadas
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
@@ -41,49 +41,30 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private Usuario usuarioLogado;
     private String filtroIgreja = "";
-    
-    public RelatorioPrestacaoContaMensal(Usuario usuarioLogado) {
+
+    public RelatorioPrestacaoContaMensalGeral() {
         initComponents();
         this.usuarioLogado = usuarioLogado;
         this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formaInicial();
     }
-    
-    public void setPosicao() {
-        Dimension d = this.getDesktopPane().getSize();
-        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
-    }  
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        igreja = new javax.swing.JComboBox<>();
-        mesPrestacao = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        anoPrestacao = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         btnGerar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        anoPrestacao = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        mesPrestacao = new javax.swing.JComboBox<>();
+        igreja = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
 
         setClosable(true);
-        setIconifiable(true);
         setResizable(true);
-        setTitle("Prestação de Contas Mensal");
-
-        jLabel1.setText("Igreja");
-
-        igreja.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                igrejaMousePressed(evt);
-            }
-        });
-
-        mesPrestacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
-
-        jLabel2.setText("Mês");
-
-        jLabel3.setText("Ano");
+        setTitle("Prestação Contas Mensal (Geral)");
 
         btnGerar.setBackground(new java.awt.Color(0, 153, 255));
         btnGerar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -94,6 +75,20 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel3.setText("Ano");
+
+        jLabel2.setText("Mês");
+
+        mesPrestacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" }));
+
+        igreja.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                igrejaMousePressed(evt);
+            }
+        });
+
+        jLabel1.setText("Igreja");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,22 +96,20 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 84, Short.MAX_VALUE))
-                            .addComponent(mesPrestacao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
+                            .addComponent(mesPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(anoPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnGerar))
-                            .addComponent(jLabel3)))
-                    .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnGerar))))
                     .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,7 +118,7 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
@@ -134,20 +127,20 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
                     .addComponent(mesPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(anoPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGerar))
-                .addGap(19, 19, 19))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
+        gerarRelatorio();
+    }//GEN-LAST:event_btnGerarActionPerformed
+
     private void igrejaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_igrejaMousePressed
         carregarIgreja();
     }//GEN-LAST:event_igrejaMousePressed
 
-    private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
-        gerarRelatorio();
-    }//GEN-LAST:event_btnGerarActionPerformed
- 
     private void carregarIgreja(){
         List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
@@ -165,7 +158,7 @@ public class RelatorioPrestacaoContaMensal extends javax.swing.JInternalFrame {
         final Integer numMes = conversor.obterNumMes(nomeMes);  
 
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
-        List<RegistroDizimoOferta> listaRgDizimoOferta = rgOfertaDao.consultaRelatorioPrestacaoContaMensal(igreja, numMes, ano);
+        List<RegistroDizimoOferta> listaRgDizimoOferta = rgOfertaDao.consultaRelatorioPrestacaoContaMensalIgrejaLocal(igreja, numMes, ano);
     
         return listaRgDizimoOferta;
     }

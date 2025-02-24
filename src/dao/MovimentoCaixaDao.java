@@ -189,7 +189,7 @@ public class MovimentoCaixaDao {
                 formaPagto.setNome(this.rs.getString("FormaPagto"));
                 tpOferta.setCodigo(this.rs.getInt("TipoOferta"));
                 rgDizimoOferta.setTpOferta(tpOferta);
-                rgDizimoOferta.setCodRegistro(this.rs.getInt("RegistroOferta"));
+                rgDizimoOferta.setCodigo(this.rs.getInt("RegistroOferta"));
                 transfDepos.setCodigo(this.rs.getInt("TransferenciaDeposito"));
                 contaPagar.setCodigo(this.rs.getInt("RegistroContaPagar"));               
                 mvCaixa.setValorEntrada(this.rs.getDouble("ValorEntrada"));
@@ -295,7 +295,7 @@ public class MovimentoCaixaDao {
                 igreja.setNome(this.rs.getString("NomeIgreja"));
                 igreja.setCodigo(this.rs.getInt("Igreja"));
                 pessoa.setCodigo(this.rs.getInt("Pessoa"));
-                rgDizimoOferta.setCodRegistro(this.rs.getInt("RegistroOferta"));
+                rgDizimoOferta.setCodigo(this.rs.getInt("RegistroOferta"));
                 transfDepos.setCodigo(this.rs.getInt("TransferenciaDeposito"));
                 contaPagar.setCodigo(this.rs.getInt("RegistroContaPagar"));     
                 crCampanha.setCodigo(this.rs.getInt("RegistroContaReceberCampanha"));   
