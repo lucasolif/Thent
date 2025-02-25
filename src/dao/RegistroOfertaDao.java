@@ -42,15 +42,14 @@ public class RegistroOfertaDao {
             conexao.setAutoCommit(false); //Setando o autocomit como falso
             
             for(RegistroDizimoOferta rg : registros){ 
-                String complemento = rg.getTpOferta().getNome()+" - "+rg.getContaCaixa().getNome();
-                String sql = "INSERT INTO MovimentoDizimoOferta (Ofertante,TipoOferta,Entrada,Saida,Complemento,FormaPagto,Igreja,ContaCaixa,UsuarioCadastro,DataOferta,DataCadastro) VALUES(?,?,?,?,?,?,?,?,?,?,GETDATE())";
+                String sql = "INSERT INTO MovimentoDizimoOferta (Ofertante,TipoOferta,Entrada,Saida,Complemento,FormaPagto,Igreja,ContaCaixa,UsuarioCadastro,DataOferta,DataMovimento) VALUES(?,?,?,?,?,?,?,?,?,?,GETDATE())";
                 psRegistro = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS); 
 
                 psRegistro.setInt(1, rg.getOfertante().getCodigo());
                 psRegistro.setDouble(2, rg.getTpOferta().getCodigo());
                 psRegistro.setDouble(3, rg.getValorOfertaEntrada());
                 psRegistro.setDouble(4, rg.getValorOfertaSaida());
-                psRegistro.setString(5, complemento);
+                psRegistro.setString(5, rg.getComplemento());
                 psRegistro.setInt(6, rg.getFormaPagto().getCodigo());
                 psRegistro.setInt(7, rg.getIgreja().getCodigo());
                 psRegistro.setInt(8, rg.getContaCaixa().getCodigo());
@@ -104,7 +103,7 @@ public class RegistroOfertaDao {
             int idRegistro = chaveRgOferta.getInt(1);
 
             // Inserir dados na segunda tabela usando a chave primária da primeira tabela
-            String sql = "INSERT INTO MovimentoCaixa (RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,?,GETDATE(),?)";
+            String sql = "INSERT INTO MovimentoCaixa (RegistroOferta,ValorEntrada,ValorSaida,ContaCaixa,Complemento,FormaPagto,Igreja,UsuarioCadastro,DataMovimento,DataPagamentoRecebimento) VALUES(?,?,?,?,?,?,?,?,GETDATE(),?)";
             
             //String complemento = rg.getOfertante().getNome().substring(0, 30)+" | "+rg.getTpOferta().getNome();
             stmInsert = conexao.prepareStatement(sql);
@@ -122,7 +121,7 @@ public class RegistroOfertaDao {
             stmInsert.execute();
         }catch(SQLException ex){
             logsDao.gravaLogsErro("RegistroOfertaDao - "+ex.getSQLState()+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar o dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao tentar movimentar no caixa, o dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
     }
        
@@ -142,12 +141,13 @@ public class RegistroOfertaDao {
             "(Select Descricao From FormasPagamento FP Where FP.Codigo = MDO.FormaPagto) As NomeFormaPagto, " +
             "(Select NomeIgreja From Igrejas I Where I.Codigo = MDO.Igreja) As NomeIgreja, " +
             "(Select Descricao From ContasCaixa CC Where CC.Codigo = MDO.ContaCaixa) As NomeContaCaixa " +
-            "WHERE (? IS NULL OR RG.ContaCaixa = ?) " +
-            "AND (? IS NULL OR RG.TipoOferta = ?) " +
-            "AND (? IS NULL OR RG.FormaPagto = ?) " +
-            "AND RG.Igreja IN ("+filtroIgreja+") " +
-            "AND (? IS NULL OR RG.DataOferta BETWEEN ? AND ?) " +
-            "AND (? IS NULL OR RG.DataCadastro BETWEEN ? AND ?) ";
+            "FROM MovimentoDizimoOferta MDO " +
+            "WHERE (? IS NULL OR MDO.ContaCaixa = ?) " +
+            "AND (? IS NULL OR MDO.TipoOferta = ?) " +
+            "AND (? IS NULL OR MDO.FormaPagto = ?) " +
+            "AND MDO.Igreja IN ("+filtroIgreja+") " +
+            "AND (? IS NULL OR MDO.DataOferta BETWEEN ? AND ?) " +
+            "AND (? IS NULL OR MDO.DataMovimento BETWEEN ? AND ?) ";
 
         try{
             conexao = Conexao.getDataSource().getConnection();
@@ -339,22 +339,22 @@ public class RegistroOfertaDao {
 
         // Montando a query SQL com placeholders
         String sql = "SELECT " +
-                    "(Select Nome From Pessoas As P Where P.Codigo = RDO.Ofertante) As Ofertante, " +
-                    "(Select Descricao From FormasPagamento As FP Where FP.Codigo = RDO.FormaPagto) As FormaPagto, " +
-                    "(SELECT TP.Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = RDO.TipoOferta) AS TipoOferta, " +
-                    "RDO.Valor AS ValorOferta, " +
-                    "RDO.TipoOferta AS CodTipoOferta, " +
-                    "RDO.Igreja AS CodIgreja, " +
-                    "RDO.DataOferta AS DataOferta, " +
-                    "(SELECT I.NomeIgreja FROM Igrejas AS I WHERE I.Codigo = RDO.Igreja) AS Igreja, " +
-                    "(SELECT CC.Descricao FROM ContasCaixa AS CC WHERE CC.Codigo = RDO.ContaCaixa) AS ContaCaixa, " +
-                    "RDO.DataCadastro AS DataCadastro " +
-                    "FROM RegistroDizimoOferta AS RDO " +
-                    "WHERE (? IS NULL OR RDO.DataCadastro BETWEEN ? AND ?) " +
-                    "AND (? IS NULL OR RDO.DataOferta BETWEEN ? AND ?) " +
-                    "AND RDO.Igreja IN ("+filtroIgreja+")" +
-                    "AND (? IS NULL OR RDO.TipoOferta = ?) " +
-                    "ORDER BY RDO."+ordemDados;
+                    "(Select Nome From Pessoas As P Where P.Codigo = MDO.Ofertante) As Ofertante, " +
+                    "(SELECT TP.Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = MDO.TipoOferta) AS TipoOferta, " +
+                    "MDO.Entrada AS ValorEntrada, " +
+                    "MDO.Entrada AS ValorSaida, " +
+                    "MDO.TipoOferta AS CodTipoOferta, " +
+                    "MDO.Igreja AS CodIgreja, " +
+                    "MDO.DataOferta AS DataOferta, " +
+                    "(SELECT I.NomeIgreja FROM Igrejas AS I WHERE I.Codigo = MDO.Igreja) AS Igreja, " +
+                    "(SELECT CC.Descricao FROM ContasCaixa AS CC WHERE CC.Codigo = MDO.ContaCaixa) AS ContaCaixa, " +
+                    "MDO.DataMovimento AS DataMovimento " +
+                    "FROM MovimentoDizimoOferta AS MDO " +
+                    "WHERE (? IS NULL OR MDO.DataMovimento BETWEEN ? AND ?) " +
+                    "AND (? IS NULL OR MDO.DataOferta BETWEEN ? AND ?) " +
+                    "AND MDO.Igreja IN ("+filtroIgreja+")" +
+                    "AND (? IS NULL OR MDO.TipoOferta = ?) " +
+                    "ORDER BY MDO."+ordemDados;
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -408,9 +408,10 @@ public class RegistroOfertaDao {
                 igreja.setCodigo(this.rs.getInt("CodIgreja"));
                 tipoOferta.setNome(this.rs.getString("TipoOferta"));    
                 tipoOferta.setCodigo(this.rs.getInt("CodTipoOferta"));
-                dizimoOferta.setDataMovimento(this.rs.getDate("DataCadastro"));
+                dizimoOferta.setDataMovimento(this.rs.getDate("DataMovimento"));
                 dizimoOferta.setDataOferta(this.rs.getDate("DataOferta"));
-                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorOferta"));
+                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorEntrada"));
+                dizimoOferta.setValorOfertaSaida(this.rs.getDouble("ValorSaida"));
                 dizimoOferta.setContaCaixa(contaCaixa);
                 dizimoOferta.setFormaPagto(formaPagto);
                 dizimoOferta.setIgreja(igreja);
@@ -443,13 +444,13 @@ public class RegistroOfertaDao {
 
         // Montando a query SQL com placeholders
         String sql = "SELECT " +
-            "(SELECT Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = RDO.TipoOferta) AS NomeTipoOferta, " +
-            "SUM(RDO.Valor) AS ValorOferta " +
-            "FROM RegistroDizimoOferta AS RDO " +
-            "WHERE MONTH(RDO.DataOferta) = ? " +
-            "AND YEAR(RDO.DataOferta) = ? " +
-            "AND (? IS NULL OR RDO.Igreja = ?)" +
-            "GROUP BY RDO.TipoOferta";
+            "(SELECT Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = MDO.TipoOferta) AS NomeTipoOferta, " +
+            "SUM(MDO.Valor) AS ValorOferta " +
+            "FROM MovimentoDizimoOferta AS MDO " +
+            "WHERE MONTH(MDO.DataOferta) = ? " +
+            "AND YEAR(MDO.DataOferta) = ? " +
+            "AND (? IS NULL OR MDO.Igreja = ?)" +
+            "GROUP BY MDO.TipoOferta";
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
@@ -561,8 +562,8 @@ public class RegistroOfertaDao {
     public List<RegistroDizimoOferta> consultarTotaisTipoOferta(Igreja igrejaFiltro, ContaCaixa contaCaixaFiltro, String filtroIgrejaUsuario, Date dataOfertaInicial, Date dataOfertaFinal, Date dataLancInicial, Date dataLancFinal){
         List<RegistroDizimoOferta> listaRegistros = new ArrayList<>();
         
-        if(igrejaFiltro.getIgreja()!= null){
-            filtroIgrejaUsuario = String.valueOf(igrejaFiltro.getIgreja().getCodigo());
+        if(igrejaFiltro!= null){
+            filtroIgrejaUsuario = String.valueOf(igrejaFiltro.getCodigo());
         }
 
         String sql = "Select TipoOferta, Sum(Entrada - Saida) ValorTotal " +
@@ -570,7 +571,7 @@ public class RegistroOfertaDao {
             "Where (? IS NULL OR ContaCaixa = ?) " +
             "And Igreja In ("+filtroIgrejaUsuario+") " +
             "And (? IS NULL OR DataOferta Between ? And ?) " +
-            "And (? IS NULL OR DataCadastro Between ? And ?) " +
+            "And (? IS NULL OR DataMovimento Between ? And ?) " +
             "Group By TipoOferta";
 
         try{
@@ -615,7 +616,6 @@ public class RegistroOfertaDao {
                 RegistroDizimoOferta registroDizimoOferta = new RegistroDizimoOferta();
                 TipoOferta tpOferta = new TipoOferta();                       
                 tpOferta.setCodigo(rs.getInt("TipoOferta"));
-                registroDizimoOferta.setCodigo(rs.getInt("Codigo"));
                 registroDizimoOferta.setValorTotal(rs.getDouble("ValorTotal"));
                 registroDizimoOferta.setTpOferta(tpOferta);
                 

@@ -90,8 +90,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         contaCaixa = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         valorOferta = new javax.swing.JFormattedTextField();
-        subContaResultado = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
         nomeOfertante = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaOfertas = new javax.swing.JTable();
@@ -139,8 +137,11 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         jLabel1.setText("Conta Caixa");
 
         valorOferta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-
-        jLabel8.setText("Conta Resultado*");
+        valorOferta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                valorOfertaKeyPressed(evt);
+            }
+        });
 
         nomeOfertante.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -190,10 +191,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -208,13 +205,9 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
                             .addComponent(codOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nomeOfertante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel8))
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(subContaResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -252,14 +245,14 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
 
             },
             new String [] {
-                "Ofertante", "Valor", "Tipo Oferta", "Forma Pagto", "Conta Caixa", "Conta de Resultado", "Data Oferta"
+                "Ofertante", "Valor", "Tipo Oferta", "Forma Pagto", "Conta Caixa", "Data Oferta"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Double.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -273,7 +266,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         jScrollPane1.setViewportView(tabelaOfertas);
         if (tabelaOfertas.getColumnModel().getColumnCount() > 0) {
             tabelaOfertas.getColumnModel().getColumn(0).setResizable(false);
-            tabelaOfertas.getColumnModel().getColumn(0).setPreferredWidth(150);
+            tabelaOfertas.getColumnModel().getColumn(0).setPreferredWidth(250);
             tabelaOfertas.getColumnModel().getColumn(1).setResizable(false);
             tabelaOfertas.getColumnModel().getColumn(1).setPreferredWidth(50);
             tabelaOfertas.getColumnModel().getColumn(2).setResizable(false);
@@ -282,8 +275,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
             tabelaOfertas.getColumnModel().getColumn(3).setPreferredWidth(100);
             tabelaOfertas.getColumnModel().getColumn(4).setResizable(false);
             tabelaOfertas.getColumnModel().getColumn(5).setResizable(false);
-            tabelaOfertas.getColumnModel().getColumn(5).setPreferredWidth(150);
-            tabelaOfertas.getColumnModel().getColumn(6).setResizable(false);
         }
 
         btnSalvar.setBackground(new java.awt.Color(51, 204, 0));
@@ -387,6 +378,17 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         }
     }//GEN-LAST:event_nomeOfertanteKeyPressed
 
+    private void valorOfertaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valorOfertaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            inserirRegistroTabela();
+            codOfertante.setText("");
+            nomeOfertante.setText("");
+            valorOferta.setText("");
+        }
+        
+
+    }//GEN-LAST:event_valorOfertaKeyPressed
+
     private void limparFormulario(){
         codOfertante.setText("");
         nomeOfertante.setText("");
@@ -442,16 +444,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         }
         
     }
-    
-    private void carregarSubContaResultado(){
-        List<SubContaResultado> listaSubContResult = subContResultDao.consultarSubContaResultado();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)subContaResultado.getModel();
-        modelo.removeAllElements();
-        for(SubContaResultado subCont : listaSubContResult){
-            modelo.addElement(subCont);
-        }
-    }
-    
+  
     private void buscarOfertante(){
         String textoBusca = this.nomeOfertante.getText(); // Texto digitado na busca    
         this.listaOfertante = this.pessoaDao.consultarCadastroAtivoPessoa(textoBusca); //Lista recebe a busca retornada do banco
@@ -484,7 +477,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         FormaPagto formaPagto = (FormaPagto) this.formaPagto.getSelectedItem();
         TipoOferta tpOferta = (TipoOferta) this.tipoOferta.getSelectedItem();
         ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
-        SubContaResultado subContResult = (SubContaResultado) this.subContaResultado.getSelectedItem();
         Pessoa ofertante = new Pessoa();
         ofertante.setCodigo(codigo);
         ofertante.setNome(nome);
@@ -495,7 +487,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         }
         
         DefaultTableModel model = (DefaultTableModel) this.tabelaOfertas.getModel();
-        model.addRow(new Object[]{ofertante,valorOferta,tpOferta,formaPagto,contaCaixa,subContResult,dataOferta});         
+        model.addRow(new Object[]{ofertante,valorOferta,tpOferta,formaPagto,contaCaixa,dataOferta});         
     } 
     
     // Remove o registro adicionado na tabela, antes dele ser enviado para o banco de dados
@@ -529,15 +521,22 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
             TipoOferta tpOferta = (TipoOferta) tabelaOfertas.getModel().getValueAt(i, 2);
             FormaPagto formaPagto = (FormaPagto) tabelaOfertas.getModel().getValueAt(i, 3);
             ContaCaixa contaCx = (ContaCaixa) tabelaOfertas.getModel().getValueAt(i, 4);
-            SubContaResultado subContResult = (SubContaResultado) tabelaOfertas.getModel().getValueAt(i, 5);
-            String stringDataOferta = (String)tabelaOfertas.getModel().getValueAt(i, 6);
+            String stringDataOferta = (String)tabelaOfertas.getModel().getValueAt(i, 5);
             Date dataOferta = this.conversor.convertendoStringDateSql(stringDataOferta);
             Igreja igreja = (Igreja) igrejaCampo.getSelectedItem();
                        
-            RegistroDizimoOferta registro = new RegistroDizimoOferta(tpOferta, valOferta, formaPagto, ofertante, dataOferta, igreja, contaCx, subContResult);
-            listaRegistro.add(registro);          
+            RegistroDizimoOferta registro = new RegistroDizimoOferta();
+            registro.setTpOferta(tpOferta);
+            registro.setValorOfertaEntrada(valOferta);
+            registro.setValorOfertaSaida(0);
+            registro.setFormaPagto(formaPagto);
+            registro.setOfertante(ofertante);
+            registro.setDataOferta(dataOferta);
+            registro.setIgreja(igreja);
+            registro.setContaCaixa(contaCx);
+            registro.setComplemento(tpOferta.getNome()+" - "+contaCx.getNome());
             
-            
+            listaRegistro.add(registro);              
         }  
         
         rgOfertaDao.adicionarRegistroOfertaDizimo(listaRegistro, this.usuarioLogado);
@@ -551,7 +550,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         limparTabela();
         carregarContaCaixa();
         dataOferta.setText(conversor.dataAtualString());
-        carregarSubContaResultado();
         personalizaTabela.definirNegritoTituloColuna(tabelaOfertas);
         alinharConteudoTabela();
     }
@@ -588,10 +586,6 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
         sextaColuna.setHorizontalAlignment(SwingConstants.CENTER);
         this.tabelaOfertas.getColumnModel().getColumn(5).setCellRenderer(sextaColuna);
         
-        //Alinhamento da data de lançamento
-        DefaultTableCellRenderer setimaColuna = new DefaultTableCellRenderer();
-        setimaColuna.setHorizontalAlignment(SwingConstants.CENTER);
-        this.tabelaOfertas.getColumnModel().getColumn(6).setCellRenderer(setimaColuna);
     }
     
     @Override
@@ -617,12 +611,10 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nomeOfertante;
-    private javax.swing.JComboBox<String> subContaResultado;
     private javax.swing.JTable tabelaOfertas;
     private javax.swing.JComboBox<String> tipoOferta;
     private javax.swing.JFormattedTextField valorOferta;

@@ -521,10 +521,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="totalOfertaLiteratura" alignment="1" min="-2" pref="16" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                          <Component id="totalOfertaEscolaSab" alignment="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="totalOfertaEscolaSab" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -566,12 +566,24 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalDizimo">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaEscolaSab">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaPrimicias">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaCultos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
               <Properties>
@@ -606,12 +618,24 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaMissionaria">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaPobres">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaGratidao">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="totalOfertaLiteratura">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="R$ 0.00"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>

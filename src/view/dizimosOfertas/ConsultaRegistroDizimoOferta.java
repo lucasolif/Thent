@@ -42,7 +42,6 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
     private final PessoaDao pessoaDao = new PessoaDao();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
-    private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private final Utilitarios conversor = new Utilitarios();
     private Pessoa ofertante = new Pessoa();   
     private RegistroDizimoOferta rgDizimoOfertas = new RegistroDizimoOferta();
@@ -54,8 +53,8 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
     
     public ConsultaRegistroDizimoOferta(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
         this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
+        formInicial();
     }
     
     public void setPosicao() {
@@ -317,6 +316,14 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel7.setText("Oferta Esc Sabati:");
 
+        totalDizimo.setText("R$ 0.00");
+
+        totalOfertaEscolaSab.setText("R$ 0.00");
+
+        totalOfertaPrimicias.setText("R$ 0.00");
+
+        totalOfertaCultos.setText("R$ 0.00");
+
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setText("Oferta Missio:");
 
@@ -328,6 +335,14 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel16.setText("Oferta Literatura:");
+
+        totalOfertaMissionaria.setText("R$ 0.00");
+
+        totalOfertaPobres.setText("R$ 0.00");
+
+        totalOfertaGratidao.setText("R$ 0.00");
+
+        totalOfertaLiteratura.setText("R$ 0.00");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -382,10 +397,10 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(totalOfertaLiteratura, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(totalOfertaEscolaSab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
-                        .addComponent(jLabel16)
-                        .addComponent(totalOfertaEscolaSab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel16)))
                 .addContainerGap())
         );
 
