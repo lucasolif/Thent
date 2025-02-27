@@ -337,7 +337,7 @@ public class Relatorios {
     }
     
     //Função para gerar apenas um totalizador
-    public void umTotalizador(String descricao, double total, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    public void valoresUmTotalizador(String descricao, double total, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         // Definindo a fonte normal e negrito
         final PDFont times = new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); // Fonte normal
@@ -363,11 +363,12 @@ public class Relatorios {
     }
     
     //Função para gerar dois totalizados para o relatório 
-    public void valoresDoisTotalizadores(String descricao1, String descricao2, double totalizador1, double totalizador2, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    public void valoresDoisTotalizadores(String descricao1, String descricao2, double totalizador1, double totalizador2, float yPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
-        float tamanhoFonte = 12;
+        float tamanhoFonte = 11;
+        float xPosition = 40;
 
         fluxoConteudo.beginText();
         //fluxoConteudo.setFont(times, tamanhoFonte);
@@ -392,11 +393,12 @@ public class Relatorios {
     }
     
     //Função para gerar três totalizados para o relatório
-    public void valoresTresTotalizadores(String descricao1, String descricao2, String descricao3, double totalizador1, double totalizador2, double totalizador3, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    public void valoresTresTotalizadores(String descricao1, String descricao2, String descricao3, double totalizador1, double totalizador2, double totalizador3, float yPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
-        float tamanhoFonte = 12;
+        float tamanhoFonte = 11;
+        float xPosition = 40;
 
         fluxoConteudo.beginText();
         //fluxoConteudo.setFont(times, tamanhoFonte);
@@ -426,6 +428,49 @@ public class Relatorios {
         fluxoConteudo.endText();
         
     }
+    
+        //Função para gerar três totalizados para o relatório
+    public void valoresQuatroTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, double totalizador1, double totalizador2, double totalizador3, float totalizador4, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
+        float tamanhoFonte = 12;
+
+        fluxoConteudo.beginText();
+        //fluxoConteudo.setFont(times, tamanhoFonte);
+
+        //Total de entrada
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao1); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador1).replace(".", ","));
+        yPosition =-12; // Ajusta a posição da próxima linha
+
+        //Total de Saída
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao2); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador2).replace(".", ","));
+
+        //Saldo da conta caixa
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao3); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador3).replace(".", ","));
+        
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao4); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador4).replace(".", ","));
+
+        fluxoConteudo.endText();
+        
+    }
+    
     
     //Função para gerar quatro totalizados para o relatório
     public void valoresCincoTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, String descricao5, double totalizador1, double totalizador2, double totalizador3, double totalizador4, double totalizador5, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{

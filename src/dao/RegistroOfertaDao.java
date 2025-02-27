@@ -342,7 +342,7 @@ public class RegistroOfertaDao {
                     "(Select Nome From Pessoas As P Where P.Codigo = MDO.Ofertante) As Ofertante, " +
                     "(SELECT TP.Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = MDO.TipoOferta) AS TipoOferta, " +
                     "MDO.Entrada AS ValorEntrada, " +
-                    "MDO.Entrada AS ValorSaida, " +
+                    "MDO.Saida AS ValorSaida, " +
                     "MDO.TipoOferta AS CodTipoOferta, " +
                     "MDO.Igreja AS CodIgreja, " +
                     "MDO.DataOferta AS DataOferta, " +
@@ -396,13 +396,11 @@ public class RegistroOfertaDao {
             // Iterando sobre os resultados
             while (rs.next()) {
                 Pessoa ofertante = new Pessoa();
-                FormaPagto formaPagto = new FormaPagto();
                 Igreja igreja = new Igreja();
                 TipoOferta tipoOferta = new TipoOferta();
                 ContaCaixa contaCaixa = new ContaCaixa();
                 RegistroDizimoOferta dizimoOferta = new RegistroDizimoOferta();
-                contaCaixa.setNome(this.rs.getString("ContaCaixa"));
-                formaPagto.setNome(this.rs.getString("FormaPagto"));
+                contaCaixa.setNome(this.rs.getString("ContaCaixa"));    
                 ofertante.setNome(this.rs.getString("Ofertante"));
                 igreja.setNome(this.rs.getString("Igreja"));
                 igreja.setCodigo(this.rs.getInt("CodIgreja"));
@@ -413,7 +411,6 @@ public class RegistroOfertaDao {
                 dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorEntrada"));
                 dizimoOferta.setValorOfertaSaida(this.rs.getDouble("ValorSaida"));
                 dizimoOferta.setContaCaixa(contaCaixa);
-                dizimoOferta.setFormaPagto(formaPagto);
                 dizimoOferta.setIgreja(igreja);
                 dizimoOferta.setTpOferta(tipoOferta);
                 dizimoOferta.setOfertante(ofertante);

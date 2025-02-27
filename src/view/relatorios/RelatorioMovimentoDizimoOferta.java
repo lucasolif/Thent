@@ -416,7 +416,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
             
             // Definir os títulos das colunas
-            String[] titulosTabela = {"Tp Oferta", "Val. Oferta", "Data Oferta", "Igreja", "Conta Caixa", "Forma Pagto"};
+            String[] titulosTabela = {"Tp Oferta", "Val. Oferta", "Operação", "Igreja", "Conta Caixa", "Data Oferta"};
             this.funcoesRelatorio.tituloColunaRelatorioRgDizimoOferta(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
             yPosition -= 20; // Pular para a linha abaixo após o título
 
@@ -434,15 +434,24 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
 
                 // Obter os dados da lista
                 String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
-                String formaPagto = rg.getFormaPagto().getNome();
                 String tipoOfertaDizimo = rg.getTpOferta().getNome();
-                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
                 String igreja = rg.getIgreja().getNome();
+                String tpOperacao = "";
+                String valor = "0";
                 String contaCaixa = rg.getContaCaixa().getNome();
                 
                 //Verifica o tamanho da descrição, para que não passe do tamanha de caraceteres
                 if (tipoOfertaDizimo.length() > limiteCaracteres) {
                     tipoOfertaDizimo = tipoOfertaDizimo.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                
+                //Verifica se é uma operação de entrada ou saída
+                if(rg.getValorOfertaEntrada() > 0){
+                    tpOperacao = "Entrada";
+                    valor = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
+                }else{
+                    tpOperacao = "Saída";
+                    valor = this.conversor.formatarDoubleString(rg.getValorOfertaSaida()).replace(".", ",");
                 }
 
                 //Inicia o processo de escrever os dados
@@ -454,23 +463,23 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 xPosition += 80; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(valorOfertaDizimo);
+                fluxoConteudo.showText(valor);
                 xPosition -= 55; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(dataOferta);
-                xPosition += 10; // Ajusta a posição da próxima coluna
+                fluxoConteudo.showText(tpOperacao);
+                xPosition += 0; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(igreja);
-                xPosition += 50; // Ajusta a posição da próxima coluna
+                xPosition += 60; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(contaCaixa);
                 xPosition -= 40; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(formaPagto);
+                fluxoConteudo.showText(dataOferta);
 
                 fluxoConteudo.endText();
 
@@ -485,11 +494,10 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 }           
                 totalDizimoOfertas += rg.getValorOfertaEntrada();
             }
-            xPosition += 350;
             yPosition -= 30;
             
             //Funções para definir os totalizadores           
-            funcoesRelatorio.valoresTresTotalizadores("Total Dízimo: ", "Total Oferta: ", "Soma Total: ", totalDizimo,totalOfertas,totalDizimoOfertas,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Total Dízimo: ", "Total Oferta: ", "Soma Total: ", totalDizimo,totalOfertas,totalDizimoOfertas,yPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("Registro de Dizimo e Ofertas",documentoPDF);
@@ -517,12 +525,14 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
         final Igreja igrejaSelec = (Igreja) this.igreja.getSelectedItem();
         String nomeIgreja = null;
         Integer codTpOferta=  null;
+        String nomeTpOferta = "";
         final String titulo = "Registros de Dizimo e Ofertas";  
-        double subTotalDizimo = 0;
-        double subTotalOfertas = 0;
-        double totalDizimo = 0;
-        double totalOfertas = 0;
-        double totalDizimoOfertas = 0;
+        double subTotalEntradaDizimo = 0;
+        double subTotalEntradaOfertas = 0;
+        double subTotalSaidaDizimo = 0;
+        double subTotalSaidaOfertas = 0;
+        double totalEntradaDizimoOfertas = 0;
+        double totalSaidaDizimoOfertas = 0;
         
         //Verifica se foi foi filtrado por igreja, ou se vai mostrar todas as igrejas
         if(igrejaSelec == null){
@@ -576,10 +586,13 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                     }else{    
                         //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
                         xPosition += 350;
-                        yPosition -= 15;
                         
+                        if(codTpOferta == 1){
+                            funcoesRelatorio.valoresDoisTotalizadores("Entrada Dizimos: ","Saída Dizimos: ", subTotalEntradaDizimo, subTotalSaidaDizimo,yPosition,fluxoConteudo);
+                        }else{
+                            funcoesRelatorio.valoresDoisTotalizadores("Entrada "+nomeTpOferta+" : ", "Saída "+nomeTpOferta+" : ", subTotalEntradaOfertas,subTotalSaidaOfertas,yPosition,fluxoConteudo);
+                        }
                         //Totalizados no final e cada data
-                        funcoesRelatorio.valoresDoisTotalizadores("Subtotal Dizimos: ", "Subtotal Oferta:   ", subTotalDizimo,subTotalOfertas,yPosition,xPosition,fluxoConteudo);
                         //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
                         xPosition = 40;
                         yPosition -= 50; 
@@ -598,16 +611,19 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                     this.funcoesRelatorio.tituloLayoutEsquerda(tituloLayout, yPosition, xPosition, fluxoConteudo);
                     
                     //Variável de controle, para validar quando for outro tipo de oferta
-                    codTpOferta = rg.getTpOferta().getCodigo();  
+                    codTpOferta = rg.getTpOferta().getCodigo(); 
+                    nomeTpOferta = rg.getTpOferta().getNome();
                     yPosition -= 20;
                                          
                     // Definir os títulos das colunas
-                    String[] titulosTabela = {"Tp Oferta", "Val. Oferta", "Data Oferta", "Igreja", "Conta Caixa", "Forma Pagto"};
+                    String[] titulosTabela = {"Tp Oferta", "Val. Oferta", "Operação", "Igreja", "Conta Caixa", "Data Oferta"};
                     this.funcoesRelatorio.tituloColunaRelatorioRgDizimoOferta(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
                     yPosition -= 20; // Pular para a linha abaixo após o título
 
-                    subTotalDizimo = 0;
-                    subTotalOfertas = 0;
+                    subTotalEntradaDizimo = 0;
+                    subTotalEntradaOfertas = 0;
+                    subTotalSaidaDizimo = 0;
+                    subTotalSaidaOfertas = 0;
                 }           
                 
                 // Resetar a posição horizontal a cada nova linha
@@ -615,15 +631,24 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
 
                 // Obter os dados da lista
                 String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
-                String formaPagto = rg.getFormaPagto().getNome();
+                String tpOperacao = "";
                 String tipoOfertaDizimo = rg.getTpOferta().getNome();
-                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
+                String valor = "0";
                 String igreja = rg.getIgreja().getNome();
                 String contaCaixa = rg.getContaCaixa().getNome();
                 
                 //Verifica o tamanho da descrição, para que não passe do tamanha de caraceteres
                 if (tipoOfertaDizimo.length() > limiteCaracteres) {
                     tipoOfertaDizimo = tipoOfertaDizimo.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                
+                //Verifica se é uma operação de entrada ou saída
+                if(rg.getValorOfertaEntrada() > 0){
+                    tpOperacao = "Entrada";
+                    valor = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
+                }else{
+                    tpOperacao = "Saída";
+                    valor = this.conversor.formatarDoubleString(rg.getValorOfertaSaida()).replace(".", ",");
                 }
 
                //Inicia o processo de escrever os dados
@@ -635,23 +660,23 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 xPosition += 80; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(valorOfertaDizimo);
-                xPosition -= 55; // Ajusta a posição da próxima coluna
+                fluxoConteudo.showText(valor);
+                xPosition -= 50; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(dataOferta);
-                xPosition += 10; // Ajusta a posição da próxima coluna
+                fluxoConteudo.showText(tpOperacao);
+                xPosition -= 10; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(igreja);
-                xPosition += 50; // Ajusta a posição da próxima coluna
+                xPosition += 70; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(contaCaixa);
-                xPosition -= 40; // Ajusta a posição da próxima coluna
+                xPosition -= 50; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(formaPagto);
+                fluxoConteudo.showText(dataOferta);
 
                 fluxoConteudo.endText();
 
@@ -660,28 +685,28 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 
                 //Verificando quem é dízimo e quem é oferta
                 if(rg.getTpOferta().getCodigo() == 1){
-                    subTotalDizimo += rg.getValorOfertaEntrada();
-                    totalDizimo += rg.getValorOfertaEntrada();
+                    subTotalEntradaDizimo += rg.getValorOfertaEntrada();
+                    subTotalSaidaDizimo += rg.getValorOfertaSaida();
                 }else{
-                    subTotalOfertas += rg.getValorOfertaEntrada();
-                    totalOfertas += rg.getValorOfertaEntrada();
+                    subTotalEntradaOfertas += rg.getValorOfertaEntrada();
+                    subTotalSaidaOfertas += rg.getValorOfertaSaida();
                 }
                 
-                totalDizimoOfertas += rg.getValorOfertaEntrada();
+                totalEntradaDizimoOfertas += rg.getValorOfertaEntrada();
+                totalSaidaDizimoOfertas += rg.getValorOfertaSaida();
             }
             //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
-            xPosition += 350;
-            yPosition -= 30;       
+            xPosition += 350;  
             
-            //Verifica se foi selecionado algum filtro. Caso tenha sido, não mostra o subtotal, e mostra apenas o total.          
+            //Ultimo subtotal da listagem       
             if(tipoOferta.getSelectedItem() == null){              
-                funcoesRelatorio.valoresDoisTotalizadores("Subtotal Dízimo: ", "Subtotal Oferta:  ", subTotalDizimo,subTotalOfertas,yPosition,xPosition,fluxoConteudo);
+                funcoesRelatorio.valoresDoisTotalizadores("Entrada "+nomeTpOferta+" : ", "Saída "+nomeTpOferta+" : ", subTotalEntradaDizimo,subTotalEntradaOfertas,yPosition,fluxoConteudo);
             }       
             //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
-            yPosition -= 50;
+            yPosition -= 60;
             
             //Funções para definir os totalizadotes
-            funcoesRelatorio.valoresTresTotalizadores("Total De Dízimos: ","Total de Oferta:    ", "Soma Total:           ", totalDizimo,totalOfertas,totalDizimoOfertas,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Total Entrada Dízimos e Ofertas: ","Total Saída Dizimo e Ofertas:    ", totalEntradaDizimoOfertas,totalSaidaDizimoOfertas, yPosition, fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RegistroDizimoOferta(TipoOferta)",documentoPDF);
@@ -773,7 +798,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                         yPosition -= 30;
 
                         //Totalizados no final e cada data
-                        funcoesRelatorio.valoresDoisTotalizadores("Subtotal Dízimo: ", "Subtotal Oferta:  ", subTotalDizimo,subTotalOfertas,yPosition,xPosition,fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Subtotal Dízimo: ", "Subtotal Oferta:  ", subTotalDizimo,subTotalOfertas,yPosition,fluxoConteudo);
                         xPosition = 40;
                         yPosition -= 40; // Pular para a linha abaixo após o título, nas demais listagem
                     }
@@ -796,7 +821,7 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                     yPosition -= 20;
                                          
                     // Definir os títulos das colunas
-                    String[] titulosTabela = {"Tp Oferta", "Val. Oferta", "Data Oferta", "Igreja", "Conta Caixa", "Forma Pagto"};
+                    String[] titulosTabela = {"Tp Oferta", "Val. Oferta", "Operação", "Igreja", "Conta Caixa", "Data Oferta"};
                     this.funcoesRelatorio.tituloColunaRelatorioRgDizimoOferta(layout ,yPosition, xPosition, titulosTabela, fluxoConteudo);           
                     yPosition -= 20; // Pular para a linha abaixo após o título
 
@@ -809,15 +834,24 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
 
                 // Obter os dados da lista
                 String dataOferta = conversor.convertendoDataStringSql((java.sql.Date) rg.getDataOferta());
-                String formaPagto = rg.getFormaPagto().getNome();
                 String tipoOfertaDizimo = rg.getTpOferta().getNome();
-                String valorOfertaDizimo = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
                 String igreja = rg.getIgreja().getNome();
                 String contaCaixa = rg.getContaCaixa().getNome();
+                String tpOperacao = "";
+                String valor = "0";
                 
                 //Verifica o tamanho da descrição, para que não passe do tamanha de caraceteres
                 if (tipoOfertaDizimo.length() > limiteCaracteres) {
                     tipoOfertaDizimo = tipoOfertaDizimo.substring(0, limiteCaracteres); // Truncar e adicionar "..."
+                }
+                
+                //Verifica se é uma operação de entrada ou saí­da
+                if(rg.getValorOfertaEntrada() > 0){
+                    tpOperacao = "Entrada";
+                    valor = this.conversor.formatarDoubleString(rg.getValorOfertaEntrada()).replace(".", ",");
+                }else{
+                    tpOperacao = "Sai­da";
+                    valor = this.conversor.formatarDoubleString(rg.getValorOfertaSaida()).replace(".", ",");
                 }
 
                //Inicia o processo de escrever os dados
@@ -829,23 +863,23 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 xPosition += 80; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(valorOfertaDizimo);
+                fluxoConteudo.showText(valor);
                 xPosition -= 55; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(dataOferta);
-                xPosition += 10; // Ajusta a posição da próxima coluna
+                fluxoConteudo.showText(tpOperacao);
+                xPosition += 0; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(igreja);
-                xPosition += 50; // Ajusta a posição da próxima coluna
+                xPosition += 60; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(contaCaixa);
                 xPosition -= 40; // Ajusta a posição da próxima coluna
 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText(formaPagto);
+                fluxoConteudo.showText(dataOferta);
 
                 fluxoConteudo.endText();
 
@@ -863,19 +897,18 @@ public class RelatorioMovimentoDizimoOferta extends javax.swing.JInternalFrame {
                 
                 totalDizimoOfertas += rg.getValorOfertaEntrada();
             }
-            //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
-            xPosition += 330;
+            //Define o posicionamento vertical da próxima informação, com base no posicionamento da informação anterior
             yPosition -= 30;       
             
             //Verifica se foi selecionado algum filtro. Caso tenha sido, não mostra o subtotal, e mostra apenas o total.          
             if(igreja.getSelectedItem() == null){              
-                funcoesRelatorio.valoresDoisTotalizadores("Subtotal Dízimo: ", "Subtotal Oferta:  ", subTotalDizimo,subTotalOfertas,yPosition,xPosition,fluxoConteudo);
+                funcoesRelatorio.valoresDoisTotalizadores("Subtotal Dízimo: ", "Subtotal Oferta:  ", subTotalDizimo,subTotalOfertas,yPosition,fluxoConteudo);
             }       
             //Define o posicionamento vertical e horizontal da próxima informação, com base no posicionamento da informação anterior
             yPosition -= 50;
             
             //Funções para definir os totalizadotes
-            funcoesRelatorio.valoresTresTotalizadores("Total De Dízimos: ","Total de Oferta:    ", "Soma Total:           ", totalDizimo,totalOfertas,totalDizimoOfertas,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Total De Dízimos: ","Total de Oferta:    ", "Soma Total:           ", totalDizimo,totalOfertas,totalDizimoOfertas,yPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("Registro de Dizimo e Oferta(Igreja)",documentoPDF);

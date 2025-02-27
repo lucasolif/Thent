@@ -416,7 +416,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
             yPosition -= 50;
             xPosition += 330;
             saldo = totalEntrada - totalSaida;
-            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo,yPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa",documentoPDF);
@@ -488,7 +488,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
                         xPosition += 360;
                         yPosition -= 10;
                         //funcoesRelatorio.descricaoDoisTotalizadores("Entrada", "Saída", yPosition,xPosition,fluxoConteudo);
-                        funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ", entrada,saida,yPosition,xPosition,fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ", entrada,saida,yPosition,fluxoConteudo);
                         xPosition = 40;
                         yPosition -= 40; // Pular para a linha abaixo após o título, nas demais listagem
                     }
@@ -575,10 +575,10 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
             saldo = totalEntrada - totalSaida;
             xPosition += 360;
             yPosition -= 10;
-            funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida, yPosition, xPosition, fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida, yPosition, fluxoConteudo);
             xPosition -= 30;
             yPosition -= 50;
-            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo, yPosition, xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo, yPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa(DataMovimento)",documentoPDF);
@@ -651,7 +651,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
                         xPosition += 360;
                         yPosition -= 10;
                         
-                        funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida,yPosition,xPosition,fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida,yPosition,fluxoConteudo);
                         xPosition = 40;
                         yPosition -= 40; // Pular para a linha abaixo após o título, nas demais listagem
                     }
@@ -744,12 +744,12 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
             xPosition += 360;
             yPosition -= 10;
             
-            funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida,yPosition,xPosition,fluxoConteudo);            //funcoesRelatorio.descricaoTresTotalizadores(textoTotalEntrada, textoTotalSaida, textoSaldoAtual, yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Entrada: ", "Saída:      ",entrada,saida,yPosition,fluxoConteudo);            //funcoesRelatorio.descricaoTresTotalizadores(textoTotalEntrada, textoTotalSaida, textoSaldoAtual, yPosition,xPosition,fluxoConteudo);
             //Defini a posição vertical e horizonta da próxima informação, com base na posição da informação anterior
             xPosition -= 30;
             yPosition -= 50;
             
-            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Total Entrada: ", "Total Saída:      ", "Saldo Atual:      ", totalEntrada,totalSaida,saldo,yPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("ExtratoCaixa(Igreja)",documentoPDF);        

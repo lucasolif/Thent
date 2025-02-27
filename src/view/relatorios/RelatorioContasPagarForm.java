@@ -671,7 +671,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             yPosition -= 40;
             xPosition += 350;  
             
-            funcoesRelatorio.valoresTresTotalizadores("TotalPago:         ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("TotalPago:         ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);
@@ -740,7 +740,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         xPosition += 320;
                         yPosition -= 10;
                         
-                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
                         xPosition = 50;
                         yPosition -= 50; // Pular para a linha abaixo após o título
                     }
@@ -828,11 +828,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             xPosition += 320;
             yPosition -= 10;
                               
-            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
             //Define o posicinamento vertical e orizontal do próximo conteúdo
             yPosition -= 50;
  
-            funcoesRelatorio.valoresTresTotalizadores("Total Pago:        ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Total Pago:        ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);       
@@ -902,7 +902,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         xPosition += 350;
                         yPosition -= 10;
                         
-                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
                         xPosition = 50;
                         yPosition -= 60; // Pular para a linha abaixo após o título
                     }
@@ -996,11 +996,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             xPosition += 350;
             yPosition -= 10;
                               
-            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
             //Define o posicinamento vertical e orizontal do próximo conteúdo
             yPosition -= 50;
  
-            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);           
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);           
 
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);       
@@ -1071,7 +1071,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         xPosition += 350;
                         yPosition -= 10;
                         
-                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
                         xPosition = 50;
                         yPosition -= 50; // Pular para a linha abaixo após o título
                     }
@@ -1165,11 +1165,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             xPosition += 350;
             yPosition -= 10;
                               
-            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
             //Define o posicinamento vertical e orizontal do próximo conteúdo
             yPosition -= 50;
  
-            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);        
@@ -1239,7 +1239,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         xPosition += 350;
                         yPosition -= 10;
                         
-                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
                         xPosition = 50;
                         yPosition -= 50; // Pular para a linha abaixo após o título
                     }
@@ -1335,11 +1335,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             xPosition += 350;
             yPosition -= 10;
                               
-            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
             //Define o posicinamento vertical e orizontal do próximo conteúdo
             yPosition -= 50;
  
-            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);       
@@ -1410,7 +1410,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         xPosition += 350;
                         yPosition -= 10;
                         
-                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, xPosition, fluxoConteudo);
+                        funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
                         xPosition = 50;
                         yPosition -= 50; // Pular para a linha abaixo após o título
                     }
@@ -1505,11 +1505,11 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             xPosition += 350;
             yPosition -= 10;
                               
-            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
             //Define o posicinamento vertical e orizontal do próximo conteúdo
             yPosition -= 50;
  
-            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,xPosition,fluxoConteudo);
+            funcoesRelatorio.valoresTresTotalizadores("Valor Pago:        ", "Valor Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);
             
             fluxoConteudo.close();
             this.funcoesRelatorio.salvarRelatorioPDF("RelatorioContasPagar",documentoPDF);        

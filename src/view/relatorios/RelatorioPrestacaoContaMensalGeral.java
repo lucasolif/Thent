@@ -295,7 +295,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
             }
             yPosition -= 10;
             xPosition += 40;
-            this.funcoesRelatorio.umTotalizador("Total: ", entradas, yPosition, xPosition, fluxoConteudo);            
+            this.funcoesRelatorio.valoresUmTotalizador("Total: ", entradas, yPosition, xPosition, fluxoConteudo);            
             yPosition -= 40; // Pular para a linha abaixo
             xPosition = 80; //Resetando o posicionamento vertical
             
@@ -374,7 +374,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
             yPosition -= 10;
             xPosition += 40;
             
-            this.funcoesRelatorio.umTotalizador("Total: ", saidas, yPosition, xPosition, fluxoConteudo); 
+            this.funcoesRelatorio.valoresUmTotalizador("Total: ", saidas, yPosition, xPosition, fluxoConteudo); 
                  
             double totalEntradas = entradas;
             double totalSaidas = saidas;
