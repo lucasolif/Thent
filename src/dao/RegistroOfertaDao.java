@@ -442,7 +442,7 @@ public class RegistroOfertaDao {
         // Montando a query SQL com placeholders
         String sql = "SELECT " +
             "(SELECT Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = MDO.TipoOferta) AS NomeTipoOferta, " +
-            "SUM(MDO.Valor) AS ValorOferta " +
+            "SUM(MDO.Entrada) AS ValorOferta " +
             "FROM MovimentoDizimoOferta AS MDO " +
             "WHERE MONTH(MDO.DataOferta) = ? " +
             "AND YEAR(MDO.DataOferta) = ? " +

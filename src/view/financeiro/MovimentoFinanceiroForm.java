@@ -131,6 +131,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         jLabel17 = new javax.swing.JLabel();
         valorRendimento = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
+        dataCaixa = new javax.swing.JFormattedTextField();
         btnExcluir = new javax.swing.JButton();
         rbSaida = new javax.swing.JRadioButton();
         rbEntrada = new javax.swing.JRadioButton();
@@ -430,6 +431,12 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
 
         jLabel18.setText("Rendimen:");
 
+        try {
+            dataCaixa.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -453,16 +460,17 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
                             .addComponent(jLabel18)
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(saldoAnterior)
-                            .addComponent(valorRendimento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                            .addComponent(valorSaida)))
+                                .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(contaCaixaSaldoBanco, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(contaCaixaSaldoBanco, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dataCaixa)
+                    .addComponent(saldoAnterior)
+                    .addComponent(valorRendimento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                    .addComponent(valorSaida))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -470,7 +478,8 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(contaCaixaSaldoBanco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15))
+                    .addComponent(jLabel15)
+                    .addComponent(dataCaixa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
@@ -930,6 +939,9 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
             }
         }
         
+        this.totalDizimo.setText(Double.toString(valorDizimo));
+        this.totalOfertas.setText(Double.toString(valorOferta));
+        
     }
     
     private void mostrarTotalSaidaEntrada(){
@@ -979,6 +991,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         rbDataMovimentacao.setSelected(true);
         dataInicial.setText(conversor.dataAtualString());
         dataFinal.setText(conversor.dataAtualString());
+        dataCaixa.setText(conversor.dataAtualString());
         consultarMovimentacao();
         atualizarTabela();
         mostrarTotalDizimoOfertas();
@@ -989,9 +1002,10 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private void atualizarDashBoadSaldoBancos(){
  
         ContaCaixa contaCx = (ContaCaixa) contaCaixaSaldoBanco.getSelectedItem();
+        Date dataCaixa = this.conversor.convertendoStringDateSql(this.dataCaixa.getText());
         
         //Coletando o saldo atual da conta caixa
-        MovimentoCaixa saldosAtuais = movimentoCaixaDao.consultarSaldoAtual(contaCx);
+        MovimentoCaixa saldosAtuais = movimentoCaixaDao.consultarSaldoAtual(contaCx, dataCaixa);
         Double valEntradaAtual = saldosAtuais.getValorEntrada();
         Double valSaidaAtual = saldosAtuais.getValorSaida();
         Double valSaldoAtual = valEntradaAtual - valSaidaAtual;
@@ -1002,7 +1016,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         
         
         //Coletando o saldo anterior da conta caixa
-        MovimentoCaixa mvCaixa = movimentoCaixaDao.consultarSaldoAtual(contaCx);
+        MovimentoCaixa mvCaixa = movimentoCaixaDao.consultarSaldoAnterior(contaCx, dataCaixa);
         Double valEntradaAnterior = mvCaixa.getValorEntrada();
         Double valSaidaAnterior = mvCaixa.getValorSaida();
         Double valSaldoAnterior = valEntradaAnterior - valSaidaAnterior;
@@ -1010,7 +1024,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
         this.saldoAnterior.setText(Double.toString(valSaldoAnterior).replace(".", ","));
         
         //Coletando o valor aplicado e o rendimento da conta caixa escolhida
-        Aplicacao aplicacao = aplicacaoDao.consultarValorAplicadoRendido(contaCx);
+        Aplicacao aplicacao = aplicacaoDao.consultarValorAplicadoRendido(contaCx, (java.sql.Date) dataCaixa);
         double valorAplicado = aplicacao.getValorInicial();
         double valorRendido = aplicacao.getValorRendimento();
         
@@ -1140,6 +1154,7 @@ public class MovimentoFinanceiroForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JTextField codFornecedorOfertante;
     private javax.swing.JComboBox<String> contaCaixa;
     private javax.swing.JComboBox<String> contaCaixaSaldoBanco;
+    private javax.swing.JFormattedTextField dataCaixa;
     private javax.swing.JFormattedTextField dataFinal;
     private javax.swing.JFormattedTextField dataInicial;
     private javax.swing.JTextField descricaoMovimento;

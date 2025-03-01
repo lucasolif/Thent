@@ -430,11 +430,12 @@ public class Relatorios {
     }
     
         //Função para gerar três totalizados para o relatório
-    public void valoresQuatroTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, double totalizador1, double totalizador2, double totalizador3, float totalizador4, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    public void valoresQuatroTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, double totalizador1, double totalizador2, double totalizador3, double totalizador4, float yPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
         float tamanhoFonte = 12;
+        float xPosition = 40;
 
         fluxoConteudo.beginText();
         //fluxoConteudo.setFont(times, tamanhoFonte);

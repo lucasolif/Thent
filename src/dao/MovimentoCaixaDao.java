@@ -445,7 +445,7 @@ public class MovimentoCaixaDao {
         }
     }
     
-    public MovimentoCaixa consultarSaldoAtual (ContaCaixa contaCaixa){
+    public MovimentoCaixa consultarSaldoAtual (ContaCaixa contaCaixa, Date dataCaixa){
         
         MovimentoCaixa mvCaixa = new MovimentoCaixa();
         
@@ -453,13 +453,14 @@ public class MovimentoCaixaDao {
             + "SUM(ValorEntrada) As ValorEntrada, "
             + "SUM(ValorSaida) As ValorSaida "
             + "FROM MovimentoCaixa "
-            + "WHERE ContaCaixa = ?";
+            + "WHERE ContaCaixa = ? AND DataMovimento <= ?";
           
         try {                
             this.conexao = Conexao.getDataSource().getConnection();
             this.stmSelect = this.conexao.prepareStatement(sql);  
               
             this.stmSelect.setInt(1, contaCaixa.getCodigo());
+            this.stmSelect.setDate(2, (java.sql.Date) dataCaixa);
     
             // Executando a consultarMovimentacao
             this.rs = this.stmSelect.executeQuery();
@@ -488,7 +489,7 @@ public class MovimentoCaixaDao {
         return mvCaixa;
     }
     
-    public MovimentoCaixa consultarSaldoAnterior (ContaCaixa contaCaixa){
+    public MovimentoCaixa consultarSaldoAnterior (ContaCaixa contaCaixa, Date dataCaixa){
         
         MovimentoCaixa mvCaixa = new MovimentoCaixa();
         
@@ -496,13 +497,14 @@ public class MovimentoCaixaDao {
             + "SUM(ValorEntrada) As ValorEntrada, "
             + "SUM(ValorSaida) As ValorSaida "
             + "FROM MovimentoCaixa "
-            + "WHERE ContaCaixa = ? AND DataMovimento < GETDATE()";
+            + "WHERE ContaCaixa = ? AND DataMovimento < ?";
           
         try {                
             this.conexao = Conexao.getDataSource().getConnection();
             this.stmSelect = this.conexao.prepareStatement(sql);  
               
             this.stmSelect.setInt(1, contaCaixa.getCodigo());
+            this.stmSelect.setDate(2, (java.sql.Date) dataCaixa);
     
             // Executando a consultarMovimentacao
             this.rs = this.stmSelect.executeQuery();

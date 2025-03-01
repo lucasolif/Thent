@@ -86,11 +86,11 @@ public class PessoaDao {
 
         List<Pessoa> listaPessoas = new ArrayList<>();
         IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultarPessoa a igreja da pessoa      
-        String sqlInsert = "SELECT * FROM Pessoas WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?)";  
+        String sqlSelect = "SELECT * FROM Pessoas WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?)";  
         
         try{
             conexao = Conexao.getDataSource().getConnection();           
-            ps = conexao.prepareStatement(sqlInsert);
+            ps = conexao.prepareStatement(sqlSelect);
             
             if (buscaPessoa != null) {
                 ps.setString(1,  "%" + buscaPessoa + "%");

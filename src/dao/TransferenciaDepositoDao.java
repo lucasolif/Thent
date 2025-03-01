@@ -66,15 +66,16 @@ public class TransferenciaDepositoDao {
                     psMovimento.executeUpdate();
                     
                     //Para movimento tipo oferta
-                    String complemento = mvCaixa.getComplemento();
                     RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
                     rgDizimoOferta.setTpOferta(mvCaixa.getRgOferta().getTpOferta());
                     rgDizimoOferta.setValorOfertaEntrada(0);
                     rgDizimoOferta.setValorOfertaSaida(mvCaixa.getTransferecia().getValorEntradaSaida());
                     rgDizimoOferta.setContaCaixa(mvCaixa.getTransferecia().getCxSaida());
                     rgDizimoOferta.setIgreja(mvCaixa.getIgreja());
+                    rgDizimoOferta.setComplemento(mvCaixa.getComplemento());
+                    rgDizimoOferta.setDataOferta(mvCaixa.getDataPagamentoRecebimento());
                             
-                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, complemento);
+                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, usuarioLogado);
 
                 }
                 
@@ -93,15 +94,16 @@ public class TransferenciaDepositoDao {
                     psMovimento.executeUpdate();
                     
                     //Para movimento tipo oferta
-                    String complemento = mvCaixa.getComplemento();
                     RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();
                     rgDizimoOferta.setTpOferta(mvCaixa.getRgOferta().getTpOferta());
                     rgDizimoOferta.setValorOfertaEntrada(mvCaixa.getTransferecia().getValorEntradaSaida());
                     rgDizimoOferta.setValorOfertaSaida(0);
-                    rgDizimoOferta.setContaCaixa(mvCaixa.getTransferecia().getCxSaida());
+                    rgDizimoOferta.setContaCaixa(mvCaixa.getTransferecia().getCxEntrada());
                     rgDizimoOferta.setIgreja(mvCaixa.getIgreja());
+                    rgDizimoOferta.setComplemento(mvCaixa.getComplemento());
+                    rgDizimoOferta.setDataOferta(mvCaixa.getDataPagamentoRecebimento());
                             
-                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, complemento);
+                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, usuarioLogado);
                 }         
             }
            
@@ -214,19 +216,21 @@ public class TransferenciaDepositoDao {
     }
     
     //Adicionar os registros de dizimo e ofertas no movimento de dizimo e ofertas
-    private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta,String complemento){
+    private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta, Usuario usuarioLogado){
         
         try{
             // Inserir dados na segunda tabela usando a chave primária da primeira tabela
-            String sql = "INSERT INTO MovimentoTipoOferta (TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,DataMovimento) VALUES(?,?,?,?,?,?,GETDATE())";
+            String sql = "INSERT INTO MovimentoDizimoOferta (TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,UsuarioCadastro,DataOferta,DataMovimento) VALUES(?,?,?,?,?,?,?,?,GETDATE())";
             stmInsert = conexao.prepareStatement(sql);
 
             stmInsert.setInt(1, registroOferta.getTpOferta().getCodigo());
             stmInsert.setDouble(2, registroOferta.getValorOfertaEntrada());
             stmInsert.setDouble(3, registroOferta.getValorOfertaSaida());
-            stmInsert.setString(4, complemento);
+            stmInsert.setString(4, registroOferta.getComplemento());
             stmInsert.setInt(5, registroOferta.getContaCaixa().getCodigo());
             stmInsert.setInt(6, registroOferta.getIgreja().getCodigo());
+            stmInsert.setInt(7, usuarioLogado.getCodigo());
+            stmInsert.setDate(8, (Date) registroOferta.getDataOferta());
             stmInsert.execute();
             
         }catch(SQLException ex){

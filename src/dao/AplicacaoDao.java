@@ -421,23 +421,28 @@ public class AplicacaoDao {
     }
     
     //Consulta para mostrar no Dashboar da tela de movimento financeiro
-    public Aplicacao consultarValorAplicadoRendido(ContaCaixa contaCaixa){
+    public Aplicacao consultarValorAplicadoRendido(ContaCaixa contaCaixa, Date dataBase){
         
         Aplicacao aplicacao = new Aplicacao();
         
         String sql = "SELECT " +
-            "SUM(ISNULL(A.ValorInicialAplicacao,0)) AS ValorAplicado, " +
-            "SUM(ISNULL(R.ValorRendimento,0)) AS ValorRendido " +
+            "ISNULL(A.ValorInicialAplicacao, 0) AS ValorAplicado, " +
+            "SUM(ISNULL(R.ValorRendimento, 0)) - ISNULL(A.ValorInicialAplicacao, 0) AS ValorRendido " +
             "FROM Aplicacoes AS A " +
-            "JOIN (SELECT AplicacaoID, SUM(ISNULL(ValorRendimento,0)) AS ValorRendimento FROM RendimentoAplicacao R GROUP BY AplicacaoID) AS R ON A.Codigo = R.AplicacaoID " +
+            "INNER JOIN RendimentoAplicacao R ON A.Codigo = R.AplicacaoID " +
             "WHERE A.Status = 1 " +
-            "AND A.ContaCaixa = ?";
+            "AND A.ContaCaixa = ? " +
+            "AND A.DataCadastro <= ? " +
+            "OR R.DataProcessamento <= ? " +
+            "GROUP BY A.ValorInicialAplicacao";
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();           
             this.stmtSelect = this.conexao.prepareStatement(sql);
             
             this.stmtSelect.setInt(1,  contaCaixa.getCodigo());
+            this.stmtSelect.setDate(2,   dataBase);
+            this.stmtSelect.setDate(3,   dataBase);
             this.rs = this.stmtSelect.executeQuery();
 
             while(this.rs.next()){
