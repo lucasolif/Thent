@@ -6,6 +6,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Campanha;
 import interfaces.ConsultaCampanhas;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class TelaConsultasCampanhas extends javax.swing.JDialog {
@@ -16,6 +20,7 @@ public class TelaConsultasCampanhas extends javax.swing.JDialog {
         super(owner, true);
         initComponents();
         carregarCampanhasCosultadas(listaCampanha);
+        escolherUsandoClickEnter();
     }
 
     @SuppressWarnings("unchecked")
@@ -121,6 +126,30 @@ public class TelaConsultasCampanhas extends javax.swing.JDialog {
     
     public void setCampanhaSelecionada(ConsultaCampanhas consultaCampanhas) {
         this.consultaCampanhas = consultaCampanhas;
+    }
+    
+        private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabelaConsultasCampanhas.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    campanhaEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabelaConsultasCampanhas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    campanhaEscolhida();
+                }
+            }
+        });
     }
 
 

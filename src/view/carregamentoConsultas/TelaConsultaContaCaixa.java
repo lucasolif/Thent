@@ -5,6 +5,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import interfaces.ConsultaContaCaixa;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import model.ContaCaixa;
 
 
@@ -16,6 +20,7 @@ public class TelaConsultaContaCaixa extends javax.swing.JDialog {
         super(onwer, true);
         initComponents();
         carregarContaCaixaConsultadas(listaContaCaixa);
+        escolherUsandoClickEnter();
     }
 
     @SuppressWarnings("unchecked")
@@ -117,6 +122,31 @@ public class TelaConsultaContaCaixa extends javax.swing.JDialog {
     public void setContaCaixaSelecionada(ConsultaContaCaixa consultaContaCaixa) {
         this.consultaContaCaixa = consultaContaCaixa;
     }
+    
+    private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    contaCaixaEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    contaCaixaEscolhida();
+                }
+            }
+        });
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSelecionar;

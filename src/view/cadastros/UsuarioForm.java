@@ -4,7 +4,7 @@ package view.cadastros;
 import java.util.Base64;
 import dao.IgrejaDao;
 import dao.UsuarioDao;
-import Ferramentas.CriptografarSenhas;
+import autenticacao.CriptografarSenhas;
 import Ferramentas.PaletaCores;
 import dao.PermissoesDao;
 import interfaces.ConsultaIgrejas;
@@ -161,9 +161,9 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
 
         jLabel18.setText("E-mail*");
 
-        jLabel1.setText("Função/Cargo");
+        jLabel1.setText("Função/Cargo*");
 
-        jLabel9.setText("Campo/Igreja");
+        jLabel9.setText("Campo/Igreja*");
 
         jLabel10.setText("Celular*");
 
@@ -499,8 +499,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         carregarAcessosIgrejaUsuario(); //Carrega os acesso dos dados da igreja.
     }
     
-    private void consultarIgreja(){      
-        String buscaIgreja = nomeIgreja.getText(); // Texto digitado na busca       
+    private void consultarIgreja(){        
         listaIgrejaConsulta = igrejaDao.consultarTodasIgrejasSemFiltro(); //Lista recebe a busca retornada do banco
     }
     

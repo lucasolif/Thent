@@ -2,6 +2,10 @@
 package view.carregamentoConsultas;
 
 import interfaces.ConsultaUsuarios;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +20,7 @@ public class TelaConsultaUsuarios extends javax.swing.JDialog {
         super(onwer, true);
         initComponents();
         carregarUsuarioConsultadas(listaUsuarios);
+        escolherUsandoClickEnter();
     }
 
     @SuppressWarnings("unchecked")
@@ -98,7 +103,7 @@ public class TelaConsultaUsuarios extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
-        usuarioEscolhida();
+        usuarioEscolhido();
     }//GEN-LAST:event_btnSelecionarActionPerformed
 
     private void carregarUsuarioConsultadas(List<Usuario> listaUsuario){         
@@ -108,7 +113,7 @@ public class TelaConsultaUsuarios extends javax.swing.JDialog {
         }
     }
 
-    private void usuarioEscolhida(){
+    private void usuarioEscolhido(){
         int linhaSelec = this.tabela.getSelectedRow();
         if(linhaSelec >= 0){
             Usuario usuario = (Usuario)this.tabela.getModel().getValueAt(linhaSelec, 2); 
@@ -121,6 +126,30 @@ public class TelaConsultaUsuarios extends javax.swing.JDialog {
     
     public void setUsuarioSelecionado(ConsultaUsuarios consultaUsuarios) {
         this.consultaUsuarios = consultaUsuarios;
+    }
+    
+    private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    usuarioEscolhido();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    usuarioEscolhido();
+                }
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

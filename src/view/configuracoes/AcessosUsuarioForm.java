@@ -15,7 +15,6 @@ import javax.swing.SwingUtilities;
 import model.AcessosTela;
 import model.FuncoesUsuario;
 import model.Usuario;
-import model.Usuario;
 import view.carregamentoConsultas.TelaConsultaUsuarios;
 
 
@@ -112,6 +111,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
         cbx57 = new javax.swing.JCheckBox();
         cbx59 = new javax.swing.JCheckBox();
         cbx60 = new javax.swing.JCheckBox();
+        cbx62 = new javax.swing.JCheckBox();
         btnSalvar = new javax.swing.JButton();
         codUsuario = new javax.swing.JTextField();
         nomeUsuario = new javax.swing.JTextField();
@@ -410,6 +410,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
 
         cbx60.setText("Alterar Senha");
 
+        cbx62.setText("Servidor de Email");
+
         javax.swing.GroupLayout acessosMenu1Layout = new javax.swing.GroupLayout(acessosMenu1);
         acessosMenu1.setLayout(acessosMenu1Layout);
         acessosMenu1Layout.setHorizontalGroup(
@@ -476,7 +478,8 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cbx59)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbx60)))
+                                .addComponent(cbx60))
+                            .addComponent(cbx62))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         acessosMenu1Layout.setVerticalGroup(
@@ -527,7 +530,9 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
                     .addComponent(cbx58)
                     .addComponent(cbx59)
                     .addComponent(cbx60))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbx62)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         acessosUsuario.addTab("Acesso Menus 1", acessosMenu1);
@@ -666,6 +671,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
         this.cbx59.setName("59");
         this.cbx60.setName("60");
         this.cbx61.setName("61");
+        this.cbx62.setName("62");
     }
     
     private void consultarUsuarios(){
@@ -903,6 +909,7 @@ public class AcessosUsuarioForm extends javax.swing.JInternalFrame implements Co
     private javax.swing.JCheckBox cbx6;
     private javax.swing.JCheckBox cbx60;
     private javax.swing.JCheckBox cbx61;
+    private javax.swing.JCheckBox cbx62;
     private javax.swing.JCheckBox cbx7;
     private javax.swing.JCheckBox cbx8;
     private javax.swing.JCheckBox cbx9;

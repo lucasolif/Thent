@@ -2,6 +2,10 @@
 package view.carregamentoConsultas;
 
 import interfaces.ConsultaFormaPagto;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +19,7 @@ public class TelaConsultaFormaPagto extends javax.swing.JDialog {
         super(owner, true);
         initComponents();
         carregarFormaPagtoConsultadas(listaFormaPagto);
+        escolherUsandoClickEnter();
     }
 
 
@@ -118,6 +123,30 @@ public class TelaConsultaFormaPagto extends javax.swing.JDialog {
     
     public void setFormaPagtoSelecionada(ConsultaFormaPagto consultaFormaPagto) {
         this.consultaFormaPagto = consultaFormaPagto;
+    }
+    
+    private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    formaPagtoEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    formaPagtoEscolhida();
+                }
+            }
+        });
     }
 
 

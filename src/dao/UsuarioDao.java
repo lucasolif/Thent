@@ -511,9 +511,9 @@ public class UsuarioDao {
         return listaAcessos;
     }
     
-    public String gerarFiltroIgreja(Usuario usurario){
+    public String gerarFiltroIgreja(Usuario usuario){
         
-        List<AcessosIgreja> listaAcessoIgreja = consultarAcessoIgreja(usurario);
+        List<AcessosIgreja> listaAcessoIgreja = consultarAcessoIgreja(usuario);
         String filtroIgreja = "";
         int cont = 0;
         int tamanhoLista = listaAcessoIgreja.size();
@@ -536,6 +536,40 @@ public class UsuarioDao {
         }
         
         return filtroIgreja;
+    }
+    
+    public Integer validarUsuarioRecuperacaoSenha(String login, String email){
+        
+        Integer codUsuario = null; 
+        
+        String sql = "SELECT Codigo FROM Usuarios Where Usuario = ? And Email = ? And Ativo = 1";
+    
+        try{
+            conexao = Conexao.getDataSource().getConnection();            
+            ps = conexao.prepareStatement(sql);
+            
+            ps.setString(1,  login);
+            ps.setString(2,  email);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                codUsuario = rs.getInt("Codigo");
+            }          
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro("UsuarioDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentarvalidar usuário", "Erro", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conexao != null) conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("UsuarioDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return codUsuario;   
     }
   
   

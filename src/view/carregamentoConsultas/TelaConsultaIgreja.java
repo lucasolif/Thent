@@ -2,6 +2,10 @@
 package view.carregamentoConsultas;
 
 import interfaces.ConsultaIgrejas;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +19,7 @@ public class TelaConsultaIgreja extends javax.swing.JDialog {
         super(owner, true);
         initComponents();
         carregarFormaPagtoConsultadas(listaIgreja);
+        escolherUsandoClickEnter();
     }
 
     @SuppressWarnings("unchecked")
@@ -96,7 +101,7 @@ public class TelaConsultaIgreja extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
-        formaPagtoEscolhida();
+        igrejaEscolhida();
     }//GEN-LAST:event_btnSelecionarActionPerformed
     
     private void carregarFormaPagtoConsultadas(List<Igreja> listaIgreja){         
@@ -106,7 +111,7 @@ public class TelaConsultaIgreja extends javax.swing.JDialog {
         }
     }
 
-    private void formaPagtoEscolhida(){
+    private void igrejaEscolhida(){
         int linhaSelec = this.tabela.getSelectedRow();
         if(linhaSelec >= 0){
             Igreja igreja = (Igreja)this.tabela.getModel().getValueAt(linhaSelec, 1); 
@@ -119,6 +124,30 @@ public class TelaConsultaIgreja extends javax.swing.JDialog {
     
     public void setIgrejaSelecionada(ConsultaIgrejas consultaIgrejas) {
         this.consultaIgrejas = consultaIgrejas;
+    }
+    
+    private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    igrejaEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    igrejaEscolhida();
+                }
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

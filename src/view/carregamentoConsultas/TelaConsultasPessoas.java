@@ -5,6 +5,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import interfaces.ConsultaPessoas;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import model.Pessoa;
 
 public class TelaConsultasPessoas extends javax.swing.JDialog {
@@ -16,6 +20,7 @@ public class TelaConsultasPessoas extends javax.swing.JDialog {
         super(owner, true);
         initComponents();
         carregarPessoasCosultadas(listaPessoa);
+        escolherPessoaUsandoClickEnter();
     }
 
     @SuppressWarnings("unchecked")
@@ -131,6 +136,30 @@ public class TelaConsultasPessoas extends javax.swing.JDialog {
     
     public void setPessoaSelecionada(ConsultaPessoas consultaPessoas) {
         this.consultaPessoas = consultaPessoas;
+    }
+   
+    private void escolherPessoaUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabelaResultadoConsulta.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    pessoaEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabelaResultadoConsulta.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    pessoaEscolhida();
+                }
+            }
+        });
     }
 
 

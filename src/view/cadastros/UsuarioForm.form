@@ -394,12 +394,12 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Fun&#xe7;&#xe3;o/Cargo"/>
+            <Property name="text" type="java.lang.String" value="Fun&#xe7;&#xe3;o/Cargo*"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Campo/Igreja"/>
+            <Property name="text" type="java.lang.String" value="Campo/Igreja*"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">

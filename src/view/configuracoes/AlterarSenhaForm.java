@@ -1,7 +1,7 @@
 
 package view.configuracoes;
 
-import Ferramentas.CriptografarSenhas;
+import autenticacao.CriptografarSenhas;
 import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.util.Base64;

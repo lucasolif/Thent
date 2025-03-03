@@ -17,7 +17,7 @@ import view.biblioteca.AutorForm;
 import view.biblioteca.AcervoBibliotecaForm;
 import view.biblioteca.CadastroBibliotecaForm;
 import view.biblioteca.ConsultaEmprestimoForm;
-import view.biblioteca.EditoraForm;
+import view.biblioteca.CadastroEditoraForm;
 import view.biblioteca.EmprestimoLivroForm;
 import view.biblioteca.CadastroLivrosForm;
 import view.biblioteca.SaidaAvulsaLivroForm;
@@ -37,6 +37,7 @@ import view.campanhas.GerenciarContasReceberForm;
 import view.campanhas.RemoverParticipanteForm;
 import view.configuracoes.AcessosUsuarioForm;
 import view.configuracoes.AlterarSenhaForm;
+import view.configuracoes.ServidorEmailForm;
 import view.contasPagar.CancelarContasPagarForm;
 import view.contasPagar.ContasPagarForm;
 import view.contasPagar.EfetivarContasPagarForm;
@@ -146,6 +147,7 @@ public class Home extends javax.swing.JFrame {
         menuConfiguracoes = new javax.swing.JMenu();
         subMenuUsuario = new javax.swing.JMenu();
         formAcessosUsuarios = new javax.swing.JMenuItem();
+        formServidorEmail = new javax.swing.JMenuItem();
         menuAlterarSenha = new javax.swing.JMenu();
         formAlterarSenha = new javax.swing.JMenuItem();
 
@@ -558,6 +560,14 @@ public class Home extends javax.swing.JFrame {
 
         menuConfiguracoes.add(subMenuUsuario);
 
+        formServidorEmail.setText("Servidor de Email");
+        formServidorEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formServidorEmailActionPerformed(evt);
+            }
+        });
+        menuConfiguracoes.add(formServidorEmail);
+
         menuBarra.add(menuConfiguracoes);
 
         menuAlterarSenha.setText("Alterar Senha");
@@ -741,7 +751,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_formCadastroAutorActionPerformed
 
     private void formCadastroEditoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formCadastroEditoraActionPerformed
-        EditoraForm dialogEditora = new EditoraForm(this, true);
+        CadastroEditoraForm dialogEditora = new CadastroEditoraForm(this, true);
         dialogEditora.setLocationRelativeTo(this);
         dialogEditora.setVisible(true);
     }//GEN-LAST:event_formCadastroEditoraActionPerformed
@@ -856,6 +866,13 @@ public class Home extends javax.swing.JFrame {
         resgateAplicacaoForm.setVisible(true);
         resgateAplicacaoForm.setPosicao();
     }//GEN-LAST:event_formRetiradaAplicacaoActionPerformed
+
+    private void formServidorEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formServidorEmailActionPerformed
+        ServidorEmailForm servidorEmail = new ServidorEmailForm();
+        this.painelHome.add(servidorEmail);
+        servidorEmail.setVisible(true);
+        servidorEmail.setPosicao();
+    }//GEN-LAST:event_formServidorEmailActionPerformed
   
     private void nomearMenus(){
         
@@ -929,6 +946,7 @@ public class Home extends javax.swing.JFrame {
         this.formAlterarSenha.setName("60");
         
         this.formRelatorioPrestacaoContaMensalGeral.setName("61");
+        this.formServidorEmail.setName("62");
         
     }
     
@@ -1073,6 +1091,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JMenuItem formRemoverParticipante;
     private javax.swing.JMenuItem formRetiradaAplicacao;
     private javax.swing.JMenuItem formSaidaAvulsaLivro;
+    private javax.swing.JMenuItem formServidorEmail;
     private javax.swing.JMenuItem formTransferenciasBancarias;
     private javax.swing.JMenu menuAlterarSenha;
     private javax.swing.JMenuBar menuBarra;

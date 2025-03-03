@@ -2,6 +2,10 @@
 package view.carregamentoConsultas;
 
 import interfaces.ConsultaBibliotecas;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +20,7 @@ public class TelaConsultasBibliotecas extends javax.swing.JDialog {
         super(owner, true);
         initComponents();
         carregarBibliotecasConsultadas(listaBiblioteca);
+        escolherUsandoClickEnter();
     }
 
     @SuppressWarnings("unchecked")
@@ -123,6 +128,29 @@ public class TelaConsultasBibliotecas extends javax.swing.JDialog {
         this.consultaBibliotecas = consultaBibliotecas;
     }
 
+    private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    bibliotecaEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    bibliotecaEscolhida();
+                }
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSelecionar;

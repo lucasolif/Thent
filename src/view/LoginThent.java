@@ -5,7 +5,7 @@ import dao.LoginDao;
 import Ferramentas.Utilitarios;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import Ferramentas.CriptografarSenhas;
+import autenticacao.CriptografarSenhas;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -35,6 +35,7 @@ public class LoginThent extends javax.swing.JFrame {
         verificandoConexao();
         this.campoLogin.setText("admin");
         this.campoSenha.setText("D8hj0ptr");
+
     }
     
     @SuppressWarnings("unchecked")
@@ -47,6 +48,7 @@ public class LoginThent extends javax.swing.JFrame {
         btnEntrar = new javax.swing.JButton();
         LabelSenha = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
+        esqueceuSenha = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 0));
@@ -75,6 +77,21 @@ public class LoginThent extends javax.swing.JFrame {
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo.jpeg"))); // NOI18N
 
+        esqueceuSenha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        esqueceuSenha.setText("Esqueceu a senha?");
+        esqueceuSenha.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        esqueceuSenha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                esqueceuSenhaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                esqueceuSenhaMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                esqueceuSenhaMousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,6 +99,9 @@ public class LoginThent extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(93, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(esqueceuSenha)
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(101, 101, 101))
@@ -111,7 +131,9 @@ public class LoginThent extends javax.swing.JFrame {
                 .addComponent(campoSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnEntrar)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(esqueceuSenha)
+                .addContainerGap())
         );
 
         pack();
@@ -128,6 +150,22 @@ public class LoginThent extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_campoSenhaKeyPressed
 
+    private void esqueceuSenhaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_esqueceuSenhaMouseEntered
+        this.esqueceuSenha.setForeground(Color.red);
+        //this.esqueceuSenha.setFocusable(true);
+    }//GEN-LAST:event_esqueceuSenhaMouseEntered
+
+    private void esqueceuSenhaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_esqueceuSenhaMouseExited
+        this.esqueceuSenha.setForeground(Color.BLACK);
+    }//GEN-LAST:event_esqueceuSenhaMouseExited
+
+    private void esqueceuSenhaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_esqueceuSenhaMousePressed
+        EsqueceuSenhaForm esqueceuSenha = new EsqueceuSenhaForm(this, true);
+        esqueceuSenha.setLocationRelativeTo(this);
+        esqueceuSenha.setVisible(true);
+    }//GEN-LAST:event_esqueceuSenhaMousePressed
+
+    //Valida o login e senha do usuário
     private void validandoUsuario(){
         
         LoginDao loginDao = new LoginDao();
@@ -188,11 +226,13 @@ public class LoginThent extends javax.swing.JFrame {
         }
     }
     
+    //Caso não seja encontrado o arquivo de config, ele abre o formulário para preecher os dados de conexão
     private void abrirFormConexao(){
         ConexaoForm dialogConex = new ConexaoForm(this, true);
         dialogConex.setVisible(true);
     }
     
+    //Gera o Rash e o Salt da senha inserida, para ser comparada no banco de dados.
     private boolean verificarSenha(){
         boolean userValidado = false;
         String senhaInformada = campoSenha.getText();
@@ -215,6 +255,7 @@ public class LoginThent extends javax.swing.JFrame {
    
         return userValidado;
     }
+
     public static void main(String args[]) {
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
@@ -233,6 +274,7 @@ public class LoginThent extends javax.swing.JFrame {
     private javax.swing.JButton btnEntrar;
     private javax.swing.JTextField campoLogin;
     private javax.swing.JPasswordField campoSenha;
+    private javax.swing.JLabel esqueceuSenha;
     private javax.swing.JLabel logo;
     // End of variables declaration//GEN-END:variables
 }

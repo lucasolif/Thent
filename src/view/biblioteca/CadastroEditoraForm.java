@@ -13,13 +13,13 @@ import view.carregamentoConsultas.TelaConsultaEditoras;
 
 
 
-public class EditoraForm extends javax.swing.JDialog implements ConsultaEditoras{
+public class CadastroEditoraForm extends javax.swing.JDialog implements ConsultaEditoras{
 
     Editora editoraSelec = null;
     private final EditoraDao editoraDao = new EditoraDao();
     private List<Editora> listaEditora;
 
-    public EditoraForm(java.awt.Frame parent, boolean modal) {
+    public CadastroEditoraForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }

@@ -117,7 +117,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
 
         jLabel3.setText("Data Oferta*");
 
-        jLabel4.setText("Valor (R$)");
+        jLabel4.setText("Valor (R$)*");
 
         jLabel5.setText("Forma Pagto*");
 

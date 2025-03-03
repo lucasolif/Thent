@@ -6,6 +6,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Livro;
 import interfaces.ConsultaLivros;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class TelaConsultasLivros extends javax.swing.JDialog {
     
@@ -15,6 +19,7 @@ public class TelaConsultasLivros extends javax.swing.JDialog {
         super(onwer, true);
         initComponents();
         carregarLivrosCosultados(listaLivros);
+        escolherUsandoClickEnter();
     }
 
 
@@ -121,6 +126,30 @@ public class TelaConsultasLivros extends javax.swing.JDialog {
     
     public void setLivroSelecionada(ConsultaLivros consultaLivros) {
         this.consultaLivros = consultaLivros;
+    }
+    
+    private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabelaConsultasLivro.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    livroEscolhido();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabelaConsultasLivro.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    livroEscolhido();
+                }
+            }
+        });
     }
 
 

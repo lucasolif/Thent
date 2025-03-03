@@ -543,6 +543,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="cbx60" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="cbx62" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -605,7 +606,9 @@
                           <Component id="cbx59" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cbx60" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="76" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="cbx62" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="50" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -772,6 +775,11 @@
             <Component class="javax.swing.JCheckBox" name="cbx60">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Alterar Senha"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cbx62">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Servidor de Email"/>
               </Properties>
             </Component>
           </SubComponents>

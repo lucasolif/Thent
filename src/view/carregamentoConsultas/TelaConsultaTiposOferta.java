@@ -1,10 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
+
 package view.carregamentoConsultas;
 
 import interfaces.ConsultaTiposOferta;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +19,7 @@ public class TelaConsultaTiposOferta extends javax.swing.JDialog {
         super(owner, true);
         initComponents();
         carregarTipoOfertaConsultadas(listaTipoOferta);
+        escolherUsandoClickEnter();
     }
 
 
@@ -121,6 +123,30 @@ public class TelaConsultaTiposOferta extends javax.swing.JDialog {
     
     public void setTipoOfertaSelecionada(ConsultaTiposOferta consultaTiposOferta) {
         this.consultaTiposOferta = consultaTiposOferta;
+    }
+    
+        private void escolherUsandoClickEnter(){
+        
+        //Escolher quando apertar na tecla Enter
+        tabela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    tipoOfertaEscolhida();
+                }
+            }
+        });
+        
+        //Escolher quando clicar duas vezes no mouse
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Verifica se foi um duplo clique (clickCount == 2)
+                if (e.getClickCount() == 2) {
+                    tipoOfertaEscolhida();
+                }
+            }
+        });
     }
 
 

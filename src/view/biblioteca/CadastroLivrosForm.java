@@ -416,7 +416,7 @@ public class CadastroLivrosForm extends javax.swing.JInternalFrame implements Co
     }
     
     private void adicionarEditora(){
-        EditoraForm dialogEditora = new EditoraForm((Frame) SwingUtilities.getWindowAncestor(this), true);
+        CadastroEditoraForm dialogEditora = new CadastroEditoraForm((Frame) SwingUtilities.getWindowAncestor(this), true);
         dialogEditora.setLocationRelativeTo(this);
         dialogEditora.setVisible(true);
     }
