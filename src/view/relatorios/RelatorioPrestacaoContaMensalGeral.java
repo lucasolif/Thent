@@ -10,10 +10,16 @@ import dao.MovimentoCaixaDao;
 import dao.RegistroOfertaDao;
 import dao.TransferenciaDepositoDao;
 import dao.UsuarioDao;
+import interfaces.ConsultaContaCaixa;
+import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
 import model.RegistroDizimoOferta;
@@ -25,9 +31,11 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import view.carregamentoConsultas.TelaConsultaContaCaixa;
+import view.carregamentoConsultas.TelaConsultaIgreja;
 
 
-public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFrame {
+public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFrame implements ConsultaContaCaixa {
 
         //Estanciamento de classes que serão utilizadas
     private final IgrejaDao igrejaDao = new IgrejaDao();
@@ -39,6 +47,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
     private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
     private final Relatorios funcoesRelatorio = new Relatorios();
     private final UsuarioDao usuarioDao = new UsuarioDao();
+    private List<ContaCaixa> listaContaCaixa = null;
     private Usuario usuarioLogado;
     private String filtroIgreja = "";
 
@@ -61,6 +70,13 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         mesPrestacao = new javax.swing.JComboBox<>();
         igreja = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnAdicionar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listagemContaCaixa = new javax.swing.JList<>();
+        codContaCaixa = new javax.swing.JTextField();
+        nomeContaCaixa = new javax.swing.JTextField();
 
         setClosable(true);
         setResizable(true);
@@ -89,45 +105,99 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
 
         jLabel1.setText("Igreja");
 
+        jLabel4.setText("Contas Caixa");
+
+        btnAdicionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/adicionar.png"))); // NOI18N
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
+
+        btnExcluir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons8-lixeira-16.png"))); // NOI18N
+        btnExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(listagemContaCaixa);
+
+        codContaCaixa.setEditable(false);
+        codContaCaixa.setBackground(new java.awt.Color(204, 204, 204));
+        codContaCaixa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+
+        nomeContaCaixa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nomeContaCaixaKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(codContaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nomeContaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(mesPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(anoPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnGerar))))
-                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnGerar)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(mesPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnExcluir))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addComponent(anoPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(mesPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(anoPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGerar))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(igreja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(mesPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(anoPrestacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnExcluir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(codContaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nomeContaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdicionar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGerar, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -141,6 +211,24 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         carregarIgreja();
     }//GEN-LAST:event_igrejaMousePressed
 
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        listarFiltrosContaCaixa();
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        excluirContaCaixaFiltro();
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void nomeContaCaixaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nomeContaCaixaKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            consultarContaCaixa();
+            carregarResultadoConsultaContaCaixa();
+        }else if(evt.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+            this.nomeContaCaixa.setText("");
+            this.codContaCaixa.setText("");
+        }
+    }//GEN-LAST:event_nomeContaCaixaKeyPressed
+
     private void carregarIgreja(){
         List<Igreja> listaIgrejas = this.igrejaDao.consultarTodasIgrejas(this.filtroIgreja);
         DefaultComboBoxModel igreja = (DefaultComboBoxModel)this.igreja.getModel();
@@ -148,6 +236,65 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         for(Igreja igre : listaIgrejas){
             igreja.addElement(igre);
         }
+    }
+    
+    private void consultarContaCaixa(){        
+        String textoBusca = this.nomeContaCaixa.getText(); // Texto digitado na busca       
+        this.listaContaCaixa = this.contaCaixaDao.consultarTodasContaCaixa(textoBusca); //Lista recebe a busca retornada do banco
+    }
+    
+    private void carregarResultadoConsultaContaCaixa(){
+        TelaConsultaContaCaixa resultConsultaContaCaixa = new TelaConsultaContaCaixa((Frame) SwingUtilities.getWindowAncestor(this), this.listaContaCaixa);
+        resultConsultaContaCaixa.setContaCaixaSelecionada(this);
+        resultConsultaContaCaixa.setLocationRelativeTo(this);
+        resultConsultaContaCaixa.setVisible(true);
+    }
+    
+    private void carregarContaCaixaEscolhida(ContaCaixa contaCaixa){
+        this.codContaCaixa.setText(String.valueOf(contaCaixa.getCodigo()));
+        this.nomeContaCaixa.setText(contaCaixa.getNome());    
+    }
+    
+    private void excluirContaCaixaFiltro(){
+        
+        // Verifica se algum item foi selecionado
+        int indiceSelecionado = listagemContaCaixa.getSelectedIndex(); // Obtém o índice do item selecionado
+
+        if (indiceSelecionado >= 0) { // Se um item foi selecionado
+            // Remove o item do DefaultListModel
+            DefaultListModel<String> modelo = (DefaultListModel<String>) listagemContaCaixa.getModel();
+            modelo.remove(indiceSelecionado); // Remove o item na posição do índice selecionado
+        } else {
+            // Caso não haja nenhum item selecionado
+            JOptionPane.showMessageDialog(null, "Selecione uma conta para ser removida do filtro", "Erro", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    private void listarFiltrosContaCaixa(){
+        
+        if (!this.codContaCaixa.getText().isEmpty()) {
+            // Verifica se o modelo já está definido no JList, se não, cria um novo.
+            DefaultListModel<String> filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+
+            // Se o modelo for null (caso inicial), cria um novo modelo
+            if (filtroContaCaixa == null) {
+                filtroContaCaixa = new DefaultListModel<>();
+                this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o modelo ao JList
+            }
+
+            // Adiciona a igreja no modelo
+            String codIgreja = this.codContaCaixa.getText();
+            String nomeIgreja = this.nomeContaCaixa.getText();
+            String igreja = codIgreja + "-" + nomeIgreja; 
+            filtroContaCaixa.addElement(igreja);  // Adiciona ao modelo do JList
+
+            // Limpa os campos de texto
+            this.codContaCaixa.setText("");
+            this.nomeContaCaixa.setText("");
+        }else {
+            JOptionPane.showMessageDialog(null, "Informe a conta caixa que será adicionada no filtro", "Erro", JOptionPane.WARNING_MESSAGE);
+        }
+
     }
     
     private List<RegistroDizimoOferta> consultarEntradas(){
@@ -408,14 +555,26 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         }
         
     }
+    
+    @Override
+    public void contaCaixaSelecionada(ContaCaixa contaCaixaSelecionada) {
+        carregarContaCaixaEscolhida(contaCaixaSelecionada);    
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField anoPrestacao;
+    private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnGerar;
+    private javax.swing.JTextField codContaCaixa;
     private javax.swing.JComboBox<String> igreja;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList<String> listagemContaCaixa;
     private javax.swing.JComboBox<String> mesPrestacao;
+    private javax.swing.JTextField nomeContaCaixa;
     // End of variables declaration//GEN-END:variables
 }

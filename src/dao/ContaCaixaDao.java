@@ -126,6 +126,64 @@ public class ContaCaixaDao {
         return listaCaixas;
     }
     
+        //Consulta para popular o JComboBox
+    //Consultar para mostra na tabela todos os caixas cadastrados
+    public List<ContaCaixa> consultarTodasContaCaixa(String conta){
+        
+        List<ContaCaixa> listaCaixas = new ArrayList<>();
+        String sql = "Select CC.*, " +
+        "(Select NomeIgreja From Igrejas As I Where I.Codigo = CC.Igreja) As NomeIgreja " +
+        "From ContasCaixa As CC " +
+        "WHERE ((? IS NULL OR CC.Codigo LIKE ?) OR (? IS NULL OR CC.Descricao LIKE ?))";
+
+        try{
+            this.conexao = Conexao.getDataSource().getConnection();           
+            this.selectStmt = this.conexao.prepareStatement(sql);
+            
+            if (conta != null) {
+                this.selectStmt.setString(1,  "%" + conta + "%");
+                this.selectStmt.setString(2,  "%" + conta + "%");
+                this.selectStmt.setString(3,  "%" + conta + "%");
+                this.selectStmt.setString(4,  "%" + conta + "%");
+            } else {
+                this.selectStmt.setNull(1, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(2, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(3, java.sql.Types.INTEGER);
+                this.selectStmt.setNull(4, java.sql.Types.INTEGER);
+            }
+            this.rs = this.selectStmt.executeQuery();
+
+            while(this.rs.next()){
+                ContaCaixa caixa = new ContaCaixa();
+                Igreja igreja = new Igreja();
+                igreja.setCodigo(this.rs.getInt("Igreja"));
+                igreja.setNome(this.rs.getString("NomeIgreja"));
+                caixa.setCodigo(this.rs.getInt("Codigo"));
+                caixa.setNome(this.rs.getString("Descricao"));
+                caixa.setConstaRelatorio(this.rs.getInt("ConstaRelatorioPrestacao"));
+                caixa.setStatus(this.rs.getInt("Status"));
+                caixa.setDataCadastro(this.rs.getDate("DataCadastro"));
+                caixa.setIgreja(igreja);
+
+                listaCaixas.add(caixa);
+            }
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar consultar a Conta Caixa", "Erro 001", JOptionPane.ERROR_MESSAGE);
+        }finally{
+            // Fechar recursos
+            try{
+                if (this.rs != null) this.rs.close();
+                if (this.selectStmt != null) this.selectStmt.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("ContaCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        return listaCaixas;
+    }
+    
     //Consultar para mostra na tabela todos os caixas cadastrados
     public List<ContaCaixa> consultar(String conta, String filtroIgreja){
         
