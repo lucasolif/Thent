@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class ContasPagar {
     private Integer codigo;
-    private Integer totalParcela;
+    private String totalParcela;
     private Integer parcela;
     private Integer numNota;
     private Integer status;
@@ -60,15 +60,13 @@ public class ContasPagar {
         this.subContaResultado = subContaResultado;
     }
 
-    public Integer getTotalParcela() {
+    public String getTotalParcela() {
         return totalParcela;
     }
 
-    public void setTotalParcela(Integer totalParcela) {
+    public void setTotalParcela(String totalParcela) {
         this.totalParcela = totalParcela;
     }
-    
-    
 
     public double getValorPago() {
         return valorPago;

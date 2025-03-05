@@ -1,7 +1,7 @@
 
 package view.relatorios;
 
-import Ferramentas.Relatorios;
+import Ferramentas.UtilitariosRelatorios;
 import Ferramentas.Utilitarios;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
@@ -29,7 +29,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
     
     private final Utilitarios conversor = new Utilitarios();
-    private final Relatorios funcoesRelatorio = new Relatorios();
+    private final UtilitariosRelatorios funcoesRelatorio = new UtilitariosRelatorios();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final MovimentoCaixaDao movimentoCaixaDao = new MovimentoCaixaDao();

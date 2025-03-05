@@ -708,25 +708,28 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private void criarListagemIgrejasLiberadas(){
         
         if (!this.codIgreja.getText().isEmpty()) {
-            // Verifica se o modelo já está definido no JList, se não, cria um novo.
-            DefaultListModel<String> igrejasLiberada = (DefaultListModel<String>) this.listagemIgrejaAcesso.getModel();
+        // Verifica se o modelo é uma instância de DefaultListModel
+        DefaultListModel<String> igrejasLiberada;
 
-            // Se o modelo for null (caso inicial), cria um novo modelo
-            if (igrejasLiberada == null) {
-                igrejasLiberada = new DefaultListModel<>();
-                this.listagemIgrejaAcesso.setModel(igrejasLiberada);  // Atribui o modelo ao JList
-            }
+        // Verifica se o modelo atual é do tipo DefaultListModel
+        if (this.listagemIgrejaAcesso.getModel() instanceof DefaultListModel) {
+            igrejasLiberada = (DefaultListModel<String>) this.listagemIgrejaAcesso.getModel();
+        } else {
+            // Se o modelo não for um DefaultListModel ou for null, cria um novo
+            igrejasLiberada = new DefaultListModel<>();
+            this.listagemIgrejaAcesso.setModel(igrejasLiberada);  // Atribui o modelo ao JList
+        }
 
-            // Adiciona a igreja no modelo
-            String codIgreja = this.codIgreja.getText();
-            String nomeIgreja = this.nomeIgreja.getText();
-            String igreja = codIgreja + "-" + nomeIgreja; 
-            igrejasLiberada.addElement(igreja);  // Adiciona ao modelo do JList
+        // Adiciona a igreja no modelo
+        String codIgreja = this.codIgreja.getText();
+        String nomeIgreja = this.nomeIgreja.getText();
+        String igreja = codIgreja + "-" + nomeIgreja; 
+        igrejasLiberada.addElement(igreja);  // Adiciona ao modelo do JList
 
-            // Limpa os campos de texto
-            this.codIgreja.setText("");
-            this.nomeIgreja.setText("");
-        }else {
+        // Limpa os campos de texto
+        this.codIgreja.setText("");
+        this.nomeIgreja.setText("");
+        } else {
             JOptionPane.showMessageDialog(null, "Informe a igreja para ser adicionada na liberação", "Erro", JOptionPane.WARNING_MESSAGE);
         }
 

@@ -50,6 +50,7 @@ import view.financeiro.TransferenciaContaForm;
 import view.relatorios.RelatorioExtratoCaixa;
 import view.relatorios.RelatorioContasPagarForm;
 import view.relatorios.RelatorioMovimentoDizimoOferta;
+import view.relatorios.RelatorioPrestacaoContaMensalGeral;
 import view.relatorios.RelatorioPrestacaoContaMensalLocal;
 
 
@@ -396,6 +397,11 @@ public class Home extends javax.swing.JFrame {
         subMenuRelatorioPrestacaoConta.add(formRelatorioPrestacaoContaMensal);
 
         formRelatorioPrestacaoContaMensalGeral.setText("Prestação Conta Mensal Geral");
+        formRelatorioPrestacaoContaMensalGeral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                formRelatorioPrestacaoContaMensalGeralActionPerformed(evt);
+            }
+        });
         subMenuRelatorioPrestacaoConta.add(formRelatorioPrestacaoContaMensalGeral);
 
         menuRelatorios.add(subMenuRelatorioPrestacaoConta);
@@ -873,6 +879,13 @@ public class Home extends javax.swing.JFrame {
         servidorEmail.setVisible(true);
         servidorEmail.setPosicao();
     }//GEN-LAST:event_formServidorEmailActionPerformed
+
+    private void formRelatorioPrestacaoContaMensalGeralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formRelatorioPrestacaoContaMensalGeralActionPerformed
+        RelatorioPrestacaoContaMensalGeral prestacaoMensalGeral = new RelatorioPrestacaoContaMensalGeral(this.userLogado);
+        this.painelHome.add(prestacaoMensalGeral);
+        prestacaoMensalGeral.setVisible(true);
+        prestacaoMensalGeral.setPosicao();
+    }//GEN-LAST:event_formRelatorioPrestacaoContaMensalGeralActionPerformed
   
     private void nomearMenus(){
         

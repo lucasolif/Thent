@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 
-public class Relatorios {
+public class UtilitariosRelatorios {
     
     private final Utilitarios conversor = new Utilitarios();
     
@@ -274,9 +274,9 @@ public class Relatorios {
         }
     }
 
-    public void tituloColunaRelatorioPrestacaoContaMensal (float yPosition, float xPosition, String[] titulosTabela, PDPageContentStream fluxoConteudo){       
+    public void tituloColunaRelatorioTesourariaLocal (float yPosition, float xPosition, String[] titulosTabela, PDPageContentStream fluxoConteudo){       
         PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
-        
+         
         try{
             // Definir os títulos das colunas na página
             for (int i = 0; i < titulosTabela.length; i++) {
@@ -296,6 +296,48 @@ public class Relatorios {
         }
     }
     
+    public void tituloColunaRelatorioTesourariaGeral (float yPosition, float xPosition, String[] titulosTabela, int layout, PDPageContentStream fluxoConteudo){       
+        PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        
+        try{
+            if(layout == 1){
+                // Definir os títulos das colunas na página
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 340; // Calcula a posição horizontal para cada título
+                    }
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 12);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                }
+            }else if(layout == 2){
+                for (int i = 0; i < titulosTabela.length; i++) {
+                    if(i != 0){
+                        switch (i) {
+                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 35; // Calcula a posição horizontal para cada título
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 170; // Calcula a posição horizontal para cada título
+                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título
+                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 50; // Calcula a posição horizontal para cada título
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                        }
+                    }
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(timesBold, 12);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do título
+                    fluxoConteudo.showText(titulosTabela[i]); // Texto do título
+                    fluxoConteudo.endText();
+                } 
+            }
+
+             
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar os títulos da coluna", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+       
     //Titulo layout centralizado
     public void tituloLayoutCentralizado(String SubTitulo, float yPosition, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
         
@@ -429,7 +471,7 @@ public class Relatorios {
         
     }
     
-        //Função para gerar três totalizados para o relatório
+    //Função para gerar três totalizados para o relatório
     public void valoresQuatroTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, double totalizador1, double totalizador2, double totalizador3, double totalizador4, float yPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
@@ -472,9 +514,51 @@ public class Relatorios {
         
     }
     
+    //Função para gerar quatro totalizados para o relatório
+    public void valoresQuatroTotalizadoresRelatorioMensal(String descricao1, String descricao2, String descricao3, String descricao4, double totalizador1, double totalizador2, double totalizador3, double totalizador4, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+        
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito
+        float tamanhoFonte = 12;
+
+        fluxoConteudo.beginText();
+
+        //Totalizador 1
+        fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao1); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador1).replace(".", ","));
+        yPosition =-12; // Ajusta a posição da próxima linha
+
+        //Totalizador 2
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao2); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador2).replace(".", ","));
+
+        //Totalizador 3
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao3); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador3).replace(".", ","));
+
+        //Totalizafor 4
+        fluxoConteudo.newLineAtOffset(0, yPosition);
+        fluxoConteudo.setFont(timesBold, tamanhoFonte);// Aplicando a fonte negrito para a descrição
+        fluxoConteudo.showText(descricao4); 
+        fluxoConteudo.setFont(times, tamanhoFonte);// Voltando para a fonte normal para o restante do texto
+        fluxoConteudo.showText("R$ "+this.conversor.formatarDoubleString(totalizador4).replace(".", ","));
+
+        
+        fluxoConteudo.endText();
+        
+    }
     
     //Função para gerar quatro totalizados para o relatório
-    public void valoresCincoTotalizadores(String descricao1, String descricao2, String descricao3, String descricao4, String descricao5, double totalizador1, double totalizador2, double totalizador3, double totalizador4, double totalizador5, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
+    public void valoresCincoTotalizadoresRelatorioMensal(String descricao1, String descricao2, String descricao3, String descricao4, String descricao5, double totalizador1, double totalizador2, double totalizador3, double totalizador4, double totalizador5, float yPosition, float xPosition, PDPageContentStream fluxoConteudo) throws IOException{
         
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
         final PDFont timesBold = new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); // Fonte em negrito

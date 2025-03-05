@@ -921,7 +921,7 @@ public class GerenciarContasReceberForm extends javax.swing.JInternalFrame imple
         mvCaixa.setCrCampanha(crCampanha);
         mvCaixa.setUsuarioCadastro(usuario);
            
-        this.mvCaixaDao.movimentarContasReceberCampanha(mvCaixa, this.usuarioLogado);
+        this.mvCaixaDao.movimentarContasRecebidaCampanha(mvCaixa, this.usuarioLogado);
     }
     
     private void duplicataSelecionada(){    

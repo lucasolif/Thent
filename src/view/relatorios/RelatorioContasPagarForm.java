@@ -1,7 +1,7 @@
 
 package view.relatorios;
 
-import Ferramentas.Relatorios;
+import Ferramentas.UtilitariosRelatorios;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
@@ -37,7 +37,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 public class RelatorioContasPagarForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
     private final Utilitarios conversor = new Utilitarios();
-    private final Relatorios funcoesRelatorio = new Relatorios();
+    private final UtilitariosRelatorios funcoesRelatorio = new UtilitariosRelatorios();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();

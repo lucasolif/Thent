@@ -1,16 +1,15 @@
 
 package view.relatorios;
 
-import Ferramentas.Relatorios;
+import Ferramentas.UtilitariosRelatorios;
 import Ferramentas.Utilitarios;
-import dao.AplicacaoDao;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;
 import dao.MovimentoCaixaDao;
 import dao.RegistroOfertaDao;
-import dao.TransferenciaDepositoDao;
 import dao.UsuarioDao;
 import interfaces.ConsultaContaCaixa;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -18,6 +17,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import model.ContaCaixa;
 import model.Igreja;
@@ -32,31 +32,34 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import view.carregamentoConsultas.TelaConsultaContaCaixa;
-import view.carregamentoConsultas.TelaConsultaIgreja;
+
 
 
 public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFrame implements ConsultaContaCaixa {
 
-        //Estanciamento de classes que serão utilizadas
+    //Estanciamento de classes que serão utilizadas
     private final IgrejaDao igrejaDao = new IgrejaDao();
-    private final AplicacaoDao aplicacaoDao = new AplicacaoDao();
     private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
-    private final TransferenciaDepositoDao transfDepositoDao = new TransferenciaDepositoDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final Utilitarios conversor = new Utilitarios();
     private final MovimentoCaixaDao mvCaixaDao = new MovimentoCaixaDao();
-    private final Relatorios funcoesRelatorio = new Relatorios();
+    private final UtilitariosRelatorios funcoesRelatorio = new UtilitariosRelatorios();
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private List<ContaCaixa> listaContaCaixa = null;
-    private Usuario usuarioLogado;
+    private Usuario usuarioLogado = null;
     private String filtroIgreja = "";
 
-    public RelatorioPrestacaoContaMensalGeral() {
+    public RelatorioPrestacaoContaMensalGeral(Usuario usuarioLogado) {
         initComponents();
         this.usuarioLogado = usuarioLogado;
         this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formaInicial();
     }
+
+    public void setPosicao() {
+        Dimension d = this.getDesktopPane().getSize();
+        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2); 
+    }  
 
 
     @SuppressWarnings("unchecked")
@@ -212,7 +215,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
     }//GEN-LAST:event_igrejaMousePressed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        listarFiltrosContaCaixa();
+        adicionarFiltrosContaCaixa();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
@@ -240,7 +243,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
     
     private void consultarContaCaixa(){        
         String textoBusca = this.nomeContaCaixa.getText(); // Texto digitado na busca       
-        this.listaContaCaixa = this.contaCaixaDao.consultarTodasContaCaixa(textoBusca); //Lista recebe a busca retornada do banco
+        this.listaContaCaixa = this.contaCaixaDao.consultarCx(textoBusca,this.filtroIgreja); //Lista recebe a busca retornada do banco
     }
     
     private void carregarResultadoConsultaContaCaixa(){
@@ -270,31 +273,65 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         }
     }
     
-    private void listarFiltrosContaCaixa(){
+    private void adicionarFiltrosContaCaixa(){
         
         if (!this.codContaCaixa.getText().isEmpty()) {
-            // Verifica se o modelo já está definido no JList, se não, cria um novo.
-            DefaultListModel<String> filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+            // Verifica se o modelo já é do tipo DefaultListModel
+            DefaultListModel<String> filtroContaCaixa;
 
-            // Se o modelo for null (caso inicial), cria um novo modelo
-            if (filtroContaCaixa == null) {
+            // Verifica se o modelo é uma instância de DefaultListModel
+            if (this.listagemContaCaixa.getModel() instanceof DefaultListModel) {
+                filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+            } else {
+                // Se o modelo não for um DefaultListModel ou for null, cria um novo modelo
                 filtroContaCaixa = new DefaultListModel<>();
-                this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o modelo ao JList
+                this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o novo modelo ao JList
             }
 
-            // Adiciona a igreja no modelo
-            String codIgreja = this.codContaCaixa.getText();
-            String nomeIgreja = this.nomeContaCaixa.getText();
-            String igreja = codIgreja + "-" + nomeIgreja; 
-            filtroContaCaixa.addElement(igreja);  // Adiciona ao modelo do JList
+            // Adiciona a conta no modelo
+            String codConta = this.codContaCaixa.getText();
+            String nomeConta = this.nomeContaCaixa.getText();
+            String conta = codConta + "-" + nomeConta;
+            filtroContaCaixa.addElement(conta);  // Adiciona ao modelo do JList
 
             // Limpa os campos de texto
             this.codContaCaixa.setText("");
             this.nomeContaCaixa.setText("");
-        }else {
+        } else {
             JOptionPane.showMessageDialog(null, "Informe a conta caixa que será adicionada no filtro", "Erro", JOptionPane.WARNING_MESSAGE);
         }
-
+    }
+    
+    private String obterFiltroCaixa(){
+        ListModel<String> modelo = listagemContaCaixa.getModel();// Acesse o modelo do JList
+        
+        int cont = 0;
+        int tamanhoListagem = modelo.getSize();
+        int ultimo = tamanhoListagem - 1;
+        String filtroContaCaixa = "";
+        
+        for (int i = 0; i < modelo.getSize(); i++) {       
+            
+            //Pegando o código da igreja que está em uma string junto com o nome da igreja
+            String contaCaixaSelec = modelo.getElementAt(i);
+            int posicaoCod = contaCaixaSelec.indexOf("-"); //Pega a posição do traço, pois ele divide o código da igreja e nome       
+            String codContaCaixa = contaCaixaSelec.substring(0,posicaoCod);                        
+ 
+            if(tamanhoListagem == 1){
+                filtroContaCaixa = codContaCaixa;
+            }else{
+                if(tamanhoListagem > 1 && cont == ultimo){
+                   filtroContaCaixa += codContaCaixa;
+                }else{
+                   filtroContaCaixa += codContaCaixa+","; 
+                }
+            }
+            cont ++;  
+            
+        }
+        
+        return filtroContaCaixa;
+        
     }
     
     private List<RegistroDizimoOferta> consultarEntradas(){
@@ -303,9 +340,10 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         final String nomeMes = (String) this.mesPrestacao.getSelectedItem();
         final Integer ano = Integer.valueOf(this.anoPrestacao.getText());
         final Integer numMes = conversor.obterNumMes(nomeMes);  
+        final String filtroContaCaixa = obterFiltroCaixa();
 
         Igreja igreja = (Igreja) this.igreja.getSelectedItem();
-        List<RegistroDizimoOferta> listaRgDizimoOferta = rgOfertaDao.consultaRelatorioPrestacaoContaMensalIgrejaLocal(igreja, numMes, ano);
+        List<RegistroDizimoOferta> listaRgDizimoOferta = rgOfertaDao.consultaEntradaOfertaDizimoRelatorioTesourariaGeral(igreja, numMes, ano, filtroContaCaixa);
     
         return listaRgDizimoOferta;
     }
@@ -317,8 +355,9 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         final Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         final Integer ano = Integer.valueOf(this.anoPrestacao.getText());
         final Integer numMes = conversor.obterNumMes(nomeMes);  
+        final String filtroContaCaixa = obterFiltroCaixa();
 
-        List<MovimentoCaixa> listaMvCaixa = mvCaixaDao.consultarMovimentacaoContasPagar(numMes, ano, igreja);
+        List<MovimentoCaixa> listaMvCaixa = mvCaixaDao.consultarMovimentacaoContasPagarRelatorioIgrejaSede(numMes, ano, igreja,filtroContaCaixa);
         return listaMvCaixa;
     }
 
@@ -329,32 +368,26 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         final Integer ano = Integer.valueOf(this.anoPrestacao.getText());
         final Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         final Integer numMes = conversor.obterNumMes(nomeMes);  
+        final String filtroContaCaixa = obterFiltroCaixa();
         
-        double saldoAnterior = mvCaixaDao.consultarSaldoMesInformado(numMes, ano, igreja); 
+        double saldoAnterior = mvCaixaDao.consultarSaldoAnteriorMesInformado(numMes, ano, igreja, filtroContaCaixa); 
         return saldoAnterior;
         
     }
-       
-    private List<MovimentoCaixa> consultarDepositoTesourariaGeral(){
-  
+    
+    private double consultarSaldoAtual(){   
+        
         //Variaveis que serão utiizadas em todas as consultas. Elas não serão alteradas futuramente.
         final String nomeMes = (String) this.mesPrestacao.getSelectedItem();
         final Integer ano = Integer.valueOf(this.anoPrestacao.getText());
         final Igreja igreja = (Igreja) this.igreja.getSelectedItem();
         final Integer numMes = conversor.obterNumMes(nomeMes);  
+        final String filtroContaCaixa = obterFiltroCaixa();
         
-        List<MovimentoCaixa> listaMvCaixa = transfDepositoDao.consultarDepositoTerourariaGeral(numMes, ano, igreja);       
-        return listaMvCaixa;
+        double saldoAtual = mvCaixaDao.consultarSaldoAtualMesInformado(numMes, ano, igreja, filtroContaCaixa); 
+        return saldoAtual; 
+    }
        
-    }
-    
-    private double consultarRendimentoAplicacao(){
-        final Igreja igreja = (Igreja) this.igreja.getSelectedItem();   
-        double rendimento = this.aplicacaoDao.consultarRendimentoAplicacao(igreja);
-        
-        return rendimento;
-    }
-    
     private void formaInicial(){
         carregarIgreja();
         this.anoPrestacao.setText(conversor.anoAtual());
@@ -367,14 +400,14 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         final List<RegistroDizimoOferta> listaEntrada = consultarEntradas();
         final List<MovimentoCaixa> listaSaidas = consultarSaidas();
         final double saldoCaixaAnterior = consultarSaldoAnterior();
-        final List<MovimentoCaixa> listaDpTesouraria = consultarDepositoTesourariaGeral();
-        final double rendimentoAplicacao = consultarRendimentoAplicacao();
+        final double saldoCaixaAtual = consultarSaldoAtual();
         
         //Definição das variáveis
         String mesRelatorio = (String) this.mesPrestacao.getSelectedItem();
         String anoRelatorio = String.valueOf(this.anoPrestacao.getText());
         final String titulo = "Prestação de Conta Referente ao mês de "+ mesRelatorio+" de "+ anoRelatorio;
-        final String[] titulosTabela = {"Descrição", "Valores"};
+        final String[] titulosTabelaEntrada = {"Descrição", "Valores"};
+        final String[] titulosTabelaSaida = {"Pessoa","Descrição","Parcela","Valor"};
         
         //Variaveis referente aos totalizados
         double saidas = 0;
@@ -384,6 +417,8 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         float yPosition = 700; // Posição vertical inicial para os títulos
         float xPosition = 80; // Posição horizontal inicial para os títulos
         final float tamanhaFonte = 12;
+        final int layout1 = 1;
+        final int layout2 = 2;
         final float tamanhoFonteTitulo = 18;
         final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte     
                 
@@ -397,16 +432,16 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         
         try {         
             // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
+            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);            
             //Gerando o título do relatório
             this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo,titulo, fluxoConteudo, paginaPDF); 
-
+            
+            
             //Gerando o titulo do layout
             this.funcoesRelatorio.tituloLayoutCentralizado("ENTRADAS",yPosition, fluxoConteudo, paginaPDF);   
             yPosition -= 20; // Pular para a linha abaixo após o título       
             //Gerar os títulos das colunas
-            this.funcoesRelatorio.tituloColunaRelatorioPrestacaoContaMensal(yPosition, xPosition, titulosTabela, fluxoConteudo);           
+            this.funcoesRelatorio.tituloColunaRelatorioTesourariaGeral(yPosition, xPosition, titulosTabelaEntrada,layout1, fluxoConteudo);           
             yPosition -= 20; // Pular para a linha abaixo após o título              
             //Pega o total das ofertas (Entradas)
             for(RegistroDizimoOferta entrada : listaEntrada) {                
@@ -421,7 +456,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
                 xPosition = 80; // Resetar a posição horizontal a cada nova linha
 
                 // Obter os dados da lista        
-                String descricao = entrada.getTpOferta().getNome();
+                String descricao = entrada.getContaCaixa().getNome();
                 String valores = this.conversor.formatarDoubleString(entrada.getValorOfertaEntrada()).replace(".", ",");
 
                 fluxoConteudo.beginText();
@@ -444,13 +479,13 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
             xPosition += 40;
             this.funcoesRelatorio.valoresUmTotalizador("Total: ", entradas, yPosition, xPosition, fluxoConteudo);            
             yPosition -= 40; // Pular para a linha abaixo
-            xPosition = 80; //Resetando o posicionamento vertical
+            xPosition = 80; //Resetando o posicionamento vertical                   
             
             //Gerando o titulo do layout
             this.funcoesRelatorio.tituloLayoutCentralizado("SAÌDAS", yPosition, fluxoConteudo, paginaPDF);   
             yPosition -= 20; // Pular para a linha abaixo       
             //Gerar os títulos das colunas
-            this.funcoesRelatorio.tituloColunaRelatorioPrestacaoContaMensal(yPosition, xPosition, titulosTabela, fluxoConteudo);           
+            this.funcoesRelatorio.tituloColunaRelatorioTesourariaGeral(yPosition, xPosition, titulosTabelaSaida,layout2, fluxoConteudo);           
             yPosition -= 20; // Pular para a linha abaixo    
             
             //Pega o total das Saídas
@@ -486,38 +521,6 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
 
             }
 
-            //Pega os depositos efetuado para a tesouraria geral
-            for(MovimentoCaixa dpTesouraria : listaDpTesouraria) {                
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
-                    fluxoConteudo.close(); //Encerra o fluxo de conteudo
-                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
-                    documentoPDF.addPage(novaPagina);
-                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
-                    yPosition = 750; // Resetar a posição Y para o topo da nova página
-                }        
-
-                xPosition = 80; // Resetar a posição horizontal a cada nova linha
-
-                // Obter os dados da lista        
-                String descricao = dpTesouraria.getComplemento();
-                String valores = this.conversor.formatarDoubleString(dpTesouraria.getValorSaida()).replace(".", ",");
-
-                fluxoConteudo.beginText();
-                fluxoConteudo.setFont(times, tamanhaFonte);
-
-                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                fluxoConteudo.showText(descricao);
-                xPosition += 310; // Ajusta a posição da próxima coluna
-                
-                fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText("R$ "+valores);
-
-                fluxoConteudo.endText();         
-                yPosition -= 20;// Descer para a próxima linha 
-                
-                saidas += dpTesouraria.getValorSaida();
-
-            }
             yPosition -= 10;
             xPosition += 40;
             
@@ -526,19 +529,18 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
             double totalEntradas = entradas;
             double totalSaidas = saidas;
             double saldoAnterior = saldoCaixaAnterior;
-            double saldoAtual = totalEntradas - totalSaidas;
-            double valorRendimento = rendimentoAplicacao;
+            double saldoAtual = saldoCaixaAtual;
             
             yPosition -= 50;
             xPosition -= 40;
             
             //Pega os dados referente aos últimos totalizadores
-            this.funcoesRelatorio.valoresCincoTotalizadores("Total Entrada:    ", "Total Saída:         ", "Saldo Anterior:   ", "Saldo Atual:         ", "Valor Aplicação: ", totalEntradas, totalSaidas, saldoAnterior, saldoAtual, valorRendimento, yPosition, xPosition, fluxoConteudo);
+            this.funcoesRelatorio.valoresQuatroTotalizadoresRelatorioMensal("Total Entrada:    ", "Total Saída:         ", "Saldo Anterior:   ", "Saldo Atual:         ", totalEntradas, totalSaidas, saldoAnterior, saldoAtual, yPosition, xPosition, fluxoConteudo);
             
             fluxoConteudo.close();
             
             //Chama a função apra salvar o relatório
-            this.funcoesRelatorio.salvarRelatorioPDF("Prestação De Contas",documentoPDF);
+            this.funcoesRelatorio.salvarRelatorioPDF("Prestação De Contas Tesouraria Geral",documentoPDF);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
         } finally {

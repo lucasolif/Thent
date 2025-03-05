@@ -17,6 +17,7 @@ import model.Igreja;
 import model.MovimentoCaixa;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
+import model.SubContaResultado;
 import model.TipoOferta;
 import model.TransferenciaConta;
 import model.Usuario;
@@ -26,6 +27,7 @@ public class MovimentoCaixaDao {
     
     private final ContasPagarDao cpDao = new ContasPagarDao();
     private final CampanhaDao campanhaDao = new CampanhaDao();
+    private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
     private final LogsDao logsDao = new LogsDao();
     private Connection conexao = null;
     private PreparedStatement stmInsert = null;
@@ -333,7 +335,7 @@ public class MovimentoCaixaDao {
         return listaMovimento;
     }
 
-    public void movimentarContasPagar (List<MovimentoCaixa> mvContaPagar, Usuario usuarioLogado){
+    public void movimentarContasPagas (List<MovimentoCaixa> mvContaPagar, Usuario usuarioLogado, RegistroDizimoOferta rgOfertaDizimo){
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -360,6 +362,7 @@ public class MovimentoCaixaDao {
                 //Se os dados foram inseridos na tabela MovimentoCaixa, o contas a pagar é atualizado
                 if(this.rs.next()){
                     this.cpDao.alterarStatusContaPagar(mv.getContaPagar(), mv.getDataPagamentoRecebimento());
+                    this.rgOfertaDao.registrarMovimentacaoDizimoOferta(rgOfertaDizimo, usuarioLogado);
                 }else{
                     JOptionPane.showMessageDialog(null, "Erro ao tentar baixa a CP no caixa", "Concluído", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -391,7 +394,7 @@ public class MovimentoCaixaDao {
         }
     }
     
-    public void movimentarContasReceberCampanha (MovimentoCaixa CrCampanha, Usuario usuarioLogado){
+    public void movimentarContasRecebidaCampanha (MovimentoCaixa CrCampanha, Usuario usuarioLogado){
         
         try{
             this.conexao = Conexao.getDataSource().getConnection();
@@ -563,16 +566,16 @@ public class MovimentoCaixaDao {
     }
     
     //Busca o saldo do mês informado. Desde o primeiro dia até o último dia do mês
-    public double consultarSaldoMesInformado(Integer mesFiltro, Integer anoFiltro, Igreja igreja){
+    public double consultarSaldoAnteriorMesInformado(Integer mesFiltro, Integer anoFiltro, Igreja igreja, String filtroContaCaixa){
         
         double saldoAnterior = 0;
         
         String sql = "SELECT (SUM(MC.ValorEntrada) - SUM(MC.ValorSaida)) AS SaldoAnterior " +
-            "FROM MovimentoCaixa As MC " +
-            "WHERE MONTH(MC.DataPagamentoRecebimento) = ? " +
-            "AND YEAR(MC.DataPagamentoRecebimento) = ? " +
+            "FROM MovimentoCaixa AS MC " +
+            "WHERE MONTH(MC.DataPagamentoRecebimento) < ? " +
+            "AND YEAR(MC.DataPagamentoRecebimento) < ? " +
             "AND Igreja = ? " +
-            "AND (Select ConstaRelatorioPrestacao From ContasCaixa As CC Where CC.Codigo = MC.ContaCaixa) = 1";
+            "AND MC.ContaCaixa In ("+filtroContaCaixa+")";
           
         try {                
             this.conexao = Conexao.getDataSource().getConnection();
@@ -607,8 +610,52 @@ public class MovimentoCaixaDao {
         return saldoAnterior;
     }
     
-    //Consulta que será utilizada no relatório
-    public List<MovimentoCaixa> consultarMovimentacaoContasPagar(Integer mesFiltro, Integer anoFiltro, Igreja igreja){
+    public double consultarSaldoAtualMesInformado(Integer mesFiltro, Integer anoFiltro, Igreja igreja, String filtroContaCaixa){
+        
+        double saldoAnterior = 0;
+        
+        String sql = "SELECT (SUM(MC.ValorEntrada) - SUM(MC.ValorSaida)) AS SaldoAnterior " +
+            "FROM MovimentoCaixa AS MC " +
+            "WHERE MONTH(MC.DataPagamentoRecebimento) <= ? " +
+            "AND YEAR(MC.DataPagamentoRecebimento) <= ? " +
+            "AND Igreja = ? " +
+            "AND MC.ContaCaixa In ("+filtroContaCaixa+")";
+          
+        try {                
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.stmSelect = this.conexao.prepareStatement(sql);  
+              
+            this.stmSelect.setInt(1, mesFiltro);
+            this.stmSelect.setInt(2, anoFiltro);
+            this.stmSelect.setInt(3, igreja.getCodigo());
+    
+            // Executando a consultarMovimentacao
+            this.rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (this.rs.next()) {               
+                saldoAnterior = this.rs.getDouble("SaldoAnterior");
+            }
+        } catch (SQLException ex) {  
+            logsDao.gravaLogsErro("MovimentoCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao consultar o saldo anterior.", "Erro SQL", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Fechando recursos
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("MovimentoCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return saldoAnterior;
+    }
+    
+    //Consulta que será utilizada no relatório especifico de prestação de contas mensal da igreja local 
+    public List<MovimentoCaixa> consultarMovimentacaoContasPagarIgrejaLocal(Integer mesFiltro, Integer anoFiltro, Igreja igreja, String filtroContaCaixa){
         
         List<MovimentoCaixa> listaMovimento = new ArrayList<>();
         
@@ -622,7 +669,7 @@ public class MovimentoCaixaDao {
             "AND MC.Igreja = ? " +
             "AND MC.RegistroContaPagar IS NOT NULL "+
             "AND MC.ValorSaida > 0 " +
-            "AND (Select ConstaRelatorioPrestacao From ContasCaixa As CC Where CC.Codigo = MC.ContaCaixa) = 1 " +
+            "AND MC.ContaCaixa In("+filtroContaCaixa+") " +
             "GROUP BY CP.Descricao";
          
         try {                
@@ -665,6 +712,71 @@ public class MovimentoCaixaDao {
 
     }
 
+    //Consulta que será utilizada no relatório especifico de prestação de contas mensal da igreja sede
+    public List<MovimentoCaixa> consultarMovimentacaoContasPagarRelatorioIgrejaSede(Integer mesFiltro, Integer anoFiltro, Igreja igreja, String filtroContaCaixa){
+        
+        List<MovimentoCaixa> listaMovimento = new ArrayList<>();
+        
+        String sql = "SELECT " +
+            "(SELECT Nome FROM Pessoas P WHERE P.Codigo = MC.Pessoa) AS NomePessoa, " +
+            "CP.Descricao AS Descricao, " +
+            "CAST(CP.Parcela AS NVARCHAR(Max)) + '/' + CAST((SELECT CAST(Count(1) AS NVARCHAR) FROM ContasPagar WHERE CP.NumNota = NumNota AND MC.Pessoa = Fornecedor) AS NVARCHAR(MAX)) AS Parcela, " +
+            "MC.ValorSaida AS ValorSaida, " +
+            "(SELECT Descricao From SubContasResultado SCR WHERE CP.SubContaResultado = SCR.Codigo) AS ContaResultado " +
+            "FROM MovimentoCaixa MC " +
+            "INNER JOIN ContasPagar CP On CP.Codigo = MC.RegistroContaPagar " +
+            "WHERE MONTH(MC.DataPagamentoRecebimento) = ? " +
+            "AND YEAR(MC.DataPagamentoRecebimento) = ? " +
+            "AND MC.Igreja = ? " +
+            "AND MC.ValorSaida > 0 " +
+            "AND MC.ContaCaixa In("+filtroContaCaixa+")";
+         
+        try {                
+            this.conexao = Conexao.getDataSource().getConnection();
+            this.stmSelect = this.conexao.prepareStatement(sql);  
+              
+            this.stmSelect.setInt(1, mesFiltro);
+            this.stmSelect.setInt(2, anoFiltro);
+            this.stmSelect.setInt(3, igreja.getCodigo());
+    
+            // Executando a consultarMovimentacao
+            this.rs = this.stmSelect.executeQuery();
+
+            // Iterando sobre os resultados
+            while (this.rs.next()) {   
+                MovimentoCaixa mvCaixa = new MovimentoCaixa();
+                Pessoa pessoa = new Pessoa();
+                SubContaResultado contaResultado = new SubContaResultado();
+                ContasPagar contasPagar = new ContasPagar();
+                contaResultado.setDescricao(this.rs.getString("ContaResultado"));
+                pessoa.setNome(this.rs.getString("NomePessoa"));
+                contasPagar.setDescricaoConta(this.rs.getString("Descricao"));
+                contasPagar.setTotalParcela(this.rs.getString("Parcela"));
+                contasPagar.setSubContaResultado(contaResultado);
+                mvCaixa.setPessoa(pessoa);
+                mvCaixa.setValorSaida(this.rs.getDouble("ValorSaida"));
+                mvCaixa.setContaPagar(contasPagar);           
+                listaMovimento.add(mvCaixa);
+            }
+        } catch (SQLException ex) {       
+            logsDao.gravaLogsErro("MovimentoCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao consultas as saidas do caixa.", "Erro SQL", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Fechando recursos
+            try {
+                if (this.rs != null) this.rs.close();
+                if (this.stmSelect != null) this.stmSelect.close();
+                if (this.conexao != null) this.conexao.close();
+            } catch (SQLException ex) {
+                logsDao.gravaLogsErro("MovimentoCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+        return listaMovimento;
+
+    }
+    
     //Adicionar a movimentação excluída
     public void movimentacaoExcluida(MovimentoCaixa movimento, String motivo, String tipo, Usuario usuario){
         try{

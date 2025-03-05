@@ -19,6 +19,7 @@ import model.Usuario;
 public class TransferenciaDepositoDao {
     
     private final LogsDao logsDao = new LogsDao();
+    private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
     private Connection conexao = null;
     private PreparedStatement ps = null;
     private PreparedStatement stmSelect = null;
@@ -75,7 +76,7 @@ public class TransferenciaDepositoDao {
                     rgDizimoOferta.setComplemento(mvCaixa.getComplemento());
                     rgDizimoOferta.setDataOferta(mvCaixa.getDataPagamentoRecebimento());
                             
-                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, usuarioLogado);
+                    this.rgOfertaDao.registrarMovimentacaoDizimoOferta(rgDizimoOferta, usuarioLogado);
 
                 }
                 
@@ -103,7 +104,7 @@ public class TransferenciaDepositoDao {
                     rgDizimoOferta.setComplemento(mvCaixa.getComplemento());
                     rgDizimoOferta.setDataOferta(mvCaixa.getDataPagamentoRecebimento());
                             
-                    adicionarOfertaDizimoMovimentoTipoOferta(rgDizimoOferta, usuarioLogado);
+                    this.rgOfertaDao.registrarMovimentacaoDizimoOferta(rgDizimoOferta, usuarioLogado);
                 }         
             }
            
@@ -162,7 +163,7 @@ public class TransferenciaDepositoDao {
         }
     }
     
-    public List<MovimentoCaixa> consultarDepositoTerourariaGeral(Integer mes, Integer ano, Igreja igreja){
+    public List<MovimentoCaixa> consultarDepositoTerourariaGeral(Integer mes, Integer ano, Igreja igreja, String fitroContaCaixa){
               
         List<MovimentoCaixa> listaMovimentoCaixa = new ArrayList<>();
 
@@ -176,6 +177,7 @@ public class TransferenciaDepositoDao {
             "AND (SELECT DepositoTesourariaGeral FROM TransferenciaDeposito AS TD WHERE MC.TransferenciaDeposito = TD.Codigo) = 1 " +
             "AND MC.TransferenciaDeposito IS NOT NULL " +
             "AND MC.ValorSaida > 0 " +
+            "AND MC.ContaCaixa In ("+fitroContaCaixa+") " +
             "GROUP BY MC.Complemento";     
         
         try {
@@ -216,7 +218,7 @@ public class TransferenciaDepositoDao {
     }
     
     //Adicionar os registros de dizimo e ofertas no movimento de dizimo e ofertas
-    private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta, Usuario usuarioLogado){
+    /*private void adicionarOfertaDizimoMovimentoTipoOferta (RegistroDizimoOferta registroOferta, Usuario usuarioLogado){
         
         try{
             // Inserir dados na segunda tabela usando a chave primária da primeira tabela
@@ -237,5 +239,5 @@ public class TransferenciaDepositoDao {
             logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar salvar movimentação de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }*/
 }

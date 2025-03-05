@@ -11,6 +11,8 @@ import dao.SubContaResultadoDao;
 import Ferramentas.PaletaCores;
 import Ferramentas.PersonalizaTabela;
 import Ferramentas.Utilitarios;
+import dao.RegistroOfertaDao;
+import dao.TipoOfertaDao;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Color;
@@ -36,7 +38,9 @@ import model.ContasPagar;
 import model.FormaPagto;
 import model.MovimentoCaixa;
 import model.Pessoa;
+import model.RegistroDizimoOferta;
 import model.SubContaResultado;
+import model.TipoOferta;
 import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
 
@@ -45,6 +49,8 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
     private Usuario usuarioLogado = new Usuario();
     private final PessoaDao pessoaDao = new PessoaDao();
+    private final TipoOfertaDao tipoOfertaDao = new TipoOfertaDao();
+    private final RegistroOfertaDao rgOfertaDao = new RegistroOfertaDao();
     private final ContaCaixaDao contaCaixaDao = new ContaCaixaDao();
     private final FormaPagtoDao formaPagtoDao = new FormaPagtoDao();
     private final ContasPagarDao contasPagarDao = new ContasPagarDao();
@@ -52,8 +58,8 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private final SubContaResultadoDao subContResultDao = new SubContaResultadoDao();
     private final PaletaCores paletaCores = new PaletaCores();
     private final Utilitarios conversor = new Utilitarios(); 
-    private ContasPagar contasPagar = new ContasPagar();
-    private Pessoa fornecedor = new Pessoa();  
+    private final ContasPagar contasPagar = new ContasPagar();
+    private final Pessoa fornecedor = new Pessoa();  
     private List<ContasPagar> listaContasPagar = null;
     private List<Pessoa> listaFornecedor = null;
     private final UsuarioDao usuarioDao = new UsuarioDao();
@@ -117,6 +123,8 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         numParcelaPagar = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         valorPagamento = new javax.swing.JFormattedTextField();
+        jLabel13 = new javax.swing.JLabel();
+        tpOfertaSaida = new javax.swing.JComboBox<>();
         rbConsultar = new javax.swing.JRadioButton();
         rbEfetivar = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
@@ -385,65 +393,76 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
 
         valorPagamento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
 
+        jLabel13.setText("Tp Oferta Saida");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dataPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(contaCaixa, 0, 177, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(31, 31, 31))
+                            .addComponent(valorPagamento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(contaCaixa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel7)
-                        .addGap(86, 86, 86))
-                    .addComponent(formaPagto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(valorPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numNotaPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numParcelaPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                .addGap(97, 97, 97))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(formaPagto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel10)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(numNotaPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel11)))
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(tpOfertaSaida, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(numParcelaPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dataPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dataPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(contaCaixa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(valorPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel12))
+                    .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(formaPagto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valorPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tpOfertaSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(numNotaPagar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -648,7 +667,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_nomeFornecedorKeyPressed
 
     private void tabelaParcelasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaParcelasMousePressed
-        contaPagarSelecionada();
+        dadoContaPagarSelecionada();
     }//GEN-LAST:event_tabelaParcelasMousePressed
 
     private void statusCoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusCoresActionPerformed
@@ -657,6 +676,43 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         statusCores.setVisible(true);
     }//GEN-LAST:event_statusCoresActionPerformed
 
+    private void carregarSubContaResultado(){
+        List<SubContaResultado> listaSubContaResult = this.subContResultDao.consultarSubContaResultado();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.subContaResultado.getModel();
+        modelo.removeAllElements();
+        for(SubContaResultado subCont : listaSubContaResult){
+            modelo.addElement(subCont);
+        }   
+    }
+    
+    private void carregarFormaPagto(){
+        List<FormaPagto> listaFormaPagto = this.formaPagtoDao.consultarFormaPagto();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.formaPagto.getModel();
+        modelo.removeAllElements();
+        for(FormaPagto pagto : listaFormaPagto){
+            modelo.addElement(pagto);
+        }
+    }
+    
+    private void carregarContaCaixa(){
+        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixa.getModel();
+        modelo.removeAllElements();
+        for(ContaCaixa cx : listaContaCaixa){
+            modelo.addElement(cx);
+        }
+        
+    }
+    
+    private void carregarTipoOferta(){
+        List<TipoOferta> listaTpOferta = tipoOfertaDao.consultarTipoOferta();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel)tpOfertaSaida.getModel();
+        modelo.removeAllElements();
+        for(TipoOferta tpOferta : listaTpOferta){
+            modelo.addElement(tpOferta);
+        }
+    }
+    
     private void buscarFornecedor(){
         String textoBusca = this.nomeFornecedor.getText(); // Texto digitado na busca        
         this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
@@ -754,35 +810,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
             String dataPagamento = this.conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
             model.addRow(new Object[]{" ",cp.getDescricaoConta(), cp.getFornecedor(), cp.getNumNota(), cp.getParcela(), cp.getValor(),  cp.getValorPago(), cp.getDescricaoStatus(), dataVencimento, dataPagamento});
         }
-        bolinhaStatusVencimento();
-    }
-    
-    private void carregarSubContaResultado(){
-        List<SubContaResultado> listaSubContaResult = this.subContResultDao.consultarSubContaResultado();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.subContaResultado.getModel();
-        modelo.removeAllElements();
-        for(SubContaResultado subCont : listaSubContaResult){
-            modelo.addElement(subCont);
-        }   
-    }
-    
-    private void carregarFormaPagto(){
-        List<FormaPagto> listaFormaPagto = this.formaPagtoDao.consultarFormaPagto();
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.formaPagto.getModel();
-        modelo.removeAllElements();
-        for(FormaPagto pagto : listaFormaPagto){
-            modelo.addElement(pagto);
-        }
-    }
-    
-    private void carregarContaCaixa(){
-        List<ContaCaixa> listaContaCaixa = this.contaCaixaDao.consultarContaCaixa(this.filtroIgreja);
-        DefaultComboBoxModel modelo = (DefaultComboBoxModel)this.contaCaixa.getModel();
-        modelo.removeAllElements();
-        for(ContaCaixa cx : listaContaCaixa){
-            modelo.addElement(cx);
-        }
-        
+        corBolinhaStatusVencimento();
     }
     
     private void limparTabela(){
@@ -793,7 +821,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     }
     
     private void efetivarCp(){
-        
+         
         int numLinhaSelec = this.tabelaParcelas.getSelectedRow();
         List<MovimentoCaixa> listaCpEfetivada = new ArrayList<>();
         ContasPagar cpEfetivar = this.listaContasPagar.get(numLinhaSelec);
@@ -804,8 +832,9 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 JOptionPane.showMessageDialog(null, "Selecione a conta a pagar que será efetivada", "Atenção", JOptionPane.WARNING_MESSAGE);
             }else{
                 Date dataPagamento = conversor.convertendoStringDateSql(this.dataPagamento.getText());
-                FormaPagto formaPgto = (FormaPagto) this.formaPagto.getSelectedItem();
-                ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
+                final FormaPagto formaPgto = (FormaPagto) this.formaPagto.getSelectedItem();
+                final ContaCaixa contaCaixa = (ContaCaixa) this.contaCaixa.getSelectedItem();
+                final TipoOferta tpOferta = (TipoOferta) tpOfertaSaida.getSelectedItem();
                 Integer numNota = Integer.valueOf(this.numNotaPagar.getText());
                 Integer parcela = Integer.valueOf(this.numParcelaPagar.getText());
                 double valorParcela = cpEfetivar.getValor();
@@ -814,6 +843,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 String descricao = cpEfetivar.getDescricaoConta();
                 cpEfetivar.setValorPago(valorPago);
                 cpEfetivar.setValorPendente(valorPendente);
+                cpEfetivar.setDataPagamento(dataPagamento);
                 
                 if(valorPago >= valorParcela){
                     cpEfetivar.setDescricaoStatus("Pago");
@@ -835,20 +865,38 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
                 int confirm = JOptionPane.showConfirmDialog(null,"Efetivar as contas selecionadas?", "Confirmar", JOptionPane.YES_NO_OPTION);     
                 //Verifica qual a opção escolhida
                 if(confirm == JOptionPane.YES_OPTION){
-                    movimentoCaixaDao.movimentarContasPagar(listaCpEfetivada, this.usuarioLogado);
+                    RegistroDizimoOferta rgOfertaDizimo = registrarSaidaOfertaDizimo(cpEfetivar,tpOferta,contaCaixa);
+                    movimentoCaixaDao.movimentarContasPagas(listaCpEfetivada, this.usuarioLogado, rgOfertaDizimo); 
                     consultarContas();
                     atualizarTabela();
                 }else if(confirm == JOptionPane.NO_OPTION){
                     JOptionPane.showMessageDialog(null, "Operação cancelada!");
                 }   
             }
-
         }else{
             JOptionPane.showMessageDialog(null, "Não foi escolhida a opção de efetivação da conta ou a conta escolhida já foi baixada", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
     }
     
-    private void contaPagarSelecionada(){      
+    private RegistroDizimoOferta registrarSaidaOfertaDizimo(ContasPagar cpEfetivada, TipoOferta tpOferta, ContaCaixa contaCaixa){
+        
+        String complemento = tpOferta.getNome()+ " | Pagamento CP "+cpEfetivada.getNumNota()+"-"+cpEfetivada.getParcela();
+
+        RegistroDizimoOferta rgDizimoOferta = new RegistroDizimoOferta();    
+        rgDizimoOferta.setComplemento(complemento);
+        rgDizimoOferta.setTpOferta(tpOferta);
+        rgDizimoOferta.setValorOfertaEntrada(0);
+        rgDizimoOferta.setValorOfertaSaida(cpEfetivada.getValorPago());
+        rgDizimoOferta.setContaCaixa(contaCaixa);
+        rgDizimoOferta.setIgreja(cpEfetivada.getIgreja());
+        rgDizimoOferta.setUsuario(this.usuarioLogado);
+        rgDizimoOferta.setDataOferta(cpEfetivada.getDataPagamento());
+        
+
+        return rgDizimoOferta;
+    }
+    
+    private void dadoContaPagarSelecionada(){      
         int linhaSelecionada = this.tabelaParcelas.getSelectedRow();
         Integer nota = (Integer) this.tabelaParcelas.getValueAt(linhaSelecionada, 3);
         Integer parcela = (Integer) this.tabelaParcelas.getValueAt(linhaSelecionada, 4);
@@ -869,6 +917,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         this.dataPagamento.setText(conversor.dataAtualString());
         this.formaPagto.setEnabled(false);
         this.contaCaixa.setEnabled(false);
+        this.tpOfertaSaida.setEnabled(false);
         this.dataPagamento.setEnabled(false);
         this.valorPagamento.setEditable(false);
         this.codFornecedor.setText("");
@@ -883,6 +932,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         atualizarTabela(); 
         carregarFormaPagto();
         carregarContaCaixa();
+        carregarTipoOferta();
         alinharConteudoTabela();
     }
     
@@ -891,6 +941,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         this.formaPagto.setEnabled(true);
         this.contaCaixa.setEnabled(true);
         this.valorPagamento.setEditable(true);
+        this.tpOfertaSaida.setEnabled(true);
     }
     
     private void formEfetivado(){
@@ -898,36 +949,8 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
         this.numNotaPagar.setText("");
         this.valorPagamento.setText("");
     }
-    
-    private void statusPagamento(){
-        
-        // Alterando cor do texto, da coluna 7"
-        this.tabelaParcelas.getColumnModel().getColumn(7).setCellRenderer(new TableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                // Usar o renderer padrão para o fundo e borda
-                JLabel componente = new JLabel(value.toString());
-                
-                String status = value.toString();
-                // Alterar a cor de fundo e do texto para a coluna "Valor"
-                if (status.equalsIgnoreCase("pago")) {
-                    ((JLabel) componente).setForeground(paletaCores.getAzul()); // Cor do texto
-                }else if(status.equalsIgnoreCase("pendente")){
-                    //componente.setBackground(Color.WHITE);
-                    ((JLabel) componente).setForeground(paletaCores.getLaranja()); // Cor do texto
-                }else{
-                    ((JLabel) componente).setForeground(paletaCores.getVerde()); // Cor do texto
-                }            
-                
-                //((JLabel) componente).setFont(new Font("Sanserif", Font.BOLD, 12)); // Fonte negrito, tamanho 12
-                
-                return componente;
-            }
-        });
-        
-    }
-    
-    private void bolinhaStatusVencimento(){
+      
+    private void corBolinhaStatusVencimento(){
         // Definindo a cor conforme a data de vencimento
         this.tabelaParcelas.getColumnModel().getColumn(0).setCellRenderer(new TableCellRenderer() {
             @Override
@@ -1051,6 +1074,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1078,6 +1102,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     private javax.swing.JButton statusCores;
     private javax.swing.JComboBox<String> subContaResultado;
     private javax.swing.JTable tabelaParcelas;
+    private javax.swing.JComboBox<String> tpOfertaSaida;
     private javax.swing.JLabel txData;
     private javax.swing.JFormattedTextField valorPagamento;
     // End of variables declaration//GEN-END:variables

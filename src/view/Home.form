@@ -270,6 +270,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Presta&#xe7;&#xe3;o Conta Mensal Geral"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="formRelatorioPrestacaoContaMensalGeralActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

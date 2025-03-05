@@ -96,6 +96,32 @@ public class RegistroOfertaDao {
 
     }   
     
+    //Adicionar os registros de dizimo e ofertas no movimento de dizimo e ofertas - Tela de efetivação de COntas a Pagar
+    public void registrarMovimentacaoDizimoOferta(RegistroDizimoOferta registros, Usuario usuarioLogado){
+
+        try{
+            // Inserir dados na segunda tabela usando a chave primária da primeira tabela
+            String sql = "INSERT INTO MovimentoDizimoOferta (TipoOferta,Entrada,Saida,Complemento,ContaCaixa,Igreja,UsuarioCadastro,DataOferta,DataMovimento) VALUES(?,?,?,?,?,?,?,?,GETDATE())";
+            stmInsert = conexao.prepareStatement(sql);
+
+            stmInsert.setInt(1, registros.getTpOferta().getCodigo());
+            stmInsert.setDouble(2, registros.getValorOfertaEntrada());
+            stmInsert.setDouble(3, registros.getValorOfertaSaida());
+            stmInsert.setString(4, registros.getComplemento());
+            stmInsert.setInt(5, registros.getContaCaixa().getCodigo());
+            stmInsert.setInt(6, registros.getIgreja().getCodigo());
+            stmInsert.setInt(7, usuarioLogado.getCodigo());
+            stmInsert.setDate(8, (java.sql.Date) registros.getDataOferta());
+            stmInsert.execute();
+            
+        }catch(SQLException ex){
+            logsDao.gravaLogsErro("TrasnferenciaDepositoDao - "+ex.getSQLState()+" - "+ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar movimentação de dizimo e oferta", "Erro 007", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }   
+    
+    
     //Adicionar os registros de dizimo e ofertas no movimento financeiro
     private void adicionarOfertaDizimoMovimentoFinanceiro (RegistroDizimoOferta registroOferta, Usuario usuarioLogado,ResultSet chaveRgOferta ){
         
@@ -435,7 +461,7 @@ public class RegistroOfertaDao {
     }
 
     //Consulta para gerar o relatório de prestação de contas mensal, referente a valores de dizimos e ofertas
-    public List<RegistroDizimoOferta> consultaRelatorioPrestacaoContaMensalIgrejaLocal(Igreja filtroIgreja, Integer mes, Integer ano){
+    public List<RegistroDizimoOferta> consultaEntradaDizimoOfertaRelatorio(Igreja filtroIgreja, Integer mes, Integer ano, String filtroContaCaixa){
         
         List<RegistroDizimoOferta> listaDizimoOferta = new ArrayList<>();
 
@@ -446,25 +472,17 @@ public class RegistroOfertaDao {
             "FROM MovimentoDizimoOferta AS MDO " +
             "WHERE MONTH(MDO.DataOferta) = ? " +
             "AND YEAR(MDO.DataOferta) = ? " +
-            "AND (? IS NULL OR MDO.Igreja = ?)" +
+            "AND MDO.Igreja = ? " +
+            "AND MDO.ContaCaixa In ("+filtroContaCaixa+")" +
             "GROUP BY MDO.TipoOferta";
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
             this.stmSelect = this.conexao.prepareStatement(sql);  
             
-            //Paramentro para o mes e ano
             this.stmSelect.setInt(1, mes);
             this.stmSelect.setInt(2, ano);
-
-            // Parametro para igreja
-            if (filtroIgreja != null) {
-                this.stmSelect.setInt(3, filtroIgreja.getCodigo());
-                this.stmSelect.setInt(4, filtroIgreja.getCodigo());
-            } else {
-                this.stmSelect.setNull(3, java.sql.Types.INTEGER);
-                this.stmSelect.setNull(4, java.sql.Types.INTEGER);
-            }
+            this.stmSelect.setInt(3, filtroIgreja.getCodigo());
 
             this.rs = this.stmSelect.executeQuery();
 
@@ -496,46 +514,40 @@ public class RegistroOfertaDao {
     }
     
     //Consulta para gerar o relatório de prestação de contas mensal, referente a valores de dizimos e ofertas
-    public List<RegistroDizimoOferta> consultaRelatorioPrestacaoContaMensalAssociacao (Igreja filtroIgreja, Integer mes, Integer ano){
+    public List<RegistroDizimoOferta> consultaEntradaOfertaDizimoRelatorioTesourariaGeral (Igreja filtroIgreja, Integer mes, Integer ano, String filtroContaCaixa){
         
         List<RegistroDizimoOferta> listaDizimoOferta = new ArrayList<>();
 
         // Montando a query SQL com placeholders
-        String sql = "SELECT " +
-            "(SELECT Descricao FROM TiposOfertas AS TP WHERE TP.Codigo = RDO.TipoOferta) AS NomeTipoOferta, " +
-            "SUM(RDO.Valor) AS ValorOferta " +
-            "FROM RegistroDizimoOferta AS RDO " +
-            "WHERE MONTH(RDO.DataOferta) = ? " +
-            "AND YEAR(RDO.DataOferta) = ? " +
-            "AND (? IS NULL OR RDO.Igreja = ?)" +
-            "GROUP BY RDO.TipoOferta";
+        String sql = "Select " +
+            "(Select Descricao From ContasCaixa CC Where CC.Codigo = MDO.ContaCaixa) As ContaCaixa, " +
+            "Sum(MDO.Entrada) As ValorTotal " +
+            "From " +
+            "MovimentoDizimoOferta MDO " +
+            "Where MDO.ContaCaixa In ("+filtroContaCaixa+") " +
+            "And Year(MDO.DataOferta) = ? " +
+            "And Month(MDO.DataOferta) = ? " +
+            "And MDO.Igreja = ? " +
+            "Group by MDo.ContaCaixa";
         
         try {
             this.conexao = Conexao.getDataSource().getConnection();         
             this.stmSelect = this.conexao.prepareStatement(sql);  
             
             //Paramentro para o mes e ano
-            this.stmSelect.setInt(1, mes);
-            this.stmSelect.setInt(2, ano);
-
-            // Parametro para igreja
-            if (filtroIgreja != null) {
-                this.stmSelect.setInt(3, filtroIgreja.getCodigo());
-                this.stmSelect.setInt(4, filtroIgreja.getCodigo());
-            } else {
-                this.stmSelect.setNull(3, java.sql.Types.INTEGER);
-                this.stmSelect.setNull(4, java.sql.Types.INTEGER);
-            }
+            this.stmSelect.setInt(1, ano);
+            this.stmSelect.setInt(2, mes);
+            this.stmSelect.setInt(3, filtroIgreja.getCodigo());
 
             this.rs = this.stmSelect.executeQuery();
 
             // Iterando sobre os resultados
             while (rs.next()) {
-                TipoOferta tipoOferta = new TipoOferta();
+                ContaCaixa contaCaixa = new ContaCaixa();
                 RegistroDizimoOferta dizimoOferta = new RegistroDizimoOferta();
-                tipoOferta.setNome(this.rs.getString("NomeTipoOferta"));    
-                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorOferta"));
-                dizimoOferta.setTpOferta(tipoOferta);
+                contaCaixa.setNome(this.rs.getString("ContaCaixa"));    
+                dizimoOferta.setValorOfertaEntrada(this.rs.getDouble("ValorTotal"));
+                dizimoOferta.setContaCaixa(contaCaixa);
                 
                 listaDizimoOferta.add(dizimoOferta);
             }

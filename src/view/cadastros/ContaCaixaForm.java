@@ -252,7 +252,7 @@ public class ContaCaixaForm extends javax.swing.JInternalFrame implements Consul
     
     private void consultarContaCaixa(){        
         String textoBusca = this.campoBusca.getText(); // Texto digitado na busca       
-        this.listaContaCaixa = this.contaCaixaDao.consultar(textoBusca, this.filtroIgreja); //Lista recebe a busca retornada do banco
+        this.listaContaCaixa = this.contaCaixaDao.consultarCx(textoBusca, this.filtroIgreja); //Lista recebe a busca retornada do banco
     }
     
     private void carregarIgreja(){
