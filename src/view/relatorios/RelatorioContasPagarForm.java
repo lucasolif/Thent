@@ -590,7 +590,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);     
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);     
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
             yPosition -= 30;
@@ -614,7 +614,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 String codFornecedor = String.valueOf(listaContasPagar.get(i).getFornecedor().getCodigo());
                 String nomeFornecedor = this.conversor.limitarCaracteres(listaContasPagar.get(i).getFornecedor().getNome(), 35) ;
                 String numNota = String.valueOf(listaContasPagar.get(i).getNumNota());
-                String parcela = String.valueOf(listaContasPagar.get(i).getParcela());
+                String parcela = listaContasPagar.get(i).getTotalParcela();
                 String valorDuplicata = this.conversor.formatarDoubleString(listaContasPagar.get(i).getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(listaContasPagar.get(i).getValorPago()).replace(".", ",");
                 String dataVencimento = this.conversor.convertendoDataStringSql((java.sql.Date) listaContasPagar.get(i).getDataVencimento());
@@ -665,7 +665,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             }
             //Define o posicionamento horizontal e vertical da próxima informação, com base no posicionamento da informação anterior
             yPosition -= 40;
-            xPosition += 350;  
             
             funcoesRelatorio.valoresTresTotalizadores("TotalPago:         ", "Total Pendente: ", "Valor Total CP: ", totalValorPago,totalValorPendente,totalValorCp,yPosition,fluxoConteudo);
 
@@ -722,7 +721,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);           
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);  
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);  
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
                 
@@ -768,7 +767,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 }
 
                 String numNota = String.valueOf(cp.getNumNota());
-                String parcela = String.valueOf(cp.getParcela());
+                String parcela = cp.getTotalParcela();
                 String descricaoCp = cp.getDescricaoConta();
                 if (descricaoCp.length() > limiteCaracteres) {
                     descricaoCp = descricaoCp.substring(0, limiteCaracteres); // Truncar e adicionar "..."
@@ -821,7 +820,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 totalValorCp += cp.getValor();            
             }
             //Define o posicinamento vertical e orizontal do próximo conteúdo
-            xPosition += 320;
             yPosition -= 10;
                               
             funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
@@ -882,7 +880,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF); 
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF); 
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
                    
@@ -894,7 +892,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         yPosition -= 30; // Pular para a linha abaixo após o título
                     }else{                 
                         //Define o posicinamento vertical e orizontal do próximo conteúdo
-                        xPosition += 350;
                         yPosition -= 10;
                         
                         funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
@@ -931,7 +928,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = this.conversor.limitarCaracteres(cp.getFornecedor().getNome(), 35);
                 String numNota = String.valueOf(cp.getNumNota());
-                String parcela = String.valueOf(cp.getParcela());
+                String parcela = cp.getTotalParcela();
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
@@ -1046,7 +1043,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF); 
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF); 
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
      
@@ -1058,9 +1055,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         yPosition -= 30; // Pular para a linha abaixo após o título
                     }else{           
                        //Define o posicinamento vertical e orizontal do próximo conteúdo
-                        xPosition += 350;
-                        yPosition -= 10;
-                        
+                        yPosition -= 10;                      
                         funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
                         xPosition = 50;
                         yPosition -= 50; // Pular para a linha abaixo após o título
@@ -1095,7 +1090,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
                 String numNota = String.valueOf(cp.getNumNota());
-                String parcela = String.valueOf(cp.getParcela());
+                String parcela = cp.getTotalParcela();
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
@@ -1152,7 +1147,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 totalValorCp += cp.getValor();   
             }
             //Define o posicinamento vertical e orizontal do próximo conteúdo
-            xPosition += 350;
             yPosition -= 10;
                               
             funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
@@ -1215,7 +1209,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);          
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);            
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);            
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
             
@@ -1226,7 +1220,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         yPosition -= 30; // Pular para a linha abaixo após o título
                     }else{             
                        //Define o posicinamento vertical e orizontal do próximo conteúdo
-                        xPosition += 350;
                         yPosition -= 10;
                         
                         funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
@@ -1263,7 +1256,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
                 String numNota = String.valueOf(cp.getNumNota());
-                String parcela = String.valueOf(cp.getParcela());
+                String parcela = cp.getTotalParcela();
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
@@ -1322,7 +1315,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 
             }
             //Define o posicinamento vertical e orizontal do próximo conteúdo
-            xPosition += 350;
             yPosition -= 10;
                               
             funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
@@ -1385,7 +1377,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);            
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);            
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
                
@@ -1397,7 +1389,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                         yPosition -= 30; // Pular para a linha abaixo após o título
                     }else{             
                        //Define o posicinamento vertical e orizontal do próximo conteúdo
-                        xPosition += 350;
                         yPosition -= 10;
                         
                         funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente, yPosition, fluxoConteudo);
@@ -1434,7 +1425,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
                 String nomeFornecedor = cp.getFornecedor().getNome();
                 String numNota = String.valueOf(cp.getNumNota());
-                String parcela = String.valueOf(cp.getParcela());
+                String parcela = cp.getTotalParcela();
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
@@ -1492,7 +1483,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 totalValorCp += cp.getValor();     
             }
             //Define o posicinamento vertical e orizontal do próximo conteúdo
-            xPosition += 350;
             yPosition -= 10;
                               
             funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);

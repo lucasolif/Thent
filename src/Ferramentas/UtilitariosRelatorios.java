@@ -18,7 +18,7 @@ public class UtilitariosRelatorios {
     private final Utilitarios conversor = new Utilitarios();
     
     //Função para gerar o título do relatório
-    public void tituloRelatorio(float tmnFonte, String titulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
+    public void primeiroTituloRelatorio(float tmnFonte, String titulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
         
         float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
         float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
@@ -45,6 +45,45 @@ public class UtilitariosRelatorios {
             float larguraTitulo = timesBold.getStringWidth(titulo)/1000 * tmnFonte; // Ajuste o tamanho da fonte         
             xPosition = (larguraPagina - larguraTitulo) / 2;// Centraliza o texto
             yPosition = 760;
+            fluxoConteudo.beginText(); //Iniciando a escrita
+            fluxoConteudo.setFont(timesBold, tmnFonte); //Definindo a fonte
+            fluxoConteudo.newLineAtOffset(xPosition, yPosition);  // Posição do texto
+            fluxoConteudo.showText(titulo);
+            fluxoConteudo.endText();                 
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar título", "Atenção", JOptionPane.WARNING_MESSAGE);
+        } 
+    }
+    
+        //Função para gerar o título do relatório
+    public void segundoTituloRelatorio(float tmnFonte, String titulo, PDPageContentStream fluxoConteudo, PDPage paginaPDF){  
+        
+        float larguraPagina = paginaPDF.getMediaBox().getWidth(); // Largura da Pagina
+        float alturaPagina = paginaPDF.getMediaBox().getHeight(); // Altura da Página
+        float xPosition;
+        float yPosition;
+        float tamanhoFonteData = 11;
+        final String dataRelatorio = conversor.dataAtualString();    
+        final PDFont timesBold =  new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD); //Definindo a fonte
+        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte
+        
+        try {                     
+            //Data da emissão do relatório
+            xPosition = larguraPagina - 150; // 100 pixels da borda direita
+            yPosition = alturaPagina - 20; // 20 pixels da borda superior
+            fluxoConteudo.beginText(); //Inicinado o texto
+            fluxoConteudo.setFont(timesBold, tamanhoFonteData); //Fonte e tamanho
+            fluxoConteudo.newLineAtOffset(xPosition, yPosition); // Posição do texto
+            fluxoConteudo.showText("Data Emissão: "); //Texto
+            fluxoConteudo.setFont(times, tamanhoFonteData); //Fonte e tamanho
+            fluxoConteudo.showText(dataRelatorio); //Texto
+            fluxoConteudo.endText(); //Finaliza o texto
+            
+            //Título relatório
+            float larguraTitulo = timesBold.getStringWidth(titulo)/1000 * tmnFonte; // Ajuste o tamanho da fonte         
+            xPosition = (larguraPagina - larguraTitulo) / 2;// Centraliza o texto
+            yPosition = 740;
             fluxoConteudo.beginText(); //Iniciando a escrita
             fluxoConteudo.setFont(timesBold, tmnFonte); //Definindo a fonte
             fluxoConteudo.newLineAtOffset(xPosition, yPosition);  // Posição do texto

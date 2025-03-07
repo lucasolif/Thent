@@ -433,7 +433,9 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         //Definição das variáveis
         String mesRelatorio = (String) this.mesPrestacao.getSelectedItem();
         String anoRelatorio = String.valueOf(this.anoPrestacao.getText());
-        final String titulo = "Prestação de Conta Referente ao mês de "+ mesRelatorio+" de "+ anoRelatorio;
+        final String titulo1 = "Prestação De Contas Da Tesouraria Geral Da Igreja Do Sétimo Dia";
+        final String titulo2 = "M. A. Referente ao mês de "+ mesRelatorio+" de "+ anoRelatorio;
+        
         final String[] titulosTabelaEntrada = {"Descrição", "Valores"};
         final String[] titulosTabelaSaida = {"Pessoa","Descrição","Parcela","Valor"};
         
@@ -464,9 +466,9 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);            
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo,titulo, fluxoConteudo, paginaPDF); 
-            
-            
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo,titulo1, fluxoConteudo, paginaPDF);
+            this.funcoesRelatorio.segundoTituloRelatorio(tamanhoFonteTitulo,titulo2, fluxoConteudo, paginaPDF); 
+              
             //Gerando o titulo do layout
             this.funcoesRelatorio.tituloLayoutCentralizado("ENTRADAS",yPosition, fluxoConteudo, paginaPDF);   
             yPosition -= 20; // Pular para a linha abaixo após o título       

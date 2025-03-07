@@ -339,7 +339,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);             
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);             
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
             
@@ -473,7 +473,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
             // Criar o conteúdo para a página      
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);              
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);               
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);               
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   
                 
@@ -635,7 +635,7 @@ public class RelatorioExtratoCaixa extends javax.swing.JInternalFrame {
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);    
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo, titulo, fluxoConteudo, paginaPDF);    
             
             //Gerando o sub título do relatório
             this.funcoesRelatorio.subTituloRelatorio(subTitulo, fluxoConteudo, paginaPDF);   

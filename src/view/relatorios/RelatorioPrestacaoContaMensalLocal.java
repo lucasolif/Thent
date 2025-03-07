@@ -489,7 +489,7 @@ public class RelatorioPrestacaoContaMensalLocal extends javax.swing.JInternalFra
             fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
             
             //Gerando o título do relatório
-            this.funcoesRelatorio.tituloRelatorio(tamanhoFonteTitulo,titulo, fluxoConteudo, paginaPDF); 
+            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo,titulo, fluxoConteudo, paginaPDF); 
 
             //Gerando o titulo do layout
             this.funcoesRelatorio.tituloLayoutCentralizado("ENTRADAS",yPosition, fluxoConteudo, paginaPDF);   

@@ -309,6 +309,7 @@ public class ContasPagarDao {
             "FP.Codigo As CodFormaPagto, FP.Descricao As DescricaoFormaPagto, " +
             "SCR.Codigo As CodSubContaResultado, SCR.Descricao As DescricaoSubContaResultado, " +
             "CR.Codigo As CodContaResultado, CR.Descricao As DescricaoContaResultado, " +
+            "CAST(CP.Parcela AS NVARCHAR(Max)) + '/' + CAST((SELECT CAST(Count(1) AS NVARCHAR) FROM ContasPagar WHERE CP.NumNota = NumNota AND CP.Fornecedor = Fornecedor) AS NVARCHAR(MAX)) AS Parcela, " +
             "CP.* " +
             "FROM ContasPagar CP " +
             "INNER JOIN Pessoas As P ON CP.Fornecedor = P.Codigo " +
@@ -398,16 +399,7 @@ public class ContasPagarDao {
             } else {
                 this.stmSelect.setNull(16, java.sql.Types.INTEGER);
                 this.stmSelect.setNull(17, java.sql.Types.INTEGER);
-            }
-            
-            // Parâmetro para igreja
-            if (filtroIgreja != null) {
-                this.stmSelect.setInt(18, filtroIgreja.getCodigo());
-                this.stmSelect.setInt(19, filtroIgreja.getCodigo());
-            } else {
-                this.stmSelect.setNull(18, java.sql.Types.INTEGER);
-                this.stmSelect.setNull(19, java.sql.Types.INTEGER);
-            }
+            }          
                
             rs = this.stmSelect.executeQuery();
 
@@ -436,7 +428,7 @@ public class ContasPagarDao {
                 contaPagar.setValorPago(this.rs.getDouble("ValorPago"));
                 contaPagar.setValorPendente(this.rs.getDouble("ValorPendente"));
                 contaPagar.setNumNota(this.rs.getInt("NumNota"));
-                contaPagar.setParcela(this.rs.getInt("Parcela"));
+                contaPagar.setTotalParcela(this.rs.getString("Parcela"));
                 contaPagar.setDataVencimento(this.rs.getDate("DataVencimento"));
                 contaPagar.setDataPagamento(this.rs.getDate("DataPagamento"));
                 contaPagar.setDataCadastro(this.rs.getDate("DataCadastro"));
