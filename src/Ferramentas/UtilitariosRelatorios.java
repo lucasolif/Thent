@@ -304,7 +304,7 @@ public class UtilitariosRelatorios {
                 // Definir os títulos das colunas na página
                 for (int i = 0; i < titulosTabela.length; i++) {
                     if(i != 0){
-                        xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 340; // Calcula a posição horizontal para cada título
+                        xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 377; // Calcula a posição horizontal para cada título
                     }
 
                     fluxoConteudo.beginText();
@@ -317,11 +317,10 @@ public class UtilitariosRelatorios {
                 for (int i = 0; i < titulosTabela.length; i++) {
                     if(i != 0){
                         switch (i) {
-                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 35; // Calcula a posição horizontal para cada título
-                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 170; // Calcula a posição horizontal para cada título
-                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título
-                            case 5 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 50; // Calcula a posição horizontal para cada título
-                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 13; // Calcula a posição horizontal para cada título
+                            case 1 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 90; // Calcula a posição horizontal para cada título
+                            case 2 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 195; // Calcula a posição horizontal para cada título
+                            case 4 -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 10; // Calcula a posição horizontal para cada título                         
+                            default -> xPosition += (timesBold.getStringWidth(titulosTabela[i-1])/1000 * 11) + 30; // Calcula a posição horizontal para cada título
                         }
                     }
                     fluxoConteudo.beginText();

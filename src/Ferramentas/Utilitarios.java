@@ -216,5 +216,14 @@ public class Utilitarios{
         return valor;
     }
     
+    public String limitarCaracteres(String nome, int tamanho){
+        String nomeLimitado = nome;
+        
+        if (nome.length() > tamanho) {
+            nomeLimitado = nome.substring(0, tamanho); // Truncar e adicionar "..."
+        }
+        
+        return nomeLimitado;
+    }
 
 }

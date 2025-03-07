@@ -420,7 +420,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     }//GEN-LAST:event_nomeIgrejaKeyPressed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        criarListagemIgrejasLiberadas();
+        adicionarIgrejasLiberadas();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void adicionarTodasIgrejaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adicionarTodasIgrejaMousePressed
@@ -705,34 +705,60 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         return control;
     }
     
-    private void criarListagemIgrejasLiberadas(){
+    private void adicionarIgrejasLiberadas(){
         
-        if (!this.codIgreja.getText().isEmpty()) {
-        // Verifica se o modelo é uma instância de DefaultListModel
-        DefaultListModel<String> igrejasLiberada;
+        if(!verificarFiltroCaixaAdicionado(this.codIgreja.getText())){
+            if (!this.codIgreja.getText().isEmpty()) {
+                // Verifica se o modelo é uma instância de DefaultListModel
+                DefaultListModel<String> igrejasLiberada;
 
-        // Verifica se o modelo atual é do tipo DefaultListModel
-        if (this.listagemIgrejaAcesso.getModel() instanceof DefaultListModel) {
-            igrejasLiberada = (DefaultListModel<String>) this.listagemIgrejaAcesso.getModel();
-        } else {
-            // Se o modelo não for um DefaultListModel ou for null, cria um novo
-            igrejasLiberada = new DefaultListModel<>();
-            this.listagemIgrejaAcesso.setModel(igrejasLiberada);  // Atribui o modelo ao JList
+                // Verifica se o modelo atual é do tipo DefaultListModel
+                if (this.listagemIgrejaAcesso.getModel() instanceof DefaultListModel) {
+                    igrejasLiberada = (DefaultListModel<String>) this.listagemIgrejaAcesso.getModel();
+                } else {
+                    // Se o modelo não for um DefaultListModel ou for null, cria um novo
+                    igrejasLiberada = new DefaultListModel<>();
+                    this.listagemIgrejaAcesso.setModel(igrejasLiberada);  // Atribui o modelo ao JList
+                }
+
+                // Adiciona a igreja no modelo
+                String codIgreja = this.codIgreja.getText();
+                String nomeIgreja = this.nomeIgreja.getText();
+                String igreja = codIgreja + "-" + nomeIgreja; 
+                igrejasLiberada.addElement(igreja);  // Adiciona ao modelo do JList
+
+                // Limpa os campos de texto
+                this.codIgreja.setText("");
+                this.nomeIgreja.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Informe a igreja para ser adicionada na liberação", "Erro", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "A igreja já foi adicionada na lista de liberação", "Erro", JOptionPane.WARNING_MESSAGE);
         }
+        
 
-        // Adiciona a igreja no modelo
-        String codIgreja = this.codIgreja.getText();
-        String nomeIgreja = this.nomeIgreja.getText();
-        String igreja = codIgreja + "-" + nomeIgreja; 
-        igrejasLiberada.addElement(igreja);  // Adiciona ao modelo do JList
 
-        // Limpa os campos de texto
-        this.codIgreja.setText("");
-        this.nomeIgreja.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Informe a igreja para ser adicionada na liberação", "Erro", JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private boolean verificarFiltroCaixaAdicionado(String codigo){
+        ListModel<String> modelo = listagemIgrejaAcesso.getModel();// Acesse o modelo do JList
+        boolean existe = false;  
+        
+        for (int i = 0; i < modelo.getSize(); i++) {       
+            
+            //Pegando o código da igreja que está em uma string junto com o nome da igreja
+            String igrejaSelec = modelo.getElementAt(i);
+            int posicaoCod = igrejaSelec.indexOf("-"); //Pega a posição do traço, pois ele divide o código da igreja e nome       
+            String codIgreja = igrejaSelec.substring(0,posicaoCod); 
+            
+            if(codigo.equalsIgnoreCase(codIgreja)){
+                existe = true;
+            }
         }
-
+        
+        return existe;
+        
     }
     
     @Override

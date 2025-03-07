@@ -23,6 +23,7 @@ import model.ContaCaixa;
 import model.Igreja;
 import model.MovimentoCaixa;
 import model.RegistroDizimoOferta;
+import model.SubContaResultado;
 import model.Usuario;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -88,6 +89,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         btnGerar.setBackground(new java.awt.Color(0, 153, 255));
         btnGerar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnGerar.setText("Gerar");
+        btnGerar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGerar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGerarActionPerformed(evt);
@@ -112,6 +114,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
 
         btnAdicionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/adicionar.png"))); // NOI18N
+        btnAdicionar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdicionarActionPerformed(evt);
@@ -132,6 +135,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         codContaCaixa.setEditable(false);
         codContaCaixa.setBackground(new java.awt.Color(204, 204, 204));
         codContaCaixa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codContaCaixa.setFocusable(false);
 
         nomeContaCaixa.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -274,32 +278,36 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
     }
     
     private void adicionarFiltrosContaCaixa(){
-        
-        if (!this.codContaCaixa.getText().isEmpty()) {
-            // Verifica se o modelo já é do tipo DefaultListModel
-            DefaultListModel<String> filtroContaCaixa;
+        if(!verificarFiltroCaixaAdicionado(this.codContaCaixa.getText())){
+            if (!this.codContaCaixa.getText().isEmpty()) {
+                // Verifica se o modelo já é do tipo DefaultListModel
+                DefaultListModel<String> filtroContaCaixa;
 
-            // Verifica se o modelo é uma instância de DefaultListModel
-            if (this.listagemContaCaixa.getModel() instanceof DefaultListModel) {
-                filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+                // Verifica se o modelo é uma instância de DefaultListModel
+                if (this.listagemContaCaixa.getModel() instanceof DefaultListModel) {
+                    filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+                } else {
+                    // Se o modelo não for um DefaultListModel ou for null, cria um novo modelo
+                    filtroContaCaixa = new DefaultListModel<>();
+                    this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o novo modelo ao JList
+                }
+
+                // Adiciona a conta no modelo
+                String codConta = this.codContaCaixa.getText();
+                String nomeConta = this.nomeContaCaixa.getText();
+                String conta = codConta + "-" + nomeConta;
+                filtroContaCaixa.addElement(conta);  // Adiciona ao modelo do JList
+
+                // Limpa os campos de texto
+                this.codContaCaixa.setText("");
+                this.nomeContaCaixa.setText("");
             } else {
-                // Se o modelo não for um DefaultListModel ou for null, cria um novo modelo
-                filtroContaCaixa = new DefaultListModel<>();
-                this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o novo modelo ao JList
+                JOptionPane.showMessageDialog(null, "Informe a conta caixa que será adicionada no filtro", "Erro", JOptionPane.WARNING_MESSAGE);
             }
-
-            // Adiciona a conta no modelo
-            String codConta = this.codContaCaixa.getText();
-            String nomeConta = this.nomeContaCaixa.getText();
-            String conta = codConta + "-" + nomeConta;
-            filtroContaCaixa.addElement(conta);  // Adiciona ao modelo do JList
-
-            // Limpa os campos de texto
-            this.codContaCaixa.setText("");
-            this.nomeContaCaixa.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Informe a conta caixa que será adicionada no filtro", "Erro", JOptionPane.WARNING_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Essa conta caixa já foi adicionada na listagem de filtro", "Erro", JOptionPane.WARNING_MESSAGE);
         }
+
     }
     
     private String obterFiltroCaixa(){
@@ -331,6 +339,26 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         }
         
         return filtroContaCaixa;
+        
+    }
+    
+    private boolean verificarFiltroCaixaAdicionado(String codigo){
+        ListModel<String> modelo = listagemContaCaixa.getModel();// Acesse o modelo do JList
+        boolean existe = false;  
+        
+        for (int i = 0; i < modelo.getSize(); i++) {       
+            
+            //Pegando o código da igreja que está em uma string junto com o nome da igreja
+            String contaCaixaSelec = modelo.getElementAt(i);
+            int posicaoCod = contaCaixaSelec.indexOf("-"); //Pega a posição do traço, pois ele divide o código da igreja e nome       
+            String codContaCaixa = contaCaixaSelec.substring(0,posicaoCod); 
+            
+            if(codigo.equalsIgnoreCase(codContaCaixa)){
+                existe = true;
+            }
+        }
+        
+        return existe;
         
     }
     
@@ -412,10 +440,12 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
         //Variaveis referente aos totalizados
         double saidas = 0;
         double entradas = 0;
+        double totalSubConta = 0;
+        SubContaResultado contaResultado = null;
         
         //Variáveis referente ao layout do relatório
         float yPosition = 700; // Posição vertical inicial para os títulos
-        float xPosition = 80; // Posição horizontal inicial para os títulos
+        float xPosition = 50; // Posição horizontal inicial para os títulos
         final float tamanhaFonte = 12;
         final int layout1 = 1;
         final int layout2 = 2;
@@ -453,7 +483,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
                     yPosition = 750; // Resetar a posição Y para o topo da nova página
                 }        
 
-                xPosition = 80; // Resetar a posição horizontal a cada nova linha
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
 
                 // Obter os dados da lista        
                 String descricao = entrada.getContaCaixa().getNome();
@@ -464,7 +494,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
 
                 fluxoConteudo.newLineAtOffset(xPosition, yPosition);
                 fluxoConteudo.showText(descricao);
-                xPosition += 310; // Ajusta a posição da próxima coluna
+                xPosition += 375; // Ajusta a posição da próxima coluna
                 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText("R$ "+valores);
@@ -476,20 +506,47 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
 
             }
             yPosition -= 10;
-            xPosition += 40;
+            xPosition += 12;
             this.funcoesRelatorio.valoresUmTotalizador("Total: ", entradas, yPosition, xPosition, fluxoConteudo);            
             yPosition -= 40; // Pular para a linha abaixo
-            xPosition = 80; //Resetando o posicionamento vertical                   
+            xPosition = 50; //Resetando o posicionamento vertical                   
             
             //Gerando o titulo do layout
             this.funcoesRelatorio.tituloLayoutCentralizado("SAÌDAS", yPosition, fluxoConteudo, paginaPDF);   
-            yPosition -= 20; // Pular para a linha abaixo       
+            yPosition -= 10; // Pular para a linha abaixo       
             //Gerar os títulos das colunas
-            this.funcoesRelatorio.tituloColunaRelatorioTesourariaGeral(yPosition, xPosition, titulosTabelaSaida,layout2, fluxoConteudo);           
-            yPosition -= 20; // Pular para a linha abaixo    
             
             //Pega o total das Saídas
-            for(MovimentoCaixa saida : listaSaidas) {                
+            for(MovimentoCaixa saida : listaSaidas) {   
+                if(contaResultado == null || contaResultado.getCodigo() != saida.getContaPagar().getSubContaResultado().getCodigo()){ 
+                    if(contaResultado == null){
+                        yPosition -= 30; // Pular para a linha abaixo após o título
+                    }else{                 
+                        //Define o posicinamento vertical e orizontal do próximo conteúdo
+                        xPosition += 382;
+                        yPosition -= 10;
+                        //Total do sibgrupo
+                        this.funcoesRelatorio.valoresUmTotalizador("Total: ", totalSubConta, yPosition, xPosition, fluxoConteudo); 
+                        xPosition = 50;
+                        yPosition -= 25;
+                    }
+               
+                    String tituloLayout = saida.getContaPagar().getSubContaResultado().getDescricao();         
+                    this.funcoesRelatorio.tituloLayoutCentralizado(tituloLayout,yPosition, fluxoConteudo, paginaPDF);   
+                    
+                    contaResultado = saida.getContaPagar().getSubContaResultado();  
+                    yPosition -= 20;
+                    
+                    // Definir os títulos das colunas
+                    this.funcoesRelatorio.tituloColunaRelatorioTesourariaGeral(yPosition, xPosition, titulosTabelaSaida,layout2, fluxoConteudo);           
+                    yPosition -= 20; // Pular para a linha abaixo    
+
+                    //Zerando os valores dos totais por data, para calcular o próximo total do próximo grupo de dados
+                    totalSubConta = 0;
+                }           
+
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
+                           
                 if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
                     fluxoConteudo.close(); //Encerra o fluxo de conteudo
                     PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
@@ -498,18 +555,28 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
                     yPosition = 750; // Resetar a posição Y para o topo da nova página
                 }        
 
-                xPosition = 80; // Resetar a posição horizontal a cada nova linha
+                xPosition = 50; // Resetar a posição horizontal a cada nova linha
 
                 // Obter os dados da lista        
-                String descricao = saida.getContaPagar().getDescricaoConta();
+                String descricao = this.conversor.limitarCaracteres(saida.getContaPagar().getDescricaoConta(),40);
                 String valores = this.conversor.formatarDoubleString(saida.getValorSaida()).replace(".", ",");
-
+                String nomePessoa = this.conversor.limitarCaracteres(saida.getPessoa().getNome(), 20); 
+                String parcela = saida.getContaPagar().getTotalParcela();
+                
                 fluxoConteudo.beginText();
                 fluxoConteudo.setFont(times, tamanhaFonte);
 
                 fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                fluxoConteudo.showText(nomePessoa);
+                xPosition += 70; // Ajusta a posição da próxima coluna
+                
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText(descricao);
-                xPosition += 310; // Ajusta a posição da próxima coluna
+                xPosition += 130; // Ajusta a posição da próxima coluna
+                
+                fluxoConteudo.newLineAtOffset(xPosition, 0);
+                fluxoConteudo.showText(parcela);
+                xPosition -= 192; // Ajusta a posição da próxima coluna
                 
                 fluxoConteudo.newLineAtOffset(xPosition, 0);
                 fluxoConteudo.showText("R$ "+valores);
@@ -518,13 +585,14 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
                 yPosition -= 20;// Descer para a próxima linha 
                 
                 saidas += saida.getValorSaida();
+                totalSubConta += saida.getValorSaida();
 
             }
 
             yPosition -= 10;
-            xPosition += 40;
+            xPosition += 382;
             
-            this.funcoesRelatorio.valoresUmTotalizador("Total: ", saidas, yPosition, xPosition, fluxoConteudo); 
+            this.funcoesRelatorio.valoresUmTotalizador("Total: ", totalSubConta, yPosition, xPosition, fluxoConteudo); 
                  
             double totalEntradas = entradas;
             double totalSaidas = saidas;
@@ -532,7 +600,7 @@ public class RelatorioPrestacaoContaMensalGeral extends javax.swing.JInternalFra
             double saldoAtual = saldoCaixaAtual;
             
             yPosition -= 50;
-            xPosition -= 40;
+            xPosition -= 50;
             
             //Pega os dados referente aos últimos totalizadores
             this.funcoesRelatorio.valoresQuatroTotalizadoresRelatorioMensal("Total Entrada:    ", "Total Saída:         ", "Saldo Anterior:   ", "Saldo Atual:         ", totalEntradas, totalSaidas, saldoAnterior, saldoAtual, yPosition, xPosition, fluxoConteudo);

@@ -283,31 +283,36 @@ public class RelatorioPrestacaoContaMensalLocal extends javax.swing.JInternalFra
     
     private void adicionarFiltrosContaCaixa(){
         
-        if (!this.codContaCaixa.getText().isEmpty()) {
-            // Verifica se o modelo já é do tipo DefaultListModel
-            DefaultListModel<String> filtroContaCaixa;
+        if(!verificarFiltroCaixaAdicionado(this.codContaCaixa.getText())){
+            if (!this.codContaCaixa.getText().isEmpty()) {
+                // Verifica se o modelo já é do tipo DefaultListModel
+                DefaultListModel<String> filtroContaCaixa;
 
-            // Verifica se o modelo é uma instância de DefaultListModel
-            if (this.listagemContaCaixa.getModel() instanceof DefaultListModel) {
-                filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+                // Verifica se o modelo é uma instância de DefaultListModel
+                if (this.listagemContaCaixa.getModel() instanceof DefaultListModel) {
+                    filtroContaCaixa = (DefaultListModel<String>) this.listagemContaCaixa.getModel();
+                } else {
+                    // Se o modelo não for um DefaultListModel ou for null, cria um novo modelo
+                    filtroContaCaixa = new DefaultListModel<>();
+                    this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o novo modelo ao JList
+                }
+
+                // Adiciona a conta no modelo
+                String codConta = this.codContaCaixa.getText();
+                String nomeConta = this.nomeContaCaixa.getText();
+                String conta = codConta + "-" + nomeConta;
+                filtroContaCaixa.addElement(conta);  // Adiciona ao modelo do JList
+
+                // Limpa os campos de texto
+                this.codContaCaixa.setText("");
+                this.nomeContaCaixa.setText("");
             } else {
-                // Se o modelo não for um DefaultListModel ou for null, cria um novo modelo
-                filtroContaCaixa = new DefaultListModel<>();
-                this.listagemContaCaixa.setModel(filtroContaCaixa);  // Atribui o novo modelo ao JList
+                JOptionPane.showMessageDialog(null, "Informe a conta caixa que será adicionada no filtro", "Erro", JOptionPane.WARNING_MESSAGE);
             }
-
-            // Adiciona a conta no modelo
-            String codConta = this.codContaCaixa.getText();
-            String nomeConta = this.nomeContaCaixa.getText();
-            String conta = codConta + "-" + nomeConta;
-            filtroContaCaixa.addElement(conta);  // Adiciona ao modelo do JList
-
-            // Limpa os campos de texto
-            this.codContaCaixa.setText("");
-            this.nomeContaCaixa.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Informe a conta caixa que será adicionada no filtro", "Erro", JOptionPane.WARNING_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Essa conta caixa já foi adicionada na listagem de filtro", "Erro", JOptionPane.WARNING_MESSAGE);
         }
+   
     }
     
     private String obterFiltroCaixa(){
@@ -339,6 +344,26 @@ public class RelatorioPrestacaoContaMensalLocal extends javax.swing.JInternalFra
         }
         
         return filtroContaCaixa;
+        
+    }
+    
+    private boolean verificarFiltroCaixaAdicionado(String codigo){
+        ListModel<String> modelo = listagemContaCaixa.getModel();// Acesse o modelo do JList
+        boolean existe = false;  
+        
+        for (int i = 0; i < modelo.getSize(); i++) {       
+            
+            //Pegando o código da igreja que está em uma string junto com o nome da igreja
+            String contaCaixaSelec = modelo.getElementAt(i);
+            int posicaoCod = contaCaixaSelec.indexOf("-"); //Pega a posição do traço, pois ele divide o código da igreja e nome       
+            String codContaCaixa = contaCaixaSelec.substring(0,posicaoCod); 
+            
+            if(codigo.equalsIgnoreCase(codContaCaixa)){
+                existe = true;
+            }
+        }
+        
+        return existe;
         
     }
     

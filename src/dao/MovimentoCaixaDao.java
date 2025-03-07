@@ -361,7 +361,7 @@ public class MovimentoCaixaDao {
                 
                 //Se os dados foram inseridos na tabela MovimentoCaixa, o contas a pagar é atualizado
                 if(this.rs.next()){
-                    this.cpDao.alterarStatusContaPagar(mv.getContaPagar(), mv.getDataPagamentoRecebimento());
+                    this.cpDao.alterarStatusContaPaga(mv.getContaPagar(), mv.getDataPagamentoRecebimento());
                     this.rgOfertaDao.registrarMovimentacaoDizimoOferta(rgOfertaDizimo, usuarioLogado);
                 }else{
                     JOptionPane.showMessageDialog(null, "Erro ao tentar baixa a CP no caixa", "Concluído", JOptionPane.INFORMATION_MESSAGE);
@@ -722,14 +722,16 @@ public class MovimentoCaixaDao {
             "CP.Descricao AS Descricao, " +
             "CAST(CP.Parcela AS NVARCHAR(Max)) + '/' + CAST((SELECT CAST(Count(1) AS NVARCHAR) FROM ContasPagar WHERE CP.NumNota = NumNota AND MC.Pessoa = Fornecedor) AS NVARCHAR(MAX)) AS Parcela, " +
             "MC.ValorSaida AS ValorSaida, " +
-            "(SELECT Descricao From SubContasResultado SCR WHERE CP.SubContaResultado = SCR.Codigo) AS ContaResultado " +
+            "(SELECT Descricao From SubContasResultado SCR WHERE CP.SubContaResultado = SCR.Codigo) AS ContaResultado, " +
+            "CP.SubContaResultado As CodContaResultado " +
             "FROM MovimentoCaixa MC " +
             "INNER JOIN ContasPagar CP On CP.Codigo = MC.RegistroContaPagar " +
             "WHERE MONTH(MC.DataPagamentoRecebimento) = ? " +
             "AND YEAR(MC.DataPagamentoRecebimento) = ? " +
             "AND MC.Igreja = ? " +
             "AND MC.ValorSaida > 0 " +
-            "AND MC.ContaCaixa In("+filtroContaCaixa+")";
+            "AND MC.ContaCaixa In("+filtroContaCaixa+") " +
+            "ORDER BY CP.SubContaResultado";
          
         try {                
             this.conexao = Conexao.getDataSource().getConnection();
@@ -749,6 +751,7 @@ public class MovimentoCaixaDao {
                 SubContaResultado contaResultado = new SubContaResultado();
                 ContasPagar contasPagar = new ContasPagar();
                 contaResultado.setDescricao(this.rs.getString("ContaResultado"));
+                contaResultado.setCodigo(this.rs.getInt("CodContaResultado"));
                 pessoa.setNome(this.rs.getString("NomePessoa"));
                 contasPagar.setDescricaoConta(this.rs.getString("Descricao"));
                 contasPagar.setTotalParcela(this.rs.getString("Parcela"));
@@ -760,7 +763,7 @@ public class MovimentoCaixaDao {
             }
         } catch (SQLException ex) {       
             logsDao.gravaLogsErro("MovimentoCaixaDao - "+ex.getSQLState()+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao consultas as saidas do caixa.", "Erro SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Erro ao consultas as saidas do caixa referente ao contas pagas.", "Erro SQL", JOptionPane.ERROR_MESSAGE);
         } finally {
             // Fechando recursos
             try {

@@ -606,7 +606,7 @@ public class ContasPagarDao {
         return cpExiste;
     }
     
-    public void alterarStatusContaPagar(ContasPagar cpEfetivada, Date dataPagamento){                   
+    public void alterarStatusContaPaga(ContasPagar cpEfetivada, Date dataPagamento){                   
         try{            
             conexao = Conexao.getDataSource().getConnection();
             String sql= "UPDATE ContasPagar SET Status=?,DescricaoStatus=?,DataPagamento=?,ValorPago=?,ValorPendente=?" + " WHERE Codigo=?";

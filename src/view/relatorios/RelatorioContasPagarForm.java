@@ -612,11 +612,7 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
 
                 // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
                 String codFornecedor = String.valueOf(listaContasPagar.get(i).getFornecedor().getCodigo());
-                String nomeFornecedor = listaContasPagar.get(i).getFornecedor().getNome();
-                int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
-                if (nomeFornecedor.length() > limiteCaracteres) {
-                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
-                }
+                String nomeFornecedor = this.conversor.limitarCaracteres(listaContasPagar.get(i).getFornecedor().getNome(), 35) ;
                 String numNota = String.valueOf(listaContasPagar.get(i).getNumNota());
                 String parcela = String.valueOf(listaContasPagar.get(i).getParcela());
                 String valorDuplicata = this.conversor.formatarDoubleString(listaContasPagar.get(i).getValor()).replace(".", ",");
@@ -870,7 +866,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
         float yPosition = 720; // Posição vertical inicial para os títulos
         float xPosition = 50; // Posição horizontal inicial para os títulos
         final float tamanhoFonteTitulo = 18;
-        final int limiteCaracteres = 35; // Limite de caracteres (ajuste conforme necessário)
         final int layout = 3;
         final PDFont timesBold =  new PDType1Font(FontName.TIMES_BOLD); //Definindo a fonte
         final PDFont times =  new PDType1Font(FontName.TIMES_ROMAN); //Definindo a fonte
@@ -934,17 +929,13 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
 
                 // Obter os dados da lista (exemplo de como acessar a lista e pegar os dados)
                 String codFornecedor = String.valueOf(cp.getFornecedor().getCodigo());
-                String nomeFornecedor = cp.getFornecedor().getNome();
+                String nomeFornecedor = this.conversor.limitarCaracteres(cp.getFornecedor().getNome(), 35);
                 String numNota = String.valueOf(cp.getNumNota());
                 String parcela = String.valueOf(cp.getParcela());
                 String valorDuplicata = this.conversor.formatarDoubleString(cp.getValor()).replace(".", ",");
                 String valorPago = this.conversor.formatarDoubleString(cp.getValorPago()).replace(".", ",");
                 String dataVencimento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataVencimento());
                 String dataPagamento = conversor.convertendoDataStringSql((java.sql.Date) cp.getDataPagamento());
-                
-                if (nomeFornecedor.length() > limiteCaracteres) {
-                    nomeFornecedor = nomeFornecedor.substring(0, limiteCaracteres); // Truncar e adicionar "..."
-                }
                 
                 // Desenhar os dados da linha na tabela
                 fluxoConteudo.beginText();
@@ -993,7 +984,6 @@ public class RelatorioContasPagarForm extends javax.swing.JInternalFrame impleme
                 totalValorCp += cp.getValor();   
             }
             //Define o posicinamento vertical e orizontal do próximo conteúdo
-            xPosition += 350;
             yPosition -= 10;
                               
             funcoesRelatorio.valoresDoisTotalizadores("Valor Pago:        ", "Valor Pendente: ", totalPago,totalPendente,yPosition,fluxoConteudo);
