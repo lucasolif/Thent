@@ -2,6 +2,7 @@
 package view;
 
 import com.google.gson.Gson;
+import dao.LogsDao;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,6 +14,7 @@ import jdbc.Configuracao;
 public class ConexaoForm extends javax.swing.JDialog {
     
     private boolean conectado = false;
+    private final LogsDao logsDao = new LogsDao();
     
     public ConexaoForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -147,9 +149,9 @@ public class ConexaoForm extends javax.swing.JDialog {
                 String json = gson.toJson(config);
                 escritor.write(json); // Escrevendo o JSON no arquivo
             }
-        } catch (IOException e) {
+        } catch (IOException ex) {
+            logsDao.gravaLogsErro("UsuarioDao"+" - "+ex.getMessage());
             JOptionPane.showMessageDialog(null, "Erro ao tentar salvar os dados do banco de dados", "Erro 014", JOptionPane.ERROR_MESSAGE);
-            System.out.println(e);
         }
     }
     

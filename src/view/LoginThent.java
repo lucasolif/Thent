@@ -33,9 +33,6 @@ public class LoginThent extends javax.swing.JFrame {
         setLocationRelativeTo( null );
         getContentPane().setBackground(Color.WHITE); // Aplicando a cor que eu criei
         verificandoConexao();
-        this.campoLogin.setText("admin");
-        this.campoSenha.setText("D8hj0ptr");
-
     }
     
     @SuppressWarnings("unchecked")
@@ -217,7 +214,7 @@ public class LoginThent extends javax.swing.JFrame {
             if(config != null){
                Conexao.inicializandoBancoDados(config); 
             }else{
-                JOptionPane.showMessageDialog(null, "Arquivo JSON do banco de dados está vazio", "Erro 014", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Arquivo de conexão do banco de dados está vazio", "Erro 014", JOptionPane.ERROR_MESSAGE);
             }            
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Erro ao tentar ler o arquivo JSON do banco de dados", "Erro 014", JOptionPane.ERROR_MESSAGE);

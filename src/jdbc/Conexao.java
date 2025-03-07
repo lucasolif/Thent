@@ -1,6 +1,7 @@
 
 package jdbc;
 
+import dao.LogsDao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -9,10 +10,11 @@ import org.apache.commons.dbcp2.BasicDataSource;
 public class Conexao {
    
     private static BasicDataSource dataSource;
+    private static LogsDao logsDao = new LogsDao();
 
     //Inicializando a conexão com o banco de dados
     public static boolean inicializandoBancoDados(Configuracao config) {
-        
+
         boolean conectado = false;
         
         if(dataSource == null){
@@ -37,6 +39,8 @@ public class Conexao {
                 JOptionPane.showMessageDialog(null, "Falha ao tentar estabelecer a conexão com o banco de dados.", "Concluído", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+            logsDao.gravaLogsErro(e.getMessage());
             JOptionPane.showMessageDialog(null, "Falha ao tentar estabelecer a conexão com o banco de dados.", "Concluído", JOptionPane.ERROR_MESSAGE);
         }
         return conectado;
@@ -57,6 +61,7 @@ public class Conexao {
             try {
                 dataSource.close();
             } catch (SQLException e) {
+                logsDao.gravaLogsErro(e.getMessage());
                 JOptionPane.showMessageDialog(null, "Erro ao fechar conexão", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
