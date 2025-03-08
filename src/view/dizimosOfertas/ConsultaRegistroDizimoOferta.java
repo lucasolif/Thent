@@ -1,14 +1,14 @@
 
 package view.dizimosOfertas;
 
-import Ferramentas.PersonalizaTabela;
+import ferramentas.PersonalizaTabela;
 import dao.ContaCaixaDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;
-import Ferramentas.Utilitarios;
+import ferramentas.Utilitarios;
 import dao.UsuarioDao;
 import java.awt.Color;
 import java.awt.Dimension;

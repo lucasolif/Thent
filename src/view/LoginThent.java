@@ -2,7 +2,7 @@
 package view;
 
 import dao.LoginDao;
-import Ferramentas.Utilitarios;
+import ferramentas.Utilitarios;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import autenticacao.CriptografarSenhas;
@@ -12,7 +12,9 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Base64;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -32,7 +34,7 @@ public class LoginThent extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo( null );
         getContentPane().setBackground(Color.WHITE); // Aplicando a cor que eu criei
-        verificandoConexao();
+        verificandoConexao();  
     }
     
     @SuppressWarnings("unchecked")
@@ -252,7 +254,7 @@ public class LoginThent extends javax.swing.JFrame {
    
         return userValidado;
     }
-
+    
     public static void main(String args[]) {
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());

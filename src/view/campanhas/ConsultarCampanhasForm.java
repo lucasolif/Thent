@@ -2,9 +2,9 @@
 package view.campanhas;
 
 import dao.CampanhaDao;
-import Ferramentas.PaletaCores;
-import Ferramentas.PersonalizaTabela;
-import Ferramentas.Utilitarios;
+import ferramentas.PaletaCores;
+import ferramentas.PersonalizaTabela;
+import ferramentas.Utilitarios;
 import dao.UsuarioDao;
 import interfaces.ConsultaCampanhas;
 import java.awt.Color;

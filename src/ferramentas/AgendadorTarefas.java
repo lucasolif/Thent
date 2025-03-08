@@ -1,5 +1,5 @@
 
-package Ferramentas;
+package ferramentas;
 
 import dao.AplicacaoDao;
 import java.sql.Connection;

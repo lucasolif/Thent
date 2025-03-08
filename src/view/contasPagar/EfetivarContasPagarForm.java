@@ -1,16 +1,16 @@
 
 package view.contasPagar;
 
-import Ferramentas.StatusCoresContaPagarReceber;
+import ferramentas.StatusCoresContaPagarReceber;
 import dao.ContaCaixaDao;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.MovimentoCaixaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Ferramentas.PaletaCores;
-import Ferramentas.PersonalizaTabela;
-import Ferramentas.Utilitarios;
+import ferramentas.PaletaCores;
+import ferramentas.PersonalizaTabela;
+import ferramentas.Utilitarios;
 import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;
 import dao.UsuarioDao;

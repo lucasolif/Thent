@@ -1,7 +1,7 @@
 package view;
 
-import Ferramentas.AgendadorTarefas;
-import Ferramentas.PaletaCores;
+import ferramentas.AgendadorTarefas;
+import ferramentas.PaletaCores;
 import dao.UsuarioDao;
 import java.util.List;
 import javax.swing.JDesktopPane;

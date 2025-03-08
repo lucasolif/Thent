@@ -1,7 +1,7 @@
 
 package view.biblioteca;
 
-import Ferramentas.PersonalizaTabela;
+import ferramentas.PersonalizaTabela;
 import dao.AutorDao;
 import dao.BibliotecaDao;
 import dao.EditoraDao;

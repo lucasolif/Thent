@@ -1,13 +1,13 @@
 
 package view.contasPagar;
 
-import Ferramentas.PersonalizaTabela;
+import ferramentas.PersonalizaTabela;
 import dao.ContasPagarDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Ferramentas.Utilitarios;
+import ferramentas.Utilitarios;
 import dao.ContaCaixaDao;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;

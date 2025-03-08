@@ -1,12 +1,12 @@
 
 package view.campanhas;
 
-import Ferramentas.PersonalizaTabela;
+import ferramentas.PersonalizaTabela;
 import dao.CampanhaDao;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import Ferramentas.Utilitarios;
+import ferramentas.Utilitarios;
 import dao.UsuarioDao;
 import java.awt.Dimension;
 import java.awt.Frame;

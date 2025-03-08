@@ -1,5 +1,5 @@
 
-package Ferramentas;
+package ferramentas;
 
 import java.awt.Color;
 import java.awt.Component;

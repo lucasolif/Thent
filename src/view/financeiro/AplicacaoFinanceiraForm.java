@@ -1,7 +1,7 @@
 
 package view.financeiro;
 
-import Ferramentas.Utilitarios;
+import ferramentas.Utilitarios;
 import dao.AplicacaoDao;
 import dao.ContaCaixaDao;
 import dao.IgrejaDao;

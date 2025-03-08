@@ -1,7 +1,7 @@
 
-package Ferramentas;
+package ferramentas;
 
-import Ferramentas.PaletaCores;
+import ferramentas.PaletaCores;
 
 public class StatusCoresContaPagarReceber extends javax.swing.JDialog{
 
