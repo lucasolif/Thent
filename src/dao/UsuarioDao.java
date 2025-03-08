@@ -55,7 +55,7 @@ public class UsuarioDao {
             }
             
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);
-            
+            this.conexao.commit();
         }catch(SQLException ex){
             logsDao.gravaLogsErro("UsuarioDao - "+ex.getSQLState()+" - "+ex.getMessage());
             if (ex.getErrorCode() == 2627) { // Código de erro para violação de UNIQUE

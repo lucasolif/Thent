@@ -39,7 +39,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     private List<Usuario> listaUser;
     private List<Igreja> listaIgrejasJComboBox;
     private List<Igreja> listaIgrejaConsulta;
-    private List<AcessosIgreja> listaAcessosAtual; 
+    private List<AcessosIgreja> listaAcessosAtual = new ArrayList<>(); 
     private String filtroIgreja = "";
       
     public UsuarioForm(Usuario usuarioLogado) {
@@ -380,8 +380,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
-            salvarAlterarCadastro();
-            formInicial();
+            salvarAlterarCadastro();         
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro no formulário, ao tentar cadastrar/alterar usuário", "Erro", JOptionPane.WARNING_MESSAGE);
         }
@@ -615,11 +614,10 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
                     
                     int idUsuario = this.usuarioDao.adicionarUsuario(usuario);   //Adiciona o usuário é retorna o código gerado                   
                     usuario.setCodigo(idUsuario);//Seta o código gerado
-                    this.usuarioDao.alterarUsuario(usuario); // Adicionar as permissões
+                    adicionarExcluirAcessoIgreja(usuario);
                     
-                }else{
-                    JOptionPane.showMessageDialog(null, "Se senha precisa ser iguais e conter letras maísculo e números", "Erro", JOptionPane.WARNING_MESSAGE);
                 }
+                
             }else{
                 FuncoesUsuario funcao = (FuncoesUsuario) this.funcaoCargo.getSelectedItem();
                 this.userSelec.setNome(nome);
@@ -647,7 +645,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
             String igrejaSelec = modelo.getElementAt(i);
             int posicaoCod = igrejaSelec.indexOf("-"); //Pega a posição do traço, pois ele divide o código da igreja e nome
             
-            int codIgreja = Integer.parseInt(igrejaSelec.substring(0,posicaoCod));
+            Integer codIgreja = Integer.valueOf(igrejaSelec.substring(0,posicaoCod));
             
             AcessosIgreja acessosIgreja = new AcessosIgreja();
             Igreja igreja = new Igreja();       
@@ -694,11 +692,13 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         
         boolean control;
         
+        // Expressão regular para validar a senha
         Pattern pattern = Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{6,20}$");
         Matcher matcher = pattern.matcher(senha);
-        if (matcher.find()) {
-            control = true;
-        }else{
+        
+        if (matcher.matches()) {
+            return true; // Senha válida
+        } else{
             JOptionPane.showMessageDialog(null, "Senha fraca, precisa conter: letra maiúscula e número.", "Erro 003", JOptionPane.WARNING_MESSAGE);
             control = false;
         }       

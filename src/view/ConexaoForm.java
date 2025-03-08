@@ -7,6 +7,9 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.JOptionPane;
 import jdbc.Conexao;
 import jdbc.Configuracao;
@@ -131,27 +134,38 @@ public class ConexaoForm extends javax.swing.JDialog {
 
     private void criandoArquivoConexao(String servidor, String bancoDados, String login, String senha){
         
-        //Pega a pasta raiz onde o projeto está instalado
-        String caminhoArquivo = System.getProperty("user.dir")+"\\config.txt";
+        // Caminho para salvar o arquivo na pasta AppData
+        String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Thent\\config.txt";
         
-        File arquivo = new File(caminhoArquivo); //Cria o arquivo no caminho especificado acima
+        // Criar o diretório se não existir
+        Path path = Paths.get(caminhoArquivo).getParent();
+        try {
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);  // Cria diretórios se não existirem
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao criar os diretórios: " + e.getMessage(), "Erro 001", JOptionPane.ERROR_MESSAGE);
+            return; // Abortando a execução, pois o diretório não pôde ser criado
+        }
         
-        try(FileWriter escritor = new FileWriter(arquivo)){
+        File arquivo = new File(caminhoArquivo); // Cria o arquivo no caminho especificado
+
+        try (FileWriter escritor = new FileWriter(arquivo)) {
             // Criando o objeto de configuração
             Configuracao config = new Configuracao(servidor, bancoDados, login, senha);
-            
+
             // Inicializando o banco de dados
-            conectado = Conexao.inicializandoBancoDados(config);
-            
-            //Validando se foi conectado
-            if(conectado){   
-                Gson gson = new Gson();// Usando Gson para converter o objeto em JSON
+            this.conectado = Conexao.inicializandoBancoDados(config);
+
+            // Validando se foi conectado
+            if (this.conectado) {   
+                Gson gson = new Gson(); // Usando Gson para converter o objeto em JSON
                 String json = gson.toJson(config);
                 escritor.write(json); // Escrevendo o JSON no arquivo
             }
         } catch (IOException ex) {
-            logsDao.gravaLogsErro("UsuarioDao"+" - "+ex.getMessage());
-            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar os dados do banco de dados", "Erro 014", JOptionPane.ERROR_MESSAGE);
+            // Exibindo mensagem de erro detalhada
+            JOptionPane.showMessageDialog(null, "Erro ao tentar salvar os dados do banco de dados: " + ex.getMessage(), "Erro 014", JOptionPane.ERROR_MESSAGE);
         }
     }
     

@@ -12,9 +12,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Base64;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -193,7 +191,7 @@ public class LoginThent extends javax.swing.JFrame {
     private void verificandoConexao(){
         
         //Pega a pasta raiz onde o projeto está instalado
-        String caminhoArquivo = System.getProperty("user.dir")+"\\config.txt";
+        String caminhoArquivo = System.getProperty("user.home")+"\\AppData\\Local\\Thent\\config.txt";
         
         arquivo = new File(caminhoArquivo); //Cria o arquivo no caminho especificado acima
         

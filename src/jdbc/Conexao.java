@@ -39,7 +39,6 @@ public class Conexao {
                 JOptionPane.showMessageDialog(null, "Falha ao tentar estabelecer a conexão com o banco de dados.", "Concluído", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             logsDao.gravaLogsErro(e.getMessage());
             JOptionPane.showMessageDialog(null, "Falha ao tentar estabelecer a conexão com o banco de dados.", "Concluído", JOptionPane.ERROR_MESSAGE);
         }

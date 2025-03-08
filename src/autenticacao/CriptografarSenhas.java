@@ -67,7 +67,7 @@ public class CriptografarSenhas {
 
         try {
             // Caminho do arquivo onde a chave será salva/recuperada
-            String caminhoArquivo = System.getProperty("user.dir") + "\\ck.txt";  // Pega a pasta raiz onde o projeto está instalado
+            String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Thent\\ck.txt";  // Pega a pasta raiz onde o projeto está instalado
             File arquivo = new File(caminhoArquivo);
             SecretKey chave = null;
 
@@ -114,7 +114,7 @@ public class CriptografarSenhas {
     }
     
     public SecretKey obterChave(){
-        String caminhoArquivo = System.getProperty("user.dir") + "\\ck.txt";  // Pega a pasta raiz onde o projeto está instalado
+        String caminhoArquivo = System.getProperty("user.home") + "\\AppData\\Local\\Thent\\ck.txt";  // Pega a pasta raiz onde o projeto está instalado
         SecretKey chave = null;
         
         // Se o arquivo existe, ler a chave do arquivo
