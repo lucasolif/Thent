@@ -546,7 +546,7 @@ public class ContasPagarForm extends javax.swing.JInternalFrame implements Consu
     
     private void buscarFornecedor(){
         String textoBusca = this.nomeFornecedor.getText(); // Texto digitado na busca        
-        this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco      
+        this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca,this.filtroIgreja); //Lista recebe a busca retornada do banco      
     } 
     
     private void carregarResultadoConsultaFornecedor(){

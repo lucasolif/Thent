@@ -42,8 +42,8 @@ public class PessoaDao {
             ps.setString(9, pessoa.getEndereco().getLogradouro());
             ps.setInt(10, pessoa.getEndereco().getNumero());
             ps.setString(11, pessoa.getEndereco().getBairro());
-            ps.setString(12, pessoa.getEndereco().getCidade());
-            ps.setString(13, pessoa.getEndereco().getEstado());
+            ps.setString(12, pessoa.getEndereco().getLocalidade());
+            ps.setString(13, pessoa.getEndereco().getUf());
             ps.setString(14, pessoa.getEndereco().getCep());
             ps.setString(15, pessoa.getEndereco().getComplemento());
             ps.setInt(16, pessoa.getAtivo());
@@ -82,11 +82,11 @@ public class PessoaDao {
     }
     
     //Método para consultarPessoa pessoa e listar na tabela
-    public List<Pessoa> consultarPessoa(String buscaPessoa){
+    public List<Pessoa> consultarPessoa(String buscaPessoa, String filtroIgreja){
 
         List<Pessoa> listaPessoas = new ArrayList<>();
         IgrejaDao igrejaDao = new IgrejaDao(); //Estanciando o objeto para consultarPessoa a igreja da pessoa      
-        String sqlSelect = "SELECT * FROM Pessoas WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?)";  
+        String sqlSelect = "SELECT * FROM Pessoas WHERE (? IS NULL OR Codigo LIKE ?) OR (? IS NULL OR Nome LIKE ?) AND Igreja IN ("+filtroIgreja+")";  
         
         try{
             conexao = Conexao.getDataSource().getConnection();           
@@ -199,8 +199,8 @@ public class PessoaDao {
             ps.setString(9, pessoa.getEndereco().getLogradouro());
             ps.setInt(10, pessoa.getEndereco().getNumero());
             ps.setString(11, pessoa.getEndereco().getBairro());
-            ps.setString(12, pessoa.getEndereco().getCidade());
-            ps.setString(13, pessoa.getEndereco().getEstado());
+            ps.setString(12, pessoa.getEndereco().getLocalidade());
+            ps.setString(13, pessoa.getEndereco().getUf());
             ps.setString(14, pessoa.getEndereco().getCep());
             ps.setString(15, pessoa.getEndereco().getComplemento());
             ps.setInt(16, pessoa.getAtivo());

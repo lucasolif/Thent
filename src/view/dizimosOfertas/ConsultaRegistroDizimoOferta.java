@@ -30,7 +30,6 @@ import model.TipoOferta;
 import model.Usuario;
 
 
-
 public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
 
     private final PersonalizaTabela personalizaTabela = new PersonalizaTabela();
@@ -49,10 +48,12 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private String filtroIgreja = "";
     
+    
     public ConsultaRegistroDizimoOferta(Usuario usuarioLogado) {
         initComponents();
         this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
         formInicial();
+        List<ContaCaixa> listaContaCaixa = contaCaixaDao.consultarContaCaixa( this.filtroIgreja);
     }
     
     public void setPosicao() {
@@ -854,7 +855,8 @@ public class ConsultaRegistroDizimoOferta extends javax.swing.JInternalFrame{
         personalizaTabela.definirNegritoTituloColuna(tabelaRegistros);
         consultarCarregarTotais();
     }
-     
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFiltrar;

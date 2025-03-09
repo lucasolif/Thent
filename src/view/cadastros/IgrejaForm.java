@@ -1,6 +1,7 @@
 
 package view.cadastros;
 
+import api.viaCep.ViaCep;
 import dao.IgrejaDao;
 import interfaces.ConsultaIgrejas;
 import java.awt.Dimension;
@@ -18,6 +19,7 @@ import view.carregamentoConsultas.TelaConsultaIgreja;
 public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIgrejas{
 
     private final IgrejaDao igrejaDao = new IgrejaDao();
+    private final ViaCep viaCep = new ViaCep();
     private Igreja igrejaSelec = null;
     private List<Igreja> listaIgreja = null;
     
@@ -39,7 +41,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
         btnLimpar = new javax.swing.JButton();
         campoComplemento = new javax.swing.JTextField();
         codIgreja = new javax.swing.JTextField();
-        campoEndereco = new javax.swing.JTextField();
+        campoLogradouro = new javax.swing.JTextField();
         nomeIgreja = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -138,6 +140,11 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        campoCep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoCepKeyPressed(evt);
+            }
+        });
 
         cbAtivo.setText("Ativo");
 
@@ -181,7 +188,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel12)
-                                            .addComponent(campoEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(campoLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(campoBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -191,11 +198,13 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel17)
                                                 .addGap(0, 0, Short.MAX_VALUE))
-                                            .addComponent(campoCidade)))
+                                            .addComponent(campoCidade, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel19)
-                                            .addComponent(campoComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(campoComplemento)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel19)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(campoNum, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -239,12 +248,13 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(campoCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(campoBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(campoLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel14)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel14)
+                                .addComponent(jLabel19))
                             .addGap(6, 6, 6)
                             .addComponent(campoNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
@@ -256,8 +266,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(campoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(22, 22, 22)
                         .addComponent(campoComplemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -300,6 +309,12 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
         }
     }//GEN-LAST:event_campoBuscaKeyPressed
 
+    private void campoCepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoCepKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            buscarEnderecoCep();
+        }
+    }//GEN-LAST:event_campoCepKeyPressed
+
     private void formInicial(){
         this.codIgreja.setText("");
         this.nomeIgreja.setText("");
@@ -308,7 +323,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
         this.campoCep.setText("");
         this.campoCidade.setText("");
         this.campoComplemento.setText("");
-        this.campoEndereco.setText("");
+        this.campoLogradouro.setText("");
         this.campoBairro.setText("");
         this.campoNum.setText("");
         this.cbAtivo.setSelected(true);
@@ -333,10 +348,10 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
         this.nomeIgreja.setText(igreja.getNome());
         this.campoBairro.setText(igreja.getEndereco().getBairro());
         this.campoCep.setText(igreja.getEndereco().getCep());
-        this.campoCidade.setText(igreja.getEndereco().getCidade());
+        this.campoCidade.setText(igreja.getEndereco().getLocalidade());
         this.campoComplemento.setText(igreja.getEndereco().getComplemento());
-        this.campoEndereco.setText(igreja.getEndereco().getLogradouro());
-        this.campoEstado.setSelectedItem(igreja.getEndereco().getEstado());
+        this.campoLogradouro.setText(igreja.getEndereco().getLogradouro());
+        this.campoEstado.setSelectedItem(igreja.getEndereco().getUf());
         this.campoNum.setText(String.valueOf(igreja.getEndereco().getNumero()));
         if(igreja.getStatus() == 1){
             this.cbAtivo.setSelected(true);
@@ -355,7 +370,7 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
         String cidade = this.campoCidade.getText();
         String cep = this.campoCep.getText();
         String complemento = this.campoComplemento.getText();
-        String logradouro = this.campoEndereco.getText();
+        String logradouro = this.campoLogradouro.getText();
         String bairro = this.campoBairro.getText();
         int numCasa = Integer.parseInt(this.campoNum.getText());
         
@@ -401,6 +416,26 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
             }  
         }
     }
+    
+    private void buscarEnderecoCep(){
+        String cep = this.campoCep.getText();
+        Endereco endereco = null;
+        if(cep.length() == 9){
+            endereco = this.viaCep.buscarEnderecoPorCep(cep);     
+            
+            if(endereco != null){
+                this.campoCep.setText(endereco.getCep());
+                this.campoCidade.setText(endereco.getLocalidade());
+                this.campoBairro.setText(endereco.getBairro());
+                this.campoLogradouro.setText(endereco.getLogradouro());
+                this.campoEstado.setSelectedItem(endereco.getUf());       
+            }else{
+                JOptionPane.showMessageDialog(null, "Endereço não encontrado", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Informe o CEP completo", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+    }
 
     @Override
     public void igrejaSelecionada(Igreja igrejaSelecionada) {
@@ -417,8 +452,8 @@ public class IgrejaForm extends javax.swing.JInternalFrame implements ConsultaIg
     private javax.swing.JFormattedTextField campoCep;
     private javax.swing.JTextField campoCidade;
     private javax.swing.JTextField campoComplemento;
-    private javax.swing.JTextField campoEndereco;
     private javax.swing.JComboBox<String> campoEstado;
+    private javax.swing.JTextField campoLogradouro;
     private javax.swing.JTextField campoNum;
     private javax.swing.JCheckBox cbAtivo;
     private javax.swing.JTextField codIgreja;

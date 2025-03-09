@@ -1,6 +1,7 @@
 
 package view.cadastros;
 
+import api.viaCep.ViaCep;
 import dao.IgrejaDao;
 import dao.PessoaDao;
 import dao.UsuarioDao;
@@ -22,12 +23,13 @@ import view.carregamentoConsultas.TelaConsultasPessoas;
 public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaPessoas{
     
     private final PessoaDao pessoaDao = new PessoaDao();
+    private final ViaCep viaCep = new ViaCep();
     private final IgrejaDao igrejaDao = new IgrejaDao();
     private Pessoa pessoaSelec;
     private List<Pessoa> listaPessoa;
     private final UsuarioDao usuarioDao = new UsuarioDao();
     private String filtroIgreja = "";
-    private Usuario usuarioLogado;
+    private Usuario usuarioLogado = null;
 
     public PessoasForm(Usuario usuarioLogado) {
         initComponents();
@@ -79,7 +81,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         campoCidade = new javax.swing.JTextField();
         campoCep = new javax.swing.JFormattedTextField();
         campoComplemento = new javax.swing.JTextField();
-        campoEndereco = new javax.swing.JTextField();
+        campoLogradouro = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
@@ -182,6 +184,11 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        campoCep.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoCepKeyPressed(evt);
+            }
+        });
 
         jLabel12.setText("Logradouro*");
 
@@ -238,7 +245,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
                                     .addComponent(cbAtivo))))
                         .addGroup(dadosPessoaisLayout.createSequentialGroup()
                             .addGroup(dadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(campoEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(campoLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel12))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(dadosPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,7 +329,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
                             .addGroup(dadosPessoaisLayout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addGap(0, 0, 0)
-                                .addComponent(campoEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(campoLogradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(dadosPessoaisLayout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addGap(6, 6, 6)
@@ -447,6 +454,12 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         formInicial();
     }//GEN-LAST:event_iconLimparActionPerformed
 
+    private void campoCepKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoCepKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            buscarEnderecoCep();
+        }
+    }//GEN-LAST:event_campoCepKeyPressed
+
     private void formInicial(){
         this.campoBusca.setText("");
         this.campoCodPessoa.setText("");
@@ -457,7 +470,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         this.campoDataNascimento.setText("");
         this.campoEmail.setText("");
         this.campoCelular.setText("");
-        this.campoEndereco.setText("");
+        this.campoLogradouro.setText("");
         this.campoNum.setText("");
         this.campoCep.setText("");
         this.campoBairro.setText("");
@@ -471,7 +484,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
     
     private void consultarPessoas(){
         String textoBusca = campoBusca.getText();
-        listaPessoa = pessoaDao.consultarPessoa(textoBusca);          
+        listaPessoa = pessoaDao.consultarPessoa(textoBusca, this.filtroIgreja);          
     }
     
     private void abrirTelaEscolhaPessoa(){
@@ -491,12 +504,12 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         this.campoCelular.setText(pessoa.getCelular());
         this.campoEmail.setText(pessoa.getEmail());
         this.orientacaoSexual.setSelectedItem(pessoa.getSexo());
-        this.campoEndereco.setText(pessoa.getEndereco().getLogradouro());
+        this.campoLogradouro.setText(pessoa.getEndereco().getLogradouro());
         this.campoNum.setText(Integer.toString(pessoa.getEndereco().getNumero()));
         this.campoCep.setText(pessoa.getEndereco().getCep());
         this.campoBairro.setText(pessoa.getEndereco().getBairro());
-        this.campoCidade.setText(pessoa.getEndereco().getCidade());
-        this.campoEstado.setSelectedItem(pessoa.getEndereco().getEstado());
+        this.campoCidade.setText(pessoa.getEndereco().getLocalidade());
+        this.campoEstado.setSelectedItem(pessoa.getEndereco().getUf());
         this.campoComplemento.setText(pessoa.getEndereco().getComplemento());
         this.campoIgreja.setSelectedItem(pessoa.getIgreja());
         
@@ -530,7 +543,7 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
         String celular = campoCelular.getText();
         String email = campoEmail.getText();
         String sexo = orientacaoSexual.getSelectedItem().toString();
-        String rua = campoEndereco.getText();
+        String rua = campoLogradouro.getText();
         int numero = Integer.parseInt(campoNum.getText()) ;
         String cep = campoCep.getText();
         String bairro = campoBairro.getText();
@@ -579,6 +592,26 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
             }
         }
     }
+    
+    private void buscarEnderecoCep(){
+        String cep = this.campoCep.getText();
+        Endereco endereco = null;
+        if(cep.length() == 9){
+            endereco = this.viaCep.buscarEnderecoPorCep(cep);     
+            
+            if(endereco != null){
+                this.campoCep.setText(endereco.getCep());
+                this.campoCidade.setText(endereco.getLocalidade());
+                this.campoBairro.setText(endereco.getBairro());
+                this.campoLogradouro.setText(endereco.getLogradouro());
+                this.campoEstado.setSelectedItem(endereco.getUf());       
+            }else{
+                JOptionPane.showMessageDialog(null, "Endereço não encontrado", "Atenção", JOptionPane.WARNING_MESSAGE);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Informe o CEP completo", "Atenção", JOptionPane.WARNING_MESSAGE);
+        }
+    }
       
     @Override
     public void pessoaSelecionada(Pessoa pessoaSelecionada) {
@@ -599,9 +632,9 @@ public class PessoasForm extends javax.swing.JInternalFrame implements ConsultaP
     private javax.swing.JTextField campoCpfCnpj;
     private javax.swing.JFormattedTextField campoDataNascimento;
     private javax.swing.JTextField campoEmail;
-    private javax.swing.JTextField campoEndereco;
     private javax.swing.JComboBox<String> campoEstado;
     private javax.swing.JComboBox<String> campoIgreja;
+    private javax.swing.JTextField campoLogradouro;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoNum;
     private javax.swing.JTextField campoRg;

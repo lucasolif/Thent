@@ -71,7 +71,7 @@
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
-                                          <Component id="campoEndereco" min="-2" pref="180" max="-2" attributes="0"/>
+                                          <Component id="campoLogradouro" min="-2" pref="180" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -84,13 +84,16 @@
                                               <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           </Group>
-                                          <Component id="campoCidade" max="32767" attributes="0"/>
+                                          <Component id="campoCidade" pref="153" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                          <Component id="campoComplemento" alignment="0" min="-2" pref="199" max="-2" attributes="0"/>
+                                          <Component id="campoComplemento" max="32767" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -151,13 +154,15 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="campoCidade" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="campoBairro" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="campoEndereco" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="campoLogradouro" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           <Component id="campoNum" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -173,8 +178,7 @@
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="campoComplemento" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -277,7 +281,7 @@
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="campoEndereco">
+    <Component class="javax.swing.JTextField" name="campoLogradouro">
     </Component>
     <Component class="javax.swing.JTextField" name="nomeIgreja">
     </Component>
@@ -375,6 +379,9 @@
           <Format format="#####-###" subtype="-1" type="5"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="campoCepKeyPressed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="campoNum">
     </Component>

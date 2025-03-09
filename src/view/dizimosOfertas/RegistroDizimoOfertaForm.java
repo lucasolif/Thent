@@ -31,7 +31,6 @@ import model.FormaPagto;
 import model.Igreja;
 import model.Pessoa;
 import model.RegistroDizimoOferta;
-import model.SubContaResultado;
 import model.TipoOferta;
 import model.Usuario;
 import view.carregamentoConsultas.TelaConsultasPessoas;
@@ -534,7 +533,7 @@ public class RegistroDizimoOfertaForm extends javax.swing.JInternalFrame impleme
             registro.setDataOferta(dataOferta);
             registro.setIgreja(igreja);
             registro.setContaCaixa(contaCx);
-            registro.setComplemento(tpOferta.getNome()+" - "+contaCx.getNome());
+            registro.setComplemento(tpOferta.getNome());
             
             listaRegistro.add(registro);              
         }  

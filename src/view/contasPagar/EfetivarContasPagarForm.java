@@ -715,7 +715,7 @@ public class EfetivarContasPagarForm extends javax.swing.JInternalFrame implemen
     
     private void buscarFornecedor(){
         String textoBusca = this.nomeFornecedor.getText(); // Texto digitado na busca        
-        this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
+        this.listaFornecedor = this.pessoaDao.consultarPessoa(textoBusca, this.filtroIgreja); //Lista recebe a busca retornada do banco
     } 
     
     private void carregarResultadoConsultaFornecedor(){

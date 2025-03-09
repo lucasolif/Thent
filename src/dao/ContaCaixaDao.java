@@ -28,12 +28,11 @@ public class ContaCaixaDao {
         try{
             this.conexao = Conexao.getDataSource().getConnection();
             
-            String sql= "INSERT INTO ContasCaixa (Descricao,DataCadastro,Status,Igreja,ConstaRelatorioPrestacao)VALUES (?,GETDATE(),?,?,?)";
+            String sql= "INSERT INTO ContasCaixa (Descricao,DataCadastro,Status,Igreja)VALUES (?,GETDATE(),?,?)";
             this.insertStmt = this.conexao.prepareStatement(sql);
             this.insertStmt.setString(1,contaCaixa.getNome());
             this.insertStmt.setInt(2,contaCaixa.getStatus());
             this.insertStmt.setInt(3,contaCaixa.getIgreja().getCodigo());
-            this.insertStmt.setInt(4,contaCaixa.getConstaRelatorio());
             this.insertStmt.execute();
             
             JOptionPane.showMessageDialog(null, "Conta Caixa cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);        
@@ -59,12 +58,11 @@ public class ContaCaixaDao {
         try{          
             this.conexao = Conexao.getDataSource().getConnection();
             
-            String sql= "UPDATE ContasCaixa SET Descricao=?,Status=?,ConstaRelatorioPrestacao=? " + "WHERE Codigo=?";
+            String sql= "UPDATE ContasCaixa SET Descricao=?,Status=? " + "WHERE Codigo=?";
             this.updateStmt = this.conexao.prepareStatement(sql);
             this.updateStmt.setString(1, contaCaixa.getNome());
             this.updateStmt.setInt(2, contaCaixa.getStatus());
-            this.updateStmt.setInt(3,contaCaixa.getConstaRelatorio());
-            this.updateStmt.setInt(4, contaCaixa.getCodigo());
+            this.updateStmt.setInt(3, contaCaixa.getCodigo());
             
             this.updateStmt.executeUpdate();
             
@@ -102,7 +100,6 @@ public class ContaCaixaDao {
                 caixa.setCodigo(this.rs.getInt("Codigo"));
                 caixa.setNome(this.rs.getString("Descricao"));
                 caixa.setStatus(this.rs.getInt("status"));
-                caixa.setConstaRelatorio(this.rs.getInt("ConstaRelatorioPrestacao"));
                 caixa.setDataCadastro(this.rs.getDate("DataCadastro"));
 
                 listaCaixas.add(caixa);
@@ -159,7 +156,6 @@ public class ContaCaixaDao {
                 igreja.setNome(this.rs.getString("NomeIgreja"));
                 caixa.setCodigo(this.rs.getInt("Codigo"));
                 caixa.setNome(this.rs.getString("Descricao"));
-                caixa.setConstaRelatorio(this.rs.getInt("ConstaRelatorioPrestacao"));
                 caixa.setStatus(this.rs.getInt("Status"));
                 caixa.setDataCadastro(this.rs.getDate("DataCadastro"));
                 caixa.setIgreja(igreja);

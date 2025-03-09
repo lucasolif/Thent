@@ -107,7 +107,7 @@ public class TelaConsultaIgreja extends javax.swing.JDialog {
     private void carregarFormaPagtoConsultadas(List<Igreja> listaIgreja){         
         for(Igreja igreja : listaIgreja){        
             DefaultTableModel model = (DefaultTableModel) this.tabela.getModel();    
-            model.addRow(new Object[]{igreja.getCodigo(),igreja,igreja.getEndereco().getCidade()});
+            model.addRow(new Object[]{igreja.getCodigo(),igreja,igreja.getEndereco().getLocalidade()});
         }
     }
 

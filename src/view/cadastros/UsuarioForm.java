@@ -44,9 +44,8 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
       
     public UsuarioForm(Usuario usuarioLogado) {
         initComponents();
-        formInicial();
         this.filtroIgreja = usuarioDao.gerarFiltroIgreja(usuarioLogado);
-        
+        formInicial();
     }
 
     @SuppressWarnings("unchecked")
@@ -593,43 +592,46 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         if(verificandoCamposVazio(nome, celular, email, login, senha)){
             JOptionPane.showMessageDialog(null, "Campos vazios. Preencha todos os campos obrigatórios", "Erro", JOptionPane.WARNING_MESSAGE);
         }else{
-            //Adicionando o usuário no banco de dados
-            if(userSelec == null){
-                if(validarIgualdadeSenha(senha, confirmSenha) && validarForcaSenha(senha)){            
-                    byte[] salt = CriptografarSenhas.gerarSalt();
-                    rashSenha = CriptografarSenhas.gerarHash(senha,salt);
-                    saltSenha = Base64.getEncoder().encodeToString(salt);
+            if(verificarVazioListagemIgreja()){
+                //Adicionando o usuário no banco de dados
+                if(userSelec == null){
+                    if(validarIgualdadeSenha(senha, confirmSenha) && validarForcaSenha(senha)){            
+                        byte[] salt = CriptografarSenhas.gerarSalt();
+                        rashSenha = CriptografarSenhas.gerarHash(senha,salt);
+                        saltSenha = Base64.getEncoder().encodeToString(salt);
 
-                    Usuario usuario = new Usuario();
-                    usuario.setLogin(login);
-                    usuario.setNome(nome);
-                    usuario.setEmail(email);
-                    usuario.setCelular(celular);
-                    usuario.setAtivo(status);
-                    usuario.setIgreja(igreja);
-                    usuario.setSaltSenha(saltSenha);
-                    usuario.setHashSenha(rashSenha);
-                    usuario.setFuncaoCargo(funcaoCargo);
-                    usuario.setTodasIgrejas(todasIgrejas);
-                    
-                    int idUsuario = this.usuarioDao.adicionarUsuario(usuario);   //Adiciona o usuário é retorna o código gerado                   
-                    usuario.setCodigo(idUsuario);//Seta o código gerado
-                    adicionarExcluirAcessoIgreja(usuario);
-                    
+                        Usuario usuario = new Usuario();
+                        usuario.setLogin(login);
+                        usuario.setNome(nome);
+                        usuario.setEmail(email);
+                        usuario.setCelular(celular);
+                        usuario.setAtivo(status);
+                        usuario.setIgreja(igreja);
+                        usuario.setSaltSenha(saltSenha);
+                        usuario.setHashSenha(rashSenha);
+                        usuario.setFuncaoCargo(funcaoCargo);
+                        usuario.setTodasIgrejas(todasIgrejas);
+
+                        int idUsuario = this.usuarioDao.adicionarUsuario(usuario);   //Adiciona o usuário é retorna o código gerado                   
+                        usuario.setCodigo(idUsuario);//Seta o código gerado
+                        adicionarExcluirAcessoIgreja(usuario);
+                        formInicial();
+                    }
+                }else{
+                    FuncoesUsuario funcao = (FuncoesUsuario) this.funcaoCargo.getSelectedItem();
+                    this.userSelec.setNome(nome);
+                    this.userSelec.setCelular(celular);
+                    this.userSelec.setEmail(email);
+                    this.userSelec.setIgreja(igreja);
+                    this.userSelec.setAtivo(status);
+                    this.userSelec.setFuncaoCargo(funcao);
+                    this.userSelec.setTodasIgrejas(todasIgrejas);
+
+                    this.usuarioDao.alterarUsuario(this.userSelec);  
+                    adicionarExcluirAcessoIgreja(this.userSelec);
                 }
-                
             }else{
-                FuncoesUsuario funcao = (FuncoesUsuario) this.funcaoCargo.getSelectedItem();
-                this.userSelec.setNome(nome);
-                this.userSelec.setCelular(celular);
-                this.userSelec.setEmail(email);
-                this.userSelec.setIgreja(igreja);
-                this.userSelec.setAtivo(status);
-                this.userSelec.setFuncaoCargo(funcao);
-                this.userSelec.setTodasIgrejas(todasIgrejas);
-                
-                this.usuarioDao.alterarUsuario(this.userSelec);  
-                adicionarExcluirAcessoIgreja(this.userSelec);
+                JOptionPane.showMessageDialog(null, "È obrigatório informar uma igreja", "Erro", JOptionPane.WARNING_MESSAGE);
             }
         } 
     }
@@ -707,7 +709,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
     
     private void adicionarIgrejasLiberadas(){
         
-        if(!verificarFiltroCaixaAdicionado(this.codIgreja.getText())){
+        if(!verificarIgrejaAdicionado(this.codIgreja.getText())){
             if (!this.codIgreja.getText().isEmpty()) {
                 // Verifica se o modelo é uma instância de DefaultListModel
                 DefaultListModel<String> igrejasLiberada;
@@ -741,7 +743,7 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
 
     }
     
-    private boolean verificarFiltroCaixaAdicionado(String codigo){
+    private boolean verificarIgrejaAdicionado(String codigo){
         ListModel<String> modelo = listagemIgrejaAcesso.getModel();// Acesse o modelo do JList
         boolean existe = false;  
         
@@ -760,6 +762,19 @@ public class UsuarioForm extends javax.swing.JInternalFrame implements ConsultaU
         return existe;
         
     }
+    
+    private boolean verificarVazioListagemIgreja(){
+        
+        ListModel<String> modelo = listagemIgrejaAcesso.getModel();// Acesse o modelo do JList
+        boolean existe = false;  
+        
+        if (modelo.getSize() > 0) {              
+            existe = true;
+        }
+        
+        return existe;
+    }
+    
     
     @Override
     public void igrejaSelecionada(Igreja igrejaSelecionada) {

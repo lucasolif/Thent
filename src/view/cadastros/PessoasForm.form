@@ -209,7 +209,7 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="campoEndereco" alignment="0" min="-2" pref="208" max="-2" attributes="0"/>
+                                  <Component id="campoLogradouro" alignment="0" min="-2" pref="208" max="-2" attributes="0"/>
                                   <Component id="jLabel12" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -323,7 +323,7 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                  <Component id="campoEndereco" min="-2" max="-2" attributes="0"/>
+                                  <Component id="campoLogradouro" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
@@ -557,10 +557,13 @@
               <Format format="#####-###" subtype="-1" type="5"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="campoCepKeyPressed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="campoComplemento">
         </Component>
-        <Component class="javax.swing.JTextField" name="campoEndereco">
+        <Component class="javax.swing.JTextField" name="campoLogradouro">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>

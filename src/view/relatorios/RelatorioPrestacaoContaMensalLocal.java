@@ -367,6 +367,18 @@ public class RelatorioPrestacaoContaMensalLocal extends javax.swing.JInternalFra
         
     }
     
+    private boolean verificarVazioListagemCaixa(){
+        
+        ListModel<String> modelo = listagemContaCaixa.getModel();// Acesse o modelo do JList
+        boolean existe = false;  
+        
+        if (modelo.getSize() > 0) {              
+            existe = true;
+        }
+        
+        return existe;
+    }
+    
     private List<RegistroDizimoOferta> consultarEntradas(){
         
         //Variaveis que serão utiizadas em todas as consultas. Elas não serão alteradas futuramente.
@@ -451,198 +463,201 @@ public class RelatorioPrestacaoContaMensalLocal extends javax.swing.JInternalFra
     
     private void gerarRelatorio(){
         
-        //Buscando os dados que serão usados, no banco de dados.
-        final List<RegistroDizimoOferta> listaEntrada = consultarEntradas();
-        final List<MovimentoCaixa> listaSaidas = consultarSaidas();
-        final double saldoCaixaAnterior = consultarSaldoAnterior();
-        final double saldoCaixaAtual = consultarSaldoAtual();
-        final List<MovimentoCaixa> listaDpTesouraria = consultarDepositoTesourariaGeral();
-        final double rendimentoAplicacao = consultarRendimentoAplicacao();
-        
-        //Definição das variáveis
-        String mesRelatorio = (String) this.mesPrestacao.getSelectedItem();
-        String anoRelatorio = String.valueOf(this.anoPrestacao.getText());
-        final String titulo = "Prestação de Conta Referente ao mês de "+ mesRelatorio+" de "+ anoRelatorio;
-        final String[] titulosTabela = {"Descrição", "Valores"};
-        
-        //Variaveis referente aos totalizados
-        double saidas = 0;
-        double entradas = 0;
-        
-        //Variáveis referente ao layout do relatório
-        float yPosition = 700; // Posição vertical inicial para os títulos
-        float xPosition = 80; // Posição horizontal inicial para os títulos
-        final float tamanhaFonte = 12;
-        final float tamanhoFonteTitulo = 18;
-        final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte     
-                
-        // Criar um novo documento PDF
-        final PDDocument documentoPDF = new PDDocument();
-        PDPageContentStream fluxoConteudo = null;
+        if(verificarVazioListagemCaixa()){
+            //Buscando os dados que serão usados, no banco de dados.
+            final List<RegistroDizimoOferta> listaEntrada = consultarEntradas();
+            final List<MovimentoCaixa> listaSaidas = consultarSaidas();
+            final double saldoCaixaAnterior = consultarSaldoAnterior();
+            final double saldoCaixaAtual = consultarSaldoAtual();
+            final List<MovimentoCaixa> listaDpTesouraria = consultarDepositoTesourariaGeral();
+            final double rendimentoAplicacao = consultarRendimentoAplicacao();
 
-        // Adicionar uma nova página ao documento
-        final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
-        documentoPDF.addPage(paginaPDF);
-        
-        try {         
-            // Criar o conteúdo para a página      
-            fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
-            
-            //Gerando o título do relatório
-            this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo,titulo, fluxoConteudo, paginaPDF); 
+            //Definição das variáveis
+            String mesRelatorio = (String) this.mesPrestacao.getSelectedItem();
+            String anoRelatorio = String.valueOf(this.anoPrestacao.getText());
+            final String titulo = "Prestação de Conta Referente ao mês de "+ mesRelatorio+" de "+ anoRelatorio;
+            final String[] titulosTabela = {"Descrição", "Valores"};
 
-            //Gerando o titulo do layout
-            this.funcoesRelatorio.tituloLayoutCentralizado("ENTRADAS",yPosition, fluxoConteudo, paginaPDF);   
-            yPosition -= 20; // Pular para a linha abaixo após o título       
-            //Gerar os títulos das colunas
-            this.funcoesRelatorio.tituloColunaRelatorioTesourariaLocal(yPosition, xPosition, titulosTabela, fluxoConteudo);           
-            yPosition -= 20; // Pular para a linha abaixo após o título              
-            //Pega o total das ofertas (Entradas)
-            for(RegistroDizimoOferta entrada : listaEntrada) {                
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
-                    fluxoConteudo.close(); //Encerra o fluxo de conteudo
-                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
-                    documentoPDF.addPage(novaPagina);
-                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
-                    yPosition = 750; // Resetar a posição Y para o topo da nova página
-                }        
+            //Variaveis referente aos totalizados
+            double saidas = 0;
+            double entradas = 0;
 
-                xPosition = 80; // Resetar a posição horizontal a cada nova linha
+            //Variáveis referente ao layout do relatório
+            float yPosition = 700; // Posição vertical inicial para os títulos
+            float xPosition = 80; // Posição horizontal inicial para os títulos
+            final float tamanhaFonte = 12;
+            final float tamanhoFonteTitulo = 18;
+            final PDFont times =  new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN); //Definindo a fonte     
 
-                // Obter os dados da lista        
-                String descricao = entrada.getTpOferta().getNome();
-                String valores = this.conversor.formatarDoubleString(entrada.getValorOfertaEntrada()).replace(".", ",");
+            // Criar um novo documento PDF
+            final PDDocument documentoPDF = new PDDocument();
+            PDPageContentStream fluxoConteudo = null;
 
-                fluxoConteudo.beginText();
-                fluxoConteudo.setFont(times, tamanhaFonte);
+            // Adicionar uma nova página ao documento
+            final PDPage paginaPDF = new PDPage(PDRectangle.A4);//Tamanho da página
+            documentoPDF.addPage(paginaPDF);
 
-                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                fluxoConteudo.showText(descricao);
-                xPosition += 310; // Ajusta a posição da próxima coluna
-                
-                fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText("R$ "+valores);
+            try {         
+                // Criar o conteúdo para a página      
+                fluxoConteudo = new PDPageContentStream(documentoPDF, paginaPDF);  
 
-                fluxoConteudo.endText();         
-                yPosition -= 20;// Descer para a próxima linha 
-                
-                entradas += entrada.getValorOfertaEntrada();
+                //Gerando o título do relatório
+                this.funcoesRelatorio.primeiroTituloRelatorio(tamanhoFonteTitulo,titulo, fluxoConteudo, paginaPDF); 
 
-            }
-            yPosition -= 10;
-            xPosition += 40;
-            this.funcoesRelatorio.valoresUmTotalizador("Total: ", entradas, yPosition, xPosition, fluxoConteudo);            
-            yPosition -= 40; // Pular para a linha abaixo
-            xPosition = 80; //Resetando o posicionamento vertical
-            
-            //Gerando o titulo do layout
-            this.funcoesRelatorio.tituloLayoutCentralizado("SAÌDAS", yPosition, fluxoConteudo, paginaPDF);   
-            yPosition -= 20; // Pular para a linha abaixo       
-            //Gerar os títulos das colunas
-            this.funcoesRelatorio.tituloColunaRelatorioTesourariaLocal(yPosition, xPosition, titulosTabela, fluxoConteudo);           
-            yPosition -= 20; // Pular para a linha abaixo    
-            
-            //Pega o total das Saídas
-            for(MovimentoCaixa saida : listaSaidas) {                
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
-                    fluxoConteudo.close(); //Encerra o fluxo de conteudo
-                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
-                    documentoPDF.addPage(novaPagina);
-                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
-                    yPosition = 750; // Resetar a posição Y para o topo da nova página
-                }        
+                //Gerando o titulo do layout
+                this.funcoesRelatorio.tituloLayoutCentralizado("ENTRADAS",yPosition, fluxoConteudo, paginaPDF);   
+                yPosition -= 20; // Pular para a linha abaixo após o título       
+                //Gerar os títulos das colunas
+                this.funcoesRelatorio.tituloColunaRelatorioTesourariaLocal(yPosition, xPosition, titulosTabela, fluxoConteudo);           
+                yPosition -= 20; // Pular para a linha abaixo após o título              
+                //Pega o total das ofertas (Entradas)
+                for(RegistroDizimoOferta entrada : listaEntrada) {                
+                    if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                        fluxoConteudo.close(); //Encerra o fluxo de conteudo
+                        PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                        documentoPDF.addPage(novaPagina);
+                        fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                        yPosition = 750; // Resetar a posição Y para o topo da nova página
+                    }        
 
-                xPosition = 80; // Resetar a posição horizontal a cada nova linha
+                    xPosition = 80; // Resetar a posição horizontal a cada nova linha
 
-                // Obter os dados da lista        
-                String descricao = saida.getContaPagar().getDescricaoConta();
-                String valores = this.conversor.formatarDoubleString(saida.getValorSaida()).replace(".", ",");
+                    // Obter os dados da lista        
+                    String descricao = entrada.getTpOferta().getNome();
+                    String valores = this.conversor.formatarDoubleString(entrada.getValorOfertaEntrada()).replace(".", ",");
 
-                fluxoConteudo.beginText();
-                fluxoConteudo.setFont(times, tamanhaFonte);
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(times, tamanhaFonte);
 
-                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                fluxoConteudo.showText(descricao);
-                xPosition += 310; // Ajusta a posição da próxima coluna
-                
-                fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText("R$ "+valores);
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(descricao);
+                    xPosition += 310; // Ajusta a posição da próxima coluna
 
-                fluxoConteudo.endText();         
-                yPosition -= 20;// Descer para a próxima linha 
-                
-                saidas += saida.getValorSaida();
+                    fluxoConteudo.newLineAtOffset(xPosition, 0);
+                    fluxoConteudo.showText("R$ "+valores);
 
-            }
+                    fluxoConteudo.endText();         
+                    yPosition -= 20;// Descer para a próxima linha 
 
-            //Pega os depositos efetuado para a tesouraria geral
-            for(MovimentoCaixa dpTesouraria : listaDpTesouraria) {                
-                if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
-                    fluxoConteudo.close(); //Encerra o fluxo de conteudo
-                    PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
-                    documentoPDF.addPage(novaPagina);
-                    fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
-                    yPosition = 750; // Resetar a posição Y para o topo da nova página
-                }        
+                    entradas += entrada.getValorOfertaEntrada();
 
-                xPosition = 80; // Resetar a posição horizontal a cada nova linha
-
-                // Obter os dados da lista        
-                String descricao = dpTesouraria.getComplemento();
-                String valores = this.conversor.formatarDoubleString(dpTesouraria.getValorSaida()).replace(".", ",");
-
-                fluxoConteudo.beginText();
-                fluxoConteudo.setFont(times, tamanhaFonte);
-
-                fluxoConteudo.newLineAtOffset(xPosition, yPosition);
-                fluxoConteudo.showText(descricao);
-                xPosition += 310; // Ajusta a posição da próxima coluna
-                
-                fluxoConteudo.newLineAtOffset(xPosition, 0);
-                fluxoConteudo.showText("R$ "+valores);
-
-                fluxoConteudo.endText();         
-                yPosition -= 20;// Descer para a próxima linha 
-                
-                saidas += dpTesouraria.getValorSaida();
-
-            }
-            yPosition -= 10;
-            xPosition += 40;
-            
-            this.funcoesRelatorio.valoresUmTotalizador("Total: ", saidas, yPosition, xPosition, fluxoConteudo); 
-                 
-            double totalEntradas = entradas;
-            double totalSaidas = saidas;
-            double saldoAnterior = saldoCaixaAnterior;
-            double saldoAtual = saldoCaixaAtual;
-            double valorRendimento = rendimentoAplicacao;
-            
-            yPosition -= 50;
-            xPosition -= 40;
-            
-            //Pega os dados referente aos últimos totalizadores
-            this.funcoesRelatorio.valoresCincoTotalizadoresRelatorioMensal("Total Entrada:    ", "Total Saída:         ", "Saldo Anterior:   ", "Saldo Atual:         ", "Valor Aplicação: ", totalEntradas, totalSaidas, saldoAnterior, saldoAtual, valorRendimento, yPosition, xPosition, fluxoConteudo);
-            
-            fluxoConteudo.close();
-            
-            //Chama a função apra salvar o relatório
-            this.funcoesRelatorio.salvarRelatorioPDF("Prestação De Contas",documentoPDF);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
-        } finally {
-            try {
-                if (fluxoConteudo != null) {
-                    fluxoConteudo.close();
                 }
-                if (documentoPDF != null) {
-                    documentoPDF.close();
+                yPosition -= 10;
+                xPosition += 40;
+                this.funcoesRelatorio.valoresUmTotalizador("Total: ", entradas, yPosition, xPosition, fluxoConteudo);            
+                yPosition -= 40; // Pular para a linha abaixo
+                xPosition = 80; //Resetando o posicionamento vertical
+
+                //Gerando o titulo do layout
+                this.funcoesRelatorio.tituloLayoutCentralizado("SAÌDAS", yPosition, fluxoConteudo, paginaPDF);   
+                yPosition -= 20; // Pular para a linha abaixo       
+                //Gerar os títulos das colunas
+                this.funcoesRelatorio.tituloColunaRelatorioTesourariaLocal(yPosition, xPosition, titulosTabela, fluxoConteudo);           
+                yPosition -= 20; // Pular para a linha abaixo    
+
+                //Pega o total das Saídas
+                for(MovimentoCaixa saida : listaSaidas) {                
+                    if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                        fluxoConteudo.close(); //Encerra o fluxo de conteudo
+                        PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                        documentoPDF.addPage(novaPagina);
+                        fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                        yPosition = 750; // Resetar a posição Y para o topo da nova página
+                    }        
+
+                    xPosition = 80; // Resetar a posição horizontal a cada nova linha
+
+                    // Obter os dados da lista        
+                    String descricao = saida.getContaPagar().getDescricaoConta();
+                    String valores = this.conversor.formatarDoubleString(saida.getValorSaida()).replace(".", ",");
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(times, tamanhaFonte);
+
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(descricao);
+                    xPosition += 310; // Ajusta a posição da próxima coluna
+
+                    fluxoConteudo.newLineAtOffset(xPosition, 0);
+                    fluxoConteudo.showText("R$ "+valores);
+
+                    fluxoConteudo.endText();         
+                    yPosition -= 20;// Descer para a próxima linha 
+
+                    saidas += saida.getValorSaida();
+
                 }
+
+                //Pega os depositos efetuado para a tesouraria geral
+                for(MovimentoCaixa dpTesouraria : listaDpTesouraria) {                
+                    if (yPosition < 50) { // Se a posição Y estiver abaixo do limite da página, criar uma nova página
+                        fluxoConteudo.close(); //Encerra o fluxo de conteudo
+                        PDPage novaPagina = new PDPage(PDRectangle.A4); // Tamanho da página
+                        documentoPDF.addPage(novaPagina);
+                        fluxoConteudo = new PDPageContentStream(documentoPDF, novaPagina);
+                        yPosition = 750; // Resetar a posição Y para o topo da nova página
+                    }        
+
+                    xPosition = 80; // Resetar a posição horizontal a cada nova linha
+
+                    // Obter os dados da lista        
+                    String descricao = dpTesouraria.getComplemento();
+                    String valores = this.conversor.formatarDoubleString(dpTesouraria.getValorSaida()).replace(".", ",");
+
+                    fluxoConteudo.beginText();
+                    fluxoConteudo.setFont(times, tamanhaFonte);
+
+                    fluxoConteudo.newLineAtOffset(xPosition, yPosition);
+                    fluxoConteudo.showText(descricao);
+                    xPosition += 310; // Ajusta a posição da próxima coluna
+
+                    fluxoConteudo.newLineAtOffset(xPosition, 0);
+                    fluxoConteudo.showText("R$ "+valores);
+
+                    fluxoConteudo.endText();         
+                    yPosition -= 20;// Descer para a próxima linha 
+
+                    saidas += dpTesouraria.getValorSaida();
+
+                }
+                yPosition -= 10;
+                xPosition += 40;
+
+                this.funcoesRelatorio.valoresUmTotalizador("Total: ", saidas, yPosition, xPosition, fluxoConteudo); 
+
+                double totalEntradas = entradas;
+                double totalSaidas = saidas;
+                double saldoAnterior = saldoCaixaAnterior;
+                double saldoAtual = saldoCaixaAtual;
+                double valorRendimento = rendimentoAplicacao;
+
+                yPosition -= 50;
+                xPosition -= 40;
+
+                //Pega os dados referente aos últimos totalizadores
+                this.funcoesRelatorio.valoresCincoTotalizadoresRelatorioMensal("Total Entrada:    ", "Total Saída:         ", "Saldo Anterior:   ", "Saldo Atual:         ", "Valor Aplicação: ", totalEntradas, totalSaidas, saldoAnterior, saldoAtual, valorRendimento, yPosition, xPosition, fluxoConteudo);
+
+                fluxoConteudo.close();
+
+                //Chama a função apra salvar o relatório
+                this.funcoesRelatorio.salvarRelatorioPDF("Prestação De Contas",documentoPDF);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao tentar gerar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+            } finally {
+                try {
+                    if (fluxoConteudo != null) {
+                        fluxoConteudo.close();
+                    }
+                    if (documentoPDF != null) {
+                        documentoPDF.close();
+                    }
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Erro ao tentar salvar o arquivo PDF", "Atenção", JOptionPane.WARNING_MESSAGE);
+                }
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "É obrigatório informar uma conta caixa para gerar o relatório", "Atenção", JOptionPane.WARNING_MESSAGE);
         }
-        
     }
     
     @Override

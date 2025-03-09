@@ -29,19 +29,30 @@ public class IgrejaDao {
 
         try{
             this.conexao = Conexao.getDataSource().getConnection();
-            this.insertStmt= this.conexao.prepareStatement(sql);
+            conexao.setAutoCommit(false); //Setando o autocomit como falso
+            
+            this.insertStmt= this.conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             this.insertStmt.setString(1, igreja.getNome());
             this.insertStmt.setString(2, igreja.getEndereco().getLogradouro());
             this.insertStmt.setInt(3, igreja.getEndereco().getNumero());
             this.insertStmt.setString(4, igreja.getEndereco().getBairro());
-            this.insertStmt.setString(5, igreja.getEndereco().getCidade());
-            this.insertStmt.setString(6, igreja.getEndereco().getEstado());
+            this.insertStmt.setString(5, igreja.getEndereco().getLocalidade());
+            this.insertStmt.setString(6, igreja.getEndereco().getUf());
             this.insertStmt.setString(7, igreja.getEndereco().getCep());
             this.insertStmt.setString(8, igreja.getEndereco().getComplemento());
             this.insertStmt.setInt(9, igreja.getStatus());
-            this.insertStmt.execute();
+            this.insertStmt.executeUpdate();
             
+            ResultSet generatedKeys = this.insertStmt.getGeneratedKeys();
+            
+            //Adicionando o a igreja cadastrada para o usuario administrador
+            if (generatedKeys.next()) { 
+                Integer codIgreja = generatedKeys.getInt(1);            
+                adicionarIgrejaUsuariosFuncaoPermitida(codIgreja);         
+            }
+            
+            conexao.commit();
             JOptionPane.showMessageDialog(null, "Igreja cadastrada com sucesso", "Concluído", JOptionPane.INFORMATION_MESSAGE);       
         }catch (SQLException ex) {
             logsDao.gravaLogsErro("IgrejaDao - "+ex.getSQLState()+" - "+ex.getMessage());
@@ -69,8 +80,8 @@ public class IgrejaDao {
             this.updateStmt.setString(2, igreja.getEndereco().getLogradouro());
             this.updateStmt.setInt(3, igreja.getEndereco().getNumero());
             this.updateStmt.setString(4, igreja.getEndereco().getBairro());
-            this.updateStmt.setString(5, igreja.getEndereco().getCidade());
-            this.updateStmt.setString(6, igreja.getEndereco().getEstado());
+            this.updateStmt.setString(5, igreja.getEndereco().getLocalidade());
+            this.updateStmt.setString(6, igreja.getEndereco().getUf());
             this.updateStmt.setString(7, igreja.getEndereco().getCep());
             this.updateStmt.setString(8, igreja.getEndereco().getComplemento());
             this.updateStmt.setInt(9, igreja.getStatus());
@@ -284,5 +295,19 @@ public class IgrejaDao {
                 JOptionPane.showMessageDialog(null, "Erro ao tentar fechar a conexão com o banco de dados", "Erro 012", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    //Adiciona as igrejas cadastradas para o usuario administrador
+    public void adicionarIgrejaUsuariosFuncaoPermitida(Integer codIgreja){
+                     
+        String sql= "INSERT INTO UsuariosAcessoIgreja (Usuario,Igreja,Data)VALUES (1,?,GETDATE())";
+             
+        try{      
+            ps = conexao.prepareStatement(sql);   
+            ps.setInt(1,codIgreja);
+            ps.execute();    
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Erro ao tentar cadastrar igreja para o usuário Admin", "Erro 001", JOptionPane.ERROR_MESSAGE);      
+        }    
     }
 }

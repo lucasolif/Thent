@@ -352,7 +352,7 @@ public class CancelarContasPagarForm extends javax.swing.JInternalFrame implemen
 
     private void buscarFornecedor(){
         String textoBusca = nomeFornecedor.getText(); // Texto digitado na busca        
-        this.listaFornecedor = pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco
+        this.listaFornecedor = pessoaDao.consultarPessoa(textoBusca,this.filtroIgreja); //Lista recebe a busca retornada do banco
     } 
          
     private void carregarResultadoConsultaFornecedor(){

@@ -9,8 +9,8 @@ public class Endereco {
     private int numero;
     private String cep;
     private String bairro;
-    private String cidade;
-    private String estado;
+    private String localidade;
+    private String uf;
     private String complemento;
 
     public Endereco() {
@@ -21,8 +21,8 @@ public class Endereco {
         this.numero = numero;
         this.cep = cep;
         this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
+        this.localidade = cidade;
+        this.uf = estado;
         this.complemento = complemento;
     }
 
@@ -42,12 +42,12 @@ public class Endereco {
         return bairro;
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getLocalidade() {
+        return localidade;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getUf() {
+        return uf;
     }
 
     public String getComplemento() {
@@ -70,12 +70,12 @@ public class Endereco {
         this.bairro = bairro;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setLocalidade(String localidade) {
+        this.localidade = localidade;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 
     public void setComplemento(String complemento) {
@@ -89,8 +89,8 @@ public class Endereco {
         hash = 23 * hash + this.numero;
         hash = 23 * hash + Objects.hashCode(this.cep);
         hash = 23 * hash + Objects.hashCode(this.bairro);
-        hash = 23 * hash + Objects.hashCode(this.cidade);
-        hash = 23 * hash + Objects.hashCode(this.estado);
+        hash = 23 * hash + Objects.hashCode(this.localidade);
+        hash = 23 * hash + Objects.hashCode(this.uf);
         hash = 23 * hash + Objects.hashCode(this.complemento);
         return hash;
     }
@@ -119,10 +119,10 @@ public class Endereco {
         if (!Objects.equals(this.bairro, other.bairro)) {
             return false;
         }
-        if (!Objects.equals(this.cidade, other.cidade)) {
+        if (!Objects.equals(this.localidade, other.localidade)) {
             return false;
         }
-        if (!Objects.equals(this.estado, other.estado)) {
+        if (!Objects.equals(this.uf, other.uf)) {
             return false;
         }
         return Objects.equals(this.complemento, other.complemento);
@@ -130,7 +130,7 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return "Endereco{" + "logradouro=" + logradouro + ", numero=" + numero + ", cep=" + cep + ", bairro=" + bairro + ", cidade=" + cidade + ", estado=" + estado + ", complemento=" + complemento + '}';
+        return "Endereco{" + "logradouro=" + logradouro + ", numero=" + numero + ", cep=" + cep + ", bairro=" + bairro + ", cidade=" + localidade + ", estado=" + uf + ", complemento=" + complemento + '}';
     }   
     
 }

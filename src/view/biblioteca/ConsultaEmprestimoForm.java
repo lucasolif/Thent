@@ -546,7 +546,7 @@ public class ConsultaEmprestimoForm extends javax.swing.JInternalFrame implement
     
     private void buscarPessoa(){
         String textoBusca = this.nomePessoa.getText(); // Texto digitado na busca        
-        this.listaPessoa = this.pessoaDao.consultarPessoa(textoBusca); //Lista recebe a busca retornada do banco    
+        this.listaPessoa = this.pessoaDao.consultarPessoa(textoBusca, this.filtroIgreja); //Lista recebe a busca retornada do banco    
     } 
     
     private void carregarResultadoConsultaPessoa(){

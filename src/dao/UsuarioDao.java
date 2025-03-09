@@ -28,7 +28,7 @@ public class UsuarioDao {
 
     public int adicionarUsuario(Usuario usuario){
         
-        String sql= "INSERT INTO Usuarios (Nome,Email,Celular,Usuario,Igreja,DataCadastro,Ativo,HashSenha,SaltSenha,Funcao,TodasIgrejas)VALUES (?,?,?,?,?,GETDATE(),1,?,?,?,?)";
+        String sql= "INSERT INTO Usuarios (Nome,Email,Celular,Usuario,Igreja,DataCadastro,Ativo,HashSenha,SaltSenha,Funcao)VALUES (?,?,?,?,?,GETDATE(),1,?,?,?)";
         int idUsuario = 0;
         
         try{
@@ -45,7 +45,6 @@ public class UsuarioDao {
             ps.setString(6,usuario.getHashSenha());
             ps.setString(7,usuario.getSaltSenha());
             ps.setInt(8,usuario.getFuncaoCargo().getCodigo());
-            ps.setInt(9,usuario.getTodasIgrejas());
             ps.executeUpdate();
             
             // Recuperar a chave primária gerada
@@ -144,10 +143,10 @@ public class UsuarioDao {
         List<Usuario> listaUsuarios = new ArrayList<>();
          //Estanciando o objeto para consultarIgreja a igreja do usuário
 
-        String sql = "SELECT I.Codigo AS CodIgreja, I.NomeIgreja AS NomeIgreja, (Select Nome From Funcoes As F Where F.Codigo = U.Funcao) As NomeFuncao, * "
+        String sql = "SELECT I.Codigo AS CodIgreja, I.NomeIgreja AS NomeIgreja, (Select Nome From Funcoes As F Where F.Codigo = U.Funcao) As NomeFuncao, U.* "
         + "FROM Usuarios AS U "
         + "INNER JOIN Igrejas AS I ON I.Codigo = U.Igreja "       
-        + "WHERE ((? IS NULL OR U.Codigo LIKE ?) OR (? IS NULL OR U.Nome LIKE ?) OR (? IS NULL OR U.Usuario LIKE ?))"
+        + "WHERE ((? IS NULL OR U.Codigo LIKE ?) OR (? IS NULL OR U.Nome LIKE ?) OR (? IS NULL OR U.Usuario LIKE ?)) "
         + "AND Ativo = 1";
     
         try{
@@ -190,8 +189,7 @@ public class UsuarioDao {
                 user.setHashSenha(rs.getString("HashSenha"));
                 user.setSaltSenha(rs.getString("SaltSenha"));
                 user.setFuncaoCargo(funcao);
-                user.setTodasIgrejas(rs.getInt("TodasIgrejas"));
-
+                
                 listaUsuarios.add(user);
             }          
         }catch(SQLException ex){
@@ -571,6 +569,6 @@ public class UsuarioDao {
         }
         return codUsuario;   
     }
-  
+    
   
 }
