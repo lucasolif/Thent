@@ -1,13 +1,13 @@
 
 package view.biblioteca;
 
-import ferramentas.PersonalizaTabela;
+import services.PersonalizaTabela;
 import dao.BibliotecaDao;
 import dao.EmprestimoLivroDao;
 import dao.LivroDao;
 import dao.PessoaDao;
 import dao.RegistroBibliotecaDao;
-import ferramentas.Utilitarios;
+import services.Utilitarios;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;

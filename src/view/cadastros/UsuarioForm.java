@@ -5,7 +5,7 @@ import java.util.Base64;
 import dao.IgrejaDao;
 import dao.UsuarioDao;
 import autenticacao.CriptografarSenhas;
-import ferramentas.PaletaCores;
+import services.PaletaCores;
 import dao.PermissoesDao;
 import interfaces.ConsultaIgrejas;
 import interfaces.ConsultaUsuarios;

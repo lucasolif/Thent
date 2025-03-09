@@ -1,7 +1,7 @@
 
 package view.biblioteca;
 
-import ferramentas.PaletaCores;
+import services.PaletaCores;
 
 public class StatusCores extends javax.swing.JDialog{
 

@@ -1,7 +1,7 @@
 
 package view.dizimosOfertas;
 
-import ferramentas.PersonalizaTabela;
+import services.PersonalizaTabela;
 import dao.ContaCaixaDao;
 import dao.FormaPagtoDao;
 import dao.IgrejaDao;
@@ -10,7 +10,7 @@ import dao.PessoaDao;
 import dao.RegistroOfertaDao;
 import dao.SubContaResultadoDao;
 import dao.TipoOfertaDao;
-import ferramentas.Utilitarios;
+import services.Utilitarios;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;

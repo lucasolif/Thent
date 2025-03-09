@@ -1,8 +1,8 @@
 
 package view.relatorios;
 
-import ferramentas.UtilitariosRelatorios;
-import ferramentas.Utilitarios;
+import services.UtilitariosRelatorios;
+import services.Utilitarios;
 import dao.IgrejaDao;
 import dao.RegistroOfertaDao;
 import dao.TipoOfertaDao;

@@ -1,11 +1,11 @@
 
 package view.campanhas;
 
-import ferramentas.PersonalizaTabela;
+import services.PersonalizaTabela;
 import dao.CampanhaDao;
 import dao.PessoaDao;
 import dao.SubContaResultadoDao;
-import ferramentas.Utilitarios;
+import services.Utilitarios;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;

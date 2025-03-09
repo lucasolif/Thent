@@ -1,10 +1,10 @@
 
 package view.contasPagar;
 
-import ferramentas.PersonalizaTabela;
+import services.PersonalizaTabela;
 import dao.ContasPagarDao;
 import dao.PessoaDao;
-import ferramentas.Utilitarios;
+import services.Utilitarios;
 import dao.UsuarioDao;
 import interfaces.ConsultaPessoas;
 import java.awt.Dimension;
